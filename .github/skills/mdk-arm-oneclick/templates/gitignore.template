@@ -1,0 +1,23 @@
+# Default: ignore everything
+*
+
+# Allow traversing directories so selected files can be re-included
+!*/
+
+# Keep this file
+!.gitignore
+
+# Keep important project source/header files only
+!Application/**/*.c
+!Application/**/*.h
+!Core/Inc/**/*.h
+!Core/Src/**/*.c
+!Task/**/*.c
+!Task/**/*.h
+!Libraries/**/*.c
+!Libraries/**/*.h
+
+# Keep team-shared VS Code configs
+!.vscode/
+!.vscode/tasks.json
+!.vscode/launch.json

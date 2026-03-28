@@ -1,0 +1,109 @@
+param(
+    [string]$Project = "__UVPROJX_REL__"
+)
+
+$ErrorActionPreference = "Stop"
+
+function Resolve-UV4Path {
+    if ($env:KEIL_UV4 -and (Test-Path $env:KEIL_UV4)) {
+        return $env:KEIL_UV4
+    }
+
+    $candidates = @(
+        "D:/KEIL_V5/UV4/UV4.exe",
+        "D:/KEIL_V5/UV4/UV4",
+        "C:/Keil_v5/UV4/UV4.exe",
+        "C:/Keil_v5/UV4/UV4"
+    )
+
+    foreach ($path in $candidates) {
+        if (Test-Path $path) {
+            return $path
+        }
+    }
+
+    $cmd = Get-Command UV4.exe -ErrorAction SilentlyContinue
+    if ($cmd) {
+        return $cmd.Source
+    }
+
+    throw "UV4.exe not found. Install Keil MDK or set KEIL_UV4 to full UV4.exe path."
+}
+
+function Get-BuildOutputDirectory {
+    param([string]$ProjectPath)
+
+    $projectName = [System.IO.Path]::GetFileNameWithoutExtension($ProjectPath)
+    $projectDir = Split-Path -Path $ProjectPath -Parent
+    return Join-Path $projectDir $projectName
+}
+
+function Show-BuildSizeSummary {
+    param([string]$ProjectPath)
+
+    $outputDir = Get-BuildOutputDirectory -ProjectPath $ProjectPath
+    if (-not (Test-Path $outputDir)) {
+        Write-Host "Build output directory not found: $outputDir"
+        return
+    }
+
+    $projectName = [System.IO.Path]::GetFileNameWithoutExtension($ProjectPath)
+    $logPath = Join-Path $outputDir ("{0}.build_log.htm" -f $projectName)
+    $mapPath = Join-Path $outputDir ("{0}.map" -f $projectName)
+
+    $sizeLine = $null
+    if (Test-Path $logPath) {
+        $sizeLine = Select-String -Path $logPath -Pattern 'Program Size:\s*Code=\d+\s+RO-data=\d+\s+RW-data=\d+\s+ZI-data=\d+' -AllMatches |
+            Select-Object -Last 1 |
+            ForEach-Object { $_.Matches } |
+            Select-Object -Last 1 |
+            ForEach-Object { $_.Value }
+
+        if ($sizeLine) {
+            Write-Host "Program Size: $sizeLine"
+        } else {
+            Write-Host "Program Size: not found in build log"
+        }
+    } else {
+        Write-Host "Build log not found: $logPath"
+    }
+
+    if ((-not $sizeLine) -and (Test-Path $mapPath)) {
+        $grandTotals = Select-String -Path $mapPath -Pattern '^\s*\d+\s+\d+\s+\d+\s+\d+\s+\d+\s+\d+\s+Grand Totals' |
+            Select-Object -Last 1
+        if ($grandTotals) {
+            $numbers = [regex]::Matches($grandTotals.Line, '\d+') | ForEach-Object { [int]$_.Value }
+            if ($numbers.Count -ge 5) {
+                Write-Host (("Program Size (from MAP): Code={0} RO-data={1} RW-data={2} ZI-data={3}") -f $numbers[0], $numbers[2], $numbers[3], $numbers[4])
+            }
+        }
+    }
+
+    $axfPath = Join-Path $outputDir ("{0}.axf" -f $projectName)
+    $hexPath = Join-Path $outputDir ("{0}.hex" -f $projectName)
+
+    foreach ($artifact in @($axfPath, $hexPath, $mapPath)) {
+        if (Test-Path $artifact) {
+            $sizeBytes = (Get-Item $artifact).Length
+            $sizeKB = [math]::Round($sizeBytes / 1KB, 2)
+            Write-Host (("{0}: {1} bytes ({2} KB)") -f [System.IO.Path]::GetFileName($artifact), $sizeBytes, $sizeKB)
+        }
+    }
+}
+
+$uv4 = Resolve-UV4Path
+
+if (-not (Test-Path $Project)) {
+    throw "Project file not found: $Project"
+}
+
+Write-Host "Build with Keil project: $Project"
+Write-Host "UV4 path: $uv4"
+
+$buildProcess = Start-Process -FilePath $uv4 -ArgumentList @('-j0', '-b', $Project) -Wait -PassThru
+if ($null -eq $buildProcess.ExitCode -or $buildProcess.ExitCode -ne 0) {
+    throw "Keil build failed, exit code: $($buildProcess.ExitCode)"
+}
+
+Write-Host "Build completed."
+Show-BuildSizeSummary -ProjectPath $Project

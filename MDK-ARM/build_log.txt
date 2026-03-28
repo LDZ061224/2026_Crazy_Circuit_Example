@@ -1,0 +1,3 @@
+Load "2026_Light_Demo\\2026_Light_Demo.axf" 
+Erase Done.Programming Done.Verify OK.Application running ...
+Flash Load finished at 22:41:35

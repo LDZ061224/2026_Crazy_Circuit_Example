@@ -1,0 +1,161 @@
+param(
+    [string]$Project = "",
+    [string]$ProbeUid = "",
+    [switch]$Force
+)
+
+$ErrorActionPreference = "Stop"
+
+$repoRoot = (Get-Location).Path
+$templateRoot = Join-Path $repoRoot ".github/skills/mdk-arm-oneclick/templates"
+if (-not (Test-Path $templateRoot)) {
+    throw "Skill templates not found: $templateRoot"
+}
+
+function To-RelPath([string]$absPath) {
+    $full = [System.IO.Path]::GetFullPath($absPath)
+    $root = [System.IO.Path]::GetFullPath($repoRoot)
+    if ($full.StartsWith($root, [System.StringComparison]::OrdinalIgnoreCase)) {
+        return $full.Substring($root.Length).TrimStart('\','/').Replace('\', '/')
+    }
+    return $absPath.Replace('\\', '/')
+}
+
+function Find-ProjectFile {
+    param([string]$Hint)
+
+    if ($Hint) {
+        if (-not (Test-Path $Hint)) {
+            throw "Project file not found: $Hint"
+        }
+        return (Resolve-Path $Hint).Path
+    }
+
+    $prefer = Get-ChildItem -Path "MDK-ARM" -Filter "*.uvprojx" -File -ErrorAction SilentlyContinue
+    if ($prefer.Count -eq 1) { return $prefer[0].FullName }
+    if ($prefer.Count -gt 1) {
+        throw "Multiple uvprojx found in MDK-ARM. Specify -Project explicitly."
+    }
+
+    $all = Get-ChildItem -Recurse -Filter "*.uvprojx" -File
+    if ($all.Count -eq 0) { throw "No .uvprojx file found." }
+    if ($all.Count -gt 1) { throw "Multiple .uvprojx found. Specify -Project explicitly." }
+    return $all[0].FullName
+}
+
+function Get-FirstNodeText {
+    param([xml]$XmlDoc, [string]$NodeName)
+
+    $node = $XmlDoc.SelectSingleNode("//*[local-name()='$NodeName']")
+    if ($null -eq $node) { return "" }
+    return [string]$node.InnerText
+}
+
+function Get-DefaultProbeUid {
+    param([string]$ProbeHint)
+
+    if ($ProbeHint) { return $ProbeHint }
+
+    $pyocdCmd = Get-Command pyocd -ErrorAction SilentlyContinue
+    if (-not $pyocdCmd) { return "" }
+
+    $raw = pyocd list --probes 2>$null
+    if ($LASTEXITCODE -ne 0 -or -not $raw) { return "" }
+
+    foreach ($line in $raw) {
+        if ($line -match '([0-9A-Fa-f]{16,})') {
+            return $Matches[1]
+        }
+    }
+
+    return ""
+}
+
+function Render-Template {
+    param(
+        [string]$TemplatePath,
+        [string]$OutPath,
+        [hashtable]$Replacements,
+        [switch]$AllowOverwrite
+    )
+
+    $content = Get-Content -Path $TemplatePath -Raw
+    foreach ($k in $Replacements.Keys) {
+        $content = $content.Replace($k, $Replacements[$k])
+    }
+
+    $outDir = Split-Path -Path $OutPath -Parent
+    if (-not (Test-Path $outDir)) {
+        New-Item -ItemType Directory -Path $outDir | Out-Null
+    }
+
+    if ((Test-Path $OutPath) -and (-not $AllowOverwrite)) {
+        Write-Host "Skip existing file: $OutPath"
+        return
+    }
+
+    Set-Content -Path $OutPath -Value $content -Encoding UTF8
+    Write-Host "Generated: $OutPath"
+}
+
+$projectAbs = Find-ProjectFile -Hint $Project
+$projectRel = To-RelPath $projectAbs
+$projectDirAbs = Split-Path -Path $projectAbs -Parent
+$projectName = [System.IO.Path]::GetFileNameWithoutExtension($projectAbs)
+
+[xml]$projXml = Get-Content -Path $projectAbs -Raw
+$device = Get-FirstNodeText -XmlDoc $projXml -NodeName "Device"
+$outputDir = Get-FirstNodeText -XmlDoc $projXml -NodeName "OutputDirectory"
+$outputName = Get-FirstNodeText -XmlDoc $projXml -NodeName "OutputName"
+
+if ([string]::IsNullOrWhiteSpace($outputDir)) { $outputDir = $projectName }
+if ([string]::IsNullOrWhiteSpace($outputName)) { $outputName = $projectName }
+if ([string]::IsNullOrWhiteSpace($device)) {
+    throw "Device is missing in uvprojx. Set it in Keil or edit launch.json manually."
+}
+
+$outputDir = $outputDir.Trim().TrimEnd('\','/')
+$outputName = $outputName.Trim()
+
+$axfAbs = Join-Path $projectDirAbs (Join-Path $outputDir ("{0}.axf" -f $outputName))
+$hexAbs = Join-Path $projectDirAbs (Join-Path $outputDir ("{0}.hex" -f $outputName))
+
+$axfRel = To-RelPath $axfAbs
+$hexRel = To-RelPath $hexAbs
+$targetId = $device.ToLowerInvariant()
+$probeUid = Get-DefaultProbeUid -ProbeHint $ProbeUid
+if ([string]::IsNullOrWhiteSpace($probeUid)) {
+    $probeUid = "PUT_PROBE_UID_HERE"
+}
+
+Write-Host "Project: $projectRel"
+Write-Host "Device: $device"
+Write-Host "HEX: $hexRel"
+Write-Host "AXF: $axfRel"
+Write-Host "Probe UID: $probeUid"
+
+$allowOverwrite = $Force.IsPresent
+
+Render-Template -TemplatePath (Join-Path $templateRoot "build-keil.ps1.template") -OutPath (Join-Path $repoRoot "scripts/build-keil.ps1") -Replacements @{
+    "__UVPROJX_REL__" = $projectRel
+} -AllowOverwrite:$allowOverwrite
+
+Render-Template -TemplatePath (Join-Path $templateRoot "flash-daplink.ps1.template") -OutPath (Join-Path $repoRoot "scripts/flash-daplink.ps1") -Replacements @{
+    "__HEX_REL__" = $hexRel
+} -AllowOverwrite:$allowOverwrite
+
+Render-Template -TemplatePath (Join-Path $templateRoot "tasks.json.template") -OutPath (Join-Path $repoRoot ".vscode/tasks.json") -Replacements @{
+    "__TARGET_ID__" = $targetId
+    "__PROBE_UID__" = $probeUid
+} -AllowOverwrite:$allowOverwrite
+
+Render-Template -TemplatePath (Join-Path $templateRoot "launch.json.template") -OutPath (Join-Path $repoRoot ".vscode/launch.json") -Replacements @{
+    "__AXF_REL__" = $axfRel
+    "__DEVICE__" = $device
+    "__TARGET_ID__" = $targetId
+    "__PROBE_UID__" = $probeUid
+} -AllowOverwrite:$allowOverwrite
+
+Render-Template -TemplatePath (Join-Path $templateRoot "gitignore.template") -OutPath (Join-Path $repoRoot ".gitignore") -Replacements @{} -AllowOverwrite:$allowOverwrite
+
+Write-Host "MDK one-click setup completed."

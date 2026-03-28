@@ -1,0 +1,82 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Keil: Build (MDK)",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "scripts/build-keil.ps1"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "DAPLink: Download HEX",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "scripts/flash-daplink.ps1"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "DAPLink: Flash HEX",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "DAPLink: Download HEX"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Build + DAPLink Download",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Keil: Build (MDK)",
+        "DAPLink: Download HEX"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Build + DAPLink Flash",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Build + DAPLink Download"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "pyOCD: Ensure GDB Server (50002)",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "$port=50002; $tel=50003; $uid='__PROBE_UID__'; $target='__TARGET_ID__'; $py='pyocd'; $listening=Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue; if ($listening) { Write-Host 'pyOCD already listening on port 50002.'; exit 0 }; if ([string]::IsNullOrWhiteSpace($uid) -or $uid -eq 'PUT_PROBE_UID_HERE') { for ($i=0; $i -lt 3; $i++) { $raw=& $py list --probes 2>$null; foreach ($line in $raw) { if ($line -match '([0-9A-Fa-f]{16,})') { $uid=$Matches[1]; break } }; if (-not [string]::IsNullOrWhiteSpace($uid) -and $uid -ne 'PUT_PROBE_UID_HERE') { break }; Start-Sleep -Seconds 1 } }; $args=@('gdbserver','--persist','--port',$port,'--telnet-port',$tel,'--target',$target,'-O','frequency=100000','-O','connect_mode=under-reset'); if (-not [string]::IsNullOrWhiteSpace($uid) -and $uid -ne 'PUT_PROBE_UID_HERE') { $args += @('--uid',$uid); Write-Host (\"Using probe UID: {0}\" -f $uid) } else { Write-Host 'No explicit probe UID, using first available probe.' }; Start-Process -FilePath $py -ArgumentList $args -WindowStyle Hidden; Start-Sleep -Seconds 3; $check=Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue; if (-not $check) { throw 'pyOCD gdbserver did not start on port 50002. Check probe connection, UID, and targetId.' }; Write-Host 'pyOCD gdbserver is ready on port 50002.'"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Build + Ensure pyOCD",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Keil: Build (MDK)",
+        "pyOCD: Ensure GDB Server (50002)"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}

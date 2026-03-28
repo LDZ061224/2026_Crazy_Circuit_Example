@@ -1,0 +1,43 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "DAPLink: Debug (pyOCD)",
+      "type": "cortex-debug",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "servertype": "pyocd",
+      "serverpath": "pyocd",
+      "gdbPath": "arm-none-eabi-gdb",
+      "serverLaunchTimeout": 60000,
+      "targetId": "__TARGET_ID__",
+      "interface": "swd",
+      "serverArgs": [
+        "--persist",
+        "-O",
+        "frequency=100000",
+        "-O",
+        "connect_mode=under-reset"
+      ],
+      "device": "__DEVICE__",
+      "executable": "${workspaceFolder}/__AXF_REL__",
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "raw",
+      "preLaunchTask": "Keil: Build (MDK)"
+    },
+    {
+      "name": "DAPLink: Debug (External pyOCD)",
+      "type": "cortex-debug",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "servertype": "external",
+      "gdbTarget": "localhost:50002",
+      "gdbPath": "arm-none-eabi-gdb",
+      "device": "__DEVICE__",
+      "executable": "${workspaceFolder}/__AXF_REL__",
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "raw",
+      "preLaunchTask": "Build + Ensure pyOCD"
+    }
+  ]
+}

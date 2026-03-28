@@ -1,0 +1,29 @@
+param(
+    [string]$HexPath = "__HEX_REL__"
+)
+
+$ErrorActionPreference = "Stop"
+
+if (-not (Test-Path $HexPath)) {
+    throw "HEX file not found: $HexPath. Run build first."
+}
+
+$vol = Get-Volume | Where-Object {
+    $_.DriveType -eq 'Removable' -and (
+        $_.FileSystemLabel -match 'DAPLINK|CMSIS|MBED'
+    )
+} | Select-Object -First 1
+
+if (-not $vol) {
+    throw "DAPLink drive not detected. Connect DAPLink and ensure a removable drive appears (for example DAPLINK)."
+}
+
+$driveRoot = "{0}:/" -f $vol.DriveLetter
+$target = Join-Path $driveRoot (Split-Path $HexPath -Leaf)
+
+Write-Host "DAPLink detected: $driveRoot ($($vol.FileSystemLabel))"
+Write-Host "Flashing by file copy: $HexPath -> $target"
+
+Copy-Item -Path $HexPath -Destination $target -Force
+
+Write-Host "HEX copied. Wait until DAPLink LED stops blinking."

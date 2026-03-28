@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "DAPLink Debug (Cortex-Debug)",
+            "type": "cortex-debug",
+            "request": "launch",
+            "servertype": "openocd",
+            "cwd": "${workspaceRoot}",
+            "executable": "${workspaceRoot}/MDK-ARM/2026_Light_Demo/2026_Light_Demo.axf",
+            "device": "STM32F103RC",
+            "configFiles": [
+                "interface/cmsis-dap.cfg",
+                "target/stm32f1x.cfg"
+            ],
+            "preLaunchTask": "Build with Keil"
+        }
+    ]
+}

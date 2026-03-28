@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build with Keil",
+            "type": "shell",
+            "command": "D:\\Keil_v5\\UV4\\UV4.exe -b .\\MDK-ARM\\2026_Light_Demo.uvprojx -j0 -o build_log.txt",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Clean with Keil",
+            "type": "shell",
+            "command": "D:\\Keil_v5\\UV4\\UV4.exe -c .\\MDK-ARM\\2026_Light_Demo.uvprojx -j0 -o build_log.txt"
+        },
+        {
+            "label": "Download with Keil (DAPLink)",
+            "type": "shell",
+            "command": "D:\\Keil_v5\\UV4\\UV4.exe -f .\\MDK-ARM\\2026_Light_Demo.uvprojx -j0 -o build_log.txt"
+        }
+    ]
+}
