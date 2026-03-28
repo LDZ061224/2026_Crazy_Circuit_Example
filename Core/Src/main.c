@@ -24,7 +24,7 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-
+#include "fun.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "headfiles.h"
@@ -48,13 +48,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-int Scan_Flag = 0;
-int Scan_Count = 0;
 int Left_Light[8] = {0};
 int Right_Light[8] = {0};
-
-static uint32_t filt_L[8][FILT_LEN] = {0};   // 左 8 路
-static uint32_t filt_R[8][FILT_LEN] = {0};   // 右 8 路
 
 /* USER CODE END PV */
 
@@ -128,16 +123,17 @@ int main(void)
   // 外设初始化
   Motor_Init();
   Encodeer_Init();
-  icm20602_init();
   AD7689_Left_Init();
   AD7689_Right_Init();
-//  bsp_dwt_init();
+  //bsp_dwt_init();
+
   // 键显输参
   OLED_Init();
   Oled_Input();
   Oled_Data_Load();
-  HAL_TIM_Base_Start(&htim7);
-  HAL_TIM_Base_Start_IT(&htim6);
+
+  // 启动流程：陀螺仪零漂校准 -> 扫线调阈值 -> 观察 -> 开负压 -> 延时后允许运行
+  Start();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -148,7 +144,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 //	Oled_Show();
-    VOFA_JustFloat(&huart1);    // 串口发送
+//    VOFA_JustFloat(&huart      // 串口发送
     HAL_Delay(5);
   }
   /* USER CODE END 3 */
@@ -196,33 +192,19 @@ void SystemClock_Config(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim == &htim6)
-	{
-		if (Scan_Flag == 0)
+	{	
+		AD7689_Left_Read(Left_Light);		
+		filt_scale_20000(Left_Light, filt_L_Correct);
+		AD7689_Right_Read(Right_Light);		
+		filt_scale_20000(Right_Light, filt_R_Correct);
+		if(dust_Flag)
 		{
-      // 读取ADC值
-			AD7689_Left_Read(Left_Light);		
-			filt_scale_20000(Left_Light, filt_L);
-			AD7689_Right_Read(Right_Light);		
-			filt_scale_20000(Right_Light, filt_R);
-
-			if (Scan_Count > 200)
-			{
-        // 自动调整阈值
-				Left_Threshold_Correct();
-				Right_Threshold_Correct();
-			}
-			Scan_Count++;
-			if (Scan_Count > 1500 )
-			{
-				Scan_Flag = 1;
-			}
+			// 风扇
+			PWM_SetDuty(Duct_IN1, 800 - dust_exp);
+			PWM_SetDuty(Duct_IN2, 800);
 		}
-		else
+		if(Start_Flag)
 		{
-			AD7689_Left_Read(Left_Light);		
-			filt_scale_20000(Left_Light, filt_L);
-			AD7689_Right_Read(Right_Light);		
-			filt_scale_20000(Right_Light, filt_R);
 			Car_Go();
 		}
 	}

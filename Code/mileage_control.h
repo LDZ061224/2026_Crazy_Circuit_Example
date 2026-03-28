@@ -15,7 +15,7 @@ History:
 #define __MILEAGE_CONTROL_H__
 
 #include "headfiles.h"
-
+#include "track.h"
 /*************************************宏定义*************************************/
 #define NODE_NUM_MAX    30   // 节点数量最大值
 #define ELEMENT_NUM_MAX 3   // 元器件数量最大值
@@ -132,7 +132,7 @@ extern int L_exp;
 extern int R_exp;
 extern int dust_exp;
 extern int Gyro_exp;
-extern uint8_t Gyro_mode;
+extern uint8_t map_mode;
 extern uint8_t Integral_Flag;
 extern float Gyro_Integral;
 extern uint8_t Node_Arr_Dir[NODE_NUM];	// 节点方向数组(1左2右0直行)
@@ -150,6 +150,7 @@ extern float  left_thr[8][2];  		// 左阈值
 extern float  right_thr[8][2]; 		// 右阈值
 
 extern Racing_track_Typedef Test1;
+extern Racing_track_Typedef Test2;
 /************************************函数声明***********************************/
 void Car_Go(void);
 void Get_Speed(void);

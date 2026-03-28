@@ -46,6 +46,7 @@ void down(int kind);
 void Recovery(void);
 void Oled_Data_Load(void);
 void Oled_Show(void);
+void Oled_ShowNum(void);
 int KeyboardInput_Confirm(unsigned char x,unsigned char y); //??without Flash??
 
 

@@ -7,6 +7,6 @@
  * Others: NONE
  * **************************************************/
 #include "control.h"
-extern Racing_track_Typedef Test2;
 
  #endif
+ 

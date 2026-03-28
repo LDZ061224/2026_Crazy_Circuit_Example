@@ -134,7 +134,7 @@ void Oled_Data_Load()
 	R_exp = Right_Exp_Init;
 	dust_exp = Dust_Exp_Init;
 	Gyro_exp = Gyro_Exp_Init;
-	Gyro_mode = Gyro_mode_Init;
+	map_mode = Gyro_mode_Init;
 }
 
 
@@ -161,3 +161,10 @@ void Oled_Show()
 	OLED_Numbers(50 , 6, ABS(ICM_Gyro[2]));
 }	
 
+void Oled_ShowNum()
+{
+	for (int i = 0; i < 16; i++)
+	{
+		OLED_ONE_Number(0 + 8 * i, 0, Image_Arr[i]);
+	}
+}	

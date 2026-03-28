@@ -29,12 +29,9 @@ int Left_MIN_ARR[8][10] = {20000};
 int Right_MAX_ARR[8][10] = {0};
 int Right_MIN_ARR[8][10] = {20000};
 
-static uint32_t filt_L_Correct[8][FILT_LEN] = {0};   // 左 8 路队列
-static uint32_t filt_R_Correct[8][FILT_LEN] = {0};   // 右 8 路队列
+uint32_t filt_L_Correct[8][FILT_LEN] = {0};   // 左 8 路队列
+uint32_t filt_R_Correct[8][FILT_LEN] = {0};   // 右 8 路队列
 static uint8_t  filt_head = 0;               // 公共队首指针
-
-int L_raw[8] = {0};
-int R_raw[8] = {0};
 
 /*--------------- 校准数组 ---------------*/
 int L_raw_min[8] = {65535,65535,65535,65535,65535,65535,65535,65535};
@@ -43,6 +40,16 @@ int R_raw_min[8] = {65535,65535,65535,65535,65535,65535,65535,65535};
 int R_raw_max[8] = {0};
 float  left_thr[8][2];  
 float  right_thr[8][2];  
+
+/*--------------- 启动相关标志位 ---------------*/
+uint8_t Start_Flag = 0;  // 启动标志位
+uint8_t Scan_Flag = 0;   // 扫描标志位
+uint8_t dust_Flag = 0;  // 负压标志位
+uint8_t Gyro_Flag = 0;  // 陀螺校准标志位
+uint16_t TCount = 0;     // 时间计数器
+
+/* 陀螺仪 Z 轴零漂偏置（静止标定得到） */
+float Gyro_Z_Bias = 0.0f;
 
 /************************************函数定义***********************************/
 
@@ -269,4 +276,173 @@ int16_t Map_Range(int16_t range1[2], int16_t range2[2], int16_t value)
     int16_t mapped_value = min1 + ratio * (max1 - min1);
 
     return mapped_value;
+}
+
+/*************************************
+** Function: Gyro_Calibrate_Z_Bias
+** Description: 陀螺仪 Z 轴零漂标定（静止状态下取均值）
+** @param sample_count       采样次数（建议 300~1000）
+** @param sample_interval_ms 采样间隔 ms（0 表示不延时）
+** @return 标定得到的 Z 轴零漂偏置
+*************************************/
+float Gyro_Calibrate_Z_Bias(uint16_t sample_count, uint16_t sample_interval_ms)
+{
+    float gyro_tmp[3] = {0};
+    float sum_z = 0.0f;
+
+    if (sample_count == 0)
+    {
+        sample_count = 500;
+    }
+
+    for (uint16_t i = 0; i < sample_count; i++)
+    {
+        icm20602_get_gyro(gyro_tmp);
+        sum_z += gyro_tmp[2];
+
+        if (sample_interval_ms > 0)
+        {
+            HAL_Delay(sample_interval_ms);
+        }
+    }
+
+    Gyro_Z_Bias = sum_z  / sample_count;
+    return Gyro_Z_Bias;
+}
+
+/*************************************
+** Function: Gyro_Remove_Z_Bias
+** Description: 对陀螺仪 Z 轴数据去零漂
+*************************************/
+float Gyro_Remove_Z_Bias(float gyro_z)
+{
+    return gyro_z - Gyro_Z_Bias;
+}
+
+static void Wait_Enter_Key(void)
+{
+    KeyValue_enum key;
+
+    while (1)
+    {
+        key = CH455_GetOneKey();
+        if (key == KEY_ENTER || key == KEY_ENTER_Long)
+        {
+            return;
+        }
+    }
+}
+
+static void Update_Image_By_Threshold(void)
+{
+    for (uint8_t i = 0; i < 8; i++)
+    {
+        if (Left_Light[i] > left_thr[i][0]) Image_Arr[i] = 1;
+        else if (Left_Light[i] < left_thr[i][1]) Image_Arr[i] = 0;
+
+        if (Right_Light[i] > right_thr[i][0]) Image_Arr[i + 8] = 1;
+        else if (Right_Light[i] < right_thr[i][1]) Image_Arr[i + 8] = 0;
+    }
+}
+
+void Start(void)
+{
+
+    /* Step 1: 按键确认后做陀螺仪静止零漂标定 */
+    OLED_CLS();
+    OLED_ShowStr(0, 0, "STEP1 GYRO", 2);
+    OLED_ShowStr(0, 2, "KEEP STILL", 2);
+    OLED_ShowStr(0, 6, "ENTER RUN", 2);
+    Wait_Enter_Key();
+
+    icm20602_init();
+
+    Gyro_Z_Bias = Gyro_Calibrate_Z_Bias(1500, 1);
+    Gyro_Flag = 1;
+
+    OLED_CLS();
+    OLED_ShowStr(0, 0, "GYRO BIAS*100", 2);
+	if(Gyro_Z_Bias > 0)
+	{
+	OLED_ShowStr(0, 2, "+", 2);
+	}
+	else if(Gyro_Z_Bias < 0)
+	{
+	OLED_ShowStr(0, 2, "- ", 2);
+	}	
+    OLED_Numbers(0, 4, ABS((int)(Gyro_Z_Bias * 100.0f)));
+    OLED_ShowStr(0, 6, "ENTER NEXT", 2);
+    Wait_Enter_Key();
+
+    /* Step 2: 扫线并自动调阈值 */
+    OLED_CLS();
+    OLED_ShowStr(0, 0, "STEP2 SCAN", 2);
+    OLED_ShowStr(0, 2, "MOVE CAR", 2);
+    OLED_ShowStr(0, 6, "ENTER RUN", 2);
+    Wait_Enter_Key();
+
+    HAL_TIM_Base_Start(&htim7);
+
+    while (TCount <= 1000)
+    {
+        AD7689_Left_Read(Left_Light);
+        filt_scale_20000(Left_Light, filt_L_Correct);
+        AD7689_Right_Read(Right_Light);
+        filt_scale_20000(Right_Light, filt_R_Correct);
+
+        if (TCount > 200)
+        {
+            Left_Threshold_Correct();
+            Right_Threshold_Correct();
+        }
+
+        if ((TCount % 100) == 0)
+        {
+            OLED_CLS();
+            OLED_ShowStr(0, 0, "SCANNING", 2);
+            OLED_Numbers(0, 2, TCount);
+        }
+
+        TCount++;
+        HAL_Delay(3);
+    }
+    Scan_Flag = 1;
+
+    /* Step 3: 调阈值后短暂显示 Oled_Show 观察，再关闭显示 */
+    OLED_CLS();
+    OLED_ShowStr(0, 0, "THR OK", 2);
+    OLED_ShowStr(0, 2, "SHOW 3S", 2);
+    Wait_Enter_Key();
+    OLED_CLS();
+    for (uint8_t i = 0; i < 60; i++)
+    {
+        AD7689_Left_Read(Left_Light);
+        filt_scale_20000(Left_Light, filt_L_Correct);
+        AD7689_Right_Read(Right_Light);
+        filt_scale_20000(Right_Light, filt_R_Correct);
+        Update_Image_By_Threshold();
+        Oled_ShowNum();
+		OLED_Numbers(0, 2, i); 
+    }
+    OLED_CLS();
+
+    HAL_TIM_Base_Start_IT(&htim6);
+
+    OLED_ShowStr(0, 0, "DUST ON", 2);
+    OLED_ShowStr(0, 2, "UNPLUG OLED", 2);
+    OLED_ShowStr(0, 6, "Start_dust", 2);
+    Wait_Enter_Key();
+    OLED_CLS();
+
+    dust_Flag = 1;
+
+    /* Step 5: 给用户拔屏缓冲时间，然后放行 Car_Go */
+    OLED_ShowStr(0, 0, "READY?", 2);
+    Wait_Enter_Key();
+    OLED_ShowStr(0, 6, "CAR GO IN 3S", 2);
+    HAL_Delay(3000);
+    OLED_CLS();
+
+    Start_Flag = 1;
+
 }

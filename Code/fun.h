@@ -34,7 +34,12 @@ extern float ICM_Acc[3];
 extern float ICM_Gyro[3];
 extern int a;
 extern TIM_HandleTypeDef htim7;
-
+extern float Gyro_Z_Bias;
+extern uint8_t Start_Flag;
+extern uint32_t filt_L_Correct[8][FILT_LEN];   // 左 8 路队列
+extern uint32_t filt_R_Correct[8][FILT_LEN];   // 右 8 路队列
+extern uint8_t Start_Flag;  // 启动标志位
+extern uint8_t dust_Flag;  // 负压标志位
 /************************************函数声明***********************************/
 void Delay_us(uint32_t nus);		
 void Usart_SendArr(UART_HandleTypeDef *huart, uint8_t *arr, uint16_t size);
@@ -46,5 +51,8 @@ void filt_scale_20000(int arr[8], uint32_t filt_q[8][FILT_LEN]);
 extern float Sliding_Avg(int x);
 extern void WitSD_Send(UART_HandleTypeDef *huart);
 int16_t Map_Range(int16_t range1[2], int16_t range2[2], int16_t value);
+float Gyro_Calibrate_Z_Bias(uint16_t sample_count, uint16_t sample_interval_ms);
+float Gyro_Remove_Z_Bias(float gyro_z);
+void Start(void);
 
 #endif

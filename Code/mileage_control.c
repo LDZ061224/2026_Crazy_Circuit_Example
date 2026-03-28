@@ -11,36 +11,33 @@ History:
 <author>  	 <time>   	<version> 	 	<desc>
 **************************************************/
 	
-#include "mileage_control.h"
-	
-#define LEN 16
-#define false 0
-#define true 1
-	
+#include "mileage_control.h"	
 /************************************变量定义***********************************/
 /*-------------标志位--------------*/
 uint8_t Stop_Flag = 0;       //停止标志位 
 uint8_t First_Mode = 0;      //初始模式标志位，初始化一些变量
-uint8_t Finish_Flag = 0;
-uint16_t Finish_Count = 0; 
+uint8_t Finish_Flag = 0;     //完成标志位
+uint16_t Finish_Count = 0;   //完成计数，完成后停车
 /*-------------循迹--------------*/
-int Image_Arr[16] = {0};	  // 图像数组
-int Last_Track_Arr[16] = {-1};	// 上次赛道
-int Track_Arr[16] = {-1};	// 赛道
-uint8_t Last_Track_Num = 0;	// 上次识别点数量
-uint8_t Track_Num = 0;		// 识别点数量
-int Left_Scan_Point = 0, Right_Scan_Point = 0; //左右扫描灯
-int Middle = 0;             //中点灯
-int Speed_Get_Count = 1;     
-int8_t Last_Error = 0;       //历史误差
-int8_t Error = 0;            //误差
+int Image_Arr[16] = {0};	  					// 图像数组
+int Last_Track_Arr[16] = {-1};				// 上次赛道
+int Track_Arr[16] = {-1};							// 赛道
+uint8_t Last_Track_Num = 0;						// 上次识别点数量
+uint8_t Track_Num = 0;								// 识别点数量
+int Left_Scan_Point = 0;
+int Right_Scan_Point = 0;             //边界扫描灯
+int Middle = 0;             					//中灯
+int Speed_Get_Count = 1;              //测速计数，偶数获取测速    
+int8_t Last_Error = 0;       					//历史误差
+int8_t Error = 0;           				  //误差
 const int8_t Dir_Arr[16] = {-32, -26, -17, -14, -10, -5, -2, -1, 1, 2, 5, 10, 14, 17, 26, 32};
-uint8_t Left_Num = 0;       // 左侧点数量
-uint8_t Right_Num = 0;      // 右侧点数量
-	
+uint8_t Left_Num = 0;       // 左侧点数量(暂时没啥用)
+uint8_t Right_Num = 0;      // 右侧点数量(暂时没啥用)
+
 /*--------------赛道结构体---------------*/
 Racing_track_Typedef Run_Track;     // 跑赛道结构体，键显选择
 uint8_t Line_Num_Count = 0;       // 有元器件的路段中正常线路的数量
+uint8_t Line_All_Count = 0;
 uint8_t In_Line_Ele_Count = 0;    // 一段连线中元器件计数
 uint8_t Execute_Times = 0;   //到第几个路段
 uint8_t Execute_All_Times = 0;	 // 执行总数量
@@ -51,8 +48,6 @@ int giSpeed_Right[3] = {0};	// 右测速
 int giSpeed_Left[3] = {0};	// 左测速
 int Left_Real_Spd = 0;		// 左实际
 int Right_Real_Spd = 0;		// 右实际
-int Left_Spd = 0;			// 左实际
-int Right_Spd = 0;			// 右实际
 int Left_Exp_Spd = 0;		// 左期望
 int Right_Exp_Spd = 0;		// 右期望
 float Average_Speed = 0;    //左右平均，用来做积分
@@ -63,7 +58,7 @@ int L_exp = 0;
 int R_exp = 0;
 int dust_exp = 0;
 int Gyro_exp = 0;
-uint8_t Gyro_mode = 0;
+uint8_t map_mode = 0;
 /*-------------陀螺仪--------------*/
 float ICM_Acc[3] = {0};
 float ICM_Gyro[3] = {0};
@@ -110,12 +105,9 @@ void Car_Go(void)
 	{
 		Get_Speed();
 	}
-	//不知道是何意味
-	Left_Real_Spd = Left_Spd;
-	Right_Real_Spd = Right_Spd;
-	
 	Get_IMU();
 	Get_Error();
+
 	Set_Out();
 }	
 	
@@ -144,8 +136,8 @@ void Get_Speed()
 		giSpeed_Right[0] = -giSpeed_Right[0];
 	}
 	
-	Left_Spd  = 0.5 * giSpeed_Left[0] + 0.3 * giSpeed_Left[1] + 0.2 * giSpeed_Left[2];
-	Right_Spd = 0.5 * giSpeed_Right[0] + 0.3 * giSpeed_Right[1] + 0.2 * giSpeed_Right[2];
+	Left_Real_Spd  = 0.5 * giSpeed_Left[0] + 0.3 * giSpeed_Left[1] + 0.2 * giSpeed_Left[2];
+	Right_Real_Spd = 0.5 * giSpeed_Right[0] + 0.3 * giSpeed_Right[1] + 0.2 * giSpeed_Right[2];
 	
 	Clear_Count(&Encoder_Left);
 	Clear_Count(&Encoder_Right);
@@ -158,14 +150,20 @@ void Get_Speed()
 *******************************************************/
 void Get_Error(void)
 {
-	// 光电管数组处理
-	Image_Process();
 	if (First_Mode == 0)
     {
-		Run_Track = Test1;
-        Run_Mode = Mileage_Mode;
-        First_Mode = 1;
-        Element_nums = Run_Track.Arr_Element_Num[Execute_Times];
+		switch(map_mode)
+		{
+			case 1 :
+			Run_Track = Test1;
+			break;
+			case 2 :
+			Run_Track = Test2;
+			break;
+		}
+			Run_Mode = Mileage_Mode;
+			First_Mode = 1;
+			Element_nums = Run_Track.Arr_Element_Num[Execute_Times];
 				// if(Element_nums + In_Line_Ele_Count + Line_Num_Count > 0)
 				// {
 				// Count.Mileage = Run_Track.Arr_Mileage_Normal[Line_Num_Count][In_Line_Ele_Count]
@@ -177,6 +175,9 @@ void Get_Error(void)
        Run_Track.Speed_Adjust.Range_Source[0] = 0;
        Run_Track.Speed_Adjust.Range_Source[1] = Run_Track.Arr_Mileage_ALL[Execute_Times];
     }
+	// 光电管数组处理
+	Image_Process();
+	
 	
     if (Element_nums == 0)
     {
@@ -213,8 +214,7 @@ void Get_Error(void)
 void Get_IMU(void)
 {	
 	icm20602_get_gyro(ICM_Gyro);
-	if(Gyro_mode == 1) ICM_Gyro[2] =  ICM_Gyro[2] + Gyro_exp;
-	else if(Gyro_mode == 2) ICM_Gyro[2] =  ICM_Gyro[2] - Gyro_exp;
+	ICM_Gyro[2] = Gyro_Remove_Z_Bias(ICM_Gyro[2]);
 	
 	if (ABS(ICM_Gyro[2]) < 1)
 	{
@@ -253,23 +253,13 @@ void Calcul_Out(void)
 		  // 动态速度映射
     int Run_Speed = Map_Range(Run_Track.Speed_Adjust.Range_Target, Run_Track.Speed_Adjust.Range_Source, Count.Node_Mileage);
 
-		if(Gyro_mode == 0)
-		{
-			Left_Exp_Spd = Run_Speed - Turn_PID_Out;
-			Right_Exp_Spd = Run_Speed + Turn_PID_Out;
-		}
-		else 
-		{
-			Left_Exp_Spd = Run_Speed + Gyro_PID_Out;
-			Right_Exp_Spd = Run_Speed - Gyro_PID_Out;
-		}
+		Left_Exp_Spd = Run_Speed + Gyro_PID_Out;
+		Right_Exp_Spd = Run_Speed - Gyro_PID_Out;
 	  
-	
-	
 	Left_PID_Out  = PID_calc(&Left_PID, Left_Exp_Spd, Left_Real_Spd);
 	Right_PID_Out = PID_calc(&Right_PID, Right_Exp_Spd, Right_Real_Spd);     
 }	
-	
+
 /******************************************************
 ** F unction: Set_Out
 ** Description: 设置输出
@@ -279,10 +269,6 @@ void Set_Out(void)
 {	
 	// 计算输出
     Calcul_Out();   
-	
-	// 风扇
-	PWM_SetDuty(Duct_IN1, 800 - dust_exp);
-	PWM_SetDuty(Duct_IN2, 800);
 	
 	if (Enable_Switch_ON)	// 使能开关
 	{	
@@ -479,12 +465,12 @@ void Normal_Run(void)
             switch (Run_Track.Arr_Node_Dir[Execute_Times])
             {
                 case 1:     // 左转
-					Error = -100;
+					Error = -110;
                     Run_Mode = Turn_Left;
                     /* code */
                     break;
                 case 2:     // 右转
-					Error = 100;
+					Error = 110;
                     Run_Mode = Turn_Right;
                     /* code */
                     break;
@@ -493,7 +479,7 @@ void Normal_Run(void)
                     Run_Mode = Straight_Mode;
                     break;
             }
-            Execute_Times = (Execute_Times + 1) % (Run_Track.Node_Num + 1);
+            Execute_Times = (Execute_Times + 1) % Run_Track.Node_Num;
 						Execute_All_Times ++;
             Element_nums = Run_Track.Arr_Element_Num[Execute_Times];
 						Run_Track.Speed_Adjust.Range_Source[1] = Run_Track.Arr_Mileage_ALL[Execute_Times];
@@ -501,7 +487,7 @@ void Normal_Run(void)
 			// 跑完一圈停车
             if (Run_Track.Stop_Mode == 0)
             {
-                if (Execute_All_Times == Run_Track.Node_Num)
+                if (Execute_All_Times == Run_Track.Node_Num - 1)
                 {
                     Finish_Flag = 1;
                 }
@@ -517,7 +503,7 @@ void Normal_Run(void)
 *************************************/
 void Turn_Left_Run(void)
 {
-    Error *= 0.98;
+    Error *= 0.985;
 //    Middle = (Track_Arr[0] + Track_Arr[Track_Num - 1]) / 2;
     HAL_GPIO_WritePin (GPIOC ,GPIO_PIN_0 ,1);
 
@@ -554,7 +540,7 @@ void Turn_Left_Run(void)
 *************************************/
 void Turn_Right_Run(void)
 {
-    Error *= 0.98;
+    Error *= 0.985;
 //    Middle = (Track_Arr[0] + Track_Arr[Track_Num - 1]) / 2;
     HAL_GPIO_WritePin (GPIOC ,GPIO_PIN_0, 1); 
 //    for (int i = 0; i < 15;  i++)
@@ -690,14 +676,15 @@ void Mileage_Mode_Run(void)
 		if (In_Line_Ele_Count == Run_Track.Arr_Element_Num[Execute_Times])
 		{
 			Run_Mode = Normal_Mode;
-			Line_Num_Count++;
+			Line_Num_Count = (Line_Num_Count + 1) % Run_Track.Node_Num;
+			Line_All_Count++;
 			In_Line_Ele_Count = 0;
 		}
 
 		// 跑完一圈停车
 		if (Run_Track.Stop_Mode == 1)
 		{
-			if (Line_Num_Count == Run_Track.Element_All_Num - 1)
+			if (Line_All_Count  == Run_Track.Node_Num - 1)
 			{
 				Finish_Flag = 1;
 			}
