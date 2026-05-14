@@ -10,11 +10,11 @@
 #include "UI.h"
 #include "OLEDkeyboard.h"
 
-/*=====ĞèÒª¸ü¸Ä»òÏÔÊ¾µÄ±äÁ¿ÉùÃ÷µÄÍ·ÎÄ¼ş=====*/
+/*=====éœ€è¦æ›´æ”¹æˆ–æ˜¾ç¤ºçš„å˜é‡å£°æ˜çš„å¤´æ–‡ä»¶=====*/
 //#include "zf_device_mt9v03x.h"
 //#include "Image.h"
 //#include "Getinfor.h"
-/*================ºê¶¨Òå================*/
+/*================å®å®šä¹‰================*/
 
 typedef enum
 {
@@ -27,8 +27,8 @@ typedef enum
 #define JBD_simiic_SDA_PIN          P33_6
 
 /*==== OLED ====*/
-#define First_X                 45  //ÉÏ´Î²ÎÊıµÄX×ø±ê
-#define Second_X                85  //±¾´ÎÊäÈë²ÎÊıµÄX×ø±ê
+#define First_X                 45  //ä¸Šæ¬¡å‚æ•°çš„Xåæ ‡
+#define Second_X                85  //æœ¬æ¬¡è¾“å…¥å‚æ•°çš„Xåæ ‡
 #define OLED_CLS(void)  OLED_Fill(0x00)
 
 //#define flash_read(SectorNum,page,type)        (type)(EEPROM_Read_32Bit(SectorNum, page))
@@ -37,9 +37,9 @@ typedef enum
 
 #define Backup_Sector                   (0U)
 #define PAGE_NUM                        (1023U)
-/*===============Íâ²¿±äÁ¿===============*/
+/*===============å¤–éƒ¨å˜é‡===============*/
 
-/*===============º¯ÊıÉùÃ÷===============*/
+/*===============å‡½æ•°å£°æ˜===============*/
 
 
 

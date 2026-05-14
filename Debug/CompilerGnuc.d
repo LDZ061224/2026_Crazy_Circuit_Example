@@ -1,18 +1,18 @@
 CompilerGnuc.o :	../libraries/infineon_libraries/Infra/Platform/Tricore/Compilers/CompilerGnuc.c
 ../libraries/infineon_libraries/Infra/Platform/Tricore/Compilers/CompilerGnuc.c :
-CompilerGnuc.o :	"E:\\ADS_WorkShop\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_Types.h"
-"E:\\ADS_WorkShop\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_Types.h" :
-CompilerGnuc.o :	"E:\\ADS_WorkShop\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Platform\Tricore\Compilers\Compilers.h"
-"E:\\ADS_WorkShop\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Platform\Tricore\Compilers\Compilers.h" :
-CompilerGnuc.o :	"E:\\ADS_WorkShop\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Configurations\Ifx_Cfg.h"
-"E:\\ADS_WorkShop\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Configurations\Ifx_Cfg.h" :
-CompilerGnuc.o :	"E:\\ADS_WorkShop\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Platform\Tricore\Compilers\CompilerTasking.h"
-"E:\\ADS_WorkShop\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Platform\Tricore\Compilers\CompilerTasking.h" :
-CompilerGnuc.o :	"D:\AURIX-Studio-1.10.2\tools\Compilers\Tasking_1.1r8\ctc\include\stddef.h"
-"D:\AURIX-Studio-1.10.2\tools\Compilers\Tasking_1.1r8\ctc\include\stddef.h" :
-CompilerGnuc.o :	"E:\\ADS_WorkShop\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Platform_Types.h"
-"E:\\ADS_WorkShop\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Platform_Types.h" :
-CompilerGnuc.o :	"E:\\ADS_WorkShop\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_TypesTasking.h"
-"E:\\ADS_WorkShop\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_TypesTasking.h" :
+CompilerGnuc.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_Types.h"
+"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_Types.h" :
+CompilerGnuc.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Platform\Tricore\Compilers\Compilers.h"
+"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Platform\Tricore\Compilers\Compilers.h" :
+CompilerGnuc.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Configurations\Ifx_Cfg.h"
+"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Configurations\Ifx_Cfg.h" :
+CompilerGnuc.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Platform\Tricore\Compilers\CompilerTasking.h"
+"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Platform\Tricore\Compilers\CompilerTasking.h" :
+CompilerGnuc.o :	"C:\Infineon\AURIX-Studio-1.10.2\tools\Compilers\Tasking_1.1r8\ctc\include\stddef.h"
+"C:\Infineon\AURIX-Studio-1.10.2\tools\Compilers\Tasking_1.1r8\ctc\include\stddef.h" :
+CompilerGnuc.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Platform_Types.h"
+"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Platform_Types.h" :
+CompilerGnuc.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_TypesTasking.h"
+"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_TypesTasking.h" :
 CompilerGnuc.o :	..\libraries\infineon_libraries\Infra\Platform\Tricore\Compilers\Compilers.h
 ..\libraries\infineon_libraries\Infra\Platform\Tricore\Compilers\Compilers.h :

@@ -3,8 +3,8 @@ Copyright (C), 2016-2024, TYUT JBD .
 File name: I2C.c
 Author: TYUT JBD
 Version:0.0               Date: 2016.11.12
-Description: oledģ��I2c
-Others:��
+Description: oled模拟I2c
+Others:无
 Function List: 1.Delay_us
                2.I2c_Start
                3.I2c_Stop
@@ -15,29 +15,29 @@ Function List: 1.Delay_us
                8.OLED_Dat
 History:
 <author>  <time>      <version > <desc>
-JBD       2016.10.21  0.0      ��ʼ
-AmaZzzing 2016.11.12  1.0        ������ɹ���
-˫��&�ű�   2020.6.1    ��ͯ�ڰ�      ����Ӣ����
+JBD       2016.10.21  0.0      初始
+AmaZzzing 2016.11.12  1.0        初步完成构架
+双车&信标   2020.6.1    儿童节版      兼容英飞凌
 **************************************************/
 
 #include "JBD_simiic.h"
 
 /*************************************************************************
-*  �������ƣ�IIC��ʱ
-*  ����˵����ģ��IIC��ʱ����
-*  ����˵������
-*  �������أ���
-*  �޸�ʱ�䣺2022��11��10��
-*  Ӧ�þ�����JBD_simiic_delay();  //�򵥵���ʱ
-*  �ڲ����� �޸�������Ե���IIC����
+*  函数名称：IIC延时
+*  功能说明：模拟IIC延时函数
+*  参数说明：无
+*  函数返回：无
+*  修改时间：2022年11月10日
+*  应用举例：JBD_simiic_delay();  //简单的延时
+*  内部调用 修改这里可以调整IIC速率
 *************************************************************************/
 void JBD_simiic_delay(void)
 {
-    /* 200MHz ϵͳʱ���� ģ��IIC�ٶ�Ϊ 400Khz */
+    /* 200MHz 系统时钟下 模拟IIC速度为 400Khz */
 
     uint8 i = 0;
 
-for(i = 0; i < 60; i++) //�޸�������Ե���IIC����
+for(i = 0; i < 60; i++) //修改这里可以调整IIC速率
     {
         __asm("NOP"); /* delay */
     }
@@ -45,44 +45,44 @@ for(i = 0; i < 60; i++) //�޸�������Ե���IIC����
 
 /*************************************************
 Function: I2c_Start
-Description:IIC��ʼ�ź�
-Details��IIC��ʼ�ź�ΪSCL�ߵ�ƽ��SDA�����½���
+Description:IIC开始信号
+Details：IIC开始信号为SCL高电平，SDA出现下降沿
 ********************************************** ***/
 void JBD_simiic_Start(void)
 {
-    JBD_simiic_SDA_OUT;   //sda�����
+    JBD_simiic_SDA_OUT;   //sda线输出
     JBD_simiic_SDA_H;
     JBD_simiic_SCL_H;
     JBD_simiic_delay();
     JBD_simiic_SDA_L; //START:when CLK is high,DATA change form high to low
     JBD_simiic_delay();
-    JBD_simiic_SCL_L; //ǯסI2C���ߣ�׼�����ͻ��������
+    JBD_simiic_SCL_L; //钳住I2C总线，准备发送或接收数据
 }
 /*************************************************
 Function: I2c_Stop
-Description:IICֹͣ�ź�
-Details��IICֹͣ�ź�ΪSCL�ߵ�ƽ��SDA����������
+Description:IIC停止信号
+Details：IIC停止信号为SCL高电平，SDA出现上升沿
 *************************************************/
 void JBD_simiic_Stop(void)
 {
-    JBD_simiic_SDA_OUT; //sda�����
+    JBD_simiic_SDA_OUT; //sda线输出
     JBD_simiic_SCL_L;
     JBD_simiic_SDA_L; //STOP:when CLK is high DATA change form low to high
     JBD_simiic_delay();
     JBD_simiic_SCL_H;
     JBD_simiic_delay();
-    JBD_simiic_SDA_H; //����I2C���߽����ź�
+    JBD_simiic_SDA_H; //发送I2C总线结束信号
     JBD_simiic_delay();
 }
 
 
 /*************************************************************************
-*  �������ƣ�void IIC_Ack(void)
-*  ����˵����ģ��IIC����ACKӦ��
-*  ����˵������
-*  �������أ���
-*  �޸�ʱ�䣺2020��3��10��
-*  Ӧ�þ������ڲ����� ����������һ���ֽ����ݺ�����������ACK֪ͨ�ӻ�һ���ֽ���������ȷ����
+*  函数名称：void IIC_Ack(void)
+*  功能说明：模拟IIC产生ACK应答
+*  参数说明：无
+*  函数返回：无
+*  修改时间：2020年3月10日
+*  应用举例：内部调用 主机接收完一个字节数据后，主机产生的ACK通知从机一个字节数据已正确接收
 *************************************************************************/
 static void JBD_simiic_Ack(void)
 {
@@ -97,12 +97,12 @@ static void JBD_simiic_Ack(void)
 
 
 /*************************************************************************
-*  �������ƣ�void IIC_NAck(void)
-*  ����˵����ģ��IIC������ACKӦ��
-*  ����˵������
-*  �������أ���
-*  �޸�ʱ�䣺2020��3��10��
-*  Ӧ�þ������ڲ����� �������������һ���ֽ����ݺ�����������NACK֪ͨ�ӻ����ͽ������ͷ�SDA,�Ա���������ֹͣ�ź�
+*  函数名称：void IIC_NAck(void)
+*  功能说明：模拟IIC不产生ACK应答
+*  参数说明：无
+*  函数返回：无
+*  修改时间：2020年3月10日
+*  应用举例：内部调用 主机接收完最后一个字节数据后，主机产生的NACK通知从机发送结束，释放SDA,以便主机产生停止信号
 *************************************************************************/
 static void JBD_simiic_NAck(void)
 {
@@ -118,13 +118,13 @@ static void JBD_simiic_NAck(void)
 
 /*************************************************
 Function: IIC_Wait_Ask
-Description:IICӦ���ź�
-Details��Ӧ���ź�ΪSDA�ɸߵ�ƽ��Ϊ�͵�ƽ
+Description:IIC应答信号
+Details：应答信号为SDA由高电平变为低电平
 *************************************************/
 uint8 JBD_simiic_Wait_Ask(void)
 {
 //    uint8  ErrTime = 10;
-    JBD_simiic_SDA_IN; //SDA����Ϊ����  ���ӻ���һ���͵�ƽ��ΪӦ��
+    JBD_simiic_SDA_IN; //SDA设置为输入  （从机给一个低电平做为应答）
     JBD_simiic_SDA_H;
     JBD_simiic_delay();
     JBD_simiic_SCL_H;
@@ -134,21 +134,21 @@ uint8 JBD_simiic_Wait_Ask(void)
         JBD_simiic_Stop();
         return 1;
     }
-    JBD_simiic_SCL_L; //ʱ�����0
+    JBD_simiic_SCL_L; //时钟输出0
     return 0;
 }
 
 
 /*************************************************
 Function: I2c_Write_OneByte
-Description:IICдһ���ֽ�
-Details��Ӧ����CH455��ȡ��ֵ,�ڽ������ݴ���ʱ��ʱ���ź�(SCL)�ź�Ϊ�ߵ�ƽ�ڼ䣬
-        ������(SDA)�����ݱ��뱣���ȶ���ֻ��SCLΪ�͵�ƽʱ��SDA�ϵ�״̬�����������仯
+Description:IIC写一个字节
+Details：应用于CH455读取键值,在进行数据传送时，时钟信号(SCL)信号为高电平期间，
+        数据线(SDA)上数据必须保持稳定，只有SCL为低电平时，SDA上的状态才允许发生变化
 *************************************************/
 void JBD_simiic_Write_OneByte(unsigned char data)
 {
     JBD_simiic_SDA_OUT;
-    JBD_simiic_SCL_L;                                                                       //����ʱ�ӿ�ʼ���ݴ���
+    JBD_simiic_SCL_L;                                                                       //拉低时钟开始数据传输
     for(uint8 t = 0; t < 8; t++)
     {
 //        JBD_simiic_SDA_READ = data_t&0x80;
@@ -174,26 +174,26 @@ void JBD_simiic_Write_OneByte(unsigned char data)
 
 /*************************************************
 Function: I2c_Read_OneByte
-Description:IIC��һ���ֽ�
-Details��Ӧ����CH455��ȡ��ֵ
+Description:IIC读一个字节
+Details：应用于CH455读取键值
 *************************************************/
 uint8 JBD_simiic_Read_OneByte(uint8 ack)
 {
     uint8 receive = 0;
-    JBD_simiic_SDA_IN; //SDA����Ϊ����ģʽ �ȴ����մӻ���������
+    JBD_simiic_SDA_IN; //SDA设置为输入模式 等待接收从机返回数据
     for(uint8 i = 0; i < 8; i++)
     {
         JBD_simiic_SCL_L;
         JBD_simiic_delay();
         JBD_simiic_SCL_H;
         receive<<=1;
-        if(JBD_simiic_SDA_READ)receive++; //�ӻ����͵ĵ�ƽ
+        if(JBD_simiic_SDA_READ)receive++; //从机发送的电平
         JBD_simiic_delay();
     }
     if(ack)
-        JBD_simiic_Ack(); //����ACK
+        JBD_simiic_Ack(); //发送ACK
     else
-        JBD_simiic_NAck(); //����nACK
+        JBD_simiic_NAck(); //发送nACK
     return receive;
 }
 

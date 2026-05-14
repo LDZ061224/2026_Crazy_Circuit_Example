@@ -3,22 +3,22 @@
 
 
 /*************************************************************************
-*  º¯ÊıÃû³Æ£ºvoid Flash_Data_Recover(unsigned char desSector, unsigned char backupSector)
-*  ¹¦ÄÜËµÃ÷£º°´¸´Î»¼üºó½«Êı¾İ´Ó±¸·İÉÈÇø»Ö¸´
-* @param   desSector     £º  Ä¿µÄÉÈÇø   ·¶Î§  0-11
-* @param   backupSector  £º  ÉÈÇø   ·¶Î§  0-11, Ä¬ÈÏ11
-*  º¯Êı·µ»Ø£ºTRUE:»Ö¸´³É¹¦   FLASE:ÉÈÇø²»Æ¥Åä
-*  ĞŞ¸ÄÊ±¼ä£º2020Äê6ÔÂ6ÈÕ
-*           2022Äê11ÔÂ24ÈÕ     //ÔÚ¼üÏÔ³õÊ¼»¯Íê³ÉºóÏÈ½øĞĞÊı¾İ¾ÈÔ®£¬È«ÅÌ¸´ÖÆ
+*  å‡½æ•°åç§°ï¼švoid Flash_Data_Recover(unsigned char desSector, unsigned char backupSector)
+*  åŠŸèƒ½è¯´æ˜ï¼šæŒ‰å¤ä½é”®åå°†æ•°æ®ä»å¤‡ä»½æ‰‡åŒºæ¢å¤
+* @param   desSector     ï¼š  ç›®çš„æ‰‡åŒº   èŒƒå›´  0-11
+* @param   backupSector  ï¼š  æ‰‡åŒº   èŒƒå›´  0-11, é»˜è®¤11
+*  å‡½æ•°è¿”å›ï¼šTRUE:æ¢å¤æˆåŠŸ   FLASE:æ‰‡åŒºä¸åŒ¹é…
+*  ä¿®æ”¹æ—¶é—´ï¼š2020å¹´6æœˆ6æ—¥
+*           2022å¹´11æœˆ24æ—¥     //åœ¨é”®æ˜¾åˆå§‹åŒ–å®Œæˆåå…ˆè¿›è¡Œæ•°æ®æ•‘æ´ï¼Œå…¨ç›˜å¤åˆ¶
 *************************************************************************/
 void Flash_Data_Recover(unsigned char backupSector)
 {
-//    uint32 sectorFlag = EEPROM_Read_32Bit(backupSector, 0);                             //±¸·İÉÈÇøµÄ0Ò³´æµ±Ç°±¸·İµÄÉÈÇø
-//    uint32 finishFlag = EEPROM_Read_32Bit(backupSector, 1);                             //±¸·İÉÈÇøµÄ1Ò³´æÍê³É±êÖ¾
+//    uint32 sectorFlag = EEPROM_Read_32Bit(backupSector, 0);                             //å¤‡ä»½æ‰‡åŒºçš„0é¡µå­˜å½“å‰å¤‡ä»½çš„æ‰‡åŒº
+//    uint32 finishFlag = EEPROM_Read_32Bit(backupSector, 1);                             //å¤‡ä»½æ‰‡åŒºçš„1é¡µå­˜å®Œæˆæ ‡å¿—
 
-//    if(finishFlag != sectorFlag) //flashÊı¾İÃ»ÓĞÊäÈë½áÊø
+//    if(finishFlag != sectorFlag) //flashæ•°æ®æ²¡æœ‰è¾“å…¥ç»“æŸ
 //    {
-//        Flash_Data_Move(Backup_Sector, sectorFlag);                                     //½«Êı¾İ»Ö¸´µ½Ô­ÉÈÇø
+//        Flash_Data_Move(Backup_Sector, sectorFlag);                                     //å°†æ•°æ®æ¢å¤åˆ°åŸæ‰‡åŒº
 //    }
 }
 

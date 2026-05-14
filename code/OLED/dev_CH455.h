@@ -4,19 +4,19 @@ File name: CH455.h
 Author: TYUT JBD
 Version:1.0               Date: 2016.11.12
 Description:  CH455.h
-Others:      ÎŞ
+Others:      æ— 
 Function List:
 History:
 <author>  <time>      <version > <desc>
-JBD       2016.10.21  0.0        ³õÊ¼
-AmaZzzing 2016.11.12  1.0        ³õ²½Íê³É¹¹¼Ü
+JBD       2016.10.21  0.0        åˆå§‹
+AmaZzzing 2016.11.12  1.0        åˆæ­¥å®Œæˆæ„æ¶
 **************************************************/
 #ifndef __CH455_H
 #define __CH455_H
 
 #include "OLEDkeyboard_Config.h"
 
-/************************************ºê¶¨Òå************************************/
+/************************************å®å®šä¹‰************************************/
 
 typedef enum
 {
@@ -46,7 +46,7 @@ typedef enum
     KEY_BACK_Long   = 0xAF,
     KEY_ENTER_Long  = 0xBF,
 
-    // µ±Ç°±»°´ÏÂ
+    // å½“å‰è¢«æŒ‰ä¸‹
     KEY_0_Down      = 0xFF - KEY_0,
     KEY_1_Down      = 0xFF - KEY_0,
     KEY_2_Down      = 0xFF - KEY_0,
@@ -63,11 +63,11 @@ typedef enum
     KEY_BLANK       = 0xFF,
 }KeyValue_enum;
 
-/*********************************È«¾Ö±äÁ¿ÉùÃ÷*********************************/
+/*********************************å…¨å±€å˜é‡å£°æ˜*********************************/
 
 //extern unsigned char keycode;
 
-/***********************************º¯ÊıÉùÃ÷***********************************/
+/***********************************å‡½æ•°å£°æ˜***********************************/
 void CH455_Init(void);
 uint8 CH455_Read(void);
 KeyValue_enum CH455_GetOneKey(void);

@@ -1,24 +1,24 @@
 #include "OLEDkeyboard_Config.h"
 #include "UI.h"
 
-int KeyValue_temp = KEY_BLANK;   //ÊäÈëµÄĞÂÊı×Ö
+int KeyValue_temp = KEY_BLANK;   //è¾“å…¥çš„æ–°æ•°å­—
 int KeyValue_old_temp;
-int NewVlaue_temp = 0;           //ÊäÈëÇøÏÔÊ¾³öÀ´µÄÊı×Ö
+int NewVlaue_temp = 0;           //è¾“å…¥åŒºæ˜¾ç¤ºå‡ºæ¥çš„æ•°å­—
 int RT_show = 0;
 
 
 ///*************************************************
 //Function: KeyboardInput
-//Description:¼üÅÌÊäÈë    (×î¶à5Î»)
-//Details£ºfactor ÏµÊı£¬ÊäÈëµÄÊıÔÚ·µ»ØÊ±½«»á³ËµÄÏµÊı£¬1.0Îª²»±ä
+//Description:é”®ç›˜è¾“å…¥    (æœ€å¤š5ä½)
+//Detailsï¼šfactor ç³»æ•°ï¼Œè¾“å…¥çš„æ•°åœ¨è¿”å›æ—¶å°†ä¼šä¹˜çš„ç³»æ•°ï¼Œ1.0ä¸ºä¸å˜
 //*************************************************/
-//int32 KeyboardInput_RT(uint16 x,uint16 y, TextSize_TypeDef TextSize, float factor) //£¨without Flash£©
+//int32 KeyboardInput_RT(uint16 x,uint16 y, TextSize_TypeDef TextSize, float factor) //ï¼ˆwithout Flashï¼‰
 //{
-//    int KeyValue = KEY_BLANK;   //ÊäÈëµÄĞÂÊı×Ö
+//    int KeyValue = KEY_BLANK;   //è¾“å…¥çš„æ–°æ•°å­—
 //    int KeyValue_old;
-//    int NewVlaue = 0;           //ÊäÈëÇøÏÔÊ¾³öÀ´µÄÊı×Ö
+//    int NewVlaue = 0;           //è¾“å…¥åŒºæ˜¾ç¤ºå‡ºæ¥çš„æ•°å­—
 //
-//    /*ÏÈÔÚÒªÊäÈëĞÅÏ¢µÄÎ»ÖÃÏÔÊ¾Ò»ĞĞ0*/
+//    /*å…ˆåœ¨è¦è¾“å…¥ä¿¡æ¯çš„ä½ç½®æ˜¾ç¤ºä¸€è¡Œ0*/
 //    OLED_Show_Numbers(x, y, 0, TextSize);
 //
 //    if(CH455_Read() != 4)
@@ -28,34 +28,34 @@ int RT_show = 0;
 //            KeyValue_old = KeyValue;
 //            KeyValue = CH455_GetOneKey();
 //
-//            /*µ±Ç°²»¶Ô³¤°´½øĞĞÌØÊâ´¦Àí*/
+//            /*å½“å‰ä¸å¯¹é•¿æŒ‰è¿›è¡Œç‰¹æ®Šå¤„ç†*/
 //            if(KeyValue > 0x0F && KeyValue != KEY_BLANK)
 //            {
 //                KeyValue = (KeyValue - 0x0F) >> 4;
 //            }
 //
-//            /* Ö±½ÓÌø¹ıµÄÇé¿öÈ¡ 0 */
+//            /* ç›´æ¥è·³è¿‡çš„æƒ…å†µå– 0 */
 //            if(KeyValue_old == KEY_BLANK && (KeyValue == KEY_ENTER || KeyValue == KEY_ENTER_Long))
 //            {
 //                NewVlaue = 0;
 //            }
 //
-//            /****************************ÊäÈëÊı×Ö¿ÉÍË¸ñ****************************/
-//            if(KeyValue != KEY_BACK && KeyValue != KEY_ENTER && KeyValue != KEY_BLANK)   //ÊäÈëÊıÖµ
+//            /****************************è¾“å…¥æ•°å­—å¯é€€æ ¼****************************/
+//            if(KeyValue != KEY_BACK && KeyValue != KEY_ENTER && KeyValue != KEY_BLANK)   //è¾“å…¥æ•°å€¼
 //            {
-//                if(NewVlaue / 10000 != 0)       //Ö»±£ÁôËÄÎ»
+//                if(NewVlaue / 10000 != 0)       //åªä¿ç•™å››ä½
 //                {
 //                    NewVlaue = NewVlaue % 10000;
 //                }
 //
-//                NewVlaue = NewVlaue * 10 + KeyValue;      //ĞÂÊäÈëµÄÊı×Ö·Åµ½¸öÎ»
+//                NewVlaue = NewVlaue * 10 + KeyValue;      //æ–°è¾“å…¥çš„æ•°å­—æ”¾åˆ°ä¸ªä½
 //            }
-//            else if(KeyValue == KEY_BACK)    //ÍË¸ñ
+//            else if(KeyValue == KEY_BACK)    //é€€æ ¼
 //            {
-//                NewVlaue = NewVlaue / 10;     //×îºóÒ»Î»È¥µô
+//                NewVlaue = NewVlaue / 10;     //æœ€åä¸€ä½å»æ‰
 //            }
 //
-//            OLED_Show_Numbers(x, y, NewVlaue, TextSize);   //ÏÔÊ¾µ±Ç°Öµ
+//            OLED_Show_Numbers(x, y, NewVlaue, TextSize);   //æ˜¾ç¤ºå½“å‰å€¼
 //        }
 //    }
 //    else
@@ -70,31 +70,31 @@ int RT_show = 0;
 //
 /////*************************************************
 ////Function: KeyboardInput_RT
-////Description:¼üÅÌÊµÊ±ÊäÈë    (×î¶à5Î»)
-////Details£ºfactor ÏµÊı£¬ÊäÈëµÄÊıÔÚ·µ»ØÊ±½«»á³ËµÄÏµÊı£¬1.0Îª²»±ä
+////Description:é”®ç›˜å®æ—¶è¾“å…¥    (æœ€å¤š5ä½)
+////Detailsï¼šfactor ç³»æ•°ï¼Œè¾“å…¥çš„æ•°åœ¨è¿”å›æ—¶å°†ä¼šä¹˜çš„ç³»æ•°ï¼Œ1.0ä¸ºä¸å˜
 ////*************************************************/
-////int32 KeyboardInput_RT(uint16 x,uint16 y, TextSize_TypeDef TextSize, float factor) //£¨without Flash£©
+////int32 KeyboardInput_RT(uint16 x,uint16 y, TextSize_TypeDef TextSize, float factor) //ï¼ˆwithout Flashï¼‰
 ////{
 ////
-////    /*ÏÈÔÚÒªÊäÈëĞÅÏ¢µÄÎ»ÖÃÏÔÊ¾Ò»ĞĞ0*/
+////    /*å…ˆåœ¨è¦è¾“å…¥ä¿¡æ¯çš„ä½ç½®æ˜¾ç¤ºä¸€è¡Œ0*/
 ////    if(RT_show == 0)
 ////    {
 ////        OLED_Show_Numbers(x, y, 0, TextSize);
-////        NewVlaue_temp = 0;//ÇåÁã
+////        NewVlaue_temp = 0;//æ¸…é›¶
 ////        RT_show = 1;
 ////    }
 ////
-////    KeyValue_old_temp = KeyValue_temp;//ÀúÊ·Öµ
+////    KeyValue_old_temp = KeyValue_temp;//å†å²å€¼
 ////    KeyValue_temp = CH455_QueryOneKey(15000);
 ////
-////    /*µ±Ç°²»¶Ô³¤°´½øĞĞÌØÊâ´¦Àí*/
+////    /*å½“å‰ä¸å¯¹é•¿æŒ‰è¿›è¡Œç‰¹æ®Šå¤„ç†*/
 ////    if(KeyValue_temp > 0x0F && KeyValue_temp != KEY_BLANK)
 ////    {
 ////        KeyValue_temp = (KeyValue_temp - 0x0F) >> 4;
 ////    }
 ////
-////    /* Ö±½ÓÌø¹ıµÄÇé¿öÈ¡ 0 */
-//////    if(KeyValue_old_temp == KEY_BLANK && (KeyValue_temp == KEY_ENTER || KeyValue_temp == KEY_ENTER_Long))//ÉÏ´Î¿Õ°×£¬Õâ´Î»Ø³µ£¨Ã»°´Êı×ÖµÄÇé¿ö£©
+////    /* ç›´æ¥è·³è¿‡çš„æƒ…å†µå– 0 */
+//////    if(KeyValue_old_temp == KEY_BLANK && (KeyValue_temp == KEY_ENTER || KeyValue_temp == KEY_ENTER_Long))//ä¸Šæ¬¡ç©ºç™½ï¼Œè¿™æ¬¡å›è½¦ï¼ˆæ²¡æŒ‰æ•°å­—çš„æƒ…å†µï¼‰
 //////    {
 //////        NewVlaue_temp = 0;
 //////    }
@@ -103,22 +103,22 @@ int RT_show = 0;
 ////        NewVlaue_temp = 0;
 ////    }
 ////
-////    /****************************ÊäÈëÊı×Ö¿ÉÍË¸ñ****************************/
-////    if(KeyValue_temp != KEY_BACK && KeyValue_temp != KEY_ENTER && KeyValue_temp != KEY_BLANK)   //ÊäÈëÊıÖµ
+////    /****************************è¾“å…¥æ•°å­—å¯é€€æ ¼****************************/
+////    if(KeyValue_temp != KEY_BACK && KeyValue_temp != KEY_ENTER && KeyValue_temp != KEY_BLANK)   //è¾“å…¥æ•°å€¼
 ////    {
-////        if(NewVlaue_temp / 10000 != 0)       //Ö»±£ÁôËÄÎ»
+////        if(NewVlaue_temp / 10000 != 0)       //åªä¿ç•™å››ä½
 ////        {
 ////            NewVlaue_temp = NewVlaue_temp % 10000;
 ////        }
 ////
-////        NewVlaue_temp = NewVlaue_temp * 10 + KeyValue_temp;      //ĞÂÊäÈëµÄÊı×Ö·Åµ½¸öÎ»
+////        NewVlaue_temp = NewVlaue_temp * 10 + KeyValue_temp;      //æ–°è¾“å…¥çš„æ•°å­—æ”¾åˆ°ä¸ªä½
 ////    }
-////    else if(KeyValue_temp == KEY_BACK)    //ÍË¸ñ
+////    else if(KeyValue_temp == KEY_BACK)    //é€€æ ¼
 ////    {
-////        NewVlaue_temp = NewVlaue_temp / 10;     //×îºóÒ»Î»È¥µô
+////        NewVlaue_temp = NewVlaue_temp / 10;     //æœ€åä¸€ä½å»æ‰
 ////    }
 ////
-////    OLED_Show_Numbers(x, y, NewVlaue_temp, TextSize);   //ÏÔÊ¾µ±Ç°Öµ
+////    OLED_Show_Numbers(x, y, NewVlaue_temp, TextSize);   //æ˜¾ç¤ºå½“å‰å€¼
 ////
 ////    if(KeyValue_temp == KEY_ENTER)
 ////    {
@@ -132,16 +132,16 @@ int RT_show = 0;
 //
 /*************************************************
 Function: KeyboardInput
-Description:¼üÅÌÊäÈë    (×î¶à5Î»)
-Details£ºfactor ÏµÊı£¬ÊäÈëµÄÊıÔÚ·µ»ØÊ±½«»á³ËµÄÏµÊı£¬1.0Îª²»±ä
+Description:é”®ç›˜è¾“å…¥    (æœ€å¤š5ä½)
+Detailsï¼šfactor ç³»æ•°ï¼Œè¾“å…¥çš„æ•°åœ¨è¿”å›æ—¶å°†ä¼šä¹˜çš„ç³»æ•°ï¼Œ1.0ä¸ºä¸å˜
 *************************************************/
-int32 KeyboardInput(uint16 x ,uint16 y , TextSize_TypeDef TextSize, float factor) //£¨without Flash£©
+int32 KeyboardInput(uint16 x ,uint16 y , TextSize_TypeDef TextSize, float factor) //ï¼ˆwithout Flashï¼‰
 {
-    int KeyValue = KEY_BLANK;   //ÊäÈëµÄĞÂÊı×Ö
+    int KeyValue = KEY_BLANK;   //è¾“å…¥çš„æ–°æ•°å­—
     int KeyValue_old;
-    int NewVlaue = 0;           //ÊäÈëÇøÏÔÊ¾³öÀ´µÄÊı×Ö
+    int NewVlaue = 0;           //è¾“å…¥åŒºæ˜¾ç¤ºå‡ºæ¥çš„æ•°å­—
 
-    /*ÏÈÔÚÒªÊäÈëĞÅÏ¢µÄÎ»ÖÃÏÔÊ¾Ò»ĞĞ0*/
+    /*å…ˆåœ¨è¦è¾“å…¥ä¿¡æ¯çš„ä½ç½®æ˜¾ç¤ºä¸€è¡Œ0*/
     OLED_Show_Numbers(x, y, 0, TextSize);
 
     while(KeyValue != KEY_ENTER)
@@ -149,34 +149,34 @@ int32 KeyboardInput(uint16 x ,uint16 y , TextSize_TypeDef TextSize, float factor
         KeyValue_old = KeyValue;
         KeyValue = CH455_GetOneKey();
 
-        /*µ±Ç°²»¶Ô³¤°´½øĞĞÌØÊâ´¦Àí*/
+        /*å½“å‰ä¸å¯¹é•¿æŒ‰è¿›è¡Œç‰¹æ®Šå¤„ç†*/
         if(KeyValue > 0x0F && KeyValue != KEY_BLANK)
         {
             KeyValue = (KeyValue - 0x0F) >> 4;
         }
 
-        /* Ö±½ÓÌø¹ıµÄÇé¿öÈ¡ 0 */
+        /* ç›´æ¥è·³è¿‡çš„æƒ…å†µå– 0 */
         if(KeyValue_old == KEY_BLANK && (KeyValue == KEY_ENTER || KeyValue == KEY_ENTER_Long))
         {
             NewVlaue = 0;
         }
 
-        /****************************ÊäÈëÊı×Ö¿ÉÍË¸ñ****************************/
-        if(KeyValue != KEY_BACK && KeyValue != KEY_ENTER && KeyValue != KEY_BLANK)   //ÊäÈëÊıÖµ
+        /****************************è¾“å…¥æ•°å­—å¯é€€æ ¼****************************/
+        if(KeyValue != KEY_BACK && KeyValue != KEY_ENTER && KeyValue != KEY_BLANK)   //è¾“å…¥æ•°å€¼
         {
-            if(NewVlaue / 10000 != 0)       //Ö»±£ÁôËÄÎ»
+            if(NewVlaue / 10000 != 0)       //åªä¿ç•™å››ä½
             {
                 NewVlaue = NewVlaue % 10000;
             }
 
-            NewVlaue = NewVlaue * 10 + KeyValue;      //ĞÂÊäÈëµÄÊı×Ö·Åµ½¸öÎ»
+            NewVlaue = NewVlaue * 10 + KeyValue;      //æ–°è¾“å…¥çš„æ•°å­—æ”¾åˆ°ä¸ªä½
         }
-        else if(KeyValue == KEY_BACK)    //ÍË¸ñ
+        else if(KeyValue == KEY_BACK)    //é€€æ ¼
         {
-            NewVlaue = NewVlaue / 10;     //×îºóÒ»Î»È¥µô
+            NewVlaue = NewVlaue / 10;     //æœ€åä¸€ä½å»æ‰
         }
 
-        OLED_Show_Numbers(x, y, NewVlaue, TextSize);   //ÏÔÊ¾µ±Ç°Öµ
+        OLED_Show_Numbers(x, y, NewVlaue, TextSize);   //æ˜¾ç¤ºå½“å‰å€¼
     }
 
     NewVlaue *= factor;
@@ -186,16 +186,16 @@ int32 KeyboardInput(uint16 x ,uint16 y , TextSize_TypeDef TextSize, float factor
 
 /*************************************************
 Function: KeyboardInput_with_Flash
-Description:¼üÅÌÊäÈë²¢´æÈëFlash    (×î¶à5Î»)
-Details£º´óºÅ×ÖÌåÏÔÊ¾ËÄÎ»Êı£¬Ğ¡ºÅ×ÖÌåÏÔÊ¾ÎåÎ»
+Description:é”®ç›˜è¾“å…¥å¹¶å­˜å…¥Flash    (æœ€å¤š5ä½)
+Detailsï¼šå¤§å·å­—ä½“æ˜¾ç¤ºå››ä½æ•°ï¼Œå°å·å­—ä½“æ˜¾ç¤ºäº”ä½
 *************************************************/
 int32 KeyboardInput_with_Flash(uint16 x,uint16 y, TextSize_TypeDef TextSize, float factor, uint16 sector, uint16 page)
 {
-    int KeyValue = KEY_BLANK;    //ÊäÈëµÄĞÂÊı×Ö
+    int KeyValue = KEY_BLANK;    //è¾“å…¥çš„æ–°æ•°å­—
     int KeyValue_old;
-    uint32 NewVlaue = 0;           //ÊäÈëÇøÏÔÊ¾³öÀ´µÄÊı×Ö
+    uint32 NewVlaue = 0;           //è¾“å…¥åŒºæ˜¾ç¤ºå‡ºæ¥çš„æ•°å­—
 
-    /*ÏÈÔÚÒªÊäÈëĞÅÏ¢µÄÎ»ÖÃÏÔÊ¾Ò»ĞĞ0*/
+    /*å…ˆåœ¨è¦è¾“å…¥ä¿¡æ¯çš„ä½ç½®æ˜¾ç¤ºä¸€è¡Œ0*/
     OLED_Show_Numbers(x, y, 0, TextSize);
 
     while(KeyValue != KEY_ENTER)
@@ -203,34 +203,34 @@ int32 KeyboardInput_with_Flash(uint16 x,uint16 y, TextSize_TypeDef TextSize, flo
         KeyValue_old = KeyValue;
         KeyValue = CH455_GetOneKey();
 
-        /* µ±Ç°²»¶Ô³¤°´½øĞĞÌØÊâ´¦Àí */
+        /* å½“å‰ä¸å¯¹é•¿æŒ‰è¿›è¡Œç‰¹æ®Šå¤„ç† */
         if(KeyValue > 0x0F && KeyValue != KEY_BLANK)
         {
             KeyValue = (KeyValue - 0x0F) >> 4;
         }
 
-        /* Ö±½ÓÌø¹ıµÄÇé¿ö±£ÁôÔ­Öµ */
+        /* ç›´æ¥è·³è¿‡çš„æƒ…å†µä¿ç•™åŸå€¼ */
         if(KeyValue_old == KEY_BLANK && (KeyValue == KEY_ENTER || KeyValue == KEY_ENTER_Long))
         {
             flash_read_page(Backup_Sector, page, &NewVlaue, 256);
         }
 
-        /****************************ÊäÈëÊı×Ö¿ÉÍË¸ñ****************************/
-        if(KeyValue != KEY_BACK && KeyValue != KEY_ENTER && KeyValue != KEY_BLANK)   //ÊäÈëÊıÖµ
+        /****************************è¾“å…¥æ•°å­—å¯é€€æ ¼****************************/
+        if(KeyValue != KEY_BACK && KeyValue != KEY_ENTER && KeyValue != KEY_BLANK)   //è¾“å…¥æ•°å€¼
         {
-            if(NewVlaue / 10000 != 0)       //Ö»±£Áô5Î»
+            if(NewVlaue / 10000 != 0)       //åªä¿ç•™5ä½
             {
                 NewVlaue = NewVlaue % 10000;
             }
 
-            NewVlaue = NewVlaue * 10 + KeyValue;      //ĞÂÊäÈëµÄÊı×Ö·Åµ½¸öÎ»
+            NewVlaue = NewVlaue * 10 + KeyValue;      //æ–°è¾“å…¥çš„æ•°å­—æ”¾åˆ°ä¸ªä½
         }
-        else if(KeyValue == KEY_BACK)    //ÍË¸ñ
+        else if(KeyValue == KEY_BACK)    //é€€æ ¼
         {
-            NewVlaue = NewVlaue / 10;     //×îºóÒ»Î»È¥µô
+            NewVlaue = NewVlaue / 10;     //æœ€åä¸€ä½å»æ‰
         }
 
-        OLED_Show_Numbers(x, y, NewVlaue, TextSize);   //ÏÔÊ¾µ±Ç°Öµ
+        OLED_Show_Numbers(x, y, NewVlaue, TextSize);   //æ˜¾ç¤ºå½“å‰å€¼
     }
 
     NewVlaue *= factor;

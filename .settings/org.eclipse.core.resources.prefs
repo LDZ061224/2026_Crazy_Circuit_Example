@@ -1,4 +1,10 @@
 eclipse.preferences.version=1
+encoding//code/Ctrl.c=UTF-8
+encoding//code/Ctrl.h=UTF-8
+encoding//code/Fun.c=UTF-8
+encoding//code/Fun.h=UTF-8
+encoding//code/Racing_Track.c=UTF-8
 encoding//code/TCA9555.c=UTF-8
 encoding//code/TCA9555.h=UTF-8
+encoding//code/pid.c=UTF-8
 encoding/<project>=GBK

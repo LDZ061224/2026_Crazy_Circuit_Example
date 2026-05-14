@@ -1,11 +1,11 @@
 #ifndef __UI_H
 #define __UI_H
 
-/*================ºê¶¨Òå================*/
+/*================å®å®šä¹‰================*/
 
-/*===============Íâ²¿±äÁ¿===============*/
+/*===============å¤–éƒ¨å˜é‡===============*/
 
-/*===============º¯ÊıÉùÃ÷===============*/
+/*===============å‡½æ•°å£°æ˜===============*/
 extern int32 KeyboardInput(uint16 x,uint16 y, TextSize_TypeDef TextSize, float factor);
 extern int32 KeyboardInput_GPS(uint16 x,uint16 y, TextSize_TypeDef TextSize, float factor,uint8 Point_Num, int32 Hyper_Select);
 extern int32 KeyboardInput_RT(uint16 x,uint16 y, TextSize_TypeDef TextSize, float factor,uint8 Point_Num, int32 Hyper);

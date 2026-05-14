@@ -1,5 +1,5 @@
 /*
-	°ÑÕâ¸öµ±¿âÊ¹ÓÃ£¬²»ÓÃ¸Ä
+	æŠŠè¿™ä¸ªå½“åº“ä½¿ç”¨ï¼Œä¸ç”¨æ”¹
 */
 
 #include "pid.h"
@@ -17,20 +17,20 @@ float PID_calc(PID_HandleTypeDef *pid, float exp_data, float real_data)
 
         pid->err3[2] = pid->err3[1];
         pid->err3[1] = pid->err3[0];
-        pid->err3[0] = exp_data - real_data;//Îó²î¼ÆËã
+        pid->err3[0] = exp_data - real_data;//è¯¯å·®è®¡ç®—
 
         pid->pOut = pid->kp * pid->err3[0];
         pid->iOut+= (pid->ki * pid->err3[0]);
         pid->dOut = pid->kd * (pid->err3[0] - pid->err3[1]);
         
-        if(pid->iOutMax != 0)//Ê¹ÓÃ»ı·ÖÏŞ·ù
+        if(pid->iOutMax != 0)//ä½¿ç”¨ç§¯åˆ†é™å¹…
         {
             pid->iOut = pid_Data_Limit(pid->iOut, -(pid->iOutMax), pid->iOutMax);
         }
         
         pid->out = pid->pOut + pid->iOut + pid->dOut;
         
-        if(pid->outMax != 0)//Ê¹ÓÃÊä³öÏŞ·ù
+        if(pid->outMax != 0)//ä½¿ç”¨è¾“å‡ºé™å¹…
         {
             pid->out = pid_Data_Limit(pid->out, -(pid->outMax), pid->outMax);
         }
@@ -39,7 +39,7 @@ float PID_calc(PID_HandleTypeDef *pid, float exp_data, float real_data)
     {
         pid->err3[2] = pid->err3[1];
         pid->err3[1] = pid->err3[0];
-        pid->err3[0] = exp_data - real_data;//Îó²î¼ÆËã
+        pid->err3[0] = exp_data - real_data;//è¯¯å·®è®¡ç®—
 
         pid->pOut = pid->kp * (pid->err3[0] - pid->err3[1]);
         pid->iOut = pid->ki * pid->err3[0];
@@ -47,7 +47,7 @@ float PID_calc(PID_HandleTypeDef *pid, float exp_data, float real_data)
 
         pid->out += pid->pOut + pid->iOut + pid->dOut ;
 
-        if(pid->outMax != 0)//Ê¹ÓÃÊä³öÏŞ·ù
+        if(pid->outMax != 0)//ä½¿ç”¨è¾“å‡ºé™å¹…
         {
             pid->out = pid_Data_Limit(pid->out, -(pid->outMax), pid->outMax);
         }
@@ -63,12 +63,12 @@ void PID_init(PID_HandleTypeDef *pid, PID_InitTypeDef *PID)
         return;
     }
     
-    pid->mode 			        = PID->mode;//ÔöÁ¿Ê½»¹ÊÇÎ»ÖÃÊ½É¶µÄ
+    pid->mode 			        = PID->mode;//å¢é‡å¼è¿˜æ˜¯ä½ç½®å¼å•¥çš„
     pid->kp 			        = PID->kp;
     pid->ki 			        = PID->ki;
     pid->kd				        = PID->kd;
-    pid->iOutMax		        = PID->iOutMax;//»ı·ÖÏŞ·ù
-    pid->outMax			        = PID->outMax;//Êä³öÏŞ·ù
+    pid->iOutMax		        = PID->iOutMax;//ç§¯åˆ†é™å¹…
+    pid->outMax			        = PID->outMax;//è¾“å‡ºé™å¹…
 }
 
 void PID_cleardata(PID_HandleTypeDef *pid)

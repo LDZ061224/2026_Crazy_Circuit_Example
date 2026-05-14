@@ -4,13 +4,13 @@ File name: OLEDKeyboard.h
 Author: TEAM  A B C
 Version:2.0               Date: 2024.12.07
 Description:  OLEDKeyboard.h
-Others:      ÎŞ
+Others:      æ— 
 Function List:
 History:
 <author>  <time>      <version > <desc>
-JBD       2016.10.21  0.0        ³õÊ¼
-AmaZzzing 2016.11.12  1.0        ³õ²½Íê³É¹¹¼Ü
-SUV       2024.12.07  2.0        »ùÓÚĞÂ¿âÖØ¹¹
+JBD       2016.10.21  0.0        åˆå§‹
+AmaZzzing 2016.11.12  1.0        åˆæ­¥å®Œæˆæ„æ¶
+SUV       2024.12.07  2.0        åŸºäºæ–°åº“é‡æ„
 **************************************************/
 #ifndef __OLEDKEYBOARD_H
 #define __OLEDKEYBOARD_H
@@ -18,19 +18,7 @@ SUV       2024.12.07  2.0        »ùÓÚĞÂ¿âÖØ¹¹
 #include "zf_common_headfile.h"
 #include "OLEDkeyboard_Config.h"
 
-/*********************************È«¾Ö±äÁ¿ÉùÃ÷*********************************/
-
-extern double CoSub1_OKb[17];
-extern double CoSub1_Second_OKb[6];
-
-extern double CoSub2_OKb[397];
-
-extern double CoSub3_OKb[41];
-
-extern double CoSub4_OKb[31];
-extern double CoSub4_Second_OKb[6];
-extern double CoSub4_Command_OKb[5];
-/***********************************º¯ÊıÉùÃ÷***********************************/
+/***********************************å‡½æ•°å£°æ˜***********************************/
 void OLED_Input(void);
 void OLED_Display(void);
 extern void OLED_Data_Load();
