@@ -33,15 +33,10 @@ typedef union floatu8data
 }floatu8data;
 
 /*********************************** 硬件引脚宏定义 ***********************************/
-// 左电机驱动PWM引脚定义
 #define Left_Motor_IN1      ATOM0_CH7_P20_8
-#define Left_Motor_IN2      ATOM2_CH6_P13_1
-
-// 右电机驱动PWM引脚定义
-#define Right_Motor_IN1     ATOM1_CH0_P02_8
-#define Right_Motor_IN2     ATOM2_CH3_P00_12
-
-// 吸风电机驱动PWM引脚定义
+#define Left_Motor_IN2      ATOM3_CH6_P13_1
+#define Right_Motor_IN1     ATOM2_CH3_P00_12
+#define Right_Motor_IN2     ATOM2_CH0_P00_9
 #define Suction_Motor_IN1   ATOM1_CH5_P00_6
 #define Suction_Motor_IN2   ATOM1_CH3_P00_4
 
@@ -61,6 +56,7 @@ extern float Gyro_Z;
 extern float Current_Check;
 // 两路电压检测值
 extern float Voltage_Check[2];
+extern int Dbg[10];
 
 /*********************************** 函数声明 ***********************************/
 // VOFA上位机数据发送函数

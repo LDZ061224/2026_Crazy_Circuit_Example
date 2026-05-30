@@ -2,29 +2,29 @@ IfxStm_cfg.o :	../libraries/infineon_libraries/iLLD/TC26B/Tricore/_Impl/IfxStm_c
 ../libraries/infineon_libraries/iLLD/TC26B/Tricore/_Impl/IfxStm_cfg.c :
 IfxStm_cfg.o :	..\libraries\infineon_libraries\iLLD\TC26B\Tricore\_Impl\IfxStm_cfg.h
 ..\libraries\infineon_libraries\iLLD\TC26B\Tricore\_Impl\IfxStm_cfg.h :
-IfxStm_cfg.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\IfxCpu_Intrinsics.h"
-"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\IfxCpu_Intrinsics.h" :
-IfxStm_cfg.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_Types.h"
-"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_Types.h" :
-IfxStm_cfg.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Platform\Tricore\Compilers\Compilers.h"
-"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Platform\Tricore\Compilers\Compilers.h" :
-IfxStm_cfg.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Configurations\Ifx_Cfg.h"
-"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Configurations\Ifx_Cfg.h" :
-IfxStm_cfg.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Platform\Tricore\Compilers\CompilerTasking.h"
-"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Platform\Tricore\Compilers\CompilerTasking.h" :
-IfxStm_cfg.o :	"C:\Infineon\AURIX-Studio-1.10.2\tools\Compilers\Tasking_1.1r8\ctc\include\stddef.h"
-"C:\Infineon\AURIX-Studio-1.10.2\tools\Compilers\Tasking_1.1r8\ctc\include\stddef.h" :
-IfxStm_cfg.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Platform_Types.h"
-"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Platform_Types.h" :
-IfxStm_cfg.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_TypesTasking.h"
-"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_TypesTasking.h" :
-IfxStm_cfg.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\IfxCpu_IntrinsicsTasking.h"
-"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\IfxCpu_IntrinsicsTasking.h" :
-IfxStm_cfg.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Sfr\\TC26B\\_Reg\IfxStm_reg.h"
-"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Sfr\\TC26B\\_Reg\IfxStm_reg.h" :
-IfxStm_cfg.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Sfr\\TC26B\\_Reg\IfxStm_regdef.h"
-"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Sfr\\TC26B\\_Reg\IfxStm_regdef.h" :
-IfxStm_cfg.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Sfr\\TC26B\\_Reg\Ifx_TypesReg.h"
-"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\Infra\\Sfr\\TC26B\\_Reg\Ifx_TypesReg.h" :
-IfxStm_cfg.o :	"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_Types.h"
-"D:\\ADS_test\\straight_carV3.0\\2026_Crazy_Circuit\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_Types.h" :
+IfxStm_cfg.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\IfxCpu_Intrinsics.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\IfxCpu_Intrinsics.h" :
+IfxStm_cfg.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_Types.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_Types.h" :
+IfxStm_cfg.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\Infra\\Platform\Tricore\Compilers\Compilers.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\Infra\\Platform\Tricore\Compilers\Compilers.h" :
+IfxStm_cfg.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\Configurations\Ifx_Cfg.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\Configurations\Ifx_Cfg.h" :
+IfxStm_cfg.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\Infra\\Platform\Tricore\Compilers\CompilerTasking.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\Infra\\Platform\Tricore\Compilers\CompilerTasking.h" :
+IfxStm_cfg.o :	"D:\AURIX-Studio-1.10.2\AURIX-Studio-1.10.2\tools\Compilers\Tasking_1.1r8\ctc\include\stddef.h"
+"D:\AURIX-Studio-1.10.2\AURIX-Studio-1.10.2\tools\Compilers\Tasking_1.1r8\ctc\include\stddef.h" :
+IfxStm_cfg.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Platform_Types.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Platform_Types.h" :
+IfxStm_cfg.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_TypesTasking.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_TypesTasking.h" :
+IfxStm_cfg.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\IfxCpu_IntrinsicsTasking.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\IfxCpu_IntrinsicsTasking.h" :
+IfxStm_cfg.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\Infra\\Sfr\\TC26B\\_Reg\IfxStm_reg.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\Infra\\Sfr\\TC26B\\_Reg\IfxStm_reg.h" :
+IfxStm_cfg.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\Infra\\Sfr\\TC26B\\_Reg\IfxStm_regdef.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\Infra\\Sfr\\TC26B\\_Reg\IfxStm_regdef.h" :
+IfxStm_cfg.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\Infra\\Sfr\\TC26B\\_Reg\Ifx_TypesReg.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\Infra\\Sfr\\TC26B\\_Reg\Ifx_TypesReg.h" :
+IfxStm_cfg.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_Types.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\infineon_libraries\\iLLD\\TC26B\\Tricore\Cpu\Std\Ifx_Types.h" :

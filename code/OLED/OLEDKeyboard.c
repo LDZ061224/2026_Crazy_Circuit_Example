@@ -1,17 +1,16 @@
-/*************************************************
-Copyright (C), 2016-2024, TYUT JBD .
-File name: OLEDKeyboard.c
-Author: TYUT JBD
-Version:2.0               Date: 2024.12.07
-Description:  OLED键盘+OLED显示驱动，实现赛道地图编辑、参数配置、数据存储功能
-Others:      依赖CH455键盘、OLED显示屏、Flash存储、PID控制模块
-Function List:
-History:
-<author>     <time>      <version>      <desc>
-JBD          2016.10.21     0.0        初始版本
-AmaZzzing    2016.11.12     1.0        预赛赛道配置完成
-SUV          2024.12.07     2.0        基于新库重构
-**************************************************/
+/**
+ * @file        OLEDKeyboard.c
+ * @author      TYUT JBD
+ * @version     2.0
+ * @date        2024.12.07
+ * @brief       OLED键盘+OLED显示驱动，实现赛道地图编辑、参数配置、数据存储功能
+ * @details     依赖CH455键盘、OLED显示屏、Flash存储、PID控制模块
+ * @copyright   Copyright (C) 2016-2024, TYUT JBD
+ * @history
+ *   JBD          2016.10.21     0.0        初始版本
+ *   AmaZzzing    2016.11.12     1.0        预赛赛道配置完成
+ *   SUV          2024.12.07     2.0        基于新库重构
+ */
 
 #include "OLEDKeyboard.h"
 #include "Ctrl.h"
@@ -76,36 +75,33 @@ static void OLED_Build_Mode_Input(void);
   默认赛道地图参数
 ================================================================================*/
 // 默认地图：第0段是“起点 -> 第1个节点”，0表示该段无元素
-#define DEFAULT_BUILD_MAP_NODE_NUM    11
+#define DEFAULT_BUILD_MAP_NODE_NUM    8
 
-static const uint8 Default_Build_Map_Node_Dir[DEFAULT_BUILD_MAP_NODE_NUM] = {1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1};
-static const uint8 Default_Build_Map_Mileage_Num[DEFAULT_BUILD_MAP_NODE_NUM + 1] = {0, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 0};
+static const uint8 Default_Build_Map_Node_Dir[DEFAULT_BUILD_MAP_NODE_NUM] = {0,1,1,1,2,1,1,1};
+static const uint8 Default_Build_Map_Mileage_Num[DEFAULT_BUILD_MAP_NODE_NUM + 1] = {2,0,0,0,1,0,2,0};
 
 // 每行元素类型定义：1=左转 2=右转 3=短直行 4=长直行
-static const uint8 Default_Build_Map_Mileage_Dir[DEFAULT_BUILD_MAP_NODE_NUM + 1][ELEMENT_NUM_MAX] =
+static const uint8 Default_Build_Map_Mileage_Dir[DEFAULT_BUILD_MAP_NODE_NUM][ELEMENT_NUM_MAX] =
 {
-    {0},
-    {4},
     {3, 3},
     {0},
-    {4},
     {0},
-    {3},
-    {4},
-    {1},
-    {3},
     {0},
+    {2},
+    {0},
+    {3,3},
     {0}
 };
-
-/*===============================================================================
-  函数名称：OLED_Show_Digit_Buffer
-  函数功能：将数字数组转换为字符串并在OLED显示
-  入口参数：x,y-显示坐标  digits-数字数组  len-数字长度
-================================================================================*/
+/**
+ * @brief   将数字数组转换为字符串并在OLED显示
+ * @param   x       显示横坐标
+ * @param   y       显示纵坐标
+ * @param   digits  数字数组
+ * @param   len     数字长度
+ */
 static void OLED_Show_Digit_Buffer(uint16 x, uint16 y, uint8 digits[], uint8 len)
 {
-    uint8 show_str[NODE_NUM_MAX + 1] = {0};  // 显示字符串缓存，末尾留1位放结束符
+    uint8 show_str[NODE_NUM_MAX + 1] = {0};  
     uint8 i;
 
     // 逐位将数字转为ASCII字符
@@ -118,10 +114,9 @@ static void OLED_Show_Digit_Buffer(uint16 x, uint16 y, uint8 digits[], uint8 len
     OLED_Show_Str(x, y, show_str, TextSize_F6x8);
 }
 
-/*===============================================================================
-  函数名称：OLED_Load_Default_Build_Mode_Map
-  函数功能：加载默认地图到建图缓存
-================================================================================*/
+/**
+ * @brief   加载默认地图到建图缓存
+ */
 static void OLED_Load_Default_Build_Mode_Map(void)
 {
     uint8 row;
@@ -145,16 +140,22 @@ static void OLED_Load_Default_Build_Mode_Map(void)
         }
     }
 
-    // 应用到运行赛道并保存到Flash
     OLED_Apply_Build_Mode_To_RunTrack();
     OLED_Save_Build_Mode_Map_To_Flash();
 }
 
-/*===============================================================================
-  函数名称：OLED_Read_Digit_Line
-  函数功能：单行数字输入，支持退格、确认
-  返 回 值：实际输入长度
-================================================================================*/
+/**
+ * @brief   单行数字输入，支持退格、确认
+ * @param   title         标题字符串
+ * @param   show_hint     是否显示提示信息
+ * @param   show_row_index是否显示行索引
+ * @param   row_index     行索引值
+ * @param   input_x       输入区横坐标
+ * @param   input_y       输入区纵坐标
+ * @param   digits        输出数字缓存数组
+ * @param   max_len       最大输入长度
+ * @return  实际输入长度
+ */
 static uint8 OLED_Read_Digit_Line(uint8 title[], uint8 show_hint, uint8 show_row_index, uint8 row_index,
                                   uint16 input_x, uint16 input_y, uint8 digits[], uint8 max_len)
 {
@@ -217,17 +218,15 @@ static uint8 OLED_Read_Digit_Line(uint8 title[], uint8 show_hint, uint8 show_row
     return len;
 }
 
-/*===============================================================================
-  函数名称：OLED_Apply_Build_Mode_To_RunTrack
-  函数功能：将建图缓存数据应用到运行赛道结构体 Run_Track
-================================================================================*/
+/**
+ * @brief   将建图缓存数据应用到运行赛道结构体 Run_Track
+ */
 static void OLED_Apply_Build_Mode_To_RunTrack(void)
 {
     uint8 row;
     uint8 i;
     uint8 total_element_num = 0;
 
-    // 以预赛地图为基础，未定义字段保留原值
     Run_Track = Pre_Contest_1;
 
     // 更新节点数量与方向
@@ -238,7 +237,7 @@ static void OLED_Apply_Build_Mode_To_RunTrack(void)
     }
 
     // 更新各段里程数据
-    for (row = 0; row <= Flash_Node_Num; row++)
+    for (row = 0; row < Flash_Node_Num; row++)
     {
         Run_Track.Node_Arr_Mileage_Num[row] = Flash_Node_Mileage_Num[row];
         total_element_num += Flash_Node_Mileage_Num[row];
@@ -246,7 +245,6 @@ static void OLED_Apply_Build_Mode_To_RunTrack(void)
         for (i = 0; i < Flash_Node_Mileage_Num[row]; i++)
         {
             /*
-             * 类型映射规则：
              * 1=左转  2=右转  里程=2000
              * 3=短直行 里程=1000
              * 4=长直行 里程=1400
@@ -280,10 +278,9 @@ static void OLED_Apply_Build_Mode_To_RunTrack(void)
     Run_Track.Element_Num = total_element_num;
 }
 
-/*===============================================================================
-  函数名称：OLED_Save_Build_Mode_Map_To_Flash
-  函数功能：将当前建图数据分页保存到Flash
-================================================================================*/
+/**
+ * @brief   将当前建图数据分页保存到Flash
+ */
 static void OLED_Save_Build_Mode_Map_To_Flash(void)
 {
     uint32 map_words[BUILD_MAP_FLASH_WORD_COUNT] = {0};
@@ -318,10 +315,9 @@ static void OLED_Save_Build_Mode_Map_To_Flash(void)
     }
 }
 
-/*===============================================================================
-  函数名称：OLED_Load_Build_Mode_Map_From_Flash
-  函数功能：从Flash加载已保存的地图
-================================================================================*/
+/**
+ * @brief   从Flash加载已保存的地图
+ */
 static void OLED_Load_Build_Mode_Map_From_Flash(void)
 {
     uint32 map_words[BUILD_MAP_FLASH_WORD_COUNT] = {0};
@@ -343,23 +339,26 @@ static void OLED_Load_Build_Mode_Map_From_Flash(void)
     // 恢复到输入缓存
     Flash_Node_Num = flash_map.Node_Num;
     for (uint8 i = 0; i < Flash_Node_Num; i++)
+    {
         Flash_Node_Dir[i] = flash_map.Node_Arr_Dir[i];
+    }
 
     for (uint8 row = 0; row <= Flash_Node_Num; row++)
     {
         Flash_Node_Mileage_Num[row] = flash_map.Node_Arr_Mileage_Num[row];
         for (uint8 i = 0; i < Flash_Node_Mileage_Num[row]; i++)
+        {
             mileage_dir[row][i] = flash_map.Node_Arr_Mileage_Dir[row][i];
+        }
     }
 
     // 应用到运行赛道
     OLED_Apply_Build_Mode_To_RunTrack();
 }
 
-/*===============================================================================
-  函数名称：OLED_Build_Mode_Input
-  函数功能：地图编辑模式输入入口
-================================================================================*/
+/**
+ * @brief   地图编辑模式输入入口
+ */
 static void OLED_Build_Mode_Input(void)
 {
     uint8 node_digits[NODE_NUM_MAX] = {0};
@@ -391,22 +390,29 @@ static void OLED_Build_Mode_Input(void)
     Flash_Node_Mileage_Num[NODE_NUM_MAX] = 0;
 
     for (row = 0; row < NODE_NUM_MAX + 1; row++)
+    {
         for (uint8 i = 0; i < ELEMENT_NUM_MAX; i++)
+        {
             mileage_dir[row][i] = 0;
-
+        }
+    }
     // 输入节点数
     Flash_Node_Num = OLED_Read_Digit_Line("Nodes:", 0, 0, 0, 0, 3, node_digits, NODE_NUM_MAX);
     for (uint8 i = 0; i < Flash_Node_Num; i++)
+    {
         Flash_Node_Dir[i] = node_digits[i];
+    }
 
     OLED_CLS();
 
     // 逐行输入里程方向
-    for (row = 0; row <= Flash_Node_Num; row++)
+    for (row = 0; row < Flash_Node_Num; row++)
     {
         Flash_Node_Mileage_Num[row] = OLED_Read_Digit_Line("Mileage", 1, 1, row, 0, 5, line_digits, ELEMENT_NUM_MAX);
         for (uint8 i = 0; i < Flash_Node_Mileage_Num[row]; i++)
+        {
             mileage_dir[row][i] = line_digits[i];
+        }
         OLED_CLS();
     }
 
@@ -415,10 +421,9 @@ static void OLED_Build_Mode_Input(void)
     OLED_Save_Build_Mode_Map_To_Flash();
 }
 
-/*===============================================================================
-  函数名称：OLED_Show_Light_Row
-  函数功能：在OLED最后一行显示光敏传感器状态（0/1字符串）
-================================================================================*/
+/**
+ * @brief   在OLED最后一行显示光敏传感器状态（0/1字符串）
+ */
 static void OLED_Show_Light_Row(void)
 {
     uint8 light_str[16] = {0};
@@ -429,11 +434,10 @@ static void OLED_Show_Light_Row(void)
     OLED_Show_Str(0, 7, light_str, TextSize_F6x8);
 }
 
-/*===============================================================================
-  函数名称：OLED_View_Mileage_Data
-  函数功能：OLED查看里程数据（不调参不跑车）
-  布局    ：P0=摘要(F8x16大字)  P1+=逐段(含空段)  P尾=转弯间距(3个/页)
-================================================================================*/
+/**
+ * @brief   OLED查看里程数据（不调参不跑车）
+ * @details 布局：P0=摘要(F8x16大字)、P1+=逐段(含空段)、P尾=转弯间距(3个/页)
+ */
 static void OLED_View_Mileage_Data(void)
 {
     uint16 seg, elem, ele_num, total_ele, tr_page, tr_pages;
@@ -508,7 +512,7 @@ static void OLED_View_Mileage_Data(void)
             for (elem = 0; elem < ele_num && row <= 6; elem++)
             {
                 edir = Run_Track.Node_Arr_Mileage_Dir[seg][elem];
-                if (edir == 0) continue;  // 跳过普通路段，不显示
+                if (edir == 0) continue;
 
                 switch (edir)
                 {
@@ -536,7 +540,6 @@ static void OLED_View_Mileage_Data(void)
         CH455_GetOneKey();
     }
 
-    //===== 转弯间距总览：每页3个 =====
     if (Turn_Mileage_Record_Num > 0)
     {
         tr_pages = (Turn_Mileage_Record_Num + 2) / 3;
@@ -560,10 +563,9 @@ static void OLED_View_Mileage_Data(void)
     }
 }
 
-/*===============================================================================
-  函数名称：OLED_Input
-  函数功能：键盘输入总入口：模式选择、地图编辑、参数配置
-================================================================================*/
+/**
+ * @brief   键盘输入总入口：模式选择、地图编辑、参数配置
+ */
 void OLED_Input(void)
 {
     CH455_Init(); // 初始化CH455键盘(IIC通信)
@@ -579,11 +581,11 @@ void OLED_Input(void)
         //====== 模式选择 ======
         switch (OLED_Choose)
         {
-            case 1:   // 预赛---建图模式
+            case 1:   // 建图模式
                 Mode = Build_Mode;
                 mode_selected = 1;
                 break;
-            case 2:   // 预赛---回放模式
+            case 2:   // 回放模式
                 Mode = Remember_Mode;
                 mode_selected = 1;
                 break;
@@ -671,7 +673,7 @@ void OLED_Input(void)
             flash_write_page(0, 1, PID_OKb, 8);
 
             // 读取并配置控制参数
-            flash_read_page(0, 3, Ctrl_OKb, 6);
+            flash_read_page(0, 2, Ctrl_OKb, 6);
             OLED_Show_Str(0, 0, "Turn_E", TextSize_F6x8);
             OLED_Show_Numbers(47, 0, Ctrl_OKb[0], TextSize_F6x8);
             OLED_Show_Str(0, 1, "R_Mile", TextSize_F6x8);
@@ -692,39 +694,16 @@ void OLED_Input(void)
             }
 
             OLED_CLS();
-            flash_erase_page(0, 3);
-            flash_write_page(0, 3, Ctrl_OKb, 6);
-        }
-        break;
-
-        case 2: // 调试参数配置
-        {
-            flash_read_page(0, 2, DBG_OKb, 3);
-            OLED_Show_Str(0, 0, "Exp_G", TextSize_F6x8);
-            OLED_Show_Numbers(47, 0, DBG_OKb[0], TextSize_F6x8);
-            OLED_Show_Str(0, 2, "Exp_L", TextSize_F6x8);
-            OLED_Show_Numbers(47, 2, DBG_OKb[1], TextSize_F6x8);
-            OLED_Show_Str(0, 4, "Exp_R", TextSize_F6x8);
-            OLED_Show_Numbers(47, 4, DBG_OKb[2], TextSize_F6x8);
-
-            for (uint16 i = 0; i < 3; i++)
-            {
-                input = KeyboardInput(90, 2*i, TextSize_F6x8, 1.0);
-                if (input != 0) DBG_OKb[i] = input;
-            }
-            OLED_CLS();
-
             flash_erase_page(0, 2);
-            flash_write_page(0, 2, DBG_OKb, 3);
+            flash_write_page(0, 2, Ctrl_OKb, 6);
         }
         break;
     }
 }
 
-/*===============================================================================
-  函数名称：OLED_Data_Load
-  函数功能：从Flash加载所有配置参数到运行变量
-================================================================================*/
+/**
+ * @brief   从Flash加载所有配置参数到运行变量
+ */
 void OLED_Data_Load()
 {
     // 加载PID参数
@@ -743,22 +722,19 @@ void OLED_Data_Load()
     Basic_Speed = Speed_OKb[0];
 
     // 加载控制参数
-    flash_read_page(0, 3, Ctrl_OKb, 6);
+    flash_read_page(0, 2, Ctrl_OKb, 6);
+    Dbg[0] = Ctrl_OKb[2];
     if (Ctrl_OKb[0] != 0) Turn_Error_Value = Ctrl_OKb[0];
     if (Ctrl_OKb[1] != 0) Remember_Mileage_Prepare_Distance = Ctrl_OKb[1];
     if (Ctrl_OKb[2] != 0) Remember_Node_Prepare_Distance = Ctrl_OKb[2];
     if (Ctrl_OKb[3] != 0) Remember_Speed_Min_Value = Ctrl_OKb[3];
     if (Ctrl_OKb[4] != 0) Remember_Speed_Max_Value = Ctrl_OKb[4];
     if (Ctrl_OKb[5] != 0) Remember_Turn_Error = Ctrl_OKb[5];
-
-    // 加载调试参数
-    flash_read_page(0, 2, DBG_OKb, 3);
 }
 
-/*===============================================================================
-  函数名称：OLED_Display
-  函数功能：OLED实时显示运行数据
-================================================================================*/
+/**
+ * @brief   OLED实时显示运行数据
+ */
 void OLED_Display(void)
 {
     OLED_Show_Str(20, 0, "Nothing or Best.", TextSize_F6x8);

@@ -75,6 +75,8 @@ uint8_t is_right = 0;              // 正在执行右转动作标志：0=非右�
 uint8_t Turn_Decel_Phase = 0;      // Build直角转弯阶段：0=直行中, 1=减速停车中, 2=原地旋转中
 uint8_t Mileage_Turn_Done = 0;     // 里程计转向完成标志：0=转向中, 1=转向完成（里程模式下陀螺仪转角达标）
 uint8_t Turn_Action_Done = 0;      // 转向动作完成标志：0=未完成, 1=已完成（传感器模式下出弯条件满足）
+uint8_t Low_Voltage_Protect_Flag = 0; // 低压保护锁存：触发后关闭所有电机，复位前保持
+uint16_t Low_Voltage_Beep_Count = 0;  // 低压蜂鸣器间歇计数
 int Check_Edge_Skip_Count = 0;     // 边缘检测跳过计数（转向/里程切换后置20，逐周期递减，防误触发）
 int Enable_Start_Delay_Count = 0;  // 启动延时计数（EnableSwitch_ON上升沿置100，递减期间电机锁定）
 uint8_t Last_EnableSwitch_ON = 0;  // 上一周期使能开关状态（用于检测上升沿触发启动延时）
@@ -97,6 +99,15 @@ int8_t Dir_Arr[15] = {-22, -21, -20, -18, -14, -9, -2, 0, 2, 9, 14, 18, 20, 21, 
 int Turn_Error_Value = 40;  // 转向PWM差值 / 转弯Error值（出弯时Error跳变产生反向阻尼）
 int16 Check_Edge_Count = 0;   // Check_Edge触发次数（VOFA调试用）
 uint8_t Force_Straight_Speed = 0;  // 直行元器件强制基础速度标志
+
+/*---------------前瞻光电布局----------------*/
+// 当前硬件为双排前瞻：6/7/8 在第二排且识别不稳定，暂不参与循迹/节点判定。
+// 仍保留 Light_Convert[6..8] 供 VOFA/OLED 观察；控制只使用第一排 12 路。
+#define TRACK_SENSOR_ACTIVE_NUM 12
+static const uint8_t Track_Sensor_Active_Index[TRACK_SENSOR_ACTIVE_NUM] =
+{
+    0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14
+};
 
 /*-------------赛道运行状态结构体-------------*/
 Racing_track_Typedef Run_Track;  // 当前赛道运行结构体（运行时数据，由键显输入或Flash加载填充）
@@ -123,10 +134,10 @@ Mode_Define Mode = Remember_Mode;              // 键盘显示工作模式（Bui
 // Gyro_Z_PID_SCALE: Gyro_Z(°/s) 除以该系数后输入PID，保持与旧Gyro_Z(raw/1000)相同量级
 // 旧: raw/1000 ≈ ±28.6, 新: raw/14.3 ≈ ±2000, 比值=2000/28.6≈70
 #define GYRO_Z_PID_SCALE 70.0f             // Gyro_Z输入PID前的缩放系数
-#define TURN_BASE_SPD_MIN 70               // 转向基础最小速度
-#define TURN_BASE_SPD_MAX 75               // 转向基础最大速度（=MIN，转向速度恒定40）
+#define TURN_BASE_SPD_MIN 40               // 转向基础最小速度
+#define TURN_BASE_SPD_MAX 40               // 转向基础最大速度（=MIN，转向速度恒定40）
 #define BUILD_TURN_TARGET_ANGLE_DEG    75.0f   // Build模式转向目标角度
-#define REMEMBER_TURN_TARGET_ANGLE_DEG 40.0f   // Remember模式转向目标角度
+#define REMEMBER_TURN_TARGET_ANGLE_DEG 75.0f   // Remember模式转向目标角度
 #define TURN_STRAIGHT_PRE_DISTANCE 300.0f  // 直角转弯前直行距离（可调参）
 #define REMEMBER_TURN_INNER_SCALE 1.4f     // Remember转向内侧轮系数 (>1.0=多减速)
 #define REMEMBER_TURN_OUTER_SCALE 0.6f     // Remember转向外侧轮系数 (<1.0=少加速)
@@ -154,14 +165,18 @@ uint8 vofa_flash_dump_mode = 0;                     // VOFA Flash数据导出模
 #define CHECK_EDGE_SKIP_INIT            0   // 初始化/重置时清零
 
 // Build模式去抖（可调参）
-#define BUILD_CHECK_EDGE_NODE_TURN       10  // 节点转弯后
-#define BUILD_CHECK_EDGE_MILEAGE_STRAIGHT 10 // 里程直行元器件后
-#define BUILD_CHECK_EDGE_MILEAGE_TURN    50  // 里程转弯元器件后
+#define BUILD_CHECK_EDGE_NODE_TURN       1  // 节点转弯后
+#define BUILD_CHECK_EDGE_MILEAGE_STRAIGHT 2 // 里程直行元器件后
+#define BUILD_CHECK_EDGE_MILEAGE_TURN    25  // 里程转弯元器件后
 
 // Remember模式去抖（可调参）
 #define REMEMBER_CHECK_EDGE_NODE_TURN       6   // 节点转弯后
 #define REMEMBER_CHECK_EDGE_MILEAGE_STRAIGHT 0  // 里程直行元器件后
 #define REMEMBER_CHECK_EDGE_MILEAGE_TURN    0   // 里程转弯元器件后
+
+#define LOW_VOLTAGE_PROTECT_VALUE      11.5f // 低压保护阈值
+#define LOW_VOLTAGE_BEEP_PERIOD_COUNT  200   // 3ms*200=600ms
+#define LOW_VOLTAGE_BEEP_ON_COUNT      60    // 3ms*60=180ms
 
 /*---------------记忆模式速度曲线参数----------------*/
 // 速度曲线：0%~5%低速 → 5%~10%加速 → 10%~95%匀速 → 95%~100%减速
@@ -244,8 +259,29 @@ static void Advance_To_Next_Track_Segment(void);
 static void Reset_Turn_Action_State(void);
 static void Complete_Turn_Action(void);
 static void Record_Turn_Mileage(void);
+static uint8_t Is_Track_Sensor_Adjacent(uint8_t left_index, uint8_t right_index);
 
 /********************************* 内部静态函数实现 *********************************/
+
+/*************************************
+** Function: Is_Track_Sensor_Adjacent
+** Description: 判断两个控制用光电在当前第一排布局中是否相邻
+*************************************/
+static uint8_t Is_Track_Sensor_Adjacent(uint8_t left_index, uint8_t right_index)
+{
+    if (right_index == left_index + 1)
+    {
+        return 1;
+    }
+
+    // 6/7/8 被屏蔽后，第一排中间的 5 和 9 是物理相邻。
+    if (left_index == 5 && right_index == 9)
+    {
+        return 1;
+    }
+
+    return 0;
+}
 
 /*************************************
 ** Function: Advance_Turn_Section_Index
@@ -457,11 +493,7 @@ static void Set_Node_Run_Mode(uint8_t node_dir)
 /*************************************
 ** Function: Finish_Mileage_Section
 ** Description: 完成当前里程路段，推进元素/线路计数
-** Details:   1. 直道节点(mileage_num==0)且有Pending标志 → 直接完成线路
-**            2. 否则递增元素计数 In_Line_Ele_Count
-**            3. 元素数达到 mileage_num → 线路+1，元素归零
-**            4. Stop_Mode==1且线路数等于节点数 → 任务完成
-**            5. 回放模式下推进转向记录
+** Details:
 *************************************/
 static void Finish_Mileage_Section(void)
 {
@@ -519,9 +551,7 @@ static void Finish_Mileage_Section(void)
 /*************************************
 ** Function: Record_Segment_Edge_MileageSegment_Total_Mileage
 ** Description: 记录当前路段边缘的里程值
-** Details:   在 Normal_Run 中检测到边缘(非零方向)时调用，
-**            将当前里程值存入 Segment_Edge_Mileage_Record[节点][元素]
-**            并立即写入Flash保存
+** Details:
 *************************************/
 static void Record_Segment_Edge_Mileage(void)
 {
@@ -530,7 +560,6 @@ static void Record_Segment_Edge_Mileage(void)
         float recorded_mileage = Count.Mileage;
         uint8_t mileage_dir = Run_Track.Node_Arr_Mileage_Dir[Execute_Times][In_Line_Ele_Count];
 
-        // 转弯元素(1左转/2右转)：里程补偿x（负值=提前记录，回放时提前触发转弯）
         if (mileage_dir == 1 || mileage_dir == 2)
         {
             recorded_mileage += MILEAGE_COMPENSATION_X;
@@ -544,8 +573,7 @@ static void Record_Segment_Edge_Mileage(void)
 /*************************************
 ** Function: Save_Segment_Edge_Mileage_Record_To_Flash
 ** Description: 将路段边缘里程记录保存到Flash
-** Details:   Segment_Edge_Mileage_Record → flash_log 结构体 → map_words uint32数组 → Flash写入
-**            Flash位置：扇区0, 页8~9, 共2页
+** Details:
 *************************************/
 static void Save_Segment_Edge_Mileage_Record_To_Flash(void)
 {
@@ -572,8 +600,7 @@ static void Save_Segment_Edge_Mileage_Record_To_Flash(void)
 /*************************************
 ** Function: Load_Segment_Edge_Mileage_Record_From_Flash
 ** Description: 从Flash加载路段边缘里程记录
-** Details:   Flash读取 → map_words uint32数组 → flash_log结构体 → 全局二维数组
-**            回放模式启动时调用，恢复建图时记录的边缘里程数据
+** Details:
 *************************************/
 static void Load_Segment_Edge_Mileage_Record_From_Flash(void)
 {
@@ -600,8 +627,7 @@ static void Load_Segment_Edge_Mileage_Record_From_Flash(void)
 /*************************************
 ** Function: Save_Turn_Mileage_Record_To_Flash
 ** Description: 将转向里程记录保存到Flash
-** Details:   Flash位置：扇区0, 页5~7, 共3页
-**            建图模式下每次记录新转向间距后调用
+** Details:
 *************************************/
 static void Save_Turn_Mileage_Record_To_Flash(void)
 {
@@ -624,11 +650,7 @@ static void Save_Turn_Mileage_Record_To_Flash(void)
 /*************************************
 ** Function: Load_Turn_Mileage_Record_From_Flash
 ** Description: 从Flash加载转向里程记录
-** Details:   回放模式启动时调用。注意数据流：
-**            Flash → map_words[uint32] → memcpy → flash_log[结构体] → 全局变量
-**            包含边界检查：若Flash中记录数超过最大值，截断到 TURN_MILEAGE_RECORD_MAX
-** BUGFIX:    添加了缺失的 memcpy(&flash_log, map_words, sizeof(flash_log))
-**            之前缺少此行导致flash_log始终为零，回放模式完全失效
+** Details:
 *************************************/
 static void Load_Turn_Mileage_Record_From_Flash(void)
 {
@@ -770,10 +792,7 @@ static void Remember_Snap_Mileage_To_Current_Edge(void)
 /*************************************
 ** Function: Remember_Reset_Runtime_State
 ** Description: 重置记忆模式的所有运行时状态
-** Details:   回放模式启动时调用一次。
-**            将所有静态变量、全局状态、PID输出重置为初始值。
-**            Turn_Mileage_Record 和 Segment_Edge_Mileage_Record 不从Flash重新加载
-**            （由外部 Load_*_From_Flash 调用方负责）
+** Details:
 *************************************/
 static void Remember_Reset_Runtime_State(void)
 {
@@ -846,16 +865,16 @@ static void Remember_Normal_Run(void)
     {
         Error = (Last_Error >= 0) ? 30 : -30;  // 保持上一方向但不使用上次的精确值
     }
-    else if (Track_Num < 7 && Track_Num >= 2)  // 传感器2~6个：少量白线，用边界计算偏差
+    else if (Track_Num < 5 && Track_Num >= 2)  // 传感器2~4个：少量白线，用边界计算偏差
     {
         Left_Scan_Point = Track_Arr[0];                       // 最左白线传感器索引
         Right_Scan_Point = Track_Arr[Track_Num - 1];          // 最右白线传感器索引
         Error = (Dir_Arr[Left_Scan_Point] + Dir_Arr[Right_Scan_Point]) / 2; // 首尾权重取平均
     }
-    else  // Track_Num >= 7：正常寻迹，用历史边界点计算
+    else  // Track_Num >= 5：正常寻迹，用历史边界点计算
     {
         // 注意：Left_Scan_Point/Right_Scan_Point 可能来自上一周期
-        //       若首周期 Track_Num >= 7，则使用初始值0（传感器最左），偏差会偏向左侧
+        //       若首周期 Track_Num >= 5，则使用初始值0（传感器最左），偏差会偏向左侧
         Error = (Dir_Arr[Left_Scan_Point] + Dir_Arr[Right_Scan_Point]) / 2;
     }
 }
@@ -1002,7 +1021,7 @@ static void Remember_Check_Trigger(void)
         {
             if (Run_Track.Node_Arr_Dir[Execute_Times] == 0)  // 节点方向也是0（纯直道）
             {
-                if (Track_Num >= 7)  // Remember模式直道节点用Track_Num判定
+                if (Track_Num >= 5)  // Remember模式直道节点用Track_Num判定
                 {
                     In_Line_Ele_Count = Run_Track.Node_Arr_Mileage_Num[Execute_Times]; // 标记所有路段已完成
                     Set_Node_Run_Mode(Run_Track.Node_Arr_Dir[Execute_Times]); // 触发直道模式
@@ -1048,7 +1067,7 @@ static void Remember_Check_Trigger(void)
 
         if (Run_Track.Node_Arr_Dir[Execute_Times] == 0)  // 节点方向=0（直行）
         {
-            if (Track_Num >= 7)  // Remember模式直道节点用Track_Num判定
+            if (Track_Num >= 5)  // Remember模式直道节点用Track_Num判定
             {
                 Set_Node_Run_Mode(Run_Track.Node_Arr_Dir[Execute_Times]);
             }
@@ -1154,6 +1173,8 @@ void Car_Go()
         Remember_Mode_Get_Error();  // 回放模式：传感器寻迹 + Flash里程回放
     }
 
+    Set_Speed();  // 计算PID输出速度
+    
     Set_Out();  // PWM输出控制电机（每周3ms）
 }
 
@@ -1202,20 +1223,14 @@ void Get_Speed()
 /*************************************
 ** Function: Get_IMU
 ** Description: 获取IMU陀螺仪数据并处理（每3ms调用一次）
-** Details:   IMU660RB ±2000dps量程, transition_factor=14.3
-**            1. 读取原始角速度 → imu660rb_gyro_transition() → 真实 °/s
-**            2. 漂移滤波：|角速度| < 2°/s 强制清零
-**            3. Gyro_Z = 真实 °/s（用于PID差速控制）
-**            4. 转弯时积分：Gyro_Integral += Gyro_Z × 0.003s = 真实角度(°)
+** Details:
 *************************************/
 void Get_IMU()
 {
-    imu660rb_get_gyro();  // 读取IMU660RB陀螺仪原始数据
+    icm20602_get_gyro();  // 读取IMU20602陀螺仪原始数据
 
-    // 转换为真实 °/s（IMU660RB: raw / 14.3 = °/s）
-    float gyro_raw = imu660rb_gyro_transition(imu660rb_gyro_z);
+    float gyro_raw = icm20602_gyro_transition(icm20602_gyro_z);
 
-    // 陀螺仪积分：用死区前的原始值累加，避免低速时积分停滞
     if (is_left == 1 || is_right == 1)
     {
         Gyro_Integral += gyro_raw * GYRO_INTEGRATION_PERIOD_S;
@@ -1225,11 +1240,10 @@ void Get_IMU()
         Gyro_Integral = 0;  // 非转弯状态清零积分角度
     }
 
-    // 小角度漂移滤波：< 2°/s 视为静止噪声，强制清零（用于PID输入，不影响积分）
     if (fabs(gyro_raw) < 2.0f)
     {
         Gyro_Z = 0;
-        imu660rb_gyro_z = 0;
+        icm20602_gyro_z = 0;
     }
     else
     {
@@ -1238,7 +1252,7 @@ void Get_IMU()
 
     // PID用Gyro_Z：与原工程一致，raw/1000，死区<30 raw
     {
-        float raw_z = (float)imu660rb_gyro_z;
+        float raw_z = (float)icm20602_gyro_z;
         if (fabs(raw_z) < 30.0f)
         {
             Gyro_Z_For_PID = 0;
@@ -1254,11 +1268,7 @@ void Get_IMU()
 ** Function: Check_Edge
 ** Description: 检测赛道边缘或特殊节点
 ** Return:     0=未检测到, 1=检测到
-** Details:   边缘判定条件（任一满足）：
-**            1. 最左侧传感器(索引0或1)检测到白线 → 左边缘
-**            2. 最右侧传感器(索引13或14)检测到白线 → 右边缘
-**            3. 白色传感器总数 >= 6 → 十字路口或宽线区域
-**            注意：Check_Edge_Skip_Count > 0 时强制返回0（转向后防误触发）
+** Details:
 *************************************/
 uint8 Check_Edge()
 {
@@ -1282,20 +1292,15 @@ uint8 Check_Edge()
 /*************************************
 ** Function: Light_Process
 ** Description: 光电传感器数据处理（每3ms调用一次）
-** Details:   处理流程：
-**            1. ADC值二值化（与上下阈值比较，含滞回）
-**            2. 构建 Track_Arr 有效传感器索引数组
-**            3. 异常滤波（传感器间距异常时回退至上周期数据）
-**            4. 停车检测（全白/全黑累计计数）
-**            5. 任务完成停车（Finish_Flag 后累计200周期）
-**            注意：异常滤波逻辑过于激进——单个传感器毛刺就丢弃整帧数据
+** Details:
 *************************************/
 void Light_Process()
 {
     memcpy(Last_Light_Convert, Light_Convert, sizeof(Light_Convert));
     uint8_t Led_Control_Enable = (Run_Mode != Mileage_Mode && Run_Mode != Turn_Left && Run_Mode != Turn_Right);
+    uint8_t sensor_index;
 
-    //===== ADC二值化：比较ADC值与阈值，含滞回 =====
+    //===== ADC二值化：比较ADC值与阈值，滞回比较器 =====
     for (int i = 0; i < 15; i++)
     {
         if (Light_ADC[i] > Light_Thr[i][0])  // ADC > 上阈值 → 判定为白线
@@ -1303,7 +1308,7 @@ void Light_Process()
             Light_Convert[i] = 1;
             if (Led_Control_Enable)
             {
-                TCA9555_LED_Ctrl(LED[14 - i], 1);  // 点亮对应LED（LED排列与传感器镜像）
+                TCA9555_LED_Ctrl(LED[14 - i], 1);
             }
         }
         if (Light_ADC[i] < Light_Thr[i][1])  // ADC < 下阈值 → 判定为黑线
@@ -1314,11 +1319,10 @@ void Light_Process()
                 TCA9555_LED_Ctrl(LED[14 - i], 0);  // 熄灭对应LED
             }
         }
-        // 在上下阈值之间：保持上一次的值（滞回，防止边界抖动）
     }
 
-    //===== 构建有效传感器索引数组 =====
-    memcpy(Last_Track_Arr, Track_Arr, sizeof(Track_Arr));  // 备份上一周期Track_Arr
+    memcpy(Last_Track_Arr, Track_Arr, sizeof(Track_Arr));
+    Last_Track_Num = Track_Num;
     for (int i = 0; i < 15; i++)
     {
         Track_Arr[i] = 0;  // 全清零
@@ -1328,31 +1332,30 @@ void Light_Process()
     Left_Num = 0;
     Right_Num = 0;
 
-    for (int i = 0; i < 15; i++)
+    for (uint8_t i = 0; i < TRACK_SENSOR_ACTIVE_NUM; i++)
     {
-        if (Light_Convert[i] == 1)  // 该传感器检测到白线
+        sensor_index = Track_Sensor_Active_Index[i];
+        if (Light_Convert[sensor_index] == 1)  // 该控制用传感器检测到白线
         {
             Initial_White_Num++;              // 白线传感器总数+1
-            Track_Arr[Track_Num++] = i;       // 记录传感器索引，Track_Num自增
+            Track_Arr[Track_Num++] = sensor_index; // 记录物理传感器索引，Track_Num自增
         }
     }
 
-    //===== 异常数据滤波 =====
-    // 检测 Track_Arr 中相邻传感器索引是否连续（差值应为1）
-    // 有跳变则整帧回退至上一周期数据，防止单个传感器毛刺干扰寻迹
     for (int i = 0; i < Track_Num - 1; i++)
     {
-        if (Track_Arr[i + 1] - Track_Arr[i] > 1)  // 相邻传感器索引跳变 > 1
+        if (!Is_Track_Sensor_Adjacent((uint8_t)Track_Arr[i], (uint8_t)Track_Arr[i + 1]))
         {
             Track_Num = Last_Track_Num;                           // 回退数量
             memcpy(Track_Arr, Last_Track_Arr, sizeof(Last_Track_Arr)); // 回退整帧
+            break;
         }
     }
 
-    //===== 停车检测：全白(Track_Num==15)或全黑(Track_Num==0)时累计 =====
+    //===== 停车检测：控制用12路全白或全黑时累计 =====
     if (EnableSwitch_ON)
     {
-        if ((Track_Num == 15 || Track_Num == 0) && is_left == 0 && is_right == 0)
+        if ((Track_Num == TRACK_SENSOR_ACTIVE_NUM || Track_Num == 0) && is_left == 0 && is_right == 0)
         {
             Count.Stop++;  // 停车计数累加（连续80次 → Set_Out中触发Stop_Flag）
         }
@@ -1366,10 +1369,9 @@ void Light_Process()
         Count.Stop = 0;  // 使能关闭时不累计停车计数
     }
 
-    //===== 任务完成停车：Finish_Flag置位后累计200周期 → Stop_Flag =====
     if (Finish_Flag == 1)
     {
-        Finish_Count++;  // 每周期+1
+        Finish_Count++;
     }
 
     if (Finish_Count > 200 && Stop_Flag == 0)  // 首次触发：停车 + 保存里程数据到Flash
@@ -1386,9 +1388,7 @@ void Light_Process()
 /*************************************
 ** Function: Build_Mode_Get_Error
 ** Description: 建图模式：计算寻迹偏差 + 状态机调度
-** Details:   每3ms调用一次。
-**            首次调用时初始化建图状态（清零所有记录 + 保存空数据到Flash）
-**            然后根据 Run_Mode 状态机调度对应处理函数
+** Details:
 *************************************/
 void Build_Mode_Get_Error()
 {
@@ -1432,19 +1432,16 @@ void Build_Mode_Get_Error()
             Straight_Run();   // 直道模式（居中稳定判定）
             break;
         default:
-            Normal_Run();     // 未知模式兜底
+            Normal_Run();
             break;
     }
 
-    Set_Speed();  // 根据 Error/Gyro_Z 计算 PID 输出速度
 }
 
 /*************************************
 ** Function: Remember_Mode_Get_Error
 ** Description: 回放模式：计算寻迹偏差 + 状态机调度
-** Details:   首次调用时从Flash加载建图数据并重置运行时状态。
-**            Normal_Mode下额外调用 Remember_Normal_Run + Remember_Check_Trigger。
-**            其他模式(转弯/里程/直道)与建图模式共用相同函数。
+** Details:
 *************************************/
 void Remember_Mode_Get_Error()
 {
@@ -1489,42 +1486,36 @@ void Remember_Mode_Get_Error()
             Straight_Run();
             break;
         default:
-            break;  // Normal_Mode已在上面处理，此处不重复
+            break;
     }
 
-    Set_Speed();  // 计算PID输出速度
 }
 
 /*************************************
 ** Function: Normal_Run
 ** Description: 正常寻迹模式（建图模式使用）
-** Details:   1. Track_Num < 2：传感器丢失 → 保持上次偏差方向
-**            2. 2 <= Track_Num < 6：少量传感器 → 用当前帧边界计算偏差
-**            3. Track_Num >= 6：正常 → 用边界计算偏差 + Check_Edge检测触发
-**            Check_Edge触发后的逻辑：
-**            - 路段内还有元素：方向≠0→进入里程模式, 方向=0→触发节点
-**            - 路段内元素已完：触发节点（方向≠0时顺带Advance_To_Next_Track_Segment）
-**            ⚠ 潜在问题：Track_Num>=6但Left_Scan_Point/Right_Scan_Point未被设置时
-**              使用初始值0，偏差计算会偏向左侧
+** Details:
 *************************************/
 void Normal_Run()
 {
     if (Track_Num > 0)
+    {
         Middle = (Track_Arr[0] + Track_Arr[Track_Num - 1]) / 2;
-    gpio_set_level(P33_4, 0);  // 蜂鸣器关（正常模式）
-    Last_Error = Error;        // 保存当前偏差（用于传感器丢失时保持方向）
+        gpio_set_level(P33_4, 0);  // 蜂鸣器关（正常模式）
+        Last_Error = Error;        // 保存当前偏差（用于传感器丢失时保持方向）
+    }
 
     if (Track_Num < 2)  // 传感器<2个：基本丢失赛道
     {
         Error = 0;  // 丢线时直行，避免锁死转弯方向
     }
-    else if (Track_Num < 5 && Track_Num >= 2)  // 传感器2~4个：少量白线
+    else if (Track_Num < 4 && Track_Num >= 2)  // 传感器2~4个：少量白线
     {
         Left_Scan_Point = Track_Arr[0];                       // 当前帧最左传感器
         Right_Scan_Point = Track_Arr[Track_Num - 1];          // 当前帧最右传感器
         Error = (Dir_Arr[Left_Scan_Point] + Dir_Arr[Right_Scan_Point]) / 2; // 首尾平均偏差
     }
-    if (Initial_White_Num >= 5)  // 真实白点≥5：正常寻迹（不依赖断点修正后的Track_Num）
+    if (Initial_White_Num >= 4)  // 真实白点≥4：正常寻迹（不依赖断点修正后的Track_Num）
     {
         // 使用已记录的边界点计算偏差（可能来自上一周期）
         Error = 0;
@@ -1551,9 +1542,7 @@ void Normal_Run()
                     // 记录边缘里程 + 推进元素计数，不触发节点
                     Record_Segment_Edge_Mileage();
                     In_Line_Ele_Count++;
-                    // 所有路段完成后才触发节点动作
-                    // 注意：不在此处推进节点，统一在转弯完成(Complete_Turn_Action)
-                    //       或直道稳定(Straight_Run)后推进
+
                     if (In_Line_Ele_Count >= mileage_num)
                     {
                         Segment_Total_Mileage[Execute_Times] = Count.Mileage;
@@ -1563,8 +1552,6 @@ void Normal_Run()
             }
             else
             {
-                // 当前线路所有元素已完成
-                // 注意：不在此处推进节点，统一在转弯完成或直道稳定后推进
                 Segment_Total_Mileage[Execute_Times] = Count.Mileage;
                 Set_Node_Run_Mode(Run_Track.Node_Arr_Dir[Execute_Times]);
             }
@@ -1579,8 +1566,7 @@ void Normal_Run()
 /*************************************
 ** Function: Turn_Left_Run
 ** Description: 左转状态机（每3ms调用一次）
-** Details:   Error = -Turn_Error_Value（持续左转）
-**            出弯：传感器条件连续3帧 + 陀螺仪≥90° → 完成转向
+** Details:
 *************************************/
 void Turn_Left_Run(void)
 {
@@ -1622,8 +1608,7 @@ void Turn_Left_Run(void)
 /*************************************
 ** Function: Turn_Right_Run
 ** Description: 右转状态机（每3ms调用一次）
-** Details:   Error = +Turn_Error_Value（持续右转）
-**            出弯：陀螺仪积分达到目标角度即完成
+** Details:
 *************************************/
 void Turn_Right_Run(void)
 {
@@ -1665,12 +1650,7 @@ void Turn_Right_Run(void)
 /*************************************
 ** Function: Mileage_Mode_Run
 ** Description: 里程计模式运行（每3ms调用一次）
-** Details:   根据当前元素方向(node_dir)执行不同操作：
-**            node_dir=1左转/2右转 → 调用 Mileage_Run_Stage_2（陀螺仪角度控制转向）
-**            node_dir=3短直行 → 行驶1000单位后完成
-**            node_dir=4长直行 → 行驶1400单位后完成
-**            其他 → Error=0直行（等待外部触发）
-**            回放模式下额外执行边缘里程校准（Remember_Snap）
+** Details:
 *************************************/
 void Mileage_Mode_Run()
 {
@@ -1694,27 +1674,27 @@ void Mileage_Mode_Run()
             Check_Edge_Skip_Count = (Mode == Build_Mode) ? BUILD_CHECK_EDGE_MILEAGE_TURN : REMEMBER_CHECK_EDGE_MILEAGE_TURN;
         }
     }
-    else if (node_dir == 3)  // 短直行元素
+    else if (node_dir == 3)
     {
         Error = 0;
-        Force_Straight_Speed = 1;  // 强制基础速度直走
+        Force_Straight_Speed = 1;
 
         if (section_mileage >= MILEAGE_STRAIGHT_SHORT)
         {
             Finish_Mileage_Section();
         }
     }
-    else if (node_dir == 4)  // 长直行元素
+    else if (node_dir == 4)
     {
         Error = 0;
-        Force_Straight_Speed = 1;  // 强制基础速度直走
+        Force_Straight_Speed = 1;
 
         if (section_mileage >= MILEAGE_STRAIGHT_LONG)
         {
             Finish_Mileage_Section();
         }
     }
-    else  // 其他方向（0或无效值）
+    else
     {
         Error = 0;
         Force_Straight_Speed = 1;  // 强制基础速度直走
@@ -1724,10 +1704,7 @@ void Mileage_Mode_Run()
 /*************************************
 ** Function: Mileage_Run_Stage_2
 ** Description: 里程计模式二级控制——元器件转弯
-** Details:   Build模式：三段式 ①直走延迟 → ②减速停车 → ③原地旋转（与节点转弯一致）
-**            Remember模式：两段式 ①直走延迟 → ②陀螺仪差速转弯（不减速停车）
-**            case 1左转/case 2右转，Error 与节点转弯一致(±Turn_Error_Value)
-**            与 Turn_Left_Run/Turn_Right_Run 的区别：不依赖传感器出弯判定，纯靠陀螺仪。
+** Details:
 *************************************/
 void Mileage_Run_Stage_2()
 {
@@ -1892,14 +1869,7 @@ void Mileage_Run_Stage_2()
 ** Function: Set_Speed
 ** Description: 设置电机期望速度（PID级联控制）
 ** Control Chain: Error → Turn_PID → Gyro_PID(+Gyro_Z×系数) → 左右轮差速
-** Details:   1. 停车检查（Stop_Flag非零 → 期望速度=0）
-**            2. Turn_PID：Error → 基础差速量
-**            3. Gyro_PID：(基础差速量 + 陀螺仪角速度×中心线系数) → 最终差速量
-**            4. 建图模式：Run_Speed = Basic_Speed
-**               回放模式：Run_Speed = Remember_Get_Run_Speed()（梯形速度曲线）
-**            5. 左右期望速度 = Run_Speed ± Gyro_PID_Out
-**            6. 转向中覆盖为转向速度分配（内外轮差速）
-**            7. 左右电机PID：期望速度 vs 实际速度 → PID调节量
+** Details:
 *************************************/
 void Set_Speed()
 {
@@ -1925,10 +1895,8 @@ void Set_Speed()
     }
 
     //===== 级联PID：Error → Turn_PID → Gyro_PID =====
-    // 转弯时Error=±40（固定值），直道时Error由传感器计算
     Turn_PID_Out  = PID_calc(&Turn_PID, 0, (float)(Error / 100.0));
 
-    // Remember模式转弯时不加陀螺仪阻尼项，纯靠两个环的P输出差速
     Gyro_PID_Out = PID_calc(&Gyro_PID, 0, (-Turn_PID_Out)
         + ((Mode == Remember_Mode && (is_left == 1 || is_right == 1)) ? 0.0f : Gyro_Z_For_PID));
 
@@ -2006,20 +1974,41 @@ void Set_Speed()
 /*************************************
 ** Function: Set_Out
 ** Description: 电机PWM输出控制（每3ms调用一次）
-** Details:   PWM频率：左右电机30KHz, 吸风电机70KHz
-**            PWM占空比范围：0~10000（对应0%~100%）
-**            电机控制逻辑：
-**            - PID_Out == 0：两路同输出0（自由滑行）
-**            - PID_Out > 0：IN1=0, IN2=(PID_Out+10000)/2（正向驱动）
-**            - PID_Out < 0：IN1=(|PID_Out|+10000)/2, IN2=0（反向驱动）
-**            停车时：四路全0（自由滑行）
+** Details:
 *************************************/
 void Set_Out(void)
 {
-    //===== 电压监测（仅警告，不保护）=====
-    if (Voltage_Check[0] < 11.5)  // 电池电压低于11.5V
+    //===== 低压保护：锁存后关闭所有电机，蜂鸣器间歇报警 =====
+    if (Voltage_Check[0] < LOW_VOLTAGE_PROTECT_VALUE)
     {
-        gpio_set_level(P33_4, 1);  // 蜂鸣器响（电压低警告）
+        Low_Voltage_Protect_Flag = 1;
+        Stop_Flag = 1;
+    }
+
+    if (Low_Voltage_Protect_Flag != 0)
+    {
+        pwm_set_duty(Suction_Motor_IN1, 0);
+        pwm_set_duty(Suction_Motor_IN2, 0);
+        pwm_set_duty(Left_Motor_IN1, 0);
+        pwm_set_duty(Left_Motor_IN2, 0);
+        pwm_set_duty(Right_Motor_IN1, 0);
+        pwm_set_duty(Right_Motor_IN2, 0);
+
+        Left_Exp_Spd = 0;
+        Right_Exp_Spd = 0;
+        Left_PID_Out = 0;
+        Right_PID_Out = 0;
+        PID_cleardata(&Left_PID);
+        PID_cleardata(&Right_PID);
+
+        Low_Voltage_Beep_Count++;
+        if (Low_Voltage_Beep_Count >= LOW_VOLTAGE_BEEP_PERIOD_COUNT)
+        {
+            Low_Voltage_Beep_Count = 0;
+        }
+
+        gpio_set_level(P33_4, (Low_Voltage_Beep_Count < LOW_VOLTAGE_BEEP_ON_COUNT) ? 1 : 0);
+        return;
     }
 
     //===== 启动延时：使能后等待电机和编码器稳定 =====
@@ -2040,40 +2029,36 @@ void Set_Out(void)
         return;                     // 跳过正常输出
     }
 
-    //===== 强制停车：全白/全黑持续 > 100周期（转弯时不检测）
-   if (Count.Stop > 10 && is_left == 0 && is_right == 0)
-   {
-       Stop_Flag = 1;  // 置位停车标志（下周期 Set_Speed 将设期望速度=0）
-   }
+//   if (Count.Stop > 100 && is_left == 0 && is_right == 0)
+//   {
+//       Stop_Flag = 1;  // 置位停车标志（下周期 Set_Speed 将设期望速度=0）
+//   }
 
    //===== 堵转检测：使能+延时过后，连续20帧左右轮速度绝对值≤5 =====
-   if (EnableSwitch_ON && Enable_Start_Delay_Count == 0 && Stop_Flag == 0
-       && is_left == 0 && is_right == 0)  // 转弯时不检测堵转（减速/原地旋转速度天然为0）
-   {
-       if (abs(Left_Real_Spd) <= 5 && abs(Right_Real_Spd) <= 5)
-       {
-           Count.Stall++;
-           if (Count.Stall > 80)
-           {
-               Stop_Flag = 1;
-           }
-       }
-       else
-       {
-           Count.Stall = 0;
-       }
-   }
+//   if (EnableSwitch_ON && Enable_Start_Delay_Count == 0 && Stop_Flag == 0
+//       && is_left == 0 && is_right == 0)  // 转弯时不检测堵转（减速/原地旋转速度天然为0）
+//   {
+//       if (abs(Left_Real_Spd) <= 5 && abs(Right_Real_Spd) <= 5)
+//       {
+//           Count.Stall++;
+//           if (Count.Stall > 80)
+//           {
+//               Stop_Flag = 1;
+//           }
+//       }
+//       else
+//       {
+//           Count.Stall = 0;
+//       }
+//   }
 
-    //===== 吸尘电机控制 =====
     if (EnableSwitch_ON && Stop_Flag == 0 && (is_left == 1 || is_right == 1))
     {
-        // 转弯时：高吸力（80%占空比 → 9500/10000）
         pwm_set_duty(Suction_Motor_IN1, 0);
         pwm_set_duty(Suction_Motor_IN2, 9500);
     }
     else
     {
-        // 直行/停车时：低吸力（70%占空比 → 7000/10000）
         pwm_set_duty(Suction_Motor_IN1, 0);
         pwm_set_duty(Suction_Motor_IN2, 9500);
     }
@@ -2138,12 +2123,7 @@ void Set_Out(void)
 /*************************************
 ** Function: Straight_Run
 ** Description: 直道运行模式（每3ms调用一次）
-** Details:   1. 保持Error=0（不产生偏差）
-**            2. 监测居中稳定条件：Track_Num 2~5个 && Middle在3~11范围
-**            3. 连续满足>5次 → 直道稳定
-**            4. Straight_Node_Pending时（由Set_Node_Run_Mode设置）：
-**               完成当前段 + 推进下一路段
-**            5. 非Pending时：退回到Normal_Mode
+** Details:
 *************************************/
 void Straight_Run(void)
 {
@@ -2151,8 +2131,8 @@ void Straight_Run(void)
     Error = 0;                          // 零偏差直行
     Middle = Get_Track_Middle_Point();  // 获取当前中心点
 
-    // 直道稳定判定：传感器2~5个 && 中心在中间区域(3~11)
-    if (Track_Num < 6 && Track_Num > 1 && Middle > 3 && Middle < 12)
+    // 直道稳定判定：传感器2~4个 && 中心在中间区域(3~11)
+    if (Track_Num < 5 && Track_Num > 1 && Middle > 3 && Middle < 11)
     {
         Count.Straight++;  // 连续居中，计数+1
     }
@@ -2171,7 +2151,7 @@ void Straight_Run(void)
             Straight_Node_Pending = 0;  // 清除等待标志
             Count.Straight = 0;         // 清零直道计数
         }
-        else  // 非Pending：正常恢复
+        else  //
         {
             Run_Mode = Normal_Mode;  // 切回正常寻迹
             Count.Straight = 0;

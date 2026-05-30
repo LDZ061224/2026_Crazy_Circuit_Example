@@ -19,7 +19,6 @@ History:
 Cross_Z   2026.1.30   0.0        创建初始版本
 **************************************************/
 
-// 包含头文件
 #include "Fun.h"
 
 /********************************* 全局变量定义 *********************************/
@@ -27,6 +26,7 @@ uint8 icm20602_Check = 0;                // ICM20602传感器初始化状态标�
 uint16 Light_ADC[15] = {0};              // 15路光敏传感器原始ADC值
 float Current_Check = 0;                 // 电流检测值
 float Voltage_Check[2] = {0};            // 两路电压检测值
+int Dbg[10] = {0};
 
 /* --------------- 光敏传感器校准参数 --------------- */
 int Light_Raw_Min[15] =                  // 15路光敏传感器ADC最小值（初始化为最大值）
@@ -56,23 +56,26 @@ void Vofa_Send_Data(void)
     memset(VOFA_data, 0, sizeof(VOFA_data));
 
     int i = 0;
-
+        for (int i = 0; i < 15; i++)
+        {
+            VOFA_data[i].floatdata = Light_Convert[i];
+        }
     // 赋值需要发送的调试数据
-    VOFA_data[0].floatdata  = Left_Exp_Spd;     // 左电机期望速度
-    VOFA_data[1].floatdata  = Right_Exp_Spd;    // 右电机期望速度
-    VOFA_data[2].floatdata  = Left_Real_Spd;     // 左电机实际速度
-    VOFA_data[3].floatdata  = Right_Real_Spd;          // 右电机实际速度
-    VOFA_data[4].floatdata  = Gyro_Integral;     // 陀螺仪积分角度
-    VOFA_data[5].floatdata  = Total_Run_Mileage;    // 寻迹偏差值
-    VOFA_data[6].floatdata  = Voltage_Check[0];     // 电压检测值1
-    VOFA_data[7].floatdata  = Count.Mileage;     // 中间变量（保留位）
-    VOFA_data[8].floatdata  = Left_PID_Out;      // 运行模式
-    VOFA_data[9].floatdata  = Right_PID_Out;    // Check_Edge触发次数
-    VOFA_data[10].floatdata = Remember_Next_Target_Mileage; // 记忆模式下的下一个目标里程
-    VOFA_data[11].floatdata = Error; // 寻迹偏差值
-    VOFA_data[12].floatdata = Gyro_Z_For_PID; // PID用陀螺仪值
+//    VOFA_data[0].floatdata  = Left_Exp_Spd;
+//    VOFA_data[1].floatdata  = Right_Exp_Spd;
+//    VOFA_data[2].floatdata  = Left_Real_Spd;
+//    VOFA_data[3].floatdata  = Right_Real_Spd;
+//    VOFA_data[4].floatdata  = Gyro_Integral;
+//    VOFA_data[5].floatdata  = Total_Run_Mileage;
+//    VOFA_data[6].floatdata  = Voltage_Check[0];
+//    VOFA_data[7].floatdata  = Count.Mileage;
+//    VOFA_data[8].floatdata  = Left_PID_Out;
+//    VOFA_data[9].floatdata  = Right_PID_Out;
+//    VOFA_data[10].floatdata = Dbg[0];
+//    VOFA_data[11].floatdata = Error;
+//    VOFA_data[12].floatdata = Stop_Flag;
     // 循环发送13组浮点数数据
-    for(i = 0; i < 13; i++)
+    for(i = 0; i < 15; i++)
     {
         // 提取浮点数拆分后的4个字节
         data[0] = VOFA_data[i].u8data[0];
@@ -269,8 +272,8 @@ void Motor_Init()
     pwm_init(Right_Motor_IN1,   30000, 0);
     pwm_init(Right_Motor_IN2,   30000, 0);
     // 吸风电机两路PWM初始化，频率70000Hz，初始占空比0
-    pwm_init(Suction_Motor_IN1, 70000, 0);
-    pwm_init(Suction_Motor_IN2, 70000, 0);
+    pwm_init(Suction_Motor_IN1, 100000, 0);
+    pwm_init(Suction_Motor_IN2, 100000, 0);
 }
 
 /*************************************

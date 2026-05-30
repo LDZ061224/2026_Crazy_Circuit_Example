@@ -1,4 +1,63 @@
-# 2026 Crazy Circuit 智能车竞速程序 — 完整流程参考
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+---
+
+# 2026 Crazy Circuit 智能车竞速程序
+
+## 硬件平台与工具链
+
+- **芯片**: Infineon AURIX TC264D (TC26xB B-Step, Dual-core TriCore)
+- **IDE**: AURIX Development Studio (Eclipse CDT, managed build)
+- **编译器**: TASKING Tricore C/C++ Compiler (`ctc`)
+- **调试器**: winIDEA (iSYSTEM) 通过 USB DAS 连接
+- **依赖库**: SEEKFREE TC264 Open Source Library V3.4.1 + Infineon iLLD
+- **启动**: 编译生成 `Debug/2026_Crazy_Circuit.elf`，通过 ADS → winIDEA 烧录至 Flash
+
+> **注意**: `Readme.md` 中错误地写为 TC397，实际芯片为 **TC264D / TC26B**（以 `.cproject` 和 `Lcf_Tasking_Tricore_Tc.lsl` 为准）。
+
+## 构建与烧录
+
+- **IDE 构建**: ADS (AURIX Development Studio) → 右键项目 → Build Project
+- **命令行构建**: `make -C Debug -j` (需要 TASKING ctc 工具链在 PATH 中)
+- **产物**: `Debug/2026_Crazy_Circuit.elf` (调试) + `Debug/2026_Crazy_Circuit.hex` (烧录)
+- **烧录**: winIDEA 通过 USB DAS 连接 → 加载 elf → 烧录至 Flash
+
+---
+
+## 项目目录结构
+
+```
+user/                   ← CPU 入口 + 中断服务
+  cpu0_main.c           → Core 0: 硬件初始化 + 主循环(VOFA调试输出)
+  cpu1_main.c           → Core 1: OLED 显示刷新循环
+  isr.c                 → 所有ISR: 3ms PIT(Car_Go), EXTI, DMA, UART
+  isr_config.h          → 中断优先级配置 (必须唯一!)
+code/                   ← 应用层代码
+  Ctrl.c / Ctrl.h       → 核心控制 (~1500行): 状态机, 寻迹, 转弯, 里程, 建图/回放
+  Fun.c / Fun.h         → 外设初始化: ADC, 编码器, PWM, 电机, GPIO
+  pid.c / pid.h         → PID 算法库 (位置式 + 增量式)
+  Racing_Track.c        → 6张预赛/决赛赛道地图数据
+  OLED/                 → OLED 显示 + CH455 键盘 + 模拟I2C + Flash UI
+libraries/              ← 第三方库
+  infineon_libraries/   → Infineon iLLD 底层驱动 (TC26B)
+  zf_common/ / zf_driver/ / zf_device/ / zf_components/  → SEEKFREE 逐飞库
+```
+
+---
+
+## 关键约束 (Gotchas)
+
+1. **中断优先级必须唯一**: `isr_config.h` 中所有中断优先级 (1-255) 不能重复，否则硬件异常
+2. **Boot 引脚禁止使用**: P14.2~P14.6, P10.5, P10.6 作为外设使用会导致芯片无法启动
+3. **P20.2 仅输入**: 不能配置为输出；P21.6 在 TC264DA 上无法使用
+4. **双核内存**: 全局变量默认分配到 CPU1 DSPRAM，CPU0 访问需注意链接脚本配置
+5. **Flash 扇区 0**: 只使用页 0-9 (布局见下方 Flash 存储章节)，擦除需整扇操作
+6. **DMA 中断**: EXTI / DMA 中断服务需要在 `isr.c` 中手动注册 CPU 亲和性
+7. **头文件统一包含**: 所有 `.c` 文件只 include `headfiles.h`，该文件汇总了全部模块头文件。修改模块依赖时只需编辑 `headfiles.h`，无需逐个改源文件。
+
+---
 
 ## 系统架构
 
@@ -304,47 +363,12 @@ Complete_Turn_Action:
   Reset_Turn_Action_State()     ← Run_Mode = Normal_Mode
 ```
 
-### 默认地图 Remember 模式逐段推演
+### Remember 模式关键行为总结
 
-前提：Flash 中已有建图数据 (Turn_Mileage_Record_Num > 0)
-
-```
-启动: Exe=0, m_num=0, In_Line=0, Next_Target=Turn_Mileage_Record[0]
-
-段0 (Exe=0, m_num=0, Node_Dir=1左转):
-  In_Line(0) < 0? 假 → 情况B
-  Node_Dir[0]=1≠0 → 里程触发:
-    Total_Run_Mileage >= Turn_Mileage_Record[0] - 180?
-    否 → 继续直行，Total_Run_Mileage增长
-    是 → Set_Node_Run_Mode(1) → Turn_Left_Run → 固定Error=-40边走边转
-          Gyro_Integral≥70° → Complete → Advance:
-            Index=1, Next_Target+=Turn_Mileage_Record[1]
-            Exe=1, In_Line=0
-
-段1 (Exe=1, m_num=1, Node_Dir=0直行):
-  In_Line(0) < 1? 真 → 情况A
-  mileage_dir=Mileage_Dir[1][0]=4(长直行)≠0:
-    ① edge_hit? → Snap → Run_Mode=Mileage_Mode → 走1800里程
-    ② Count.Mileage >= Segment_Edge_Mileage[1][0] - 120 → Mileage_Mode
-  Mileage_Mode_Run: node_dir=4, Error=0, section_mileage≥1800 → Finish_Mileage_Section
-    In_Line_Ele_Count=1
-  (注意: 之后需要额外一次Check_Edge触发才能进入情况B)
-
-段1尾部 (Exe=1, In_Line=1 >= m_num=1):
-  情况B, Node_Dir[1]=0 → 仅edge_hit触发Set_Node_Run_Mode(0)→Straight_Mode
-  Straight_Run 稳定后 → Advance: Exe=2
-
-段2 (Exe=2, m_num=2, Node_Dir=1左转):
-  元素[0]=3(短直行) → Mileage_Mode 走1400 → Finish
-  元素[1]=3(短直行) → Mileage_Mode 走1400 → Finish, In_Line=2
-  情况B, Node_Dir[2]=1 → 里程触发 Turn_Left_Run → Advance: Exe=3
-
-... (依此类推)
-
-段11 (Exe=11, m_num=0):
-  Advance_To_Next_Track_Segment: Execute_Times = 11 % 12 = 11
-  Stop_Mode==0 && Exe==Node_Num(11) → Finish_Flag=1 → 完赛停车
-```
+- **段内元素**: `Remember_Check_Trigger` 提前触发（物理边缘 Snap 优先 + 里程预判 `Remember_Mileage_Prepare_Distance`(120) 兜底）
+- **节点转弯**: 里程触发（距目标 `Remember_Node_Prepare_Distance`(180) 时进入转向）
+- **转弯完成**: `Remember_Advance_Turn_Record` 累加下条记录，`Advance_To_Next_Track_Segment` 推进节点
+- 完整逐段推演见 `Readme.md`"默认地图 Check-Edge 逐次路由表"
 
 ### Remember 模式速度曲线 (Remember_Get_Run_Speed)
 
@@ -437,3 +461,9 @@ Car_Go
 │       └── PID_calc(&Right_PID) → Right_PID_Out
 └── Set_Out → pwm_set_duty (H 桥控制)
 ```
+
+---
+
+## 补充文档
+
+`Readme.md` — 静态分析报告，含已修复 Bug 记录、已知局限列表、默认地图 Check-Edge 逐次路由表（19 步完整推演）、修改历史。

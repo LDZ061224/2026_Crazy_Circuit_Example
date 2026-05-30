@@ -38,11 +38,145 @@
 #include "isr.h"
 #include "Fun.h"
 
+extern uint8 debug_uart_data;
+
 // 对于TC系列默认是不支持中断嵌套的，希望支持中断嵌套需要在中断内使用 interrupt_global_enable(0); 来开启中断嵌套
 // 简单点说实际上进入中断后TC系列的硬件自动调用了 interrupt_global_disable(); 来拒绝响应任何的中断，因此需要我们自己手动调用 interrupt_global_enable(0); 来开启中断的响应。
 
 int Scan_Count = 0;         // 阈值校准计数
 int Scan_Complete = 0;
+
+// 串口调参：解析出的命令存这里，主循环检测 g_tuning_cmd.valid==1 即可读取
+uart_tuning_cmd_t g_tuning_cmd = {0};
+
+/*************************************
+** Function: uart_tuning_atof
+** Description: 手写字符串转浮点数，替代标准库 atof
+** Parameters:  *str - 待转换字符串，如 "123.456" 或 "-0.008"
+** Returns:     float 转换结果
+** Notes:      嵌入式环境可能没有标准库 atof，故自行实现
+*************************************/
+static float uart_tuning_atof(const char *str)
+{
+    float result = 0.0f;        // 最终结果累加在这里
+    float sign = 1.0f;          // 正负号，默认正
+    float decimal = 1.0f;       // 小数权重：0.1 → 0.01 → 0.001 ...
+    uint8 has_decimal = 0;      // 是否已经遇到小数点
+
+    // 跳过符号位
+    if (*str == '-') 
+    {
+         sign = -1.0f; 
+         str++; 
+    }
+    else if (*str == '+') 
+    {
+         str++; 
+    }
+
+    // 逐字符扫描
+    while (*str)
+    {
+        if (*str == '.')                    // 遇到小数点 → 切到小数模式
+        {
+            has_decimal = 1;
+            str++;
+            continue;
+        }
+        if (*str < '0' || *str > '9') break; // 非数字字符 → 停止
+
+        if (has_decimal)                    // 小数模式：权重衰减 × 0.1
+        {
+            decimal *= 0.1f;               // 十分位 → 百分位 → 千分位 ...
+            result += (float)(*str - '0') * decimal;
+        }
+        else                                // 整数模式：高位 × 10 + 新位
+        {
+            result = result * 10.0f + (float)(*str - '0');
+        }
+        str++;
+    }
+    return result * sign;                   // 最后乘上符号
+}
+
+/*************************************
+** Function: uart_tuning_parse_frame
+** Description: 解析完整帧 "KEY=value" 字符串，拆出键名和数值
+** Parameters:  *frame - 帧字符串，如 "@LKP=80.5"
+**             len    - 帧长度（不含结尾 '\0'）
+** Details:    帧格式 @XXX=%f：XXX=3字符键名，=分隔，%f=浮点数值
+**             位置索引: [0]='@' [1~3]=KEY [4]='=' [5~]=value
+**             解析结果写入全局 g_tuning_cmd
+*************************************/
+static void uart_tuning_parse_frame(const char *frame, uint8 len)
+{
+    // 最短也至少是 @X=Y# → 去掉头尾中间至少 "X=Y" = 3字节, 加上@前缀共4+2=6
+    if (len < 6) return;            // 帧太短，丢弃
+    if (frame[0] != '@') return;    // 帧头不对，丢弃
+    if (frame[4] != '=') return;    // 等号位置不对（KEY 不是3字符?），丢弃
+
+    // --- 提取 KEY：@ 后面连续 3 个字符 ---
+    //  位置:  0    1  2  3    4    5 ...
+    //  帧:    @    L  K  P    =    8  0  .  5
+    //         ↑                ↑
+    //       frame[0]         frame[4]
+    g_tuning_cmd.key[0] = frame[1];     // 第1个字符如 'L'
+    g_tuning_cmd.key[1] = frame[2];     // 第2个字符如 'K'
+    g_tuning_cmd.key[2] = frame[3];     // 第3个字符如 'P'
+    g_tuning_cmd.key[3] = '\0';         // C 字符串结尾
+
+    // --- 提取 value：等号后面一直到帧尾 ---
+    // &frame[5] 指向 '8' 的位置，atof 一直读到非数字为止
+    g_tuning_cmd.value = uart_tuning_atof(&frame[5]);
+
+    // --- 标记有效，主循环可读 ---
+    g_tuning_cmd.valid = 1;
+}
+
+/*************************************
+** Function: uart_tuning_parse_byte
+** Description: 逐字节喂入帧解析状态机
+** Parameters:  byte - 串口收到的单个字节
+** Details:    状态机行为：
+**             1. 收到 '@' → 开始新帧，清空缓冲区
+**             2. 收到 '#' 且正在接收 → 帧结束，调用 parse_frame 解析
+**             3. 其他字节且正在接收 → 存入缓冲区（最长31字节）
+**             未在接收中且非 '@' 的字节 → 丢弃（帧间垃圾数据）
+** Notes:      buf/idx/receiving 为 static 局部变量，调用间保持值不变
+*************************************/
+static void uart_tuning_parse_byte(uint8 byte)
+{
+    static uint8 buf[32];       // 帧缓冲区，最长存31个字节 + 结束符
+    static uint8 idx = 0;       // 当前写入位置（下一个字节放哪里）
+    static uint8 receiving = 0; // 状态: 0=不在接收, 1=正在接收帧内容
+
+    if (byte == '@')            // --- 帧头：开始新帧 ---
+    {
+        idx = 0;                // 清空缓冲区指针
+        receiving = 1;          // 进入"接收中"状态
+        buf[idx++] = byte;      // 也把 @ 存进去，方便帧解析时对齐位置
+    }
+    else if (receiving)         // --- 正在接收中 ---
+    {
+        if (byte == '#')        // 帧尾：一帧结束
+        {
+            buf[idx] = '\0';    // 字符串终止符
+            receiving = 0;      // 退出接收状态
+            uart_tuning_parse_frame((const char *)buf, idx); // 送去解析
+            idx = 0;
+        }
+        else if (idx < sizeof(buf) - 1) // 普通字节：存入缓冲区
+        {
+            buf[idx++] = byte;
+        }
+        else                    // 缓冲区满了（超过31字节还没看到#）→ 丢弃
+        {
+            idx = 0;
+            receiving = 0;
+        }
+    }
+    // else: 不在接收状态也不是 '@' → 忽略（帧间的垃圾数据）
+}
 
 // **************************** PIT中断函数 ****************************
 IFX_INTERRUPT(cc60_pit_ch0_isr, 0, CCU6_0_CH0_ISR_PRIORITY)
@@ -199,6 +333,7 @@ IFX_INTERRUPT(uart0_rx_isr, 0, UART0_RX_INT_PRIO)
 
 #if DEBUG_UART_USE_INTERRUPT                        // 如果开启 debug 串口中断
         debug_interrupr_handler();                  // 调用 debug 串口接收处理函数 数据会被 debug 环形缓冲区读取
+        uart_tuning_parse_byte(debug_uart_data);    // 同时喂给调参命令解析器
 #endif                                              // 如果修改了 DEBUG_UART_INDEX 那这段代码需要放到对应的串口中断去
 }
 

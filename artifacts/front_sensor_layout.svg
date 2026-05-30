@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+  <rect width="1200" height="760" fill="#f7f8fb"/>
+  <defs>
+    <style>
+      .title { font-family: Arial, "Microsoft YaHei", sans-serif; font-size: 34px; font-weight: 700; fill: #1d2433; }
+      .label { font-family: Arial, "Microsoft YaHei", sans-serif; font-size: 24px; fill: #334155; }
+      .small { font-family: Arial, "Microsoft YaHei", sans-serif; font-size: 19px; fill: #64748b; }
+      .num { font-family: Arial, "Microsoft YaHei", sans-serif; font-size: 24px; font-weight: 700; fill: #ffffff; }
+      .sensor-near { fill: #2563eb; stroke: #153e9f; stroke-width: 3; }
+      .sensor-far { fill: #f97316; stroke: #b94a07; stroke-width: 3; }
+      .line { stroke: #94a3b8; stroke-width: 4; stroke-linecap: round; }
+      .dash { stroke: #94a3b8; stroke-width: 3; stroke-dasharray: 10 12; }
+      .axis { stroke: #0f172a; stroke-width: 4; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#0f172a"/>
+    </marker>
+  </defs>
+
+  <text x="600" y="62" text-anchor="middle" class="title">当前前瞻光电布局示意</text>
+  <text x="600" y="98" text-anchor="middle" class="small">前进方向向上；下方是靠近车体的一排，橙色为更远离车体的第二排</text>
+
+  <line x1="600" y1="660" x2="600" y2="145" class="dash"/>
+  <line x1="600" y1="675" x2="600" y2="600" class="axis"/>
+  <text x="622" y="628" class="label">前进方向</text>
+  <text x="616" y="365" class="small">中心线</text>
+
+  <rect x="430" y="642" width="340" height="72" rx="8" fill="#e2e8f0" stroke="#94a3b8" stroke-width="3"/>
+  <text x="600" y="687" text-anchor="middle" class="label">车体 / 主板方向</text>
+
+  <line x1="130" y1="505" x2="1070" y2="505" class="line"/>
+  <text x="80" y="513" text-anchor="end" class="label">第一排</text>
+  <text x="80" y="542" text-anchor="end" class="small">靠近车</text>
+
+  <line x1="455" y1="290" x2="745" y2="290" class="line"/>
+  <text x="80" y="298" text-anchor="end" class="label">第二排</text>
+  <text x="80" y="327" text-anchor="end" class="small">更远离车</text>
+
+  <!-- Near row: 0 1 2 3 4 5   9 10 11 12 13 14 -->
+  <g>
+    <circle cx="140" cy="505" r="32" class="sensor-near"/><text x="140" y="514" text-anchor="middle" class="num">0</text>
+    <circle cx="220" cy="505" r="32" class="sensor-near"/><text x="220" y="514" text-anchor="middle" class="num">1</text>
+    <circle cx="300" cy="505" r="32" class="sensor-near"/><text x="300" y="514" text-anchor="middle" class="num">2</text>
+    <circle cx="380" cy="505" r="32" class="sensor-near"/><text x="380" y="514" text-anchor="middle" class="num">3</text>
+    <circle cx="460" cy="505" r="32" class="sensor-near"/><text x="460" y="514" text-anchor="middle" class="num">4</text>
+    <circle cx="540" cy="505" r="32" class="sensor-near"/><text x="540" y="514" text-anchor="middle" class="num">5</text>
+    <circle cx="660" cy="505" r="32" class="sensor-near"/><text x="660" y="514" text-anchor="middle" class="num">9</text>
+    <circle cx="740" cy="505" r="32" class="sensor-near"/><text x="740" y="514" text-anchor="middle" class="num">10</text>
+    <circle cx="820" cy="505" r="32" class="sensor-near"/><text x="820" y="514" text-anchor="middle" class="num">11</text>
+    <circle cx="900" cy="505" r="32" class="sensor-near"/><text x="900" y="514" text-anchor="middle" class="num">12</text>
+    <circle cx="980" cy="505" r="32" class="sensor-near"/><text x="980" y="514" text-anchor="middle" class="num">13</text>
+    <circle cx="1060" cy="505" r="32" class="sensor-near"/><text x="1060" y="514" text-anchor="middle" class="num">14</text>
+  </g>
+
+  <!-- Far row: 6 7 8 -->
+  <g>
+    <circle cx="505" cy="290" r="34" class="sensor-far"/><text x="505" y="299" text-anchor="middle" class="num">6</text>
+    <circle cx="600" cy="290" r="34" class="sensor-far"/><text x="600" y="299" text-anchor="middle" class="num">7</text>
+    <circle cx="695" cy="290" r="34" class="sensor-far"/><text x="695" y="299" text-anchor="middle" class="num">8</text>
+  </g>
+
+  <path d="M540 466 C555 405, 565 360, 505 327" fill="none" stroke="#f97316" stroke-width="3" stroke-dasharray="7 8"/>
+  <path d="M600 466 C600 405, 600 360, 600 327" fill="none" stroke="#f97316" stroke-width="3" stroke-dasharray="7 8"/>
+  <path d="M660 466 C645 405, 635 360, 695 327" fill="none" stroke="#f97316" stroke-width="3" stroke-dasharray="7 8"/>
+
+  <text x="600" y="570" text-anchor="middle" class="small">第一排中间两侧：5 和 9</text>
+  <text x="600" y="246" text-anchor="middle" class="small">第二排中心：7；左右前瞻：6 / 8</text>
+
+  <rect x="165" y="145" width="270" height="95" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <circle cx="205" cy="178" r="14" class="sensor-near"/><text x="232" y="186" class="small">第一排 ADC</text>
+  <circle cx="205" cy="211" r="14" class="sensor-far"/><text x="232" y="219" class="small">第二排前瞻 ADC</text>
+</svg>

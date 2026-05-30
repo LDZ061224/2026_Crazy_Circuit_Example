@@ -18,6 +18,8 @@
 #include "zf_common_headfile.h"
 #include "headfiles.h"
 #include "zf_driver_uart.h"
+#include "isr.h"
+
 #pragma section all "cpu0_dsram"
 // 将后续代码段放到 CPU0 的 DSRAM 中，便于快速访问。
 
@@ -29,22 +31,21 @@ int core0_main(void)
 {
     clock_init();                   // 初始化系统时钟
     debug_init();                   // 初始化调试串口和基础输出
-    // 先完成底层外设初始化，再进入姿态模块和主循环。
     Encoder_Init();
     Motor_Init();
     Other_Init();
     Light_Init();
-    /* IMU660RB 轮询初始化，直到姿态模块就绪后再继续。 */
-    while (imu_Check == 1)
+    while(1)
     {
-        imu_Check = imu660rb_init();
-        gpio_toggle_level(P33_4);
-        system_delay_ms(200);
+       if (icm20602_init()){}
+       else
+           break;
+       gpio_toggle_level(P33_4);
     }
-    gpio_set_level(P33_4,0);
+    gpio_set_level(P33_4, 0);
     TCA9555_Init();
-    OLED_Input();
-    OLED_Data_Load();
+//    OLED_Input();
+//    OLED_Data_Load();
     uart_init(UART_0, 115200, UART0_TX_P14_0, UART0_RX_P14_1);
     uart_rx_interrupt(UART_0, 1);           // 开启串口 0 接收中断
     interrupt_global_enable(0);             // 允许全局中断
@@ -65,6 +66,10 @@ int core0_main(void)
     /* 主循环只做持续型调试发送，不阻塞控制中断。 */
     while (TRUE)
     {
+//        for(int i = 0; i < 15; i++)
+//        {
+//            TCA9555_LED_Ctrl(LED[i], 1);
+//        }
         // 周期性发送调试数据，供上位机查看运行状态。
         //Wit_Send_Data();  // 无线模块未连接，使用VOFA有线调试
         Vofa_Send_Data();
