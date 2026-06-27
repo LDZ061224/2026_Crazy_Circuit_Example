@@ -25,9 +25,6 @@ AmaZzzing 2016.11.12  1.0        初步完成构架
 #define JBD_simiic_SDA_OUT          gpio_set_dir(JBD_simiic_SDA_PIN, GPO,GPO_PUSH_PULL);
 #define JBD_simiic_SDA_IN           gpio_set_dir(JBD_simiic_SDA_PIN, GPI,GPO_PUSH_PULL);
 
-#define JBD_simiic_SCL_INIT         gpio_init(JBD_simiic_SCL_PIN,GPO, GPO_PUSH_PULL, 1);
-#define JBD_simiic_SDA_INIT         gpio_init(JBD_simiic_SDA_PIN,GPO, GPO_PUSH_PULL, 1);
-
 #define JBD_simiic_SCL_H            gpio_set_level(JBD_simiic_SCL_PIN, 1);
 #define JBD_simiic_SCL_L            gpio_set_level(JBD_simiic_SCL_PIN, 0);
 

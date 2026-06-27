@@ -27,16 +27,7 @@ typedef enum
 #define JBD_simiic_SDA_PIN          P33_6
 
 /*==== OLED ====*/
-#define First_X                 45  //上次参数的X坐标
-#define Second_X                85  //本次输入参数的X坐标
-#define OLED_CLS(void)  OLED_Fill(0x00)
-
-//#define flash_read(SectorNum,page,type)        (type)(EEPROM_Read_32Bit(SectorNum, page))
-
-#define MAX_PAGE_NUM                    (100)
-
 #define Backup_Sector                   (0U)
-#define PAGE_NUM                        (1023U)
 /*===============外部变量===============*/
 
 /*===============函数声明===============*/

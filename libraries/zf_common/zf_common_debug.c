@@ -38,9 +38,6 @@
 #include "zf_common_fifo.h"
 #include "zf_driver_uart.h"
 #include "zf_common_debug.h"
-#include "Ctrl.h"
-
-int Stop_Count = 0;
 static debug_output_struct  debug_output_info;
 static volatile uint8       zf_debug_init_flag = 0;
 static volatile uint8       zf_debug_assert_enable = 1;
@@ -252,16 +249,6 @@ void debug_interrupr_handler (void)
     {
         uart_query_byte(DEBUG_UART_INDEX, &debug_uart_data);                    // 读取串口数据
         fifo_write_buffer(&debug_uart_fifo, &debug_uart_data, 1);               // 存入 FIFO
-
-        if (debug_uart_data == 'T')
-        {
-            Stop_Count++;
-        }
-
-        if (Stop_Count > 5)
-        {
-            Stop_Flag = 1;
-        }
     }
 }
 

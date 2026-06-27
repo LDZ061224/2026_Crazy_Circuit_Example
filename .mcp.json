@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "systematlas": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "systematlas-mcp"
+      ],
+      "env": {
+        "SYSTEMATLAS_SCOPE": "project"
+      }
+    },
+    "flowscript": {
+      "command": "node",
+      "args": [
+        "C:/Users/Lenovo/flowscript-mcp/flowscript-mcp.js"
+      ]
+    }
+  }
+}

@@ -1,4 +1,4 @@
-LOADING	E:\ADS_WorkShop\2026_Crazy_Circuit_V4.0\Debug\2026_Crazy_Circuit.elf
+LOADING	D:\workspace\2026_Crazy_Circuit_V4.0\Debug\2026_Crazy_Circuit.elf
 EMULATION	Probe - System; Root
 EMULATION	Initial debug frequency set
 EMULATION	Asserting reset
@@ -11,6 +11,6 @@ EMULATION	Final debug frequency set
 EMULATION	SoC ID match OK
 SoC	Detected device: TC260 series, rev. BB
 EMULATION	STARTED
-PROGRAMMING 	87313 bytes
-PROGRAMMING	Infineon TC26x_PFLASH_2MB5 (8 sectors)
+PROGRAMMING 	79106 bytes
+PROGRAMMING	Infineon TC26x_PFLASH_2MB5 (7 sectors)
 EMULATION	END - Without cleanup

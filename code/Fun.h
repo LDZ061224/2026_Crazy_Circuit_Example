@@ -34,11 +34,14 @@ typedef union floatu8data
 
 /*********************************** 硬件引脚宏定义 ***********************************/
 #define Left_Motor_IN1      ATOM0_CH7_P20_8
-#define Left_Motor_IN2      ATOM3_CH6_P13_1
-#define Right_Motor_IN1     ATOM2_CH3_P00_12
-#define Right_Motor_IN2     ATOM2_CH0_P00_9
-#define Suction_Motor_IN1   ATOM1_CH5_P00_6
-#define Suction_Motor_IN2   ATOM1_CH3_P00_4
+#define Left_Motor_IN2      ATOM2_CH6_P13_1
+//#define Left_Motor_IN2      ATOM2_CH6_P15_3
+//#define Left_Motor_IN1      ATOM2_CH0_P20_12
+//#define Left_Motor_IN2      ATOM2_CH4_P11_9
+#define Right_Motor_IN1     ATOM1_CH2_P02_2
+#define Right_Motor_IN2     ATOM1_CH0_P02_8
+#define Suction_Motor_IN1   ATOM2_CH0_P00_9
+#define Suction_Motor_IN2   ATOM3_CH3_P00_12
 
 // 使能开关判断宏：P00_2引脚为高电平表示开启
 #define EnableSwitch_ON     gpio_get_level(P00_2) == 1
@@ -48,8 +51,8 @@ typedef union floatu8data
 extern uint16 Light_ADC[15];
 // 15路光敏传感器阈值数组 [0]上阈值 [1]下阈值
 extern float Light_Thr[15][2];
-// ICM20602传感器状态标志
-extern uint8 icm20602_Check;
+// IMU660RB传感器状态标志
+extern uint8 imu660rb_Check;
 // 陀螺仪Z轴角速度
 extern float Gyro_Z;
 // 电流检测值
@@ -68,7 +71,7 @@ void Light_Init(void);
 void Encoder_Init(void);
 // 电机PWM初始化函数
 void Motor_Init(void);
-// 其他外设初始化（OLED、GPIO、ICM20602）
+// 其他外设初始化（OLED、GPIO、IMU660RB）
 void Other_Init(void);
 // 获取15路光敏传感器ADC值
 void Get_Light(void);

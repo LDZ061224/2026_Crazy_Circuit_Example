@@ -22,7 +22,7 @@ Cross_Z   2026.1.30   0.0        创建初始版本
 #include "Fun.h"
 
 /********************************* 全局变量定义 *********************************/
-uint8 icm20602_Check = 0;                // ICM20602传感器初始化状态标志
+uint8 imu660rb_Check = 0;                // IMU660RB传感器初始化状态标志
 uint16 Light_ADC[15] = {0};              // 15路光敏传感器原始ADC值
 float Current_Check = 0;                 // 电流检测值
 float Voltage_Check[2] = {0};            // 两路电压检测值
@@ -50,51 +50,49 @@ float  Light_Thr[15][2];                 // 15路光敏传感器上下阈值
 *************************************/
 void Vofa_Send_Data(void)
 {
-    uint8 data[4];                       // 单精度浮点数拆分后的4字节缓存
     floatu8data VOFA_data[20];           // 浮点数与字节数组共用体
+    uint8 frame[15 * 4 + 4];
     // 清空数据缓存
     memset(VOFA_data, 0, sizeof(VOFA_data));
 
     int i = 0;
-        for (int i = 0; i < 15; i++)
-        {
-            VOFA_data[i].floatdata = Light_Convert[i];
-        }
+//       for (int i = 0; i < 15; i++)
+//       {
+//           VOFA_data[i].floatdata = Light_ADC[i];
+//       }
     // 赋值需要发送的调试数据
-//    VOFA_data[0].floatdata  = Left_Exp_Spd;
-//    VOFA_data[1].floatdata  = Right_Exp_Spd;
-//    VOFA_data[2].floatdata  = Left_Real_Spd;
-//    VOFA_data[3].floatdata  = Right_Real_Spd;
-//    VOFA_data[4].floatdata  = Gyro_Integral;
-//    VOFA_data[5].floatdata  = Total_Run_Mileage;
-//    VOFA_data[6].floatdata  = Voltage_Check[0];
-//    VOFA_data[7].floatdata  = Count.Mileage;
-//    VOFA_data[8].floatdata  = Left_PID_Out;
-//    VOFA_data[9].floatdata  = Right_PID_Out;
-//    VOFA_data[10].floatdata = Dbg[0];
-//    VOFA_data[11].floatdata = Error;
-//    VOFA_data[12].floatdata = Stop_Flag;
-    // 循环发送13组浮点数数据
+     VOFA_data[0].floatdata  = Left_Exp_Spd;
+     VOFA_data[1].floatdata  = Right_Exp_Spd;
+     VOFA_data[2].floatdata  = Left_Real_Spd;
+     VOFA_data[3].floatdata  = Right_Real_Spd;
+     VOFA_data[4].floatdata  = Gyro_Z;
+     VOFA_data[5].floatdata  = Total_Run_Mileage;
+     VOFA_data[6].floatdata  = Voltage_Check[0];
+     VOFA_data[7].floatdata  = Count.Mileage;
+     VOFA_data[8].floatdata  = Left_PID_Out;
+     VOFA_data[9].floatdata  = Right_PID_Out;
+     VOFA_data[10].floatdata = Dbg[0];
+     VOFA_data[11].floatdata = Error;
+     VOFA_data[12].floatdata = Gyro_Integral;
+     VOFA_data[13].floatdata = Debug_Angle_Vel_Target;
+     VOFA_data[14].floatdata = Debug_Angle_Vel_Real;
+    // 循环发送15组浮点数数据
     for(i = 0; i < 15; i++)
     {
         // 提取浮点数拆分后的4个字节
-        data[0] = VOFA_data[i].u8data[0];
-        data[1] = VOFA_data[i].u8data[1];
-        data[2] = VOFA_data[i].u8data[2];
-        data[3] = VOFA_data[i].u8data[3];
-
-        // 通过串口0逐字节发送。
-        uart_write_byte(UART_0, data[0]);
-        uart_write_byte(UART_0, data[1]);
-        uart_write_byte(UART_0, data[2]);
-        uart_write_byte(UART_0, data[3]);
+        frame[i * 4 + 0] = VOFA_data[i].u8data[0];
+        frame[i * 4 + 1] = VOFA_data[i].u8data[1];
+        frame[i * 4 + 2] = VOFA_data[i].u8data[2];
+        frame[i * 4 + 3] = VOFA_data[i].u8data[3];
     }
 
     // 发送VOFA协议固定帧尾 00 00 80 7F
-    uart_write_byte(UART_0, 0x00);
-    uart_write_byte(UART_0, 0x00);
-    uart_write_byte(UART_0, 0x80);
-    uart_write_byte(UART_0, 0x7f);
+    frame[60] = 0x00;
+    frame[61] = 0x00;
+    frame[62] = 0x80;
+    frame[63] = 0x7f;
+
+    uart_write_buffer(UART_0, frame, sizeof(frame));
 
     return;
 }
@@ -107,8 +105,8 @@ void Vofa_Send_Data(void)
 *************************************/
 void Vofa_Send_Flash_Data(void)
 {
-    uint8 data[4];
     floatu8data vofa[50];
+    uint8 frame[50 * 4 + 4];
     memset(vofa, 0, sizeof(vofa));
 
     uint16_t turn_count = Turn_Mileage_Record_Num;
@@ -137,19 +135,16 @@ void Vofa_Send_Flash_Data(void)
     // 一次性发送全部有效数据
     for (uint16_t i = 0; i < pos; i++)
     {
-        data[0] = vofa[i].u8data[0];
-        data[1] = vofa[i].u8data[1];
-        data[2] = vofa[i].u8data[2];
-        data[3] = vofa[i].u8data[3];
-        uart_write_byte(UART_0, data[0]);
-        uart_write_byte(UART_0, data[1]);
-        uart_write_byte(UART_0, data[2]);
-        uart_write_byte(UART_0, data[3]);
+        frame[i * 4 + 0] = vofa[i].u8data[0];
+        frame[i * 4 + 1] = vofa[i].u8data[1];
+        frame[i * 4 + 2] = vofa[i].u8data[2];
+        frame[i * 4 + 3] = vofa[i].u8data[3];
     }
-    uart_write_byte(UART_0, 0x00);
-    uart_write_byte(UART_0, 0x00);
-    uart_write_byte(UART_0, 0x80);
-    uart_write_byte(UART_0, 0x7f);
+    frame[pos * 4 + 0] = 0x00;
+    frame[pos * 4 + 1] = 0x00;
+    frame[pos * 4 + 2] = 0x80;
+    frame[pos * 4 + 3] = 0x7f;
+    uart_write_buffer(UART_0, frame, pos * 4 + 4);
 }
 
 /*************************************
@@ -282,11 +277,12 @@ void Motor_Init()
 ** Input:      无
 ** Output:     无
 ** Return:     无
-** Others:     包含OLED、ICM20602、GPIO初始化
+** Others:     包含OLED、IMU660RB、GPIO初始化
 *************************************/
 void Other_Init()
 {
     OLED_Init();                                  // OLED显示屏初始化
+//    gpio_init(P15_1,    GPO, 0, GPO_PUSH_PULL);
     gpio_init(P33_4,    GPO, 0, GPO_PUSH_PULL);   // 推挽输出GPIO初始化
     gpio_init(P00_2,    GPI, 0, GPI_PULL_DOWN);   // 下拉输入GPIO初始化
     gpio_init(P20_10,   GPI, 0, GPI_FLOATING_IN); // 浮空输入GPIO初始化
@@ -326,9 +322,19 @@ void Get_Light()
     // 电池电流检测（raw * 3.3 / (4095 * 运放增益 * 采样电阻)）
     Current_Check = (adc_convert(ADC0_CH10_A10) * 3.3 / (4095 * 20 * 0.015));
 
-    // 电池电压检测（分压比11:1 + 校准偏移 + 一阶低通滤波）
-    Voltage_Check[1] = Voltage_Check[0];
-    Voltage_Check[0] = (adc_convert(ADC0_CH5_A5) * 3.3 * 11 / 4095.0) + 0.567;
+    // 电池电压检测（分压比11:1 + 校准偏移 + 突变滤波 + 一阶低通滤波）
+    {
+        float raw_voltage = (adc_convert(ADC0_CH5_A5) * 3.3 * 11 / 4095.0) + 0.567;
+
+        // 突变过滤：相邻两次差值 > 0.5V 则丢弃本次数据，保留上次值
+        if (Voltage_Check[0] - raw_voltage > 0.5f)
+        {
+            raw_voltage = Voltage_Check[0];  // 认为是毛刺，使用上次有效值
+        }
+
+        Voltage_Check[1] = Voltage_Check[0];
+        Voltage_Check[0] = raw_voltage;
+    }
     Voltage_Check[0] = 0.3 * Voltage_Check[1] + 0.7 * Voltage_Check[0];
 }
 

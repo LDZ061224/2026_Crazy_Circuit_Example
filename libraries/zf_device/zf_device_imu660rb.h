@@ -74,13 +74,13 @@
 //====================================================硬件 SPI 驱动====================================================
 #define IMU660RB_SPI_SPEED                          (10 * 1000 * 1000)          // 硬件 SPI 速率
 #define IMU660RB_SPI                                (SPI_2           )          // 硬件 SPI 号
-#define IMU660RB_SPC_PIN                            (SPI2_SCLK_P15_3)          // 硬件 SPI SCK 引脚
-#define IMU660RB_SDI_PIN                            (SPI2_MOSI_P15_5)          // 硬件 SPI MOSI 引脚
-#define IMU660RB_SDO_PIN                            (SPI2_MISO_P15_7)          // 硬件 SPI MISO 引脚
+#define IMU660RB_SPC_PIN                            (SPI2_SCLK_P15_8)          // 硬件 SPI SCK 引脚
+#define IMU660RB_SDI_PIN                            (SPI2_MOSI_P15_6)          // 硬件 SPI MOSI 引脚
+#define IMU660RB_SDO_PIN                            (SPI2_MISO_P15_4)          // 硬件 SPI MISO 引脚
 //====================================================硬件 SPI 驱动====================================================
 #endif
 
-#define IMU660RB_CS_PIN                             (P15_1)                    // CS 片选引脚
+#define IMU660RB_CS_PIN                             (P15_2)                    // CS 片选引脚
 #define IMU660RB_CS(x)                              (x? (gpio_high(IMU660RB_CS_PIN)): (gpio_low(IMU660RB_CS_PIN)))
 
 typedef enum

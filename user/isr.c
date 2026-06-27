@@ -39,6 +39,7 @@
 #include "Fun.h"
 
 extern uint8 debug_uart_data;
+extern int Stop_Flag;   // 停车标志（定义在 Ctrl.c）
 
 // 对于TC系列默认是不支持中断嵌套的，希望支持中断嵌套需要在中断内使用 interrupt_global_enable(0); 来开启中断嵌套
 // 简单点说实际上进入中断后TC系列的硬件自动调用了 interrupt_global_disable(); 来拒绝响应任何的中断，因此需要我们自己手动调用 interrupt_global_enable(0); 来开启中断的响应。
@@ -110,6 +111,22 @@ static float uart_tuning_atof(const char *str)
 *************************************/
 static void uart_tuning_parse_frame(const char *frame, uint8 len)
 {
+    //===== 紧急停车命令 @STOP# =====
+    if (len == 5 && frame[0] == '@' && frame[1] == 'S'
+        && frame[2] == 'T' && frame[3] == 'O' && frame[4] == 'P')
+    {
+        Stop_Flag = 1;
+        return;
+    }
+
+    //===== 恢复运行命令 @RUN# =====
+    if (len == 4 && frame[0] == '@' && frame[1] == 'R'
+        && frame[2] == 'U' && frame[3] == 'N')
+    {
+        Stop_Flag = 0;
+        return;
+    }
+
     // 最短也至少是 @X=Y# → 去掉头尾中间至少 "X=Y" = 3字节, 加上@前缀共4+2=6
     if (len < 6) return;            // 帧太短，丢弃
     if (frame[0] != '@') return;    // 帧头不对，丢弃
@@ -200,6 +217,8 @@ IFX_INTERRUPT(cc60_pit_ch0_isr, 0, CCU6_0_CH0_ISR_PRIORITY)
     if (Scan_Complete)
     {
         Car_Go();
+//         Get_Light();  // 读取15路光敏传感器ADC值（每周3ms）
+//         Light_Process();
     }
 }
 

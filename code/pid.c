@@ -17,10 +17,13 @@ float PID_calc(PID_HandleTypeDef *pid, float exp_data, float real_data)
 
         pid->err3[2] = pid->err3[1];
         pid->err3[1] = pid->err3[0];
+        pid->real3[2] = pid->real3[1];
+        pid->real3[1] = pid->real3[0];
+        pid->real3[0] = real_data;
         pid->err3[0] = exp_data - real_data;//误差计算
 
         pid->pOut = pid->kp * pid->err3[0];
-        pid->iOut+= (pid->ki * pid->err3[0]);
+        pid->iOut += pid->ki * pid->err3[0];         // 对误差累积积分
         pid->dOut = pid->kd * (pid->err3[0] - pid->err3[1]);
         
         if(pid->iOutMax != 0)//使用积分限幅
@@ -35,14 +38,45 @@ float PID_calc(PID_HandleTypeDef *pid, float exp_data, float real_data)
             pid->out = pid_Data_Limit(pid->out, -(pid->outMax), pid->outMax);
         }
     }
-    else if(pid->mode == PID_MODE_ADD)
+    else if(pid->mode == PID_MODE_POSITION_D_ON_MEASUREMENT)
     {
+        pid->set = exp_data;
+
         pid->err3[2] = pid->err3[1];
         pid->err3[1] = pid->err3[0];
+        pid->real3[2] = pid->real3[1];
+        pid->real3[1] = pid->real3[0];
+        pid->real3[0] = real_data;
+        pid->err3[0] = exp_data - real_data;//误差计算
+
+        pid->pOut = pid->kp * pid->err3[0];
+        pid->iOut += pid->ki * pid->err3[0];
+        pid->dOut = -pid->kd * (pid->real3[0] - pid->real3[1]);
+
+        if(pid->iOutMax != 0)//使用积分限幅
+        {
+            pid->iOut = pid_Data_Limit(pid->iOut, -(pid->iOutMax), pid->iOutMax);
+        }
+
+        pid->out = pid->pOut + pid->iOut + pid->dOut;
+
+        if(pid->outMax != 0)//使用输出限幅
+        {
+            pid->out = pid_Data_Limit(pid->out, -(pid->outMax), pid->outMax);
+        }
+    }
+    else if(pid->mode == PID_MODE_ADD)
+    {
+        pid->set = exp_data;
+        pid->err3[2] = pid->err3[1];
+        pid->err3[1] = pid->err3[0];
+        pid->real3[2] = pid->real3[1];
+        pid->real3[1] = pid->real3[0];
+        pid->real3[0] = real_data;
         pid->err3[0] = exp_data - real_data;//误差计算
 
         pid->pOut = pid->kp * (pid->err3[0] - pid->err3[1]);
-        pid->iOut = pid->ki * pid->err3[0];
+        pid->iOut = pid->ki * pid->err3[0];           // 位置式积分（对当前误差积分）
         pid->dOut = pid->kd * ((pid->err3[0]-pid->err3[1])-(pid->err3[1]-pid->err3[2]));
 
         pid->out += pid->pOut + pid->iOut + pid->dOut ;
@@ -76,6 +110,9 @@ void PID_cleardata(PID_HandleTypeDef *pid)
     pid->err3[0] = 0;
     pid->err3[1] = 0;
     pid->err3[2] = 0;
+    pid->real3[0] = 0;
+    pid->real3[1] = 0;
+    pid->real3[2] = 0;
     pid->pOut = 0;
     pid->iOut = 0;
     pid->dOut = 0;

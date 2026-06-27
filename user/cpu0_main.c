@@ -25,7 +25,7 @@
 
 /* CPU0 负责整车启动、外设初始化和持续调试输出。 */
 int imu_Check = 1;  // IMU660RB初始化状态，1=未完成
-
+int i = 0;
 /* ======================== CPU0 主入口 ======================== */
 int core0_main(void)
 {
@@ -37,15 +37,16 @@ int core0_main(void)
     Light_Init();
     while(1)
     {
-       if (icm20602_init()){}
+       if (imu660rb_init()){}
        else
            break;
        gpio_toggle_level(P33_4);
     }
+//    spi_init(IMU660RB_SPI, SPI_MODE0, IMU660RB_SPI_SPEED, IMU660RB_SPC_PIN, IMU660RB_SDI_PIN, IMU660RB_SDO_PIN, SPI_CS_NULL);
     gpio_set_level(P33_4, 0);
     TCA9555_Init();
-//    OLED_Input();
-//    OLED_Data_Load();
+    OLED_Input();
+    OLED_Data_Load();
     uart_init(UART_0, 115200, UART0_TX_P14_0, UART0_RX_P14_1);
     uart_rx_interrupt(UART_0, 1);           // 开启串口 0 接收中断
     interrupt_global_enable(0);             // 允许全局中断
@@ -59,21 +60,31 @@ int core0_main(void)
         }
     }
 
-    // PIT 定时器提供周期任务节拍，主循环只保留轻量输出。
+//    // PIT 定时器提供周期任务节拍，主循环只保留轻量输出。
     pit_ms_init(CCU60_CH0, 3);
     cpu_wait_event_ready();                 // 等待事件调度器进入就绪状态
 
     /* 主循环只做持续型调试发送，不阻塞控制中断。 */
     while (TRUE)
     {
-//        for(int i = 0; i < 15; i++)
-//        {
-//            TCA9555_LED_Ctrl(LED[i], 1);
-//        }
+//       for(int i = 0; i < 15; i++)
+//       {
+//           TCA9555_LED_Ctrl(LED[i], 1);
+//       }
+
         // 周期性发送调试数据，供上位机查看运行状态。
         //Wit_Send_Data();  // 无线模块未连接，使用VOFA有线调试
         Vofa_Send_Data();
         // system_delay_ms(1);
+//        gpio_toggle_level(P33_4);
+//         system_delay_ms(10);
+//        pwm_set_duty(Left_Motor_IN1, 8000);
+//        pwm_set_duty(Left_Motor_IN2, 0);
+//        pwm_set_duty(Right_Motor_IN1, 0);
+//        pwm_set_duty(Right_Motor_IN2, 8000);
+//        pwm_set_duty(Suction_Motor_IN1, 9500);
+//        pwm_set_duty(Suction_Motor_IN2, 10000);
+
     }
 }
 

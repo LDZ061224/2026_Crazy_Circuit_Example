@@ -5,13 +5,13 @@
 #include "stdlib.h"
 
 #define pid_Data_Limit(Data, min, max)      (((Data) < (min)) ? (min) : (((Data) > (max) ? (max) : (Data))))
-#define pid_ABS(x)                          ((x) < 0 ? (-(x)) : (x))        
 
 
 typedef enum 
 {
     PID_MODE_POSITION   = 0,
-    PID_MODE_ADD,	
+    PID_MODE_ADD,
+    PID_MODE_POSITION_D_ON_MEASUREMENT,
 }PID_MODE_TypeDef;
 
 
@@ -32,6 +32,7 @@ typedef struct
     
 	float               set;
 	float 	            err3[3];
+	float 	            real3[3];
 
 	float 	            kp;
 	float 	            ki;

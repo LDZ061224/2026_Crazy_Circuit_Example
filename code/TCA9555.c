@@ -112,11 +112,11 @@ uint8_t TCA9555_Read_Input(uint8_t port)
 
     if (port == 0)
     {
-        reg_addr = 0x00; // Input Port 0
+        reg_addr = TCA9555_REG_INPUT_P0;
     }
     else
     {
-        reg_addr = 0x01; // Input Port 1
+        reg_addr = TCA9555_REG_INPUT_P1;
     }
 
     return soft_iic_read_8bit_register(&TC9555_I2C_Struct, reg_addr);
@@ -133,11 +133,11 @@ void TCA9555_Set_Polarity(uint8_t port, uint8_t polarity_mask)
 
     if (port == 0)
     {
-        cmd = 0x04; // Polarity Inversion Port 0
+        cmd = TCA9555_REG_POLARITY_P0;
     }
     else
     {
-        cmd = 0x05; // Polarity Inversion Port 1
+        cmd = TCA9555_REG_POLARITY_P1;
     }
 
     soft_iic_write_8bit_register(&TC9555_I2C_Struct, cmd, polarity_mask);
