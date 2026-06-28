@@ -324,7 +324,7 @@ static void TestAdcForward_Loop(void)
     adc_vals[0]  = (float)adc_convert(ADC0_CH0_A0);
 
     Vofa_Send_Floats(UART_2, adc_vals, 15);
-    system_delay_ms(3);
+    system_delay_ms(10);
 }
 
 /*********************************** TEST_UART_VOFA ***********************************/
@@ -468,10 +468,10 @@ static void TestEncoder_Init(void)
 {
     uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
 
-    encoder_quad_init(TIM2_ENCODER, TIM2_ENCODER_CH1_P00_7, TIM2_ENCODER_CH2_P00_8);
+    encoder_quad_init(TIM4_ENCODER, TIM4_ENCODER_CH1_P02_8, TIM4_ENCODER_CH2_P00_9);
     encoder_quad_init(TIM3_ENCODER, TIM3_ENCODER_CH1_P02_6, TIM3_ENCODER_CH2_P02_7);
 
-    encoder_clear_count(TIM2_ENCODER);
+    encoder_clear_count(TIM4_ENCODER);
     encoder_clear_count(TIM3_ENCODER);
 
     printf("=== TEST_ENCODER: Quadrature encoder ===\r\n");
@@ -481,7 +481,7 @@ static void TestEncoder_Loop(void)
 {
     static int16 last_left = 0, last_right = 0;
 
-    int16 enc_left  = encoder_get_count(TIM2_ENCODER);
+    int16 enc_left  = encoder_get_count(TIM4_ENCODER);
     int16 enc_right = encoder_get_count(TIM3_ENCODER);
 
     float speed_left  = (float)(enc_left  - last_left);
