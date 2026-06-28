@@ -324,51 +324,7 @@ cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_components\
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_components\seekfree_assistant.h" :
 cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_components\seekfree_assistant_interface.h"
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_components\seekfree_assistant_interface.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\headfiles.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\headfiles.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\pid.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\pid.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Fun.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Fun.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\headfiles.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\headfiles.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\TCA9555.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\TCA9555.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDKeyboard.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDKeyboard.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDkeyboard_Config.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDkeyboard_Config.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\JBD_simiic.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\JBD_simiic.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDkeyboard_Config.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDkeyboard_Config.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\Font.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\Font.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\dev_ssd1306.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\dev_ssd1306.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\dev_CH455.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\dev_CH455.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\FlashFun.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\FlashFun.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\UI.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\UI.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDkeyboard.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDkeyboard.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Ctrl.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Ctrl.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :
-cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_driver\zf_driver_uart.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_driver\zf_driver_uart.h" :
-cpu0_main.o :	..\user\isr.h
-..\user\isr.h :
+cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\app_new_car_test.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\app_new_car_test.h" :
 cpu0_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :

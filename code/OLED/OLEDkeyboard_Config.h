@@ -10,11 +10,11 @@
 #include "UI.h"
 #include "OLEDkeyboard.h"
 
-/*=====需要更改或显示的变量声明的头文件=====*/
+/*=====闇�瑕佹洿鏀规垨鏄剧ず鐨勫彉閲忓０鏄庣殑澶存枃浠�=====*/
 //#include "zf_device_mt9v03x.h"
 //#include "Image.h"
 //#include "Getinfor.h"
-/*================宏定义================*/
+/*================瀹忓畾涔�================*/
 
 typedef enum
 {
@@ -23,14 +23,14 @@ typedef enum
 }SwitchStatus_typeDef;
 
 /*==== simiic ====*/
-#define JBD_simiic_SCL_PIN          P33_8
-#define JBD_simiic_SDA_PIN          P33_6
+#define JBD_simiic_SCL_PIN          P21_5
+#define JBD_simiic_SDA_PIN          P21_7
 
 /*==== OLED ====*/
 #define Backup_Sector                   (0U)
-/*===============外部变量===============*/
+/*===============澶栭儴鍙橀噺===============*/
 
-/*===============函数声明===============*/
+/*===============鍑芥暟澹版槑===============*/
 
 
 

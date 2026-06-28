@@ -34,30 +34,41 @@
 ********************************************************************************************************************/
 
 #include "zf_common_headfile.h"
-#include "headfiles.h"
+
+/*
+ *  编译模式控制（与 cpu0_main.c 保持一致）
+ *  测试模式 = 1: CPU1 空循环，不依赖 OLED/headfiles.h
+ *  正式模式 = 0: CPU1 运行 OLED_Display()
+ */
+#define NEW_CAR_TEST_ENABLE  1
+
+#if !NEW_CAR_TEST_ENABLE
+    #include "headfiles.h"
+#endif
+
 #pragma section all "cpu1_dsram"
 // 将本语句与#pragma section all restore语句之间的全局变量都放在CPU1的RAM中
 
 // **************************** 代码区域 ****************************
 
-// 本例程是开源库空工程 可用作移植或者测试各类内外设
-// 本例程是开源库空工程 可用作移植或者测试各类内外设
-// 本例程是开源库空工程 可用作移植或者测试各类内外设
-
 void core1_main(void)
 {
     disable_Watchdog();                     // 关闭看门狗
-    // 此处编写用户代码 例如外设初始化代码等
 
-
-    // 此处编写用户代码 例如外设初始化代码等
+#if NEW_CAR_TEST_ENABLE
+    /* ========== 测试模式：CPU1 空闲 ========== */
+    // 所有测试逻辑在 CPU0 运行，CPU1 仅关看门狗后空转
+    while (TRUE)
+    {
+    }
+#else
+    /* ========== 正式模式：CPU1 负责 OLED 显示刷新 ========== */
     cpu_wait_event_ready();                 // 等待所有核心初始化完毕
     while (TRUE)
     {
-        // 此处编写需要循环执行的代码
         OLED_Display();
-        // 此处编写需要循环执行的代码
     }
+#endif
 }
 #pragma section all restore
 // **************************** 代码区域 ****************************

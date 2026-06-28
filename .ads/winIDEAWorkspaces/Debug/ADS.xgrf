@@ -13,11 +13,11 @@
        <EditorPersist>
         <__.0>
          <BookmarkList></BookmarkList>
-         <CaretPos>1975</CaretPos>
+         <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\user\cpu0_main.c</FileName>
+         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\user\isr.c</FileName>
          <FileType>1</FileType>
-         <ScrollPos>35</ScrollPos>
+         <ScrollPos>0</ScrollPos>
         </__.0>
         <__.100>
          <BookmarkList></BookmarkList>
@@ -59,11 +59,19 @@
          <FileType>1</FileType>
          <ScrollPos>207</ScrollPos>
         </__.104>
+        <__.105>
+         <BookmarkList></BookmarkList>
+         <CaretPos>21302</CaretPos>
+         <Encoding>6</Encoding>
+         <FileName>D:\workspace\2026_Crazy_Circuit_V4.0\code\app_new_car_test.c</FileName>
+         <FileType>1</FileType>
+         <ScrollPos>620</ScrollPos>
+        </__.105>
         <__.10>
          <BookmarkList></BookmarkList>
-         <CaretPos>0</CaretPos>
+         <CaretPos>699</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_uart.c</FileName>
+         <FileName>D:\ADS_test\2026_Crazy_Circuit\2026_Crazy_Circuit\code\OLED\dev_CH455.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.10>
@@ -85,75 +93,75 @@
         </__.12>
         <__.13>
          <BookmarkList></BookmarkList>
-         <CaretPos>21617</CaretPos>
-         <Encoding>6</Encoding>
-         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_uart.c</FileName>
-         <FileType>1</FileType>
-         <ScrollPos>444</ScrollPos>
-        </__.13>
-        <__.14>
-         <BookmarkList></BookmarkList>
          <CaretPos>5995</CaretPos>
          <Encoding>6</Encoding>
          <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\code\OLED\OLEDKeyboard.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>154</ScrollPos>
+        </__.13>
+        <__.14>
+         <BookmarkList></BookmarkList>
+         <CaretPos>21617</CaretPos>
+         <Encoding>6</Encoding>
+         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_uart.c</FileName>
+         <FileType>1</FileType>
+         <ScrollPos>444</ScrollPos>
         </__.14>
         <__.15>
-         <BookmarkList></BookmarkList>
-         <CaretPos>2423</CaretPos>
-         <Encoding>6</Encoding>
-         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_gpio.c</FileName>
-         <FileType>1</FileType>
-         <ScrollPos>24</ScrollPos>
-        </__.15>
-        <__.16>
          <BookmarkList></BookmarkList>
          <CaretPos>3588</CaretPos>
          <Encoding>6</Encoding>
          <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Gtm\Std\IfxGtm_Atom.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>67</ScrollPos>
+        </__.15>
+        <__.16>
+         <BookmarkList></BookmarkList>
+         <CaretPos>2423</CaretPos>
+         <Encoding>6</Encoding>
+         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_gpio.c</FileName>
+         <FileType>1</FileType>
+         <ScrollPos>24</ScrollPos>
         </__.16>
         <__.17>
-         <BookmarkList></BookmarkList>
-         <CaretPos>9518</CaretPos>
-         <Encoding>6</Encoding>
-         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Port\Std\IfxPort.c</FileName>
-         <FileType>1</FileType>
-         <ScrollPos>311</ScrollPos>
-        </__.17>
-        <__.18>
          <BookmarkList></BookmarkList>
          <CaretPos>2579</CaretPos>
          <Encoding>6</Encoding>
          <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\code\TCA9555.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>66</ScrollPos>
+        </__.17>
+        <__.18>
+         <BookmarkList></BookmarkList>
+         <CaretPos>9518</CaretPos>
+         <Encoding>6</Encoding>
+         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Port\Std\IfxPort.c</FileName>
+         <FileType>1</FileType>
+         <ScrollPos>311</ScrollPos>
         </__.18>
         <__.19>
-         <BookmarkList></BookmarkList>
-         <CaretPos>2206</CaretPos>
-         <Encoding>6</Encoding>
-         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_adc.c</FileName>
-         <FileType>1</FileType>
-         <ScrollPos>23</ScrollPos>
-        </__.19>
-        <__.1>
-         <BookmarkList></BookmarkList>
-         <CaretPos>0</CaretPos>
-         <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\user\isr.c</FileName>
-         <FileType>1</FileType>
-         <ScrollPos>0</ScrollPos>
-        </__.1>
-        <__.20>
          <BookmarkList></BookmarkList>
          <CaretPos>16636</CaretPos>
          <Encoding>6</Encoding>
          <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\code\Ctrl.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>598</ScrollPos>
+        </__.19>
+        <__.1>
+         <BookmarkList></BookmarkList>
+         <CaretPos>2577</CaretPos>
+         <Encoding>6</Encoding>
+         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Stm\Std\IfxStm.c</FileName>
+         <FileType>1</FileType>
+         <ScrollPos>23</ScrollPos>
+        </__.1>
+        <__.20>
+         <BookmarkList></BookmarkList>
+         <CaretPos>2206</CaretPos>
+         <Encoding>6</Encoding>
+         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_adc.c</FileName>
+         <FileType>1</FileType>
+         <ScrollPos>23</ScrollPos>
         </__.20>
         <__.21>
          <BookmarkList></BookmarkList>
@@ -165,35 +173,35 @@
         </__.21>
         <__.22>
          <BookmarkList></BookmarkList>
-         <CaretPos>12794</CaretPos>
-         <Encoding>6</Encoding>
-         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Asclin\Std\IfxAsclin.c</FileName>
-         <FileType>1</FileType>
-         <ScrollPos>379</ScrollPos>
-        </__.22>
-        <__.23>
-         <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
          <FileName>D:\ADS_test\2026_Crazy_Circuit\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_delay.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
+        </__.22>
+        <__.23>
+         <BookmarkList></BookmarkList>
+         <CaretPos>12794</CaretPos>
+         <Encoding>6</Encoding>
+         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Asclin\Std\IfxAsclin.c</FileName>
+         <FileType>1</FileType>
+         <ScrollPos>379</ScrollPos>
         </__.23>
         <__.24>
-         <BookmarkList></BookmarkList>
-         <CaretPos>0</CaretPos>
-         <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\user\cpu1_main.c</FileName>
-         <FileType>1</FileType>
-         <ScrollPos>0</ScrollPos>
-        </__.24>
-        <__.25>
          <BookmarkList></BookmarkList>
          <CaretPos>8069</CaretPos>
          <Encoding>6</Encoding>
          <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_soft_iic.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>146</ScrollPos>
+        </__.24>
+        <__.25>
+         <BookmarkList></BookmarkList>
+         <CaretPos>0</CaretPos>
+         <Encoding>6</Encoding>
+         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\user\cpu1_main.c</FileName>
+         <FileType>1</FileType>
+         <ScrollPos>0</ScrollPos>
         </__.25>
         <__.26>
          <BookmarkList></BookmarkList>
@@ -229,11 +237,11 @@
         </__.29>
         <__.2>
          <BookmarkList></BookmarkList>
-         <CaretPos>2577</CaretPos>
+         <CaretPos>1975</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Stm\Std\IfxStm.c</FileName>
+         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\user\cpu0_main.c</FileName>
          <FileType>1</FileType>
-         <ScrollPos>23</ScrollPos>
+         <ScrollPos>35</ScrollPos>
         </__.2>
         <__.30>
          <BookmarkList></BookmarkList>
@@ -263,7 +271,7 @@
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit_V4.0\code\Ctrl.c</FileName>
+         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_delay.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.33>
@@ -271,7 +279,7 @@
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\2026_Crazy_Circuit\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Stm\Std\IfxStm.c</FileName>
+         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit_V4.0\code\Ctrl.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.34>
@@ -279,7 +287,7 @@
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_delay.c</FileName>
+         <FileName>D:\ADS_test\2026_Crazy_Circuit\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Stm\Std\IfxStm.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.35>
@@ -287,7 +295,7 @@
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\2026_Crazy_Circuit\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_soft_iic.c</FileName>
+         <FileName>D:\ADS_test\2026_Crazy_Circuit\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_uart.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.36>
@@ -295,7 +303,7 @@
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\2026_Crazy_Circuit\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_uart.c</FileName>
+         <FileName>D:\ADS_test\2026_Crazy_Circuit\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_soft_iic.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.37>
@@ -309,27 +317,27 @@
         </__.38>
         <__.39>
          <BookmarkList></BookmarkList>
-         <CaretPos>0</CaretPos>
-         <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\2026_Crazy_Circuit\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Gtm\Std\IfxGtm_Atom.c</FileName>
-         <FileType>1</FileType>
-         <ScrollPos>0</ScrollPos>
-        </__.39>
-        <__.3>
-         <BookmarkList></BookmarkList>
-         <CaretPos>699</CaretPos>
-         <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\2026_Crazy_Circuit\2026_Crazy_Circuit\code\OLED\dev_CH455.c</FileName>
-         <FileType>1</FileType>
-         <ScrollPos>0</ScrollPos>
-        </__.3>
-        <__.40>
-         <BookmarkList></BookmarkList>
          <CaretPos>1746</CaretPos>
          <Encoding>6</Encoding>
          <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\user\cpu0_main.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>6</ScrollPos>
+        </__.39>
+        <__.3>
+         <BookmarkList></BookmarkList>
+         <CaretPos>2048</CaretPos>
+         <Encoding>6</Encoding>
+         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\user\cpu1_main.c</FileName>
+         <FileType>1</FileType>
+         <ScrollPos>31</ScrollPos>
+        </__.3>
+        <__.40>
+         <BookmarkList></BookmarkList>
+         <CaretPos>0</CaretPos>
+         <Encoding>6</Encoding>
+         <FileName>D:\ADS_test\2026_Crazy_Circuit\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Gtm\Std\IfxGtm_Atom.c</FileName>
+         <FileType>1</FileType>
+         <ScrollPos>0</ScrollPos>
         </__.40>
         <__.41>
          <BookmarkList></BookmarkList>
@@ -375,7 +383,7 @@
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit_V4.0\libraries\zf_driver\zf_driver_adc.c</FileName>
+         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_gpio.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.46>
@@ -383,7 +391,7 @@
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\2026_Crazy_Circuit\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Asclin\Std\IfxAsclin.c</FileName>
+         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit_V4.0\libraries\zf_driver\zf_driver_adc.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.47>
@@ -391,7 +399,7 @@
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_gpio.c</FileName>
+         <FileName>D:\ADS_test\2026_Crazy_Circuit\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Asclin\Std\IfxAsclin.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.48>
@@ -399,23 +407,23 @@
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\2026_Crazy_Circuit\2026_Crazy_Circuit\code\OLED\UI.c</FileName>
+         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Gtm\Std\IfxGtm_Atom.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.49>
         <__.4>
          <BookmarkList></BookmarkList>
-         <CaretPos>1168</CaretPos>
+         <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\code\OLED\JBD_simiic.c</FileName>
+         <FileName>D:\workspace\2026_Crazy_Circuit_V4.0\code\OLED\UI.c</FileName>
          <FileType>1</FileType>
-         <ScrollPos>38</ScrollPos>
+         <ScrollPos>0</ScrollPos>
         </__.4>
         <__.50>
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Gtm\Std\IfxGtm_Atom.c</FileName>
+         <FileName>D:\ADS_test\2026_Crazy_Circuit\2026_Crazy_Circuit\code\OLED\UI.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.50>
@@ -423,7 +431,7 @@
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Port\Std\IfxPort.c</FileName>
+         <FileName>D:\workspace\2026_Crazy_Circuit_V4.0\libraries\zf_common\zf_common_clock.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.51>
@@ -431,7 +439,7 @@
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\2026_Crazy_Circuit\2026_Crazy_Circuit\libraries\zf_common\zf_common_debug.c</FileName>
+         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Asclin\Std\IfxAsclin.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.52>
@@ -447,7 +455,7 @@
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\workspace\2026_Crazy_Circuit_V4.0\libraries\zf_common\zf_common_clock.c</FileName>
+         <FileName>D:\ADS_test\2026_Crazy_Circuit\2026_Crazy_Circuit\libraries\zf_common\zf_common_debug.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.54>
@@ -455,7 +463,7 @@
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Asclin\Std\IfxAsclin.c</FileName>
+         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Port\Std\IfxPort.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.55>
@@ -487,7 +495,7 @@
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\code\TCA9555.c</FileName>
+         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Stm\Std\IfxStm.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.59>
@@ -495,7 +503,7 @@
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\workspace\2026_Crazy_Circuit_V4.0\libraries\infineon_libraries\iLLD\TC26B\Tricore\Asclin\Std\IfxAsclin.c</FileName>
+         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_uart.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.5>
@@ -503,7 +511,7 @@
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\libraries\infineon_libraries\iLLD\TC26B\Tricore\Stm\Std\IfxStm.c</FileName>
+         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\code\TCA9555.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.60>
@@ -511,25 +519,25 @@
          <BookmarkList></BookmarkList>
          <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\code\OLED\dev_CH455.c</FileName>
+         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_adc.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>0</ScrollPos>
         </__.61>
         <__.62>
+         <BookmarkList></BookmarkList>
+         <CaretPos>0</CaretPos>
+         <Encoding>6</Encoding>
+         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\code\OLED\dev_CH455.c</FileName>
+         <FileType>1</FileType>
+         <ScrollPos>0</ScrollPos>
+        </__.62>
+        <__.63>
          <BookmarkList></BookmarkList>
          <CaretPos>1223</CaretPos>
          <Encoding>6</Encoding>
          <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit_V4.0\user\cpu0_main.c</FileName>
          <FileType>1</FileType>
          <ScrollPos>5</ScrollPos>
-        </__.62>
-        <__.63>
-         <BookmarkList></BookmarkList>
-         <CaretPos>0</CaretPos>
-         <Encoding>6</Encoding>
-         <FileName>D:\ADS_test\straight_carV3.0\2026_Crazy_Circuit\libraries\zf_driver\zf_driver_adc.c</FileName>
-         <FileType>1</FileType>
-         <ScrollPos>0</ScrollPos>
         </__.63>
         <__.64>
          <BookmarkList></BookmarkList>
@@ -669,11 +677,11 @@
         </__.79>
         <__.7>
          <BookmarkList></BookmarkList>
-         <CaretPos>7792</CaretPos>
+         <CaretPos>0</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\code\Fun.c</FileName>
+         <FileName>D:\workspace\2026_Crazy_Circuit_V4.0\libraries\infineon_libraries\iLLD\TC26B\Tricore\Asclin\Std\IfxAsclin.c</FileName>
          <FileType>1</FileType>
-         <ScrollPos>229</ScrollPos>
+         <ScrollPos>0</ScrollPos>
         </__.7>
         <__.80>
          <BookmarkList></BookmarkList>
@@ -725,11 +733,11 @@
         </__.85>
         <__.86>
          <BookmarkList></BookmarkList>
-         <CaretPos>1243</CaretPos>
+         <CaretPos>1650</CaretPos>
          <Encoding>6</Encoding>
          <FileName>D:\workspace\2026_Crazy_Circuit_V4.0\user\cpu0_main.c</FileName>
          <FileType>1</FileType>
-         <ScrollPos>0</ScrollPos>
+         <ScrollPos>10</ScrollPos>
         </__.86>
         <__.87>
          <BookmarkList></BookmarkList>
@@ -757,11 +765,11 @@
         </__.89>
         <__.8>
          <BookmarkList></BookmarkList>
-         <CaretPos>0</CaretPos>
+         <CaretPos>7792</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>D:\workspace\2026_Crazy_Circuit_V4.0\code\OLED\UI.c</FileName>
+         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\code\Fun.c</FileName>
          <FileType>1</FileType>
-         <ScrollPos>0</ScrollPos>
+         <ScrollPos>229</ScrollPos>
         </__.8>
         <__.90>
          <BookmarkList></BookmarkList>
@@ -845,11 +853,11 @@
         </__.99>
         <__.9>
          <BookmarkList></BookmarkList>
-         <CaretPos>2048</CaretPos>
+         <CaretPos>1168</CaretPos>
          <Encoding>6</Encoding>
-         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\user\cpu1_main.c</FileName>
+         <FileName>E:\ADS_WorkShop\2026_Crazy_Circuit\code\OLED\JBD_simiic.c</FileName>
          <FileType>1</FileType>
-         <ScrollPos>31</ScrollPos>
+         <ScrollPos>38</ScrollPos>
         </__.9>
        </EditorPersist>
       </EditorPersist>
@@ -965,17 +973,21 @@
         <ViewType>Document</ViewType>
        </__.23>
        <__.24>
-        <ViewId>1</ViewId>
-        <ViewType>Output_Progress</ViewType>
-       </__.24>
-       <__.25>
-        <ViewId>0</ViewId>
-        <ViewType>Symbols</ViewType>
-       </__.25>
-       <__.26>
         <ViewId>26</ViewId>
         <ViewType>Document</ViewType>
+       </__.24>
+       <__.25>
+        <ViewId>1</ViewId>
+        <ViewType>Output_Progress</ViewType>
+       </__.25>
+       <__.26>
+        <ViewId>0</ViewId>
+        <ViewType>Symbols</ViewType>
        </__.26>
+       <__.27>
+        <ViewId>27</ViewId>
+        <ViewType>Document</ViewType>
+       </__.27>
        <__.2>
         <ViewId>3</ViewId>
         <ViewType>CustomWatch</ViewType>
@@ -1103,6 +1115,11 @@
         <ViewId>26</ViewId>
         <ViewType>Document</ViewType>
        </__.21>
+       <__.22>
+        <RelativePath>..\..\..\code\app_new_car_test.c</RelativePath>
+        <ViewId>27</ViewId>
+        <ViewType>Document</ViewType>
+       </__.22>
        <__.2>
         <RelativePath>..\..\..\libraries\zf_driver\zf_driver_delay.c</RelativePath>
         <ViewId>7</ViewId>
@@ -1264,7 +1281,7 @@
       <PrimaryDocumentPaneId>5</PrimaryDocumentPaneId>
       <Frames>
        <__.0>
-        <FocusedViewId>26</FocusedViewId>
+        <FocusedViewId>27</FocusedViewId>
         <FrameState>3</FrameState>
         <IsPrimary>true</IsPrimary>
         <Bounds>
@@ -1320,7 +1337,7 @@
                <IsPinned>false</IsPinned>
                <IsTabbed>true</IsTabbed>
                <Orientation>None</Orientation>
-               <TopTabViewId>26</TopTabViewId>
+               <TopTabViewId>27</TopTabViewId>
                <ViewId>-1</ViewId>
                <Children>
                 <__.0>
@@ -1463,6 +1480,16 @@
                  <TopTabViewId>-1</TopTabViewId>
                  <ViewId>26</ViewId>
                 </__.21>
+                <__.22>
+                 <DockType>Document</DockType>
+                 <Extent>1</Extent>
+                 <IsDocumentPane>false</IsDocumentPane>
+                 <IsPinned>false</IsPinned>
+                 <IsTabbed>false</IsTabbed>
+                 <Orientation>None</Orientation>
+                 <TopTabViewId>-1</TopTabViewId>
+                 <ViewId>27</ViewId>
+                </__.22>
                 <__.2>
                  <DockType>Document</DockType>
                  <Extent>1</Extent>
@@ -1620,10 +1647,6 @@
       </FindInFilesDialogData>
      </GlobalData>
      <History>
-      <ComboBox>
-       <ComboBoxes>
-       </ComboBoxes>
-      </ComboBox>
      </History>
      <Options>
       <CallstackWindow>

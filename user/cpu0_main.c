@@ -14,23 +14,52 @@
 *
 * 日期              作者                说明
 * 2022-09-15       pudding            first version
+* 2026-06-27       Claude             新增新车测试模式分支
 ********************************************************************************************************************/
+
+// 底层驱动库（测试和正式模式都需要）
 #include "zf_common_headfile.h"
-#include "headfiles.h"
-#include "zf_driver_uart.h"
-#include "isr.h"
+
+/*
+ *  编译模式控制：
+ *    NEW_CAR_TEST_ENABLE = 1 → 新车基础功能测试模式（轻量，不依赖跑车代码）
+ *    NEW_CAR_TEST_ENABLE = 0 → 原正式跑车代码
+ */
+#define NEW_CAR_TEST_ENABLE  1
+
+#if NEW_CAR_TEST_ENABLE
+    /* ========== 测试模式：只引入测试框架 ========== */
+    #include "app_new_car_test.h"
+#else
+    /* ========== 正式模式：引入完整跑车代码 ========== */
+    #include "headfiles.h"
+    #include "zf_driver_uart.h"
+    #include "isr.h"
+#endif
 
 #pragma section all "cpu0_dsram"
 // 将后续代码段放到 CPU0 的 DSRAM 中，便于快速访问。
 
-/* CPU0 负责整车启动、外设初始化和持续调试输出。 */
-int imu_Check = 1;  // IMU660RB初始化状态，1=未完成
-int i = 0;
 /* ======================== CPU0 主入口 ======================== */
 int core0_main(void)
 {
-    clock_init();                   // 初始化系统时钟
-    debug_init();                   // 初始化调试串口和基础输出
+    clock_init();                   // 初始化系统时钟（必须）
+    debug_init();                   // 初始化调试串口基础输出（必须）
+
+#if NEW_CAR_TEST_ENABLE
+    /* ========== 新车基础功能测试模式 ========== */
+    NewCarTest_Init();
+
+    while (TRUE)
+    {
+        NewCarTest_Loop();
+    }
+
+#else
+    /* ========== 原正式跑车代码（完整保留） ========== */
+    int imu_Check = 1;
+    int i = 0;
+
     Encoder_Init();
     Motor_Init();
     Other_Init();
@@ -42,7 +71,6 @@ int core0_main(void)
            break;
        gpio_toggle_level(P33_4);
     }
-//    spi_init(IMU660RB_SPI, SPI_MODE0, IMU660RB_SPI_SPEED, IMU660RB_SPC_PIN, IMU660RB_SDI_PIN, IMU660RB_SDO_PIN, SPI_CS_NULL);
     gpio_set_level(P33_4, 0);
     TCA9555_Init();
     OLED_Input();
@@ -60,32 +88,16 @@ int core0_main(void)
         }
     }
 
-//    // PIT 定时器提供周期任务节拍，主循环只保留轻量输出。
+    // PIT 定时器提供周期任务节拍，主循环只保留轻量输出。
     pit_ms_init(CCU60_CH0, 3);
     cpu_wait_event_ready();                 // 等待事件调度器进入就绪状态
 
     /* 主循环只做持续型调试发送，不阻塞控制中断。 */
     while (TRUE)
     {
-//       for(int i = 0; i < 15; i++)
-//       {
-//           TCA9555_LED_Ctrl(LED[i], 1);
-//       }
-
-        // 周期性发送调试数据，供上位机查看运行状态。
-        //Wit_Send_Data();  // 无线模块未连接，使用VOFA有线调试
         Vofa_Send_Data();
-        // system_delay_ms(1);
-//        gpio_toggle_level(P33_4);
-//         system_delay_ms(10);
-//        pwm_set_duty(Left_Motor_IN1, 8000);
-//        pwm_set_duty(Left_Motor_IN2, 0);
-//        pwm_set_duty(Right_Motor_IN1, 0);
-//        pwm_set_duty(Right_Motor_IN2, 8000);
-//        pwm_set_duty(Suction_Motor_IN1, 9500);
-//        pwm_set_duty(Suction_Motor_IN2, 10000);
-
     }
+#endif
 }
 
 #pragma section all restore
