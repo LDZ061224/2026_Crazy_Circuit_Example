@@ -79,19 +79,16 @@ static void OLED_Build_Mode_Input(void);
     Element: 0=none  1=turn-left  2=turn-right  3=short-straight  4=long-straight
 ================================================================================*/
 // Segment 0 is "start -> node 0". If mileage_num[0]=0, run starts from the first node.
-#define DEFAULT_BUILD_MAP_NODE_NUM    20
+#define DEFAULT_BUILD_MAP_NODE_NUM    17
 
 static const uint8 Default_Build_Map_Node_Dir[DEFAULT_BUILD_MAP_NODE_NUM] =
-    {0,0,1,0,1,1,0,1,0,1,0,0,0,1,2,2,1,1,0,1};
+    {0,1,1,0,1,0,1,0,0,0,1,2,2,1,1,0,1};
 static const uint8 Default_Build_Map_Mileage_Num[DEFAULT_BUILD_MAP_NODE_NUM + 1] =
-    {0,1,0,2,0,2,0,1,0,1,0,0,1,1,1,0,1,0,1,0,2};
+    {2,0,2,0,1,0,1,0,0,1,1,1,0,1,0,1,0,2};
 
 // Element direction per segment: {0}=none, {1}=left, {2}=right, {3}=short-straight, {4}=long-straight
 static const uint8 Default_Build_Map_Mileage_Dir[DEFAULT_BUILD_MAP_NODE_NUM + 1][ELEMENT_NUM_MAX] =
 {
-    {0},           // seg 0: start -> node0 (no elements)
-    {3},           // seg 1: short straight element
-    {0},           // seg 2: no elements
     {3,3},         // seg 3: two short straights
     {0},           // seg 4: no elements
     {3,3},         // seg 5: two short straights
