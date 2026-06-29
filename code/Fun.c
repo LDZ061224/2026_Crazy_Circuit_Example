@@ -260,15 +260,15 @@ void Encoder_Init()
 *************************************/
 void Motor_Init()
 {
-    // DIR PWM: 10000=forward, 0=reverse, 30kHz
+    // DIR PWM: 0=forward, 10000=reverse, 30kHz
     pwm_init(Left_Motor_DIR,  30000, 10000);
     pwm_init(Right_Motor_DIR, 30000, 10000);
     // duty PWM: 30kHz, start at 0
-    pwm_init(Left_Motor_PWM,  30000, 0);
-    pwm_init(Right_Motor_PWM, 30000, 0);
-    // 风扇: DIR=10000=吸风, duty=0
+    pwm_init(Left_Motor_PWM,  30000, 10000);
+    pwm_init(Right_Motor_PWM, 30000, 10000);
+    // 风扇: DIR=0=吸风, duty=0
     pwm_init(Suction_Motor_DIR, 100000, 10000);
-    pwm_init(Suction_Motor_PWM, 100000, 0);
+    pwm_init(Suction_Motor_PWM, 100000, 10000);
 }
 
 /*************************************
