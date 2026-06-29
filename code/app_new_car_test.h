@@ -39,6 +39,7 @@ typedef enum
     TEST_ENCODER,               // 鍏夋爡缂栫爜鍣� / 娴嬮�熸祴璇�
     TEST_ENABLE_SWITCH,         // 浣胯兘寮�鍏虫祴璇�
     TEST_BUTTON,                // 鑷畾涔夋寜閿祴璇�
+    TEST_WS2812,                // WS2812 LED test
     TEST_VOLTAGE_CURRENT,       // 鐢靛帇 / 鐢垫祦妫�娴嬫祴璇�
     TEST_COUNT                  // 娴嬭瘯椤圭洰鎬绘暟锛堢敤浜庤竟鐣屾鏌ワ級
 } NewCarTestMode_e;
@@ -62,7 +63,7 @@ typedef enum
  *    TEST_BUTTON         - 鑷畾涔夋寜閿�
  *    TEST_VOLTAGE_CURRENT- 鐢靛帇鐢垫祦妫�娴�
  */
-#define NEW_CAR_TEST_MODE   TEST_BUZZER
+#define NEW_CAR_TEST_MODE   TEST_WS2812
 /*********************************** 瀹夊叏閰嶇疆瀹� ***********************************/
 /*
  *  浠ヤ笅瀹忕敤浜庣數鏈� / 椋庢墖娴嬭瘯鐨勫畨鍏ㄥ弬鏁般��
@@ -90,10 +91,10 @@ typedef enum
  *  锛堝悗鑰呬細閾惧紡鍖呭惈 Fun.h 鍙婃墍鏈夎窇杞﹂�昏緫锛夛紝鍥犳鍦ㄦ澶勫崟鐙鍒朵竴浠姐��
  *  濡傛灉寮曡剼鏈夊彉鍔紝璇峰悓姝ヤ慨鏀广��
  */
-//#define Left_Motor_PWM      ATOM3_CH1_P15_7
-//#define Left_Motor_DIR      ATOM3_CH0_P15_5
-#define Left_Motor_PWM      ATOM3_CH3_P00_12
-#define Left_Motor_DIR      ATOM2_CH0_P00_9
+#define Left_Motor_PWM      ATOM3_CH1_P15_7
+#define Left_Motor_DIR      ATOM3_CH0_P15_5
+//#define Left_Motor_PWM      ATOM3_CH3_P00_12
+//#define Left_Motor_DIR      ATOM2_CH0_P00_9
 #define Right_Motor_PWM     ATOM1_CH3_P00_4
 #define Right_Motor_DIR     ATOM1_CH5_P00_6
 #define Suction_Motor_PWM   ATOM1_CH6_P00_7

@@ -8,6 +8,7 @@ C_SRCS += \
 ../code/Fun.c \
 ../code/Racing_Track.c \
 ../code/TCA9555.c \
+../code/WS2812.c \
 ../code/app_new_car_test.c \
 ../code/pid.c 
 
@@ -16,6 +17,7 @@ code/Ctrl.src \
 code/Fun.src \
 code/Racing_Track.src \
 code/TCA9555.src \
+code/WS2812.src \
 code/app_new_car_test.src \
 code/pid.src 
 
@@ -24,6 +26,7 @@ code/Ctrl.d \
 code/Fun.d \
 code/Racing_Track.d \
 code/TCA9555.d \
+code/WS2812.d \
 code/app_new_car_test.d \
 code/pid.d 
 
@@ -32,6 +35,7 @@ code/Ctrl.o \
 code/Fun.o \
 code/Racing_Track.o \
 code/TCA9555.o \
+code/WS2812.o \
 code/app_new_car_test.o \
 code/pid.o 
 
@@ -53,6 +57,10 @@ code/TCA9555.src: ../code/TCA9555.c code/subdir.mk
 	cctc -cs --dep-file="$(*F).d" --misrac-version=2004 -D__CPU__=tc26xb "-fD:/workspace/2026_Crazy_Circuit_V4.0/Debug/TASKING_C_C___Compiler-Include_paths__-I_.opt" --iso=99 --c++14 --language=+volatile --exceptions --anachronisms --fp-model=3 -O0 --tradeoff=4 --compact-max-size=200 -g -Wc-w544 -Wc-w557 -Ctc26xb -Y0 -N0 -Z0 -o "$@" "$<"
 code/TCA9555.o: code/TCA9555.src code/subdir.mk
 	astc -Og -Os --no-warnings= --error-limit=42 -o  "$@" "$<"
+code/WS2812.src: ../code/WS2812.c code/subdir.mk
+	cctc -cs --dep-file="$(*F).d" --misrac-version=2004 -D__CPU__=tc26xb "-fD:/workspace/2026_Crazy_Circuit_V4.0/Debug/TASKING_C_C___Compiler-Include_paths__-I_.opt" --iso=99 --c++14 --language=+volatile --exceptions --anachronisms --fp-model=3 -O0 --tradeoff=4 --compact-max-size=200 -g -Wc-w544 -Wc-w557 -Ctc26xb -Y0 -N0 -Z0 -o "$@" "$<"
+code/WS2812.o: code/WS2812.src code/subdir.mk
+	astc -Og -Os --no-warnings= --error-limit=42 -o  "$@" "$<"
 code/app_new_car_test.src: ../code/app_new_car_test.c code/subdir.mk
 	cctc -cs --dep-file="$(*F).d" --misrac-version=2004 -D__CPU__=tc26xb "-fD:/workspace/2026_Crazy_Circuit_V4.0/Debug/TASKING_C_C___Compiler-Include_paths__-I_.opt" --iso=99 --c++14 --language=+volatile --exceptions --anachronisms --fp-model=3 -O0 --tradeoff=4 --compact-max-size=200 -g -Wc-w544 -Wc-w557 -Ctc26xb -Y0 -N0 -Z0 -o "$@" "$<"
 code/app_new_car_test.o: code/app_new_car_test.src code/subdir.mk
@@ -65,7 +73,7 @@ code/pid.o: code/pid.src code/subdir.mk
 clean: clean-code
 
 clean-code:
-	-$(RM) code/Ctrl.d code/Ctrl.o code/Ctrl.src code/Fun.d code/Fun.o code/Fun.src code/Racing_Track.d code/Racing_Track.o code/Racing_Track.src code/TCA9555.d code/TCA9555.o code/TCA9555.src code/app_new_car_test.d code/app_new_car_test.o code/app_new_car_test.src code/pid.d code/pid.o code/pid.src
+	-$(RM) code/Ctrl.d code/Ctrl.o code/Ctrl.src code/Fun.d code/Fun.o code/Fun.src code/Racing_Track.d code/Racing_Track.o code/Racing_Track.src code/TCA9555.d code/TCA9555.o code/TCA9555.src code/WS2812.d code/WS2812.o code/WS2812.src code/app_new_car_test.d code/app_new_car_test.o code/app_new_car_test.src code/pid.d code/pid.o code/pid.src
 
 .PHONY: clean-code
 

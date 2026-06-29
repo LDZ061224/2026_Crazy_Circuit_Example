@@ -592,9 +592,33 @@
         <Count>0</Count>
         <Enabled>true</Enabled>
         <Expression></Expression>
-        <Location>&quot;..\..\..\code\app_new_car_test.c&quot;::656</Location>
+        <Location>&quot;..\..\..\code\app_new_car_test.c&quot;::366</Location>
         <ProcessFilter></ProcessFilter>
        </__.0>
+       <__.1>
+        <ActionEnabled>false</ActionEnabled>
+        <ActionParams></ActionParams>
+        <ActionScript></ActionScript>
+        <ActionShow>false</ActionShow>
+        <Condition>false</Condition>
+        <Count>0</Count>
+        <Enabled>true</Enabled>
+        <Expression></Expression>
+        <Location>&quot;..\..\..\code\app_new_car_test.c&quot;::615</Location>
+        <ProcessFilter></ProcessFilter>
+       </__.1>
+       <__.2>
+        <ActionEnabled>false</ActionEnabled>
+        <ActionParams></ActionParams>
+        <ActionScript></ActionScript>
+        <ActionShow>false</ActionShow>
+        <Condition>false</Condition>
+        <Count>0</Count>
+        <Enabled>true</Enabled>
+        <Expression></Expression>
+        <Location>&quot;..\..\..\code\app_new_car_test.c&quot;::607</Location>
+        <ProcessFilter></ProcessFilter>
+       </__.2>
       </BPs>
       <Processes>
        <__.0>

@@ -348,3 +348,7 @@ app_new_car_test.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDkey
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDkeyboard.h" :
 app_new_car_test.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :
+app_new_car_test.o :	..\code\WS2812.h
+..\code\WS2812.h :
+app_new_car_test.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :

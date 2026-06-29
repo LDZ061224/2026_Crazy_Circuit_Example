@@ -16,6 +16,7 @@ Claude    2026.6.28   0.2   Motor DIR pins use PWM instead of GPIO for direction
 #include "app_new_car_test.h"
 #include "dev_ssd1306.h"
 #include "dev_CH455.h"
+#include "WS2812.h"
 
 /*********************************** module-local variables ***********************************/
 
@@ -33,6 +34,7 @@ static uint8  g_fan_test_phase = 0;
 static uint32 g_fan_phase_timer = 0;
 
 static uint32 g_oled_test_count = 0;
+static uint32 g_ws2812_phase = 0;
 
 /*********************************** internal helpers ***********************************/
 
@@ -194,10 +196,10 @@ static void TestMotor_Loop(void)
 //        g_motor_phase_timer = 0;
 //        g_motor_test_phase++;
 //    }
-    pwm_set_duty(Left_Motor_DIR, 10000);
-    pwm_set_duty(Left_Motor_PWM, 6000);
-    pwm_set_duty(Right_Motor_DIR, 10000);
-    pwm_set_duty(Right_Motor_PWM, 6000);
+    pwm_set_duty(Left_Motor_DIR, 0);
+    pwm_set_duty(Left_Motor_PWM, 2000);
+    pwm_set_duty(Right_Motor_DIR, 0);
+    pwm_set_duty(Right_Motor_PWM, 4000);
 }
 
 /*********************************** TEST_BUZZER ***********************************/
@@ -353,10 +355,10 @@ static void TestUartVofa_Loop(void)
 static void TestOledKey_Init(void)
 {
     uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
-    OLED_Init();
-    OLED_Input();
-
-    printf("=== TEST_OLED_KEY: OLED + CH455 keypad ===\r\n");
+//    OLED_Init();
+//    OLED_Input-
+    pwm_init(ATOM0_CH3_P21_5,30000,6000);
+    pwm_init(ATOM1_CH5_P21_7,30000,6000);
 }
 
 static void TestOledKey_Loop(void)
@@ -393,13 +395,16 @@ static void TestFan_Init(void)
     // duty PWM: 100 kHz, start at 0
     pwm_init(Suction_Motor_PWM, 100000, 0);
 
+    // DIR PWM: 10000 = forward, 0 = reverse
+    pwm_init(Left_Motor_DIR,  30000, 10000);
+    pwm_init(Right_Motor_DIR, 30000, 10000);
+
+    // duty PWM: 30 kHz, start at 0
+    pwm_init(Left_Motor_PWM,  30000, 0);
+    pwm_init(Right_Motor_PWM, 30000, 0);
+
     g_fan_test_phase = 0;
     g_fan_phase_timer = 0;
-
-    printf("=== TEST_FAN: Suction fan test ===\r\n");
-    printf("  Phase 0: Low (%d), 1: Mid (%d), 2: Stop, 3: High (%d)\r\n",
-           FAN_TEST_DUTY_LOW, FAN_TEST_DUTY_MID, FAN_TEST_DUTY_HIGH);
-    printf("  ENABLE SWITCH MUST BE ON (P20_7=HIGH)\r\n");
 }
 
 static void TestFan_Loop(void)
@@ -457,7 +462,7 @@ static void TestFan_Loop(void)
 //        if (g_fan_test_phase > 3) g_fan_test_phase = 0;
 //    }
     pwm_set_duty(Suction_Motor_DIR, 10000);
-    pwm_set_duty(Suction_Motor_PWM, 6000);
+    pwm_set_duty(Suction_Motor_PWM, 9500);
 }
 
 /*********************************** TEST_ENCODER ***********************************/
@@ -473,8 +478,6 @@ static void TestEncoder_Init(void)
 
     encoder_clear_count(TIM4_ENCODER);
     encoder_clear_count(TIM3_ENCODER);
-
-    printf("=== TEST_ENCODER: Quadrature encoder ===\r\n");
 }
 
 static void TestEncoder_Loop(void)
@@ -572,6 +575,67 @@ static void TestVoltageCurrent_Loop(void)
     system_delay_ms(200);
 }
 
+
+/*********************************** TEST_WS2812 ***********************************/
+/*
+ *  WS2812 LED strip test on P20_9.
+ *  Cycles through: R solid -> G solid -> B solid -> rainbow -> breathing -> off
+ *  Each phase lasts ~3 seconds, then loops.
+ *  Uses the WS2812 library API (Init / Effect_Set / Effect_Update).
+ */
+#define WS2812_TEST_PHASE_MS  3000
+
+static void TestWs2812_Init(void)
+{
+    uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
+
+    WS2812_Init();
+    g_ws2812_phase = 0;
+
+}
+
+static void TestWs2812_Loop(void)
+{
+    /* phase changes every 3 s */
+    uint8_t phase = (g_ws2812_phase / (WS2812_TEST_PHASE_MS / 10)) % 6;
+    static uint8_t last_phase = 0xFF;
+
+    if (phase != last_phase)
+    {
+        last_phase = phase;
+        switch (phase)
+        {
+        case 0:
+            WS2812_Effect_Set((WS2812_Effect_Config){
+                .type = EFF_SOLID, .r = 255, .g = 0, .b = 0 });
+            break;
+        case 1:
+            WS2812_Effect_Set((WS2812_Effect_Config){
+                .type = EFF_SOLID, .r = 0, .g = 255, .b = 0 });
+            break;
+        case 2:
+            WS2812_Effect_Set((WS2812_Effect_Config){
+                .type = EFF_SOLID, .r = 0, .g = 0, .b = 255 });
+            break;
+        case 3:
+            WS2812_Effect_Set((WS2812_Effect_Config){
+                .type = EFF_RAINBOW_FLOW, .speed = 1, .tail = 4 });
+            break;
+        case 4:
+            WS2812_Effect_Set((WS2812_Effect_Config){
+                .type = EFF_BREATHING, .r = 0, .g = 255, .b = 0, .period_ms = 2000 });
+            break;
+        case 5:
+            WS2812_Effect_Set((WS2812_Effect_Config){
+                .type = EFF_OFF });
+            break;
+        }
+    }
+
+    WS2812_Effect_Update();
+    g_ws2812_phase++;
+    system_delay_ms(10);
+}
 /*********************************** top-level dispatch ***********************************/
 
 void NewCarTest_Init(void)
@@ -590,6 +654,7 @@ void NewCarTest_Init(void)
     case TEST_ENABLE_SWITCH:  TestEnableSwitch_Init();   break;
     case TEST_BUTTON:         TestButton_Init();         break;
     case TEST_VOLTAGE_CURRENT: TestVoltageCurrent_Init(); break;
+    case TEST_WS2812:        TestWs2812_Init();        break;
     default:
         printf("=== ERROR: Unknown test mode %d ===\r\n", (int)g_test_mode);
         break;
@@ -613,6 +678,7 @@ void NewCarTest_Loop(void)
     case TEST_ENABLE_SWITCH:  TestEnableSwitch_Loop();   break;
     case TEST_BUTTON:         TestButton_Loop();         break;
     case TEST_VOLTAGE_CURRENT: TestVoltageCurrent_Loop(); break;
+    case TEST_WS2812:        TestWs2812_Loop();        break;
     default:
         system_delay_ms(500);
         break;

@@ -23,8 +23,8 @@ typedef enum
 }SwitchStatus_typeDef;
 
 /*==== simiic ====*/
-#define JBD_simiic_SCL_PIN          P21_5
-#define JBD_simiic_SDA_PIN          P21_7
+#define JBD_simiic_SCL_PIN          P21_7
+#define JBD_simiic_SDA_PIN          P21_5
 
 /*==== OLED ====*/
 #define Backup_Sector                   (0U)
