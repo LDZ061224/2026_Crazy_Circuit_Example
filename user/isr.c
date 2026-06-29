@@ -18,9 +18,9 @@
 #include "isr.h"
 #include "Fun.h"
 #include "Uart_Adjust.h"
+#include "Debug_Car.h"
 
 extern uint8 debug_uart_data;
-extern int Stop_Flag;
 
 // TC: ISR 内默认关全局中断, 需要时用 interrupt_global_enable(0) 开启嵌套
 
@@ -46,7 +46,12 @@ IFX_INTERRUPT(cc60_pit_ch0_isr, 0, CCU6_0_CH0_ISR_PRIORITY)
 
     if (Scan_Complete)
     {
-        Car_Go();
+#if USE_DEBUG_MODE
+        // if (Mode == Debug_Mode)
+            Debug_Car_Go();
+#else
+            Car_Go();
+#endif
     }
 }
 
@@ -128,10 +133,7 @@ IFX_INTERRUPT(uart0_tx_isr, 0, UART0_TX_INT_PRIO)
 IFX_INTERRUPT(uart0_rx_isr, 0, UART0_RX_INT_PRIO)
 {
     interrupt_global_enable(0);
-#if DEBUG_UART_USE_INTERRUPT
-    debug_interrupr_handler();
-    Uart_Adjust_ParseByte(debug_uart_data);
-#endif
+
 }
 
 // UART_1: camera
@@ -155,11 +157,10 @@ IFX_INTERRUPT(uart2_tx_isr, 0, UART2_TX_INT_PRIO)
 IFX_INTERRUPT(uart2_rx_isr, 0, UART2_RX_INT_PRIO)
 {
     interrupt_global_enable(0);
-    uint8 dat;
-    if (uart_query_byte(UART_2, &dat))
-    {
-        Uart_Adjust_ParseByte(dat);
-    }
+    #if DEBUG_UART_USE_INTERRUPT
+    debug_interrupr_handler();
+    Uart_Adjust_ParseByte(debug_uart_data);
+#endif
 }
 
 // UART_3: GNSS

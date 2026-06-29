@@ -622,10 +622,10 @@ void OLED_Input(void)
 
         //---- 从Flash恢复上次保存的调试参�?----
         flash_read_page(0, 1, PID_OKb, 13);
-        if (PID_OKb[0] != 0) Debug_Kp_Left  = PID_OKb[0];
-        if (PID_OKb[1] != 0) Debug_Ki_Left  = PID_OKb[1] * 0.01;
-        if (PID_OKb[2] != 0) Debug_Kp_Right = PID_OKb[2];
-        if (PID_OKb[3] != 0) Debug_Ki_Right = PID_OKb[3] * 0.01;
+        if (PID_OKb[0] != 0) Left_PID.kp  = PID_OKb[0];
+        if (PID_OKb[1] != 0) Left_PID.ki  = PID_OKb[1] * 0.01;
+        if (PID_OKb[2] != 0) Right_PID.kp = PID_OKb[2];
+        if (PID_OKb[3] != 0) Right_PID.ki = PID_OKb[3] * 0.01;
         flash_read_page(0, 3, DBG_OKb, 4);
         if (DBG_OKb[0] != 0) Debug_Target_Speed = DBG_OKb[0];
         if (DBG_OKb[1] != 0) Debug_Fan_Duty = DBG_OKb[1];
@@ -635,7 +635,7 @@ void OLED_Input(void)
         Debug_Motor_Enable = 0;
 
         // 跳过速度/PID参数配置，直接启�?
-        OLED_Data_Load();
+        Data_Load();
         PID_cleardata(&Left_PID);
         PID_cleardata(&Right_PID);
         return;
@@ -746,7 +746,7 @@ void OLED_Input(void)
 /**
  * @brief   从Flash加载所有配置参数到运行变量
  */
-void OLED_Data_Load()
+void Data_Load()
 {
 //    OLED_Load_Default_Build_Mode_Map();
 //    // 加载PID参数
@@ -783,419 +783,419 @@ void OLED_Data_Load()
 /**
  * @brief   OLED实时显示运行数据 + 调试模式交互
  */
-void OLED_Display(void)
-{
-    if (Mode == Debug_Mode)
-    {
-        //===== 调试模式显示/交互 =====
-        if (Debug_Sub_Mode == Debug_Sub_PI_Tuning)
-        {
-            int32 key = KEY_BLANK;
-            static int32 edit_value = 0;  // 跨帧保存编辑中的数�?
+// void OLED_Display(void)
+// {
+//     if (Mode == Debug_Mode)
+//     {
+//         //===== 调试模式显示/交互 =====
+//         if (Debug_Sub_Mode == Debug_Sub_PI_Tuning)
+//         {
+//             int32 key = KEY_BLANK;
+//             static int32 edit_value = 0;  // 跨帧保存编辑中的数�?
 
-            if (Debug_Motor_Enable == 0)
-            {
-                // ==== �?: 参数编辑页（四行从上到下依次输入，输完自动开电机�?====
-                int32 cur_val[4];   // 0=Kp, 1=Ki, 2=Spd, 3=Wheel(0�?�?
-                int i;
+//             if (Debug_Motor_Enable == 0)
+//             {
+//                 // ==== �?: 参数编辑页（四行从上到下依次输入，输完自动开电机�?====
+//                 int32 cur_val[4];   // 0=Kp, 1=Ki, 2=Spd, 3=Wheel(0�?�?
+//                 int i;
 
-                OLED_CLS();
-                cur_val[0] = (int)(Debug_Which_Wheel ? Debug_Kp_Right : Debug_Kp_Left);
-                cur_val[1] = (int)((Debug_Which_Wheel ? Debug_Ki_Right : Debug_Ki_Left) * 100.0f);
-                cur_val[2] = Debug_Target_Speed;
-                cur_val[3] = Debug_Which_Wheel;
+//                 OLED_CLS();
+//                 cur_val[0] = (int)(Debug_Which_Wheel ? Debug_Kp_Right : Debug_Kp_Left);
+//                 cur_val[1] = (int)((Debug_Which_Wheel ? Debug_Ki_Right : Debug_Ki_Left) * 100.0f);
+//                 cur_val[2] = Debug_Target_Speed;
+//                 cur_val[3] = Debug_Which_Wheel;
 
-                OLED_Show_Str(0, 0, "Kp", TextSize_F6x8);
-                OLED_Show_Numbers(40, 0, cur_val[0], TextSize_F6x8);
-                OLED_Show_Str(0, 1, "Ki", TextSize_F6x8);
-                OLED_Show_Numbers(40, 1, cur_val[1], TextSize_F6x8);
-                OLED_Show_Str(0, 2, "Spd", TextSize_F6x8);
-                OLED_Show_Numbers(40, 2, cur_val[2], TextSize_F6x8);
-                OLED_Show_Str(0, 3, "Wheel", TextSize_F6x8);
-                OLED_Show_Str(45, 3, cur_val[3] ? "Right" : "Left", TextSize_F6x8);
+//                 OLED_Show_Str(0, 0, "Kp", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 0, cur_val[0], TextSize_F6x8);
+//                 OLED_Show_Str(0, 1, "Ki", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 1, cur_val[1], TextSize_F6x8);
+//                 OLED_Show_Str(0, 2, "Spd", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 2, cur_val[2], TextSize_F6x8);
+//                 OLED_Show_Str(0, 3, "Wheel", TextSize_F6x8);
+//                 OLED_Show_Str(45, 3, cur_val[3] ? "Right" : "Left", TextSize_F6x8);
 
-                // 四行从上到下依次输入�?保持不变�?
-                for (i = 0; i < 3; i++)
-                {
-                    edit_value = KeyboardInput(40, i, TextSize_F6x8, 1.0);
-                    if (edit_value != 0) cur_val[i] = edit_value;
-                }
-                // Wheel: 输入2=�? 1=�?
-                edit_value = KeyboardInput(45, 3, TextSize_F6x8, 1.0);
-                if (edit_value == 2) cur_val[3] = 0;
-                else if (edit_value == 1) cur_val[3] = 1;
+//                 // 四行从上到下依次输入�?保持不变�?
+//                 for (i = 0; i < 3; i++)
+//                 {
+//                     edit_value = KeyboardInput(40, i, TextSize_F6x8, 1.0);
+//                     if (edit_value != 0) cur_val[i] = edit_value;
+//                 }
+//                 // Wheel: 输入2=�? 1=�?
+//                 edit_value = KeyboardInput(45, 3, TextSize_F6x8, 1.0);
+//                 if (edit_value == 2) cur_val[3] = 0;
+//                 else if (edit_value == 1) cur_val[3] = 1;
 
-                // 回写到全局变量
-                Debug_Which_Wheel = cur_val[3];
-                if (Debug_Which_Wheel == 0)
-                {
-                    Debug_Kp_Left  = cur_val[0];
-                    Debug_Ki_Left  = cur_val[1] * 0.01;
-                }
-                else
-                {
-                    Debug_Kp_Right = cur_val[0];
-                    Debug_Ki_Right = cur_val[1]*0.01;
-                }
-                Debug_Target_Speed = cur_val[2];
+//                 // 回写到全局变量
+//                 Debug_Which_Wheel = cur_val[3];
+//                 if (Debug_Which_Wheel == 0)
+//                 {
+//                     Debug_Kp_Left  = cur_val[0];
+//                     Debug_Ki_Left  = cur_val[1] * 0.01;
+//                 }
+//                 else
+//                 {
+//                     Debug_Kp_Right = cur_val[0];
+//                     Debug_Ki_Right = cur_val[1]*0.01;
+//                 }
+//                 Debug_Target_Speed = cur_val[2];
 
-                // 输入完毕 �?自动开电机
-                Debug_Motor_Enable = 1;
-                PID_cleardata(&Left_PID);
-                PID_cleardata(&Right_PID);
-                OLED_CLS();
-            }
-            else  // Debug_Motor_Enable == 1
-            {
-                // ==== �?: 运行页（Real/PWM + 1.Save 0.Stop�?====
-                int real_spd = (Debug_Which_Wheel == 0) ? Left_Real_Spd : Right_Real_Spd;
-                int pwm_out  = (Debug_Which_Wheel == 0) ? (int)Left_PID_Out : (int)Right_PID_Out;
+//                 // 输入完毕 �?自动开电机
+//                 Debug_Motor_Enable = 1;
+//                 PID_cleardata(&Left_PID);
+//                 PID_cleardata(&Right_PID);
+//                 OLED_CLS();
+//             }
+//             else  // Debug_Motor_Enable == 1
+//             {
+//                 // ==== �?: 运行页（Real/PWM + 1.Save 0.Stop�?====
+//                 int real_spd = (Debug_Which_Wheel == 0) ? Left_Real_Spd : Right_Real_Spd;
+//                 int pwm_out  = (Debug_Which_Wheel == 0) ? (int)Left_PID_Out : (int)Right_PID_Out;
 
-                OLED_Show_Str(0, 0, "Run", TextSize_F6x8);
-                OLED_Show_Str(55, 0, Debug_Which_Wheel ? "R" : "L", TextSize_F6x8);
+//                 OLED_Show_Str(0, 0, "Run", TextSize_F6x8);
+//                 OLED_Show_Str(55, 0, Debug_Which_Wheel ? "R" : "L", TextSize_F6x8);
 
-                OLED_Show_Str(0, 1, "Real", TextSize_F6x8);
-                OLED_Show_Numbers(40, 1, real_spd, TextSize_F6x8);
-                OLED_Show_Str(0, 2, "PWM", TextSize_F6x8);
-                OLED_Show_Numbers(40, 2, pwm_out, TextSize_F6x8);
+//                 OLED_Show_Str(0, 1, "Real", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 1, real_spd, TextSize_F6x8);
+//                 OLED_Show_Str(0, 2, "PWM", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 2, pwm_out, TextSize_F6x8);
 
-                OLED_Show_Str(0, 4, "1.Save", TextSize_F6x8);
-                OLED_Show_Str(0, 5, "0.Stop", TextSize_F6x8);
+//                 OLED_Show_Str(0, 4, "1.Save", TextSize_F6x8);
+//                 OLED_Show_Str(0, 5, "0.Stop", TextSize_F6x8);
 
-                key = CH455_GetOneKey();
-                if (key > 0x0F && key != KEY_BLANK)
-                    key = (key - 0x0F) >> 4;
+//                 key = CH455_GetOneKey();
+//                 if (key > 0x0F && key != KEY_BLANK)
+//                     key = (key - 0x0F) >> 4;
 
-                if (key == 1)  // 保存到Flash
-                {
-                    PID_OKb[0] = (uint32)Debug_Kp_Left;
-                    PID_OKb[1] = (uint32)(Debug_Ki_Left * 100.0f);
-                    PID_OKb[2] = (uint32)Debug_Kp_Right;
-                    PID_OKb[3] = (uint32)(Debug_Ki_Right * 100.0f);
-                    flash_erase_page(0, 1);
-                    flash_write_page(0, 1, PID_OKb, 13);
-                }
-                else if (key == 0)  // 停止 �?回页1
-                {
-                    Debug_Motor_Enable = 0;
-                    OLED_CLS();
-                }
-            }
-        }
-        else if (Debug_Sub_Mode == Debug_Sub_Ground_Test)
-        {
-            int32 key = KEY_BLANK;
-            int32 edit_value = 0;
+//                 if (key == 1)  // 保存到Flash
+//                 {
+//                     PID_OKb[0] = (uint32)Debug_Kp_Left;
+//                     PID_OKb[1] = (uint32)(Debug_Ki_Left * 100.0f);
+//                     PID_OKb[2] = (uint32)Debug_Kp_Right;
+//                     PID_OKb[3] = (uint32)(Debug_Ki_Right * 100.0f);
+//                     flash_erase_page(0, 1);
+//                     flash_write_page(0, 1, PID_OKb, 13);
+//                 }
+//                 else if (key == 0)  // 停止 �?回页1
+//                 {
+//                     Debug_Motor_Enable = 0;
+//                     OLED_CLS();
+//                 }
+//             }
+//         }
+//         else if (Debug_Sub_Mode == Debug_Sub_Ground_Test)
+//         {
+//             int32 key = KEY_BLANK;
+//             int32 edit_value = 0;
 
-            if (Debug_Motor_Enable == 0)
-            {
-                int32 cur_val[8];
-                int i;
+//             if (Debug_Motor_Enable == 0)
+//             {
+//                 int32 cur_val[8];
+//                 int i;
 
-                OLED_CLS();
-                cur_val[0] = (int)Debug_Kp_Left;
-                cur_val[1] = (int)(Debug_Ki_Left * 100.0f);
-                cur_val[2] = (int)Debug_Kp_Right;
-                cur_val[3] = (int)(Debug_Ki_Right * 100.0f);
-                cur_val[4] = Debug_Target_Speed;
-                cur_val[5] = Debug_Fan_Duty;
-                cur_val[6] = Debug_Ground_Dir;
+//                 OLED_CLS();
+//                 cur_val[0] = (int)Debug_Kp_Left;
+//                 cur_val[1] = (int)(Debug_Ki_Left * 100.0f);
+//                 cur_val[2] = (int)Debug_Kp_Right;
+//                 cur_val[3] = (int)(Debug_Ki_Right * 100.0f);
+//                 cur_val[4] = Debug_Target_Speed;
+//                 cur_val[5] = Debug_Fan_Duty;
+//                 cur_val[6] = Debug_Ground_Dir;
 
-                OLED_Show_Str(0, 0, "L_P", TextSize_F6x8);
-                OLED_Show_Numbers(40, 0, cur_val[0], TextSize_F6x8);
-                OLED_Show_Str(0, 1, "L_I", TextSize_F6x8);
-                OLED_Show_Numbers(40, 1, cur_val[1], TextSize_F6x8);
-                OLED_Show_Str(0, 2, "R_P", TextSize_F6x8);
-                OLED_Show_Numbers(40, 2, cur_val[2], TextSize_F6x8);
-                OLED_Show_Str(0, 3, "R_I", TextSize_F6x8);
-                OLED_Show_Numbers(40, 3, cur_val[3], TextSize_F6x8);
-                OLED_Show_Str(0, 4, "Spd", TextSize_F6x8);
-                OLED_Show_Numbers(40, 4, cur_val[4], TextSize_F6x8);
-                OLED_Show_Str(0, 5, "Fan", TextSize_F6x8);
-                OLED_Show_Numbers(40, 5, cur_val[5], TextSize_F6x8);
-                OLED_Show_Str(0, 6, "Dir", TextSize_F6x8);
-                OLED_Show_Numbers(40, 6, cur_val[6], TextSize_F6x8);
-                for (i = 0; i < 7; i++)
-                {
-                    edit_value = KeyboardInput(40, i, TextSize_F6x8, 1.0);
-                    if (edit_value != 0) cur_val[i] = edit_value;
-                }
+//                 OLED_Show_Str(0, 0, "L_P", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 0, cur_val[0], TextSize_F6x8);
+//                 OLED_Show_Str(0, 1, "L_I", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 1, cur_val[1], TextSize_F6x8);
+//                 OLED_Show_Str(0, 2, "R_P", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 2, cur_val[2], TextSize_F6x8);
+//                 OLED_Show_Str(0, 3, "R_I", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 3, cur_val[3], TextSize_F6x8);
+//                 OLED_Show_Str(0, 4, "Spd", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 4, cur_val[4], TextSize_F6x8);
+//                 OLED_Show_Str(0, 5, "Fan", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 5, cur_val[5], TextSize_F6x8);
+//                 OLED_Show_Str(0, 6, "Dir", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 6, cur_val[6], TextSize_F6x8);
+//                 for (i = 0; i < 7; i++)
+//                 {
+//                     edit_value = KeyboardInput(40, i, TextSize_F6x8, 1.0);
+//                     if (edit_value != 0) cur_val[i] = edit_value;
+//                 }
 
-                Debug_Kp_Left = cur_val[0];
-                Debug_Ki_Left = cur_val[1] * 0.01f;
-                Debug_Kp_Right = cur_val[2];
-                Debug_Ki_Right = cur_val[3] * 0.01f;
-                Debug_Target_Speed = cur_val[4];
-                Debug_Fan_Duty = cur_val[5];
-                Debug_Ground_Dir = (cur_val[6] == 2) ? 2 : 1;
+//                 Debug_Kp_Left = cur_val[0];
+//                 Debug_Ki_Left = cur_val[1] * 0.01f;
+//                 Debug_Kp_Right = cur_val[2];
+//                 Debug_Ki_Right = cur_val[3] * 0.01f;
+//                 Debug_Target_Speed = cur_val[4];
+//                 Debug_Fan_Duty = cur_val[5];
+//                 Debug_Ground_Dir = (cur_val[6] == 2) ? 2 : 1;
 
-                Debug_Motor_Enable = 1;
-                PID_cleardata(&Left_PID);
-                PID_cleardata(&Right_PID);
-                OLED_CLS();
-            }
-            else
-            {
-                OLED_Show_Str(0, 0, "Ground", TextSize_F6x8);
-                OLED_Show_Str(0, 1, "LReal", TextSize_F6x8);
-                OLED_Show_Numbers(45, 1, Left_Real_Spd, TextSize_F6x8);
-                OLED_Show_Str(0, 2, "RReal", TextSize_F6x8);
-                OLED_Show_Numbers(45, 2, Right_Real_Spd, TextSize_F6x8);
-                OLED_Show_Str(0, 3, "Fan", TextSize_F6x8);
-                OLED_Show_Numbers(45, 3, Debug_Fan_Duty, TextSize_F6x8);
-                OLED_Show_Str(0, 4, "Dir", TextSize_F6x8);
-                OLED_Show_Str(45, 4, Debug_Ground_Dir == 2 ? "L-/R+" : "L+/R-", TextSize_F6x8);
-                OLED_Show_Str(0, 5, "1.Save", TextSize_F6x8);
-                OLED_Show_Str(0, 6, "0.Stop", TextSize_F6x8);
+//                 Debug_Motor_Enable = 1;
+//                 PID_cleardata(&Left_PID);
+//                 PID_cleardata(&Right_PID);
+//                 OLED_CLS();
+//             }
+//             else
+//             {
+//                 OLED_Show_Str(0, 0, "Ground", TextSize_F6x8);
+//                 OLED_Show_Str(0, 1, "LReal", TextSize_F6x8);
+//                 OLED_Show_Numbers(45, 1, Left_Real_Spd, TextSize_F6x8);
+//                 OLED_Show_Str(0, 2, "RReal", TextSize_F6x8);
+//                 OLED_Show_Numbers(45, 2, Right_Real_Spd, TextSize_F6x8);
+//                 OLED_Show_Str(0, 3, "Fan", TextSize_F6x8);
+//                 OLED_Show_Numbers(45, 3, Debug_Fan_Duty, TextSize_F6x8);
+//                 OLED_Show_Str(0, 4, "Dir", TextSize_F6x8);
+//                 OLED_Show_Str(45, 4, Debug_Ground_Dir == 2 ? "L-/R+" : "L+/R-", TextSize_F6x8);
+//                 OLED_Show_Str(0, 5, "1.Save", TextSize_F6x8);
+//                 OLED_Show_Str(0, 6, "0.Stop", TextSize_F6x8);
 
-                key = CH455_GetOneKey();
-                if (key > 0x0F && key != KEY_BLANK)
-                    key = (key - 0x0F) >> 4;
+//                 key = CH455_GetOneKey();
+//                 if (key > 0x0F && key != KEY_BLANK)
+//                     key = (key - 0x0F) >> 4;
 
-                if (key == 1)
-                {
-                    PID_OKb[0] = (uint32)Debug_Kp_Left;
-                    PID_OKb[1] = (uint32)(Debug_Ki_Left * 100.0f);
-                    PID_OKb[2] = (uint32)Debug_Kp_Right;
-                    PID_OKb[3] = (uint32)(Debug_Ki_Right * 100.0f);
-                    DBG_OKb[0] = (uint32)Debug_Target_Speed;
-                    DBG_OKb[1] = (uint32)Debug_Fan_Duty;
-                    DBG_OKb[2] = (uint32)Debug_Ground_Dir;
-                    DBG_OKb[3] = (uint32)Debug_Angle_Mode;
-                    flash_erase_page(0, 0);
-                    flash_write_page(0, 0, Speed_OKb, 1);
-                    flash_erase_page(0, 1);
-                    flash_write_page(0, 1, PID_OKb, 13);
-                    flash_erase_page(0, 3);
-                    flash_write_page(0, 3, DBG_OKb, 4);
-                }
-                else if (key == 0)
-                {
-                    Debug_Motor_Enable = 0;
-                    OLED_CLS();
-                }
-            }
-        }
-        else if (Debug_Sub_Mode == Debug_Sub_Angle)
-        {
-            int32 key = KEY_BLANK;
-            int32 edit_value = 0;
+//                 if (key == 1)
+//                 {
+//                     PID_OKb[0] = (uint32)Debug_Kp_Left;
+//                     PID_OKb[1] = (uint32)(Debug_Ki_Left * 100.0f);
+//                     PID_OKb[2] = (uint32)Debug_Kp_Right;
+//                     PID_OKb[3] = (uint32)(Debug_Ki_Right * 100.0f);
+//                     DBG_OKb[0] = (uint32)Debug_Target_Speed;
+//                     DBG_OKb[1] = (uint32)Debug_Fan_Duty;
+//                     DBG_OKb[2] = (uint32)Debug_Ground_Dir;
+//                     DBG_OKb[3] = (uint32)Debug_Angle_Mode;
+//                     flash_erase_page(0, 0);
+//                     flash_write_page(0, 0, Speed_OKb, 1);
+//                     flash_erase_page(0, 1);
+//                     flash_write_page(0, 1, PID_OKb, 13);
+//                     flash_erase_page(0, 3);
+//                     flash_write_page(0, 3, DBG_OKb, 4);
+//                 }
+//                 else if (key == 0)
+//                 {
+//                     Debug_Motor_Enable = 0;
+//                     OLED_CLS();
+//                 }
+//             }
+//         }
+//         else if (Debug_Sub_Mode == Debug_Sub_Angle)
+//         {
+//             int32 key = KEY_BLANK;
+//             int32 edit_value = 0;
 
-            if (Debug_Motor_Enable == 0)
-            {
-                int32 cur_val[8];
-                int i;
+//             if (Debug_Motor_Enable == 0)
+//             {
+//                 int32 cur_val[8];
+//                 int i;
 
-                OLED_CLS();
-                cur_val[0] = (int)(Angle_PID.kp * 100.0f);
-                cur_val[1] = (int)(Angle_PID.kd * 100.0f);
-                cur_val[2] = (int)(Gyro_PID.kp * 1000.0f);
-                cur_val[3] = (int)(Gyro_PID.ki * 1000.0f);
-                cur_val[4] = (int)(Gyro_PID.kd * 1000.0f);
-                cur_val[5] = Debug_Angle_Mode;
-                cur_val[6] = Debug_Target_Speed;
-                cur_val[7] = 0;
+//                 OLED_CLS();
+//                 cur_val[0] = (int)(Angle_PID.kp * 100.0f);
+//                 cur_val[1] = (int)(Angle_PID.kd * 100.0f);
+//                 cur_val[2] = (int)(Gyro_PID.kp * 1000.0f);
+//                 cur_val[3] = (int)(Gyro_PID.ki * 1000.0f);
+//                 cur_val[4] = (int)(Gyro_PID.kd * 1000.0f);
+//                 cur_val[5] = Debug_Angle_Mode;
+//                 cur_val[6] = Debug_Target_Speed;
+//                 cur_val[7] = 0;
 
-                OLED_Show_Str(0, 0, "A_P", TextSize_F6x8);
-                OLED_Show_Numbers(40, 0, cur_val[0], TextSize_F6x8);
-                OLED_Show_Str(0, 1, "A_D", TextSize_F6x8);
-                OLED_Show_Numbers(40, 1, cur_val[1], TextSize_F6x8);
-                OLED_Show_Str(0, 2, "GI_P", TextSize_F6x8);
-                OLED_Show_Numbers(40, 2, cur_val[2], TextSize_F6x8);
-                OLED_Show_Str(0, 3, "GI_I", TextSize_F6x8);
-                OLED_Show_Numbers(40, 3, cur_val[3], TextSize_F6x8);
-                OLED_Show_Str(0, 4, "GI_D", TextSize_F6x8);
-                OLED_Show_Numbers(40, 4, cur_val[4], TextSize_F6x8);
-                OLED_Show_Str(0, 5, "Mode", TextSize_F6x8);
-                OLED_Show_Numbers(40, 5, cur_val[5], TextSize_F6x8);
-                OLED_Show_Str(0, 6, "Spd", TextSize_F6x8);
-                OLED_Show_Numbers(40, 6, cur_val[6], TextSize_F6x8);
+//                 OLED_Show_Str(0, 0, "A_P", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 0, cur_val[0], TextSize_F6x8);
+//                 OLED_Show_Str(0, 1, "A_D", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 1, cur_val[1], TextSize_F6x8);
+//                 OLED_Show_Str(0, 2, "GI_P", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 2, cur_val[2], TextSize_F6x8);
+//                 OLED_Show_Str(0, 3, "GI_I", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 3, cur_val[3], TextSize_F6x8);
+//                 OLED_Show_Str(0, 4, "GI_D", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 4, cur_val[4], TextSize_F6x8);
+//                 OLED_Show_Str(0, 5, "Mode", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 5, cur_val[5], TextSize_F6x8);
+//                 OLED_Show_Str(0, 6, "Spd", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 6, cur_val[6], TextSize_F6x8);
 
-                for (i = 0; i < 7; i++)
-                {
-                    edit_value = KeyboardInput(40, i, TextSize_F6x8, 1.0);
-                    if (edit_value != 0) cur_val[i] = edit_value;
-                }
+//                 for (i = 0; i < 7; i++)
+//                 {
+//                     edit_value = KeyboardInput(40, i, TextSize_F6x8, 1.0);
+//                     if (edit_value != 0) cur_val[i] = edit_value;
+//                 }
 
-                Angle_PID.kp = cur_val[0] * 0.01f;
-                Angle_PID.kd = cur_val[1] * 0.01f;
-                Angle_PID.ki = 0;
-                Angle_PID.mode = PID_MODE_POSITION_D_ON_MEASUREMENT;
-                Gyro_PID.kp = cur_val[2] * 0.001f;
-                Gyro_PID.ki = cur_val[3] * 0.001f;
-                Gyro_PID.kd = cur_val[4] * 0.001f;
-                Gyro_PID.mode = PID_MODE_ADD;
-                Debug_Angle_Mode = (cur_val[5] == 2) ? 2 : 1;
-                Debug_Target_Speed = (cur_val[6] == 1) ? 0 : cur_val[6];
+//                 Angle_PID.kp = cur_val[0] * 0.01f;
+//                 Angle_PID.kd = cur_val[1] * 0.01f;
+//                 Angle_PID.ki = 0;
+//                 Angle_PID.mode = PID_MODE_POSITION_D_ON_MEASUREMENT;
+//                 Gyro_PID.kp = cur_val[2] * 0.001f;
+//                 Gyro_PID.ki = cur_val[3] * 0.001f;
+//                 Gyro_PID.kd = cur_val[4] * 0.001f;
+//                 Gyro_PID.mode = PID_MODE_ADD;
+//                 Debug_Angle_Mode = (cur_val[5] == 2) ? 2 : 1;
+//                 Debug_Target_Speed = (cur_val[6] == 1) ? 0 : cur_val[6];
 
-                Debug_Motor_Enable = 1;
-                Gyro_Integral = 0;
-                Debug_Angle_D_First = 0;
-                PID_cleardata(&Angle_PID);
-                PID_cleardata(&Turn_PID);
-                PID_cleardata(&Gyro_PID);
-                PID_cleardata(&Gyro_PD_PID);
-                PID_cleardata(&Left_PID);
-                PID_cleardata(&Right_PID);
-                OLED_CLS();
-            }
-            else
-            {
-                OLED_Show_Str(0, 0, "Angle", TextSize_F6x8);
-                OLED_Show_Numbers(45, 0, (int)Gyro_Integral, TextSize_F6x8);
-                OLED_Show_Str(0, 1, "Out", TextSize_F6x8);
-                OLED_Show_Numbers(45, 1, (int)Gyro_PID_Out, TextSize_F6x8);
-                OLED_Show_Str(0, 2, "Mode", TextSize_F6x8);
-                OLED_Show_Numbers(45, 2, Debug_Angle_Mode, TextSize_F6x8);
-                OLED_Show_Str(0, 3, "D1st", TextSize_F6x8);
-                OLED_Show_Numbers(45, 3, Debug_Angle_D_First, TextSize_F6x8);
-                OLED_Show_Str(0, 4, "Fan", TextSize_F6x8);
-                OLED_Show_Numbers(45, 4, Debug_Fan_Duty, TextSize_F6x8);
-                OLED_Show_Str(0, 5, "1.Save", TextSize_F6x8);
-                OLED_Show_Str(0, 6, "0.Stop", TextSize_F6x8);
+//                 Debug_Motor_Enable = 1;
+//                 Gyro_Integral = 0;
+//                 Debug_Angle_D_First = 0;
+//                 PID_cleardata(&Angle_PID);
+//                 PID_cleardata(&Turn_PID);
+//                 PID_cleardata(&Gyro_PID);
+//                 PID_cleardata(&Gyro_PD_PID);
+//                 PID_cleardata(&Left_PID);
+//                 PID_cleardata(&Right_PID);
+//                 OLED_CLS();
+//             }
+//             else
+//             {
+//                 OLED_Show_Str(0, 0, "Angle", TextSize_F6x8);
+//                 OLED_Show_Numbers(45, 0, (int)Gyro_Integral, TextSize_F6x8);
+//                 OLED_Show_Str(0, 1, "Out", TextSize_F6x8);
+//                 OLED_Show_Numbers(45, 1, (int)Gyro_PID_Out, TextSize_F6x8);
+//                 OLED_Show_Str(0, 2, "Mode", TextSize_F6x8);
+//                 OLED_Show_Numbers(45, 2, Debug_Angle_Mode, TextSize_F6x8);
+//                 OLED_Show_Str(0, 3, "D1st", TextSize_F6x8);
+//                 OLED_Show_Numbers(45, 3, Debug_Angle_D_First, TextSize_F6x8);
+//                 OLED_Show_Str(0, 4, "Fan", TextSize_F6x8);
+//                 OLED_Show_Numbers(45, 4, Debug_Fan_Duty, TextSize_F6x8);
+//                 OLED_Show_Str(0, 5, "1.Save", TextSize_F6x8);
+//                 OLED_Show_Str(0, 6, "0.Stop", TextSize_F6x8);
 
-                key = CH455_GetOneKey();
-                if (key > 0x0F && key != KEY_BLANK)
-                    key = (key - 0x0F) >> 4;
+//                 key = CH455_GetOneKey();
+//                 if (key > 0x0F && key != KEY_BLANK)
+//                     key = (key - 0x0F) >> 4;
 
-                if (key == 1)
-                {
-                    PID_OKb[4] = (uint32)(Angle_PID.kp * 100.0f);
-                    PID_OKb[5] = (uint32)(Angle_PID.kd * 100.0f);
-                    PID_OKb[6] = (uint32)(Gyro_PID.kp * 1000.0f);
-                    PID_OKb[7] = (uint32)(Gyro_PID.ki * 1000.0f);
-                    PID_OKb[10] = (uint32)(Gyro_PID.kd * 1000.0f);
-                    DBG_OKb[0] = (uint32)Debug_Target_Speed;
-                    DBG_OKb[1] = (uint32)Debug_Fan_Duty;
-                    DBG_OKb[3] = (uint32)Debug_Angle_Mode;
-                    flash_erase_page(0, 1);
-                    flash_write_page(0, 1, PID_OKb, 13);
-                    flash_erase_page(0, 3);
-                    flash_write_page(0, 3, DBG_OKb, 4);
-                }
-                else if (key == 0)
-                {
-                    Debug_Motor_Enable = 0;
-                    OLED_CLS();
-                }
-            }
-        }
+//                 if (key == 1)
+//                 {
+//                     PID_OKb[4] = (uint32)(Angle_PID.kp * 100.0f);
+//                     PID_OKb[5] = (uint32)(Angle_PID.kd * 100.0f);
+//                     PID_OKb[6] = (uint32)(Gyro_PID.kp * 1000.0f);
+//                     PID_OKb[7] = (uint32)(Gyro_PID.ki * 1000.0f);
+//                     PID_OKb[10] = (uint32)(Gyro_PID.kd * 1000.0f);
+//                     DBG_OKb[0] = (uint32)Debug_Target_Speed;
+//                     DBG_OKb[1] = (uint32)Debug_Fan_Duty;
+//                     DBG_OKb[3] = (uint32)Debug_Angle_Mode;
+//                     flash_erase_page(0, 1);
+//                     flash_write_page(0, 1, PID_OKb, 13);
+//                     flash_erase_page(0, 3);
+//                     flash_write_page(0, 3, DBG_OKb, 4);
+//                 }
+//                 else if (key == 0)
+//                 {
+//                     Debug_Motor_Enable = 0;
+//                     OLED_CLS();
+//                 }
+//             }
+//         }
 
-        else if (Debug_Sub_Mode == Debug_Sub_NormalTrace)
-        {
-            int32 key = KEY_BLANK;
-            int32 edit_value = 0;
+//         else if (Debug_Sub_Mode == Debug_Sub_NormalTrace)
+//         {
+//             int32 key = KEY_BLANK;
+//             int32 edit_value = 0;
 
-            if (Debug_Motor_Enable == 0)
-            {
-                int32 cur_val[8];
-                int i;
+//             if (Debug_Motor_Enable == 0)
+//             {
+//                 int32 cur_val[8];
+//                 int i;
 
-                OLED_CLS();
-                cur_val[0] = (int)(Angle_PID.kp * 100.0f);
-                cur_val[1] = (int)(Angle_PID.kd * 100.0f);
-                cur_val[2] = (int)(Gyro_PD_PID.kp * 1000.0f);
-                cur_val[3] = (int)(Gyro_PD_PID.kd * 1000.0f);
-                cur_val[4] = Debug_Target_Speed;
-                cur_val[5] = 0;
-                cur_val[6] = 0;
-                cur_val[7] = 0;
+//                 OLED_CLS();
+//                 cur_val[0] = (int)(Angle_PID.kp * 100.0f);
+//                 cur_val[1] = (int)(Angle_PID.kd * 100.0f);
+//                 cur_val[2] = (int)(Gyro_PD_PID.kp * 1000.0f);
+//                 cur_val[3] = (int)(Gyro_PD_PID.kd * 1000.0f);
+//                 cur_val[4] = Debug_Target_Speed;
+//                 cur_val[5] = 0;
+//                 cur_val[6] = 0;
+//                 cur_val[7] = 0;
 
-                OLED_Show_Str(0, 0, "T_P", TextSize_F6x8);
-                OLED_Show_Numbers(40, 0, cur_val[0], TextSize_F6x8);
-                OLED_Show_Str(0, 1, "T_D", TextSize_F6x8);
-                OLED_Show_Numbers(40, 1, cur_val[1], TextSize_F6x8);
-                OLED_Show_Str(0, 2, "GD_P", TextSize_F6x8);
-                OLED_Show_Numbers(40, 2, cur_val[2], TextSize_F6x8);
-                OLED_Show_Str(0, 3, "GD_D", TextSize_F6x8);
-                OLED_Show_Numbers(40, 3, cur_val[3], TextSize_F6x8);
-                OLED_Show_Str(0, 4, "Spd", TextSize_F6x8);
-                OLED_Show_Numbers(40, 4, cur_val[4], TextSize_F6x8);
+//                 OLED_Show_Str(0, 0, "T_P", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 0, cur_val[0], TextSize_F6x8);
+//                 OLED_Show_Str(0, 1, "T_D", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 1, cur_val[1], TextSize_F6x8);
+//                 OLED_Show_Str(0, 2, "GD_P", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 2, cur_val[2], TextSize_F6x8);
+//                 OLED_Show_Str(0, 3, "GD_D", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 3, cur_val[3], TextSize_F6x8);
+//                 OLED_Show_Str(0, 4, "Spd", TextSize_F6x8);
+//                 OLED_Show_Numbers(40, 4, cur_val[4], TextSize_F6x8);
 
-                for (i = 0; i < 5; i++)
-                {
-                    edit_value = KeyboardInput(40, i, TextSize_F6x8, 1.0);
-                    if (edit_value != 0) cur_val[i] = edit_value;
-                }
+//                 for (i = 0; i < 5; i++)
+//                 {
+//                     edit_value = KeyboardInput(40, i, TextSize_F6x8, 1.0);
+//                     if (edit_value != 0) cur_val[i] = edit_value;
+//                 }
 
-                Angle_PID.kp = cur_val[0] * 0.01f;
-                Angle_PID.kd = cur_val[1] * 0.01f;
-                Angle_PID.ki = 0;
-                Angle_PID.mode = PID_MODE_POSITION_D_ON_MEASUREMENT;
-                Gyro_PD_PID.kp = cur_val[2] * 0.001f;
-                Gyro_PD_PID.kd = cur_val[3] * 0.001f;
-                Gyro_PD_PID.ki = 0;
-                Gyro_PD_PID.mode = PID_MODE_POSITION;
-                Debug_Target_Speed = (cur_val[4] == 1) ? 0 : cur_val[4];
+//                 Angle_PID.kp = cur_val[0] * 0.01f;
+//                 Angle_PID.kd = cur_val[1] * 0.01f;
+//                 Angle_PID.ki = 0;
+//                 Angle_PID.mode = PID_MODE_POSITION_D_ON_MEASUREMENT;
+//                 Gyro_PD_PID.kp = cur_val[2] * 0.001f;
+//                 Gyro_PD_PID.kd = cur_val[3] * 0.001f;
+//                 Gyro_PD_PID.ki = 0;
+//                 Gyro_PD_PID.mode = PID_MODE_POSITION;
+//                 Debug_Target_Speed = (cur_val[4] == 1) ? 0 : cur_val[4];
 
-                Debug_Motor_Enable = 1;
-                Gyro_Integral = 0;
-                Debug_Angle_D_First = 0;
-                PID_cleardata(&Angle_PID);
-                PID_cleardata(&Turn_PID);
-                PID_cleardata(&Gyro_PID);
-                PID_cleardata(&Gyro_PD_PID);
-                PID_cleardata(&Left_PID);
-                PID_cleardata(&Right_PID);
-                OLED_CLS();
-            }
-            else
-            {
-                OLED_Show_Str(0, 0, "NTrace", TextSize_F6x8);
-                OLED_Show_Numbers(45, 0, (int)Gyro_Integral, TextSize_F6x8);
-                OLED_Show_Str(0, 1, "Out", TextSize_F6x8);
-                OLED_Show_Numbers(45, 1, (int)Gyro_PID_Out, TextSize_F6x8);
-                OLED_Show_Str(0, 4, "Fan", TextSize_F6x8);
-                OLED_Show_Numbers(45, 4, Debug_Fan_Duty, TextSize_F6x8);
-                OLED_Show_Str(0, 5, "1.Save", TextSize_F6x8);
-                OLED_Show_Str(0, 6, "0.Stop", TextSize_F6x8);
+//                 Debug_Motor_Enable = 1;
+//                 Gyro_Integral = 0;
+//                 Debug_Angle_D_First = 0;
+//                 PID_cleardata(&Angle_PID);
+//                 PID_cleardata(&Turn_PID);
+//                 PID_cleardata(&Gyro_PID);
+//                 PID_cleardata(&Gyro_PD_PID);
+//                 PID_cleardata(&Left_PID);
+//                 PID_cleardata(&Right_PID);
+//                 OLED_CLS();
+//             }
+//             else
+//             {
+//                 OLED_Show_Str(0, 0, "NTrace", TextSize_F6x8);
+//                 OLED_Show_Numbers(45, 0, (int)Gyro_Integral, TextSize_F6x8);
+//                 OLED_Show_Str(0, 1, "Out", TextSize_F6x8);
+//                 OLED_Show_Numbers(45, 1, (int)Gyro_PID_Out, TextSize_F6x8);
+//                 OLED_Show_Str(0, 4, "Fan", TextSize_F6x8);
+//                 OLED_Show_Numbers(45, 4, Debug_Fan_Duty, TextSize_F6x8);
+//                 OLED_Show_Str(0, 5, "1.Save", TextSize_F6x8);
+//                 OLED_Show_Str(0, 6, "0.Stop", TextSize_F6x8);
 
-                key = CH455_GetOneKey();
-                if (key > 0x0F && key != KEY_BLANK)
-                    key = (key - 0x0F) >> 4;
+//                 key = CH455_GetOneKey();
+//                 if (key > 0x0F && key != KEY_BLANK)
+//                     key = (key - 0x0F) >> 4;
 
-                if (key == 1)
-                {
-                    PID_OKb[4] = (uint32)(Angle_PID.kp * 100.0f);
-                    PID_OKb[5] = (uint32)(Angle_PID.kd * 100.0f);
-                    PID_OKb[8] = (uint32)(Gyro_PD_PID.kp * 1000.0f);
-                    PID_OKb[9] = (uint32)(Gyro_PD_PID.kd * 1000.0f);
-                    DBG_OKb[0] = (uint32)Debug_Target_Speed;
-                    DBG_OKb[1] = (uint32)Debug_Fan_Duty;
-                    DBG_OKb[2] = (uint32)Debug_Ground_Dir;
-                    DBG_OKb[3] = (uint32)Debug_Angle_Mode;
-                    flash_erase_page(0, 1);
-                    flash_write_page(0, 1, PID_OKb, 13);
-                    flash_erase_page(0, 3);
-                    flash_write_page(0, 3, DBG_OKb, 4);
-                }
-                else if (key == 0)
-                {
-                    Debug_Motor_Enable = 0;
-                    OLED_CLS();
-                }
-            }
-        }
+//                 if (key == 1)
+//                 {
+//                     PID_OKb[4] = (uint32)(Angle_PID.kp * 100.0f);
+//                     PID_OKb[5] = (uint32)(Angle_PID.kd * 100.0f);
+//                     PID_OKb[8] = (uint32)(Gyro_PD_PID.kp * 1000.0f);
+//                     PID_OKb[9] = (uint32)(Gyro_PD_PID.kd * 1000.0f);
+//                     DBG_OKb[0] = (uint32)Debug_Target_Speed;
+//                     DBG_OKb[1] = (uint32)Debug_Fan_Duty;
+//                     DBG_OKb[2] = (uint32)Debug_Ground_Dir;
+//                     DBG_OKb[3] = (uint32)Debug_Angle_Mode;
+//                     flash_erase_page(0, 1);
+//                     flash_write_page(0, 1, PID_OKb, 13);
+//                     flash_erase_page(0, 3);
+//                     flash_write_page(0, 3, DBG_OKb, 4);
+//                 }
+//                 else if (key == 0)
+//                 {
+//                     Debug_Motor_Enable = 0;
+//                     OLED_CLS();
+//                 }
+//             }
+//         }
 
-        else  // 其他调试子模式（预留�?
-        {
-            OLED_Show_Str(20, 0, "Debug Idle", TextSize_F6x8);
-            OLED_Show_Str(0, 4, "TODO", TextSize_F6x8);
-        }
-        return;
-    }
+//         else  // 其他调试子模式（预留�?
+//         {
+//             OLED_Show_Str(20, 0, "Debug Idle", TextSize_F6x8);
+//             OLED_Show_Str(0, 4, "TODO", TextSize_F6x8);
+//         }
+//         return;
+//     }
 
-    // 原有建图/回放模式显示
-    OLED_Show_Str(20, 0, "Nothing or Best.", TextSize_F6x8);
+//     // 原有建图/回放模式显示
+//     OLED_Show_Str(20, 0, "Nothing or Best.", TextSize_F6x8);
 
-    OLED_Show_Str(0, 2, "L_Spd", TextSize_F6x8);
-    OLED_Show_Numbers(77, 2, Left_Exp_Spd, TextSize_F6x8);
+//     OLED_Show_Str(0, 2, "L_Spd", TextSize_F6x8);
+//     OLED_Show_Numbers(77, 2, Left_Exp_Spd, TextSize_F6x8);
 
-    OLED_Show_Str(0, 4, "R_Spd", TextSize_F6x8);
-    OLED_Show_Numbers(77, 4, Right_Exp_Spd, TextSize_F6x8);
+//     OLED_Show_Str(0, 4, "R_Spd", TextSize_F6x8);
+//     OLED_Show_Numbers(77, 4, Right_Exp_Spd, TextSize_F6x8);
 
-    OLED_Show_Str(0, 6, "Err", TextSize_F6x8);
-    OLED_Show_Numbers(77, 6, Error, TextSize_F6x8);
+//     OLED_Show_Str(0, 6, "Err", TextSize_F6x8);
+//     OLED_Show_Numbers(77, 6, Error, TextSize_F6x8);
 
-    OLED_Show_Light_Row();  // 显示光敏传感器状�?
-}
+//     OLED_Show_Light_Row();  // 显示光敏传感器状�?
+// }

@@ -1,33 +1,37 @@
 /*************************************************
 Copyright (C), 2016-2026, TYUT JBD TEAM C.
 File name: Uart_Adjust.c
-Description:  UART remote tuning protocol — implementation
-             Frame: @XXX=value#  (3-char key, '=' separator, '#' terminator)
-             Special: @STOP#  @RUN#
+Description:  UART remote tuning protocol — implementation.
+             Frame: @XXX=value# (3-char key, '=' separator, '#' terminator).
+             Special: @STOP# → key="STP" val=1 ; @RUN# → key="RUN" val=0.
              Works on UART_2, ISR feeds bytes, CPU1 loop calls Apply.
-Others:      依赖 headfiles.h (PID / Flash / Ctrl debug vars)
+Others:      All XXX keys are 3 chars (Apply uses strcmp on a 4-byte buffer).
 History:
-Cross_Z   2026.1.30   0.0   initial
-Claude    2026.6.28   0.1   add debug-mode commands (DLP/DLI/DRP/DRI/FAN/TGT/GDI/AMO/MEN/WHL/MOD/SAV)
+Cross_Z   2026.1.30   0.0  initial
+Claude    2026.6.28   0.1  debug-mode + Flash save commands
+Claude    2026.6.29   0.2  clean unused uart_* vars, fix BSP, add all keys
 **************************************************/
 
 #include "Uart_Adjust.h"
 #include "headfiles.h"
 
-/*********************************全局变量定义*********************************/
+/* ============================== supported commands ==============================
+
+  Stop/Run  : @STOP#  @RUN#
+  Speed PID : @LKP=val# / @DLP=val#   @LKI=val# / @DLI=val#   | kp×1  ki×0.01
+              @RKP=val# / @DRP=val#   @RKI=val# / @DRI=val#
+  Steer PID : @TKP=val#  @TKD=val#                          | ×0.01
+  Gyro PID  : @GKP=val#  @GKI=val#  @GKD=val#              | ×0.001
+  Base      : @BSP=val#   (Basic_Speed + Debug_Target_Speed)
+  Debug     : @FAN=val#   @TGT=val#   @GDI=val#(1 or 2)
+              @AMO=val#(1/2)  @MEN=val#(toggle if value matches)
+              @WHL=val#   @MOD=val#(0=PI 1=GroundTest 2=Angle 3=NormTrace)
+  Flash     : @SAV=val#   (any value, triggers save)
+============================================================================= */
+
 uart_tuning_cmd_t g_tuning_cmd = {0};
-uint16 g_tuning_msg_count = 0;
 
-uint8 uart_tuning_mode = 1;
-uint8 uart_track_mode = 0;
-uint8 uart_enable = 0;
-
-int16 uart_left_target = 0;
-int16 uart_right_target = 0;
-float uart_gyro_target = 0.0f;
-int16 uart_suction_power = 0;
-
-/**********************************static functions**********************************/
+/* ============================== static helpers ============================== */
 
 static float uart_tuning_atof(const char *str)
 {
@@ -50,11 +54,27 @@ static float uart_tuning_atof(const char *str)
     return result * sign;
 }
 
+/*
+ *  Parse a complete frame (already delimited by '@' … '#') into g_tuning_cmd.
+ *
+ *  Supported formats:
+ *    @STOP#           → key="STP"  val=1    (no '=')
+ *    @RUN#            → key="RUN"  val=0
+ *    @XXX=value#      → key="XXX"  val=parsed float  (3-char key, '=' required)
+ *
+ *  frame: points to '@' (byte-parser stored '@' in buf[0])
+ *  len:   number of bytes before '#'
+ */
 static void uart_tuning_parse_frame(const char *frame, uint8 len)
 {
-    /* ----- special: @STOP# (5 chars) ----- */
-    if (len == 5 && frame[0] == '@' && frame[1] == 'S'
-        && frame[2] == 'T' && frame[3] == 'O' && frame[4] == 'P')
+    /* ---------- @STOP#  or  @STP# ---------- */
+    if ((len == 5 && frame[0] == '@'
+         && frame[1] == 'S' && frame[2] == 'T'
+         && frame[3] == 'O' && frame[4] == 'P')
+        ||
+        (len == 4 && frame[0] == '@'
+         && frame[1] == 'S' && frame[2] == 'T'
+         && frame[3] == 'P'))
     {
         g_tuning_cmd.key[0] = 'S'; g_tuning_cmd.key[1] = 'T';
         g_tuning_cmd.key[2] = 'P'; g_tuning_cmd.key[3] = '\0';
@@ -62,9 +82,10 @@ static void uart_tuning_parse_frame(const char *frame, uint8 len)
         g_tuning_cmd.valid = 1;
         return;
     }
-    /* ----- special: @RUN# (4 chars) ----- */
-    if (len == 4 && frame[0] == '@' && frame[1] == 'R'
-        && frame[2] == 'U' && frame[3] == 'N')
+
+    /* ---------- @RUN# ---------- */
+    if (len == 4 && frame[0] == '@'
+        && frame[1] == 'R' && frame[2] == 'U' && frame[3] == 'N')
     {
         g_tuning_cmd.key[0] = 'R'; g_tuning_cmd.key[1] = 'U';
         g_tuning_cmd.key[2] = 'N'; g_tuning_cmd.key[3] = '\0';
@@ -73,6 +94,8 @@ static void uart_tuning_parse_frame(const char *frame, uint8 len)
         return;
     }
 
+    /* ---------- @XXX=value# (generic) ---------- */
+    /* minimum: @X=Y# → 6 bytes.  frame[0]='@', frame[4]='=' */
     if (len < 6) return;
     if (frame[0] != '@') return;
     if (frame[4] != '=') return;
@@ -84,9 +107,12 @@ static void uart_tuning_parse_frame(const char *frame, uint8 len)
 
     g_tuning_cmd.value = uart_tuning_atof(&frame[5]);
     g_tuning_cmd.valid = 1;
-    g_tuning_msg_count++;
 }
 
+/*
+ *  Per-byte state machine.  '@' starts a frame, '#' ends it.
+ *  Buffer size 32 = enough for "@XXX=-123.456" (~14 bytes) + margin.
+ */
 static void uart_tuning_parse_byte(uint8 byte)
 {
     static uint8 buf[32];
@@ -100,29 +126,28 @@ static void uart_tuning_parse_byte(uint8 byte)
         buf[idx++] = byte;
         return;
     }
-    else if (receiving)
+
+    if (!receiving) return;          // garbage between frames — ignore
+
+    if (byte == '#')
     {
-        if (byte == '#')
-        {
-            buf[idx] = '\0';
-            receiving = 0;
-            uart_tuning_parse_frame((const char *)buf, idx);
-            idx = 0;
-        }
-        else if (idx < sizeof(buf) - 1)
-        {
-            buf[idx++] = byte;
-        }
-        else
-        {
-            idx = 0;
-            receiving = 0;
-        }
-        return;
+        buf[idx] = '\0';
+        receiving = 0;
+        uart_tuning_parse_frame((const char *)buf, idx);
+        idx = 0;
+    }
+    else if (idx < sizeof(buf) - 1)
+    {
+        buf[idx++] = byte;
+    }
+    else                              // overflow — discard
+    {
+        idx = 0;
+        receiving = 0;
     }
 }
 
-/**********************************public API**********************************/
+/* ============================== public API ============================== */
 
 void Uart_Adjust_ParseByte(uint8 byte)
 {
@@ -131,11 +156,11 @@ void Uart_Adjust_ParseByte(uint8 byte)
 
 void Uart_Adjust_Apply(void)
 {
-    extern int Stop_Flag;  // from Ctrl.c
+    extern int Stop_Flag;
 
     if (!g_tuning_cmd.valid) return;
 
-    /* ---------- 紧急停车 / 恢复 ---------- */
+    /* ---------- stop / resume ---------- */
     if (strcmp(g_tuning_cmd.key, "STP") == 0)
     {
         Stop_Flag = 1;
@@ -144,27 +169,28 @@ void Uart_Adjust_Apply(void)
     {
         Stop_Flag = 0;
     }
-    /* ---------- 赛车 PID 参数 ---------- */
-    else if (strcmp(g_tuning_cmd.key, "LKP") == 0)
+    /* ---------- wheel-speed PID ---------- */
+    else if (strcmp(g_tuning_cmd.key, "LKP") == 0 || strcmp(g_tuning_cmd.key, "DLP") == 0)
     {
         Left_PID.kp = g_tuning_cmd.value;
         PID_cleardata(&Left_PID);
     }
-    else if (strcmp(g_tuning_cmd.key, "LKI") == 0)
+    else if (strcmp(g_tuning_cmd.key, "LKI") == 0 || strcmp(g_tuning_cmd.key, "DLI") == 0)
     {
         Left_PID.ki = g_tuning_cmd.value * 0.01f;
         PID_cleardata(&Left_PID);
     }
-    else if (strcmp(g_tuning_cmd.key, "RKP") == 0)
+    else if (strcmp(g_tuning_cmd.key, "RKP") == 0 || strcmp(g_tuning_cmd.key, "DRP") == 0)
     {
         Right_PID.kp = g_tuning_cmd.value;
         PID_cleardata(&Right_PID);
     }
-    else if (strcmp(g_tuning_cmd.key, "RKI") == 0)
+    else if (strcmp(g_tuning_cmd.key, "RKI") == 0 || strcmp(g_tuning_cmd.key, "DRI") == 0)
     {
         Right_PID.ki = g_tuning_cmd.value * 0.01f;
         PID_cleardata(&Right_PID);
     }
+    /* ---------- steering / gyro PID ---------- */
     else if (strcmp(g_tuning_cmd.key, "TKP") == 0)
     {
         Turn_PID.kp = g_tuning_cmd.value * 0.01f;
@@ -177,35 +203,17 @@ void Uart_Adjust_Apply(void)
     }
     else if (strcmp(g_tuning_cmd.key, "GKP") == 0)
         Gyro_PID.kp = g_tuning_cmd.value * 0.001f;
+    else if (strcmp(g_tuning_cmd.key, "GKI") == 0)
+        Gyro_PID.ki = g_tuning_cmd.value * 0.001f;
     else if (strcmp(g_tuning_cmd.key, "GKD") == 0)
         Gyro_PID.kd = g_tuning_cmd.value * 0.001f;
-    /* ---------- 赛车模式 ---------- */
-    else if (strcmp(g_tuning_cmd.key, "SPD") == 0)
-        uart_suction_power = (int16)g_tuning_cmd.value;
+    /* ---------- base speed ---------- */
     else if (strcmp(g_tuning_cmd.key, "BSP") == 0)
     {
         Basic_Speed = (int16)g_tuning_cmd.value;
         Debug_Target_Speed = (int16)g_tuning_cmd.value;
     }
-    else if (strcmp(g_tuning_cmd.key, "ENA") == 0)
-        uart_enable = (uint8)g_tuning_cmd.value;
-    else if (strcmp(g_tuning_cmd.key, "EXL") == 0)
-        uart_left_target = (int16)g_tuning_cmd.value;
-    else if (strcmp(g_tuning_cmd.key, "EXR") == 0)
-        uart_right_target = (int16)g_tuning_cmd.value;
-    else if (strcmp(g_tuning_cmd.key, "GTR") == 0)
-        uart_gyro_target = g_tuning_cmd.value;
-    else if (strcmp(g_tuning_cmd.key, "TRK") == 0)
-        uart_track_mode = (uint8)g_tuning_cmd.value;
-    /* ---------- Debug 调参模式 ---------- */
-    else if (strcmp(g_tuning_cmd.key, "DLP") == 0)
-        Debug_Kp_Left = g_tuning_cmd.value;
-    else if (strcmp(g_tuning_cmd.key, "DLI") == 0)
-        Debug_Ki_Left = g_tuning_cmd.value * 0.01f;
-    else if (strcmp(g_tuning_cmd.key, "DRP") == 0)
-        Debug_Kp_Right = g_tuning_cmd.value;
-    else if (strcmp(g_tuning_cmd.key, "DRI") == 0)
-        Debug_Ki_Right = g_tuning_cmd.value * 0.01f;
+    /* ---------- debug parameters ---------- */
     else if (strcmp(g_tuning_cmd.key, "FAN") == 0)
         Debug_Fan_Duty = (int)g_tuning_cmd.value;
     else if (strcmp(g_tuning_cmd.key, "TGT") == 0)
@@ -215,7 +223,7 @@ void Uart_Adjust_Apply(void)
     else if (strcmp(g_tuning_cmd.key, "AMO") == 0)
         Debug_Angle_Mode = ((uint8)g_tuning_cmd.value == 2) ? 2 : 1;
     else if (strcmp(g_tuning_cmd.key, "MEN") == 0)
-        Debug_Motor_Enable = (uint8)g_tuning_cmd.value;
+        Debug_Motor_Enable = (g_tuning_cmd.value > 0) ? 1 : 0;
     else if (strcmp(g_tuning_cmd.key, "WHL") == 0)
         Debug_Which_Wheel = (uint8)g_tuning_cmd.value;
     else if (strcmp(g_tuning_cmd.key, "MOD") == 0)
@@ -229,7 +237,7 @@ void Uart_Adjust_Apply(void)
         default: break;
         }
     }
-    /* ---------- Flash 保存 ---------- */
+    /* ---------- Flash save ---------- */
     else if (strcmp(g_tuning_cmd.key, "SAV") == 0)
         Uart_Adjust_SaveToFlash();
 
@@ -238,14 +246,15 @@ void Uart_Adjust_Apply(void)
 
 void Uart_Adjust_SaveToFlash(void)
 {
-    PID_OKb[0] = (uint32)Debug_Kp_Left;
-    PID_OKb[1] = (uint32)(Debug_Ki_Left * 100.0f);
-    PID_OKb[2] = (uint32)Debug_Kp_Right;
-    PID_OKb[3] = (uint32)(Debug_Ki_Right * 100.0f);
+    PID_OKb[0] = (uint32)Left_PID.kp;
+    PID_OKb[1] = (uint32)(Left_PID.ki * 100.0f);
+    PID_OKb[2] = (uint32)Right_PID.kp;
+    PID_OKb[3] = (uint32)(Right_PID.ki * 100.0f);
     PID_OKb[4] = (uint32)(Turn_PID.kp * 100.0f);
     PID_OKb[5] = (uint32)(Turn_PID.kd * 100.0f);
     PID_OKb[6] = (uint32)(Gyro_PID.kp * 1000.0f);
-    PID_OKb[7] = (uint32)(Gyro_PID.kd * 1000.0f);
+    PID_OKb[7] = (uint32)(Gyro_PID.ki * 1000.0f);
+    PID_OKb[8] = (uint32)(Gyro_PID.kd * 1000.0f);
 
     Speed_OKb[0] = (uint32)Debug_Target_Speed;
 
@@ -258,8 +267,8 @@ void Uart_Adjust_SaveToFlash(void)
     flash_write_page(0, 0, Speed_OKb, 1);
 
     flash_erase_page(0, 1);
-    flash_write_page(0, 1, PID_OKb, 8);
+    flash_write_page(0, 1, PID_OKb, 13);
 
-    flash_erase_page(0, 2);
-    flash_write_page(0, 2, DBG_OKb, 4);
+    flash_erase_page(0, 3);
+    flash_write_page(0, 3, DBG_OKb, 4);
 }

@@ -19,16 +19,6 @@ typedef struct
 
 /*********************************全局变量声明*********************************/
 extern uart_tuning_cmd_t g_tuning_cmd;
-extern uint16 g_tuning_msg_count;
-
-extern uint8 uart_tuning_mode;
-extern uint8 uart_track_mode;
-extern uint8 uart_enable;
-
-extern int16 uart_left_target;
-extern int16 uart_right_target;
-extern float uart_gyro_target;
-extern int16 uart_suction_power;
 
 /* Flash 存储数组（定义在 OLEDKeyboard.c 中） */
 extern uint32 PID_OKb[13];

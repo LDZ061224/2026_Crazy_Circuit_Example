@@ -328,6 +328,10 @@ isr.o :	..\user\isr.h
 ..\user\isr.h :
 isr.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :
+isr.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Uart_Adjust.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Uart_Adjust.h" :
+isr.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :
 isr.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Fun.h"
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Fun.h" :
 isr.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
@@ -372,3 +376,9 @@ isr.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Ctrl.h"
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Ctrl.h" :
 isr.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :
+isr.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Uart_Adjust.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Uart_Adjust.h" :
+isr.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Debug_Car.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Debug_Car.h" :
+isr.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Ctrl.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Ctrl.h" :

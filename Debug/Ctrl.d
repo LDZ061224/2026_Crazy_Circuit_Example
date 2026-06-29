@@ -366,3 +366,5 @@ Ctrl.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDkeyboard.h"
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDkeyboard.h" :
 Ctrl.o :	..\code\Ctrl.h
 ..\code\Ctrl.h :
+Ctrl.o :	..\code\Debug_Car.h
+..\code\Debug_Car.h :

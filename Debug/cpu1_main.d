@@ -366,3 +366,11 @@ cpu1_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Ctrl.h"
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Ctrl.h" :
 cpu1_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :
+cpu1_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Uart_Adjust.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Uart_Adjust.h" :
+cpu1_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :
+cpu1_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\WS2812.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\WS2812.h" :
+cpu1_main.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
+"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :

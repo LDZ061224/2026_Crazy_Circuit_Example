@@ -19,6 +19,7 @@
 #include "headfiles.h"
 #include "zf_driver_uart.h"
 #include "isr.h"
+#include "WS2812.h"
 
 #pragma section all "cpu0_dsram"
 // 将后续代码段放到 CPU0 的 DSRAM 中，便于快速访问。
@@ -46,11 +47,10 @@ int core0_main(void)
     gpio_set_level(P33_4, 0);
     TCA9555_Init();
     // OLED_Input();        // OLED 不可用，跳过按键初始化
-    // OLED_Data_Load();    // Flash 参数由 Ctrl.c 默认值 + 串口调参覆盖
-    uart_init(UART_0, 115200, UART0_TX_P14_0, UART0_RX_P14_1);
-    uart_rx_interrupt(UART_0, 1);           // 开启串口 0 接收中断（@STOP# 紧急停车）
+    Data_Load();    // 从 Flash 加载 PID + 速度 + DBG 参数
+    WS2812_Init();  // 灯板初始化
 
-    /* 串口2：调参命令接收（新房车 OLED 不可用时的替代方案） */
+    /* 串口2：调参命令接收（新车 OLED 不可用时的替代方案） */
     uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
     uart_rx_interrupt(UART_2, 1);           // 开启串口 2 接收中断
 
@@ -72,21 +72,15 @@ int core0_main(void)
     /* 主循环只做持续型调试发送，不阻塞控制中断。 */
     while (TRUE)
     {
-//       for(int i = 0; i < 15; i++)
-//       {
-//           TCA9555_LED_Ctrl(LED[i], 1);
-//       }
-
-        // 周期性发送调试数据，供上位机查看运行状态。
-        //Wit_Send_Data();  // 无线模块未连接，使用VOFA有线调试
         Vofa_Send_Data();
-        // system_delay_ms(1);
+        WS2812_Effect_Update();             // render + push LED frame
+//        system_delay_ms(1);
 //        gpio_toggle_level(P33_4);
 //         system_delay_ms(10);
-//        pwm_set_duty(Left_Motor_IN1, 8000);
-//        pwm_set_duty(Left_Motor_IN2, 0);
-//        pwm_set_duty(Right_Motor_IN1, 0);
-//        pwm_set_duty(Right_Motor_IN2, 8000);
+        // pwm_set_duty(Left_Motor_DIR, 10000);
+        // pwm_set_duty(Left_Motor_PWM, 6000);
+         pwm_set_duty(Right_Motor_DIR, 10000);
+         pwm_set_duty(Right_Motor_PWM, 6000);
 //        pwm_set_duty(Suction_Motor_IN1, 9500);
 //        pwm_set_duty(Suction_Motor_IN2, 10000);
 

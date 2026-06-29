@@ -21,6 +21,7 @@ Cross_Z   2026.1.30    0.0
 
 #include "Ctrl.h"
 
+#include "Debug_Car.h"
 /*********************************  *********************************/
 
 /*------------------------------*/
@@ -81,6 +82,7 @@ float Check_Edge_Skip_Thresh = 0;      // Edge-detect cooldown mileage threshold
 float Check_Edge_Skip_Mileage_Base = 0; // Count.Mileage snapshot when cooldown started
 int Enable_Start_Delay_Count = 0;
 uint8_t Last_EnableSwitch_ON = 0;
+uint8_t g_led_flag = 0;                        // Build mode LED flag (P33_4 replaced by WS2812)
 int Middle = 0;
 float Gyro_Integral = 0;
 float Mileage_Element_Base = 0;
@@ -96,7 +98,7 @@ float Turn_Begin_Mileage = 0;
 
 
 
-int8_t Dir_Arr[15] = {18, 16, 13, 9, 6, 3, 1, 0, -1, -3, -6, -9, -13, -16, -18};
+int16_t Dir_Arr[15] = {18, 16, 13, 9, 6, 3, 1, 0, -1, -3, -6, -9, -13, -16, -18};
 int16 Check_Edge_Count = 0;
 uint8_t Force_Straight_Speed = 0;
 uint8_t Current_Element_Dir = 0;    // Direction of current element action (1=left, 2=right, 3=short-straight, 4=long-straight)
@@ -142,10 +144,7 @@ uint8  Debug_Angle_Mode = 2;                         // 1=sine rate target, 2=90
 uint8  Debug_Angle_D_First = 0;                      // 0=error D, 1=measurement D
 float  Debug_Angle_Vel_Target = 0.0f;
 float  Debug_Angle_Vel_Real = 0.0f;
-float  Debug_Kp_Left  = 250.0f;
-float  Debug_Ki_Left  = 65.0f;
-float  Debug_Kp_Right = 250.0f;
-float  Debug_Ki_Right = 65.0f;
+
 
 /*---------------?/s ??---------------*/
 
@@ -175,7 +174,6 @@ uint8 vofa_flash_dump_mode = 0;
 
 #define GYRO_INTEGRATION_PERIOD_S 0.003f
 #define NORMAL_GYRO_OUT_STEP_MAX 12.0f   // Normal trace steering slew limit per 3ms tick
-#define DEBUG_ANGLE_STEP_TICKS 667U      // Angle debug: 90-degree target changes every 2s
 
 /*---------------Flash----------------*/
 /*
@@ -891,7 +889,7 @@ void Safety_Check(void)
         {
             stop_beep_count = 0;
         }
-        gpio_set_level(P33_4, (stop_beep_count < 60) ? 1 : 0);
+        g_led_flag = (stop_beep_count < 60) ? 1 : 0;
     }
     else
     {
@@ -952,339 +950,21 @@ void Car_Go()
         }
     }
 
-    if (Mode == Debug_Mode)
-    {
-
-        switch (Debug_Sub_Mode)
-        {
-            case Debug_Sub_PI_Tuning:   Debug_Wheel_Tuning();   break;
-            case Debug_Sub_Ground_Test: Debug_Ground_Test();     break;
-            case Debug_Sub_Angle:       Debug_Angle_Tuning();   break;
-            case Debug_Sub_NormalTrace: Debug_Normal_Trace();   break;
-            default:                    Debug_Wheel_Tuning();   break;
-        }
-        return;
-    }
-
     Set_Speed();
 
-    Set_Out();
+    // Set_Out();
 }
 
 
-/*************************************
-** Function: Debug_Wheel_Tuning
-** Description: PI3ms?
-** Details:   Debug_Motor_Enable=0 ? + PID
-**            Debug_Motor_Enable=1 ?PI?Debug_Set_Out
-**             Debug_Which_Wheel (0)?1)
-**            Kp/Ki  Debug_Kp_Left/Right
-**             Debug_Target_Speed
-** Note:     MUet_Speed
-*************************************/
-void Debug_Wheel_Tuning(void)
-{
-    if (Debug_Motor_Enable == 0)
-    {
-
-        Left_PID_Out  = 0;
-        Right_PID_Out = 0;
-        PID_cleardata(&Left_PID);
-        PID_cleardata(&Right_PID);
-    }
-    else  // Debug_Motor_Enable == 1
-    {
-        float kp, ki;
-//        Debug_Which_Wheel = 1;
-        if (Debug_Which_Wheel == 0)
-        {
-
-            kp = Debug_Kp_Left;
-            ki = Debug_Ki_Left;
-
-            Left_PID.kp  = kp;
-            Left_PID.ki  = ki;
-            Left_Exp_Spd = Debug_Target_Speed;
-            Right_Exp_Spd = 0;
-
-            Left_PID_Out  = PID_calc(&Left_PID, (float)Left_Exp_Spd, (float)Left_Real_Spd);
-            Right_PID_Out = 0;
-            PID_cleardata(&Right_PID);
-        }
-        else
-        {
-
-            kp = Debug_Kp_Right;
-            ki = Debug_Ki_Right;
-
-            Right_PID.kp  = kp;
-            Right_PID.ki  = ki;
-            Right_Exp_Spd = Debug_Target_Speed;
-            Left_Exp_Spd  = 0;
-
-            Right_PID_Out = PID_calc(&Right_PID, (float)Right_Exp_Spd, (float)Right_Real_Spd);
-            Left_PID_Out  = 0;
-            PID_cleardata(&Left_PID);
-        }
-    }
-
-    Debug_Set_Out();
-    pwm_set_duty(Suction_Motor_PWM, 0);
-    pwm_set_duty(Suction_Motor_DIR, 0);
-}
-
-/*************************************
-** Function: Debug_Ground_Test
-** Description:  +
-*************************************/
-void Debug_Ground_Test(void)
-{
-    if (Debug_Motor_Enable == 1 && EnableSwitch_ON == 1)
-    {
-        Left_PID.kp  = Debug_Kp_Left;
-        Left_PID.ki  = Debug_Ki_Left;
-        Right_PID.kp = Debug_Kp_Right;
-        Right_PID.ki = Debug_Ki_Right;
-
-        if(Debug_Ground_Dir == 1)
-        {
-            Left_Exp_Spd  = Debug_Target_Speed;
-            Right_Exp_Spd = -Debug_Target_Speed;
-        }
-        else if(Debug_Ground_Dir == 2)
-        {
-            Left_Exp_Spd  = -Debug_Target_Speed;
-            Right_Exp_Spd = Debug_Target_Speed;
-        }
-
-        Left_PID_Out  = PID_calc(&Left_PID, (float)Left_Exp_Spd, (float)Left_Real_Spd);
-        Right_PID_Out = PID_calc(&Right_PID, (float)Right_Exp_Spd, (float)Right_Real_Spd);
-    }
-    else
-    {
-        Left_Exp_Spd  = 0;
-        Right_Exp_Spd = 0;
-        Left_PID_Out  = 0;
-        Right_PID_Out = 0;
-        PID_cleardata(&Left_PID);
-        PID_cleardata(&Right_PID);
-    }
-    Debug_Set_Out();
-}
-/*************************************
-** Function: Debug_Angle_Tuning
-** Description: ?
-*************************************/
-void Debug_Angle_Tuning(void)
-{
-    static uint32 angle_tick = 0;
-    float angle_target;
-    float gyro_target;
-
-    if (Debug_Motor_Enable == 0 || EnableSwitch_ON == 0)
-    {
-        angle_tick = 0;
-        Gyro_Integral = 0;
-        Turn_PID_Out = 0;
-        Gyro_PID_Out = 0;
-        Debug_Angle_Vel_Target = 0;
-        Debug_Angle_Vel_Real = 0;
-        Left_Exp_Spd = 0;
-        Right_Exp_Spd = 0;
-        Left_PID_Out = 0;
-        Right_PID_Out = 0;
-        Debug_Angle_D_First = 0;
-        PID_cleardata(&Angle_PID);
-        PID_cleardata(&Gyro_PID);
-        PID_cleardata(&Gyro_PD_PID);
-        PID_cleardata(&Left_PID);
-        PID_cleardata(&Right_PID);
-        Debug_Set_Out();
-        return;
-    }
-
-    if (Debug_Angle_Mode == 2)
-    {
-        uint32 step_index = angle_tick / DEBUG_ANGLE_STEP_TICKS;
-        uint32 phase = step_index % 8U;
-        if (phase <= 4U)
-        {
-            angle_target = (float)phase * 90.0f;
-        }
-        else
-        {
-            angle_target = (float)(8U - phase) * 90.0f;
-        }
-
-        Debug_Angle_D_First = 1;
-        Turn_PID_Out = PID_calc(&Angle_PID, angle_target, Gyro_Integral);
-        gyro_target = Turn_PID_Out;
-    }
-    else
-    {
-        angle_target = 0;
-        Turn_PID_Out = 0;
-        Debug_Angle_D_First = 0;
-        gyro_target = 800.0f * sinf(6.2831853f * (float)(angle_tick % 333U) / 333.0f);
-    }
-
-    Debug_Angle_Vel_Target = gyro_target;
-    Debug_Angle_Vel_Real = Gyro_Z;
-    Gyro_PID_Out = PID_calc(&Gyro_PID, gyro_target, Gyro_Z);      // gyro rate target -> incremental PID
-
-    Left_Exp_Spd = Debug_Target_Speed + Gyro_PID_Out;
-    Right_Exp_Spd = Debug_Target_Speed - Gyro_PID_Out;
-
-    Left_PID.kp = Debug_Kp_Left;
-    Left_PID.ki = Debug_Ki_Left;
-    Right_PID.kp = Debug_Kp_Right;
-    Right_PID.ki = Debug_Ki_Right;
-    Left_PID_Out = PID_calc(&Left_PID, (float)Left_Exp_Spd, (float)Left_Real_Spd);
-    Right_PID_Out = PID_calc(&Right_PID, (float)Right_Exp_Spd, (float)Right_Real_Spd);
-
-    angle_tick++;
-    Debug_Set_Out();
-}
-/*************************************
-** Function: Debug_Normal_Trace
-** Description: ?
-*************************************/
-void Debug_Normal_Trace(void)
-{
-    if (Debug_Motor_Enable == 0 || EnableSwitch_ON == 0)
-    {
-        Error = 0;
-        Turn_PID_Out = 0;
-        Gyro_PID_Out = 0;
-        Debug_Angle_Vel_Target = 0;
-        Debug_Angle_Vel_Real = 0;
-        Left_Exp_Spd = 0;
-        Right_Exp_Spd = 0;
-        Left_PID_Out = 0;
-        Right_PID_Out = 0;
-        PID_cleardata(&Turn_PID);
-        PID_cleardata(&Angle_PID);
-        PID_cleardata(&Gyro_PID);
-        PID_cleardata(&Gyro_PD_PID);
-        PID_cleardata(&Left_PID);
-        PID_cleardata(&Right_PID);
-        Debug_Set_Out();
-        return;
-    }
-
-    if (Track_Num > 0)
-    {
-        Middle = (Track_Arr[0] + Track_Arr[Track_Num - 1]) / 2;
-        Last_Error = Error;
-    }
-
-    if (Track_Num < 2)
-    {
-        Error = 0;
-    }
-    else
-    {
-        Left_Scan_Point = Track_Arr[0];
-        Right_Scan_Point = Track_Arr[Track_Num - 1];
-        Error = (Dir_Arr[Left_Scan_Point] + Dir_Arr[Right_Scan_Point]) / 2;
-    }
-
-    {
-        Turn_PID_Out = PID_calc(&Angle_PID, 0.0f, (float)Error);
-    }
-    Gyro_PID_Out = PID_calc(&Gyro_PID, Turn_PID_Out, Gyro_Z);
-
-    Debug_Angle_Vel_Target = Turn_PID_Out;
-    Debug_Angle_Vel_Real = Gyro_Z;
-
-    Left_Exp_Spd = Debug_Target_Speed + Gyro_PID_Out;
-    Right_Exp_Spd = Debug_Target_Speed - Gyro_PID_Out;
-
-    Left_PID.kp = Debug_Kp_Left;
-    Left_PID.ki = Debug_Ki_Left;
-    Right_PID.kp = Debug_Kp_Right;
-    Right_PID.ki = Debug_Ki_Right;
-
-    Left_PID_Out = PID_calc(&Left_PID, (float)Left_Exp_Spd, (float)Left_Real_Spd);
-    Right_PID_Out = PID_calc(&Right_PID, (float)Right_Exp_Spd, (float)Right_Real_Spd);
-    Debug_Set_Out();
-}
-/*************************************
-** Function: Debug_Set_Out
-** Description: PWM
-** Details:   //?Stop_Flag
-**            ?Left_PID_Out / Right_PID_Out H?
-**            ?000
-**            Debug_Motor_Enable=0?
-*************************************/
-void Debug_Set_Out(void)
-{
-
-//    pwm_set_duty(Suction_Motor_PWM, 0);
-//    pwm_set_duty(Suction_Motor_DIR, 0);
-    if (Debug_Motor_Enable != 0)
-    {
-        pwm_set_duty(Suction_Motor_PWM, Debug_Fan_Duty);
-        pwm_set_duty(Suction_Motor_DIR, 0);
-    }
-    else
-    {
-        pwm_set_duty(Suction_Motor_PWM, 0);
-        pwm_set_duty(Suction_Motor_DIR, 0);
-    }
-
-    if (Debug_Motor_Enable == 0 || Left_PID_Out == 0)
-    {
-        pwm_set_duty(Left_Motor_DIR, 0);
-        pwm_set_duty(Left_Motor_PWM, 0);
-    }
-    else if (Left_PID_Out > 0)   // forward
-    {
-        pwm_set_duty(Left_Motor_DIR, 0);
-        pwm_set_duty(Left_Motor_PWM, fabs(Left_PID_Out));
-    }
-    else                         // reverse
-    {
-        pwm_set_duty(Left_Motor_DIR, 10000);
-        pwm_set_duty(Left_Motor_PWM, fabs(Left_PID_Out));
-    }
-
-
-    if (Debug_Motor_Enable == 0 || Right_PID_Out == 0)
-    {
-        pwm_set_duty(Right_Motor_DIR, 0);
-        pwm_set_duty(Right_Motor_PWM, 0);
-    }
-    else if (Right_PID_Out > 0)  // forward
-    {
-        pwm_set_duty(Right_Motor_DIR, 0);
-        pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
-    }
-    else                         // reverse
-    {
-        pwm_set_duty(Right_Motor_DIR, 10000);
-        pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
-    }
-//    pwm_set_duty(Left_Motor_DIR, 0);
-//    pwm_set_duty(Left_Motor_PWM, 9000);
-//    pwm_set_duty(Right_Motor_DIR, 0);
-//    pwm_set_duty(Right_Motor_PWM, 6000);
-}
-
-/*************************************
-** Function: Get_Speed
-** Description: 6ms?FIR+?
-** Details:   traight_longqiu_motor_car?
-**            6ms??3-tap FIR ?Left_Real_Spd/Right_Real_Spd
-*************************************/
+/* Debug functions moved to Debug_Car.c */
 void Get_Speed()
 {
     int left_raw, right_raw;
     float instant_speed;
 
 
-    left_raw  =  1 * encoder_get_count(TIM4_ENCODER) / 3;
-    right_raw = -1 * encoder_get_count(TIM3_ENCODER) / 3;
+    right_raw  = encoder_get_count(TIM4_ENCODER);
+    left_raw =  encoder_get_count(TIM3_ENCODER);
     encoder_clear_count(TIM4_ENCODER);
     encoder_clear_count(TIM3_ENCODER);
 
@@ -1531,7 +1211,7 @@ void Normal_Run()
     if (Track_Num > 0)
     {
         Middle = (Track_Arr[0] + Track_Arr[Track_Num - 1]) / 2;
-        gpio_set_level(P33_4, 0);
+        g_led_flag = 0;
         Last_Error = Error;
     }
 
@@ -1563,7 +1243,7 @@ void Turn_Left_Run(void)
     if (Turn_Action_Done)
         return;
 
-    gpio_set_level(P33_4, 1);
+    g_led_flag = 1;
 
     if (Mode == Build_Mode)
     {
@@ -1627,7 +1307,7 @@ void Turn_Right_Run(void)
     if (Turn_Action_Done)
         return;
 
-    gpio_set_level(P33_4, 1);
+    g_led_flag = 1;
 
     if (Mode == Build_Mode)
     {
@@ -1686,7 +1366,7 @@ void Turn_Right_Run(void)
 *************************************/
 void Mileage_Mode_Run()
 {
-    gpio_set_level(P33_4, 1);
+    g_led_flag = 1;
     TCA9555_All_LED_On();
 
     float section_mileage = Count.Mileage - Mileage_Element_Base;
@@ -2020,12 +1700,12 @@ void Set_Out(void)
         }
         else if (Right_PID_Out > 0)  // forward
         {
-            pwm_set_duty(Right_Motor_DIR, 0);
+            pwm_set_duty(Right_Motor_DIR, 10000);
             pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
         }
         else                         // reverse
         {
-            pwm_set_duty(Right_Motor_DIR, 10000);
+            pwm_set_duty(Right_Motor_DIR, 0);
             pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
         }
     }
@@ -2048,7 +1728,7 @@ void Set_Out(void)
 *************************************/
 void Straight_Run(void)
 {
-    gpio_set_level(P33_4, 1);
+    g_led_flag = 1;
     Error = 0;
     Middle = Get_Track_Middle_Point();
 

@@ -21,7 +21,7 @@ SUV       2024.12.07  2.0        基于新库重构
 /***********************************函数声明***********************************/
 void OLED_Input(void);
 void OLED_Display(void);
-extern void OLED_Data_Load();
+extern void Data_Load();
 
 #endif
 

@@ -27,6 +27,7 @@ Cross_Z     2026.1.30      0.0        閸掓稑缂撻崚婵嗩潗閻楀牊婀?
 #define TRACK_SEGMENT_NUM_MAX   (NODE_NUM_MAX + 1)
 #define BUILD_ACTION_MAX        (NODE_NUM_MAX + (TRACK_SEGMENT_NUM_MAX * ELEMENT_NUM_MAX))
 #define TURN_MILEAGE_RECORD_MAX 120
+#define DEBUG_ANGLE_STEP_TICKS 667U          // Angle debug: 90-degree target changes every 2s
 
 #define SAFETY_LOW_VOLTAGE_THRESHOLD    10.9f
 
@@ -204,6 +205,11 @@ extern float Average_Speed;
 
 // 瀵邦亣鎶楃拠顖氭▕
 extern int Error;
+extern int   Track_Arr[15];
+extern int16_t Dir_Arr[15];
+extern int   Left_Scan_Point;
+extern int   Right_Scan_Point;
+extern int   Last_Error;
 
 // 閸忓鏅辨导鐘冲妳閸?
 extern uint16 Light_ADC[15];
@@ -286,6 +292,7 @@ extern uint8  Debug_Ground_Dir;             // 1=瀹革附顒滈崣鍐插冀, 2=
 extern uint8  Debug_Angle_Mode;             // 1=sin target, 2=step target
 extern uint8  Debug_Angle_D_First;          // 0=error D, 1=measurement D
 extern float  Debug_Angle_Vel_Target;       // VOFA: 鐟欐帡鈧喎瀹抽惄顔界垼
+extern uint8_t g_led_flag;                // Build mode LED: 1=blue, 0=green
 extern float  Debug_Angle_Vel_Real;         // VOFA: 鐎圭偤妾憴鎺椻偓鐔峰
 extern float  Debug_Kp_Left;               // 瀹革箒鐤嗙拫鍐槸Kp
 extern float  Debug_Ki_Left;               // 瀹革箒鐤嗙拫鍐槸Ki

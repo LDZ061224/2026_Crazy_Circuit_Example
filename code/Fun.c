@@ -92,7 +92,7 @@ void Vofa_Send_Data(void)
     frame[62] = 0x80;
     frame[63] = 0x7f;
 
-    uart_write_buffer(UART_0, frame, sizeof(frame));
+    uart_write_buffer(UART_2, frame, sizeof(frame));
 
     return;
 }
@@ -264,11 +264,13 @@ void Motor_Init()
     pwm_init(Left_Motor_DIR,  30000, 10000);
     pwm_init(Right_Motor_DIR, 30000, 10000);
     // duty PWM: 30kHz, start at 0
-    pwm_init(Left_Motor_PWM,  30000, 10000);
-    pwm_init(Right_Motor_PWM, 30000, 10000);
+    pwm_init(Left_Motor_PWM,  30000, 0);
+    pwm_init(Right_Motor_PWM, 30000, 0);
     // 风扇: DIR=0=吸风, duty=0
     pwm_init(Suction_Motor_DIR, 100000, 10000);
-    pwm_init(Suction_Motor_PWM, 100000, 10000);
+    pwm_init(Suction_Motor_PWM, 100000, 0);
+
+    system_delay_ms(10);
 }
 
 /*************************************
