@@ -111,9 +111,9 @@ void Vofa_Send_Flash_Data(void)
 
     uint16_t turn_count = Turn_Mileage_Record_Num;
     uint16_t edge_count = 0;
-    for (uint8_t r = 0; r <= Run_Track.Node_Num; r++)
+    for (uint8_t r = 0; r <= BUILD_NODE_NUM; r++)
     {
-        edge_count += Run_Track.Node_Arr_Mileage_Num[r];
+        edge_count += Mileage_Num_By_Segment[r];
     }
     uint16_t pos = 0;
 
@@ -123,9 +123,9 @@ void Vofa_Send_Flash_Data(void)
         vofa[pos].floatdata = Turn_Mileage_Record[i];
     }
     // 各路段边缘里程（按行展开，只取有效条目）
-    for (uint8_t r = 0; r <= Run_Track.Node_Num && pos < 50; r++)
+    for (uint8_t r = 0; r <= BUILD_NODE_NUM && pos < 50; r++)
     {
-        uint8_t num = Run_Track.Node_Arr_Mileage_Num[r];
+        uint8_t num = Mileage_Num_By_Segment[r];
         for (uint8_t c = 0; c < num && pos < 50; c++, pos++)
         {
             vofa[pos].floatdata = Segment_Edge_Mileage_Record[r][c];

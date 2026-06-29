@@ -45,6 +45,7 @@ uint8 Last_Light_Convert[15] = {0};
 /*-----------------PID----------------*/
 float Gyro_Z = 0;
 float Gyro_Z_For_PID = 0;
+float gyro_z_offset = 0;   // 陀螺仪Z轴零漂，上电校准时采集
 PID_HandleTypeDef Gyro_PID = GYRO_PID;     // Gyro rate incremental PID
 PID_HandleTypeDef Gyro_PD_PID = GYRO_PD_PID; // Gyro rate position PD for normal trace debug
 PID_HandleTypeDef Angle_PID = ANGLE_PID;   // Angle PD with derivative on measurement
@@ -112,7 +113,63 @@ static const uint8_t Track_Sensor_Active_Index[TRACK_SENSOR_ACTIVE_NUM] =
 };
 
 /*--------------------------*/
-Racing_track_Typedef Run_Track;
+// Default build actions (pre-computed from track map: 17 nodes + 14 elements = 31 actions)
+const Build_Action_Typedef Default_Build_Actions[BUILD_ACTION_COUNT] =
+{
+    // seg 0: 2 element short-straights + node straight
+    {BUILD_ACTION_ELEM_STRAIGHT_SHORT, 0, 0},
+    {BUILD_ACTION_ELEM_STRAIGHT_SHORT, 0, 1},
+    {BUILD_ACTION_NODE_STRAIGHT,        0, 0},
+    // seg 1: no elements + node left
+    {BUILD_ACTION_NODE_TURN_LEFT,       1, 0},
+    // seg 2: 2 element short-straights + node left
+    {BUILD_ACTION_ELEM_STRAIGHT_SHORT, 2, 0},
+    {BUILD_ACTION_ELEM_STRAIGHT_SHORT, 2, 1},
+    {BUILD_ACTION_NODE_TURN_LEFT,       2, 0},
+    // seg 3: no elements + node straight
+    {BUILD_ACTION_NODE_STRAIGHT,        3, 0},
+    // seg 4: 1 element short-straight + node left
+    {BUILD_ACTION_ELEM_STRAIGHT_SHORT, 4, 0},
+    {BUILD_ACTION_NODE_TURN_LEFT,       4, 0},
+    // seg 5: no elements + node straight
+    {BUILD_ACTION_NODE_STRAIGHT,        5, 0},
+    // seg 6: 1 element short-straight + node left
+    {BUILD_ACTION_ELEM_STRAIGHT_SHORT, 6, 0},
+    {BUILD_ACTION_NODE_TURN_LEFT,       6, 0},
+    // seg 7: no elements + node straight
+    {BUILD_ACTION_NODE_STRAIGHT,        7, 0},
+    // seg 8: no elements + node straight
+    {BUILD_ACTION_NODE_STRAIGHT,        8, 0},
+    // seg 9: 1 element turn-left + node straight
+    {BUILD_ACTION_ELEM_TURN_LEFT,       9, 0},
+    {BUILD_ACTION_NODE_STRAIGHT,        9, 0},
+    // seg 10: 1 element turn-left + node left
+    {BUILD_ACTION_ELEM_TURN_LEFT,      10, 0},
+    {BUILD_ACTION_NODE_TURN_LEFT,      10, 0},
+    // seg 11: 1 element short-straight + node right
+    {BUILD_ACTION_ELEM_STRAIGHT_SHORT, 11, 0},
+    {BUILD_ACTION_NODE_TURN_RIGHT,     11, 0},
+    // seg 12: no elements + node right
+    {BUILD_ACTION_NODE_TURN_RIGHT,     12, 0},
+    // seg 13: 1 element short-straight + node left
+    {BUILD_ACTION_ELEM_STRAIGHT_SHORT, 13, 0},
+    {BUILD_ACTION_NODE_TURN_LEFT,      13, 0},
+    // seg 14: no elements + node left
+    {BUILD_ACTION_NODE_TURN_LEFT,      14, 0},
+    // seg 15: 1 element short-straight + node straight
+    {BUILD_ACTION_ELEM_STRAIGHT_SHORT, 15, 0},
+    {BUILD_ACTION_NODE_STRAIGHT,       15, 0},
+    // seg 16: no elements + node left
+    {BUILD_ACTION_NODE_TURN_LEFT,      16, 0},
+    // seg 17: 2 element short-straights (last segment, no node)
+    {BUILD_ACTION_ELEM_STRAIGHT_SHORT, 17, 0},
+    {BUILD_ACTION_ELEM_STRAIGHT_SHORT, 17, 1},
+};
+
+// Per-segment element count (Mileage_Num from original track map)
+const uint8 Mileage_Num_By_Segment[BUILD_NODE_NUM + 1] =
+    {2,0,2,0,1,0,1,0,0,1,1,1,0,1,0,1,0,2};
+
 int8_t Execute_Times = 0;
 int8_t Mileage_Times = 0;
 uint8_t Line_Num_Count = 0;
@@ -241,11 +298,9 @@ static void Record_Turn_Mileage(void);
 static void Record_Segment_Edge_Mileage(void);
 static uint8_t Is_Turn_Angle_Settled(float angle_target);
 static uint8_t Is_Track_Sensor_Adjacent(uint8_t left_index, uint8_t right_index);
-static void Build_Rebuild_Action_List_From_RunTrack(void);
+static void Build_Load_Default_Action_List(void);
 static void Build_Dispatch_Current_Action(void);
 static void Build_Finish_Current_Action(void);
-static Build_Action_Enum Build_Node_Dir_To_Action(uint8_t node_dir);
-static Build_Action_Enum Build_Element_Dir_To_Action(uint8_t element_dir);
 static uint8_t Build_Action_To_Element_Dir(Build_Action_Enum action);
 
 /********************************* ?*********************************/
@@ -270,31 +325,6 @@ static uint8_t Is_Track_Sensor_Adjacent(uint8_t left_index, uint8_t right_index)
     return 0;
 }
 
-// Map node direction (0=straight,1=left,2=right) to action type
-static Build_Action_Enum Build_Node_Dir_To_Action(uint8_t node_dir)
-{
-    switch (node_dir)
-    {
-        case 0:  return BUILD_ACTION_NODE_STRAIGHT;
-        case 1:  return BUILD_ACTION_NODE_TURN_LEFT;
-        case 2:  return BUILD_ACTION_NODE_TURN_RIGHT;
-        default: return BUILD_ACTION_NONE;
-    }
-}
-
-// Map element direction (0=none,1=left,2=right,3=short-straight,4=long-straight) to action type
-static Build_Action_Enum Build_Element_Dir_To_Action(uint8_t element_dir)
-{
-    switch (element_dir)
-    {
-        case 1:  return BUILD_ACTION_ELEM_TURN_LEFT;
-        case 2:  return BUILD_ACTION_ELEM_TURN_RIGHT;
-        case 3:  return BUILD_ACTION_ELEM_STRAIGHT_SHORT;
-        case 4:  return BUILD_ACTION_ELEM_STRAIGHT_LONG;
-        default: return BUILD_ACTION_NONE;
-    }
-}
-
 // Extract element direction (1~4) from action type. Returns 0 for node actions.
 static uint8_t Build_Action_To_Element_Dir(Build_Action_Enum action)
 {
@@ -308,41 +338,13 @@ static uint8_t Build_Action_To_Element_Dir(Build_Action_Enum action)
     }
 }
 
-static void Build_Rebuild_Action_List_From_RunTrack(void)
+static void Build_Load_Default_Action_List(void)
 {
-    uint8_t seg;
-    Build_Action_Count = 0;
+    Build_Action_Count = BUILD_ACTION_COUNT;
     Build_Action_Index = 0;
     Build_Action_Active_Index = 0;
     memset(Build_Action_List, 0, sizeof(Build_Action_List));
-
-    for (seg = 0; seg <= Run_Track.Node_Num && seg < TRACK_SEGMENT_NUM_MAX; seg++)
-    {
-        uint8_t elem;
-        uint8_t mileage_num = Run_Track.Node_Arr_Mileage_Num[seg];
-
-        if (mileage_num > ELEMENT_NUM_MAX)
-        {
-            mileage_num = ELEMENT_NUM_MAX;
-        }
-
-        for (elem = 0; elem < mileage_num && Build_Action_Count < BUILD_ACTION_MAX; elem++)
-        {
-            Build_Action_List[Build_Action_Count].action =
-                Build_Element_Dir_To_Action(Run_Track.Node_Arr_Mileage_Dir[seg][elem]);
-            Build_Action_List[Build_Action_Count].segment_index = seg;
-            Build_Action_List[Build_Action_Count].element_index = elem;
-            Build_Action_Count++;
-        }
-
-        if (seg < Run_Track.Node_Num && Build_Action_Count < BUILD_ACTION_MAX)
-        {
-            Build_Action_List[Build_Action_Count].action = Build_Node_Dir_To_Action(Run_Track.Node_Arr_Dir[seg]);
-            Build_Action_List[Build_Action_Count].segment_index = seg;
-            Build_Action_List[Build_Action_Count].element_index = 0;
-            Build_Action_Count++;
-        }
-    }
+    memcpy(Build_Action_List, Default_Build_Actions, sizeof(Default_Build_Actions));
 }
 
 static void Build_Finish_Current_Action(void)
@@ -359,7 +361,7 @@ static void Build_Finish_Current_Action(void)
         {
             In_Line_Ele_Count++;
 
-            if (In_Line_Ele_Count >= Run_Track.Node_Arr_Mileage_Num[Execute_Times])
+            if (In_Line_Ele_Count >= Mileage_Num_By_Segment[Execute_Times])
             {
                 Line_Num_Count++;
             }
@@ -370,8 +372,7 @@ static void Build_Finish_Current_Action(void)
         }
     }
 
-    if (Build_Action_Index >= Build_Action_Count ||
-        (Run_Track.Stop_Mode == 1 && Line_Num_Count >= Run_Track.Node_Num))
+    if (Build_Action_Index >= Build_Action_Count)
     {
         Finish_Flag = 1;
     }
@@ -391,7 +392,7 @@ static void Build_Dispatch_Current_Action(void)
     action = &Build_Action_List[Build_Action_Index];
     Execute_Times = action->segment_index;
     In_Line_Ele_Count = action->element_index;
-    Mileage_Times = Run_Track.Node_Arr_Mileage_Num[Execute_Times];
+    Mileage_Times = Mileage_Num_By_Segment[Execute_Times];
 
     //===== Dispatch by action type =====
     switch (action->action)
@@ -998,7 +999,7 @@ void Get_IMU()
 {
     imu660rb_get_gyro();
 
-    float gyro_raw = imu660rb_gyro_transition(imu660rb_gyro_z);
+    float gyro_raw = imu660rb_gyro_transition(imu660rb_gyro_z) - gyro_z_offset;
     uint8 debug_angle_run = (Mode == Debug_Mode
         && (Debug_Sub_Mode == Debug_Sub_Angle || Debug_Sub_Mode == Debug_Sub_NormalTrace)
         && Debug_Motor_Enable == 1);
@@ -1167,8 +1168,8 @@ void Build_Mode_Get_Error()
         In_Line_Ele_Count = 0;
         Build_Action_Index = 0;
         Build_Action_Active_Index = 0;
-        Build_Rebuild_Action_List_From_RunTrack();                    // Expand nodes/elements to unified action list
-        Mileage_Times = Run_Track.Node_Arr_Mileage_Num[Execute_Times]; // Load first segment element count
+        Build_Load_Default_Action_List();                             // Load default build actions
+        Mileage_Times = Mileage_Num_By_Segment[Execute_Times]; // Load first segment element count
         Turn_Mileage_Record_Num = 0;
         Last_Turn_Mileage_Base = 0;
         memset(Turn_Mileage_Record, 0, sizeof(Turn_Mileage_Record));
@@ -1302,8 +1303,6 @@ void Turn_Left_Run(void)
 *************************************/
 void Turn_Right_Run(void)
 {
-    TCA9555_All_LED_On();
-
     if (Turn_Action_Done)
         return;
 
@@ -1367,7 +1366,6 @@ void Turn_Right_Run(void)
 void Mileage_Mode_Run()
 {
     g_led_flag = 1;
-    TCA9555_All_LED_On();
 
     float section_mileage = Count.Mileage - Mileage_Element_Base;
 

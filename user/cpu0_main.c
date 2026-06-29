@@ -50,6 +50,41 @@ int core0_main(void)
     Data_Load();    // 从 Flash 加载 PID + 速度 + DBG 参数
     WS2812_Init();  // 灯板初始化
 
+    // ========================= 陀螺仪除零漂校准 =========================
+    // 校准期间：负压开到最大，灯板红灯呼吸，提醒用户保持车辆静止
+    pwm_set_duty(Suction_Motor_DIR, 0);
+    pwm_set_duty(Suction_Motor_PWM, 9500);
+
+    WS2812_Effect_Set((WS2812_Effect_Config){
+        .type = EFF_BREATHING,
+        .r = 255, .g = 0, .b = 0,
+        .period_ms = 1000
+    });
+
+    #define GYRO_CALIB_SAMPLES 500
+    int32_t gyro_z_sum = 0;
+    for (int calib_i = 0; calib_i < GYRO_CALIB_SAMPLES; calib_i++)
+    {
+        imu660rb_get_gyro();
+        gyro_z_sum += imu660rb_gyro_z;
+        WS2812_Effect_Update();
+        system_delay_ms(5);
+    }
+
+    // 计算零漂（物理单位 °/s）
+    float gyro_z_offset_raw = (float)gyro_z_sum / GYRO_CALIB_SAMPLES;
+    gyro_z_offset = imu660rb_gyro_transition(gyro_z_offset_raw);
+
+    // 校准结束：关负压，绿灯常亮
+    pwm_set_duty(Suction_Motor_PWM, 0);
+
+    WS2812_Effect_Set((WS2812_Effect_Config){
+        .type = EFF_SOLID,
+        .r = 0, .g = 255, .b = 0
+    });
+    WS2812_Effect_Update();
+    // ========================= 陀螺仪除零漂校准 END =========================
+
     /* 串口2：调参命令接收（新车 OLED 不可用时的替代方案） */
     uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
     uart_rx_interrupt(UART_2, 1);           // 开启串口 2 接收中断
@@ -77,8 +112,8 @@ int core0_main(void)
 //        system_delay_ms(1);
 //        gpio_toggle_level(P33_4);
 //         system_delay_ms(10);
-        // pwm_set_duty(Left_Motor_DIR, 10000);
-        // pwm_set_duty(Left_Motor_PWM, 6000);
+         pwm_set_duty(Left_Motor_DIR, 10000);
+         pwm_set_duty(Left_Motor_PWM, 6000);
          pwm_set_duty(Right_Motor_DIR, 10000);
          pwm_set_duty(Right_Motor_PWM, 6000);
 //        pwm_set_duty(Suction_Motor_IN1, 9500);

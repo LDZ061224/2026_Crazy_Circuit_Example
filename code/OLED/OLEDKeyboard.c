@@ -67,47 +67,17 @@ typedef struct
 /*===============================================================================
   内部函数声明
 ================================================================================*/
-static void OLED_Apply_Build_Mode_To_RunTrack(void);
+static void OLED_Apply_Build_Mode(void);
 static void OLED_Save_Build_Mode_Map_To_Flash(void);
 static void OLED_Load_Build_Mode_Map_From_Flash(void);
 static void OLED_Build_Mode_Input(void);
 
 /*===============================================================================
   Default track map (used when key '1' is pressed in Build input)
-  Direction codes:
-    Node: 0=straight  1=left  2=right
-    Element: 0=none  1=turn-left  2=turn-right  3=short-straight  4=long-straight
+  Now defined in Ctrl.c as Default_Build_Actions[] + Mileage_Num_By_Segment[].
 ================================================================================*/
 // Segment 0 is "start -> node 0". If mileage_num[0]=0, run starts from the first node.
-#define DEFAULT_BUILD_MAP_NODE_NUM    17
 
-static const uint8 Default_Build_Map_Node_Dir[DEFAULT_BUILD_MAP_NODE_NUM] =
-    {0,1,1,0,1,0,1,0,0,0,1,2,2,1,1,0,1};
-static const uint8 Default_Build_Map_Mileage_Num[DEFAULT_BUILD_MAP_NODE_NUM + 1] =
-    {2,0,2,0,1,0,1,0,0,1,1,1,0,1,0,1,0,2};
-
-// Element direction per segment: {0}=none, {1}=left, {2}=right, {3}=short-straight, {4}=long-straight
-static const uint8 Default_Build_Map_Mileage_Dir[DEFAULT_BUILD_MAP_NODE_NUM + 1][ELEMENT_NUM_MAX] =
-{
-    {3,3},         // seg 3: two short straights
-    {0},           // seg 4: no elements
-    {3,3},         // seg 5: two short straights
-    {0},           // seg 6: no elements
-    {3},           // seg 7: short straight
-    {0},           // seg 8: no elements
-    {3},           // seg 9: short straight
-    {0},           // seg 10: no elements
-    {0},           // seg 11: no elements
-    {1},           // seg 12: turn-left element
-    {1},           // seg 13: turn-left element
-    {3},           // seg 14: short straight
-    {0},           // seg 15: no elements
-    {3},           // seg 16: short straight
-    {0},           // seg 17: no elements
-    {3},           // seg 18: short straight
-    {0},           // seg 19: no elements
-    {3,3}          // seg 20: two short straights (last segment)
-};
 /**
  * @brief   将数字数组转换为字符串并在OLED显示
  * @param   x       显示横坐�?
@@ -138,26 +108,19 @@ static void OLED_Load_Default_Build_Mode_Map(void)
     uint8 row;
     uint8 i;
 
-    // 加载节点数量与方�?
-    Flash_Node_Num = DEFAULT_BUILD_MAP_NODE_NUM;
-    for (i = 0; i < Flash_Node_Num; i++)
+    Flash_Node_Num = BUILD_NODE_NUM;
+
+    // Load default per-segment counts from Ctrl.c constants
+    for (row = 0; row <= BUILD_NODE_NUM; row++)
     {
-        Flash_Node_Dir[i] = Default_Build_Map_Node_Dir[i];
+        Flash_Node_Mileage_Num[row] = Mileage_Num_By_Segment[row];
     }
 
-    // 加载各段里程数量与方�?
-    for (row = 0; row <= Flash_Node_Num; row++)
-    {
-        Flash_Node_Mileage_Num[row] = Default_Build_Map_Mileage_Num[row];
+    // Copy default action list directly to runtime array
+    Build_Action_Count = BUILD_ACTION_COUNT;
+    memcpy(Build_Action_List, Default_Build_Actions, sizeof(Default_Build_Actions));
 
-        for (i = 0; i < Flash_Node_Mileage_Num[row]; i++)
-        {
-            mileage_dir[row][i] = Default_Build_Map_Mileage_Dir[row][i];
-        }
-    }
-
-    OLED_Apply_Build_Mode_To_RunTrack();
-    OLED_Save_Build_Mode_Map_To_Flash();
+    // FIXME: flash map save skipped (format changed)
 }
 
 /**
@@ -237,33 +200,49 @@ static uint8 OLED_Read_Digit_Line(uint8 title[], uint8 show_hint, uint8 show_row
 /**
  * @brief   将建图缓存数据应用到运行赛道结构�?Run_Track
  */
-static void OLED_Apply_Build_Mode_To_RunTrack(void)
+static void OLED_Apply_Build_Mode(void)
 {
-    uint8 row;
-    uint8 i;
+    uint8 seg, elem;
+    uint8 count = 0;
 
-    Run_Track = Pre_Contest_1;
-
-    // Apply node direction to Run_Track
-    Run_Track.Node_Num = Flash_Node_Num;
-    for (i = 0; i < Flash_Node_Num; i++)
+    for (seg = 0; seg <= Flash_Node_Num && seg < TRACK_SEGMENT_NUM_MAX; seg++)
     {
-        Run_Track.Node_Arr_Dir[i] = Flash_Node_Dir[i];
-    }
+        uint8 mnum = Flash_Node_Mileage_Num[seg];
+        if (mnum > ELEMENT_NUM_MAX) mnum = ELEMENT_NUM_MAX;
 
-    // Apply per-segment element directions
-    for (row = 0; row <= Flash_Node_Num; row++)
-    {
-        Run_Track.Node_Arr_Mileage_Num[row] = Flash_Node_Mileage_Num[row];
-
-        for (i = 0; i < Flash_Node_Mileage_Num[row]; i++)
+        // Elements first
+        for (elem = 0; elem < mnum && count < BUILD_ACTION_MAX; elem++)
         {
-            // Direction codes are preserved directly — they map to new
-            // BUILD_ACTION_ELEM_* enums via Build_Element_Dir_To_Action()
-            Run_Track.Node_Arr_Mileage_Dir[row][i] = mileage_dir[row][i];
-            Run_Track.Node_Arr_Mileage_Element[row][i] = 0;
+            switch (mileage_dir[seg][elem])
+            {
+                case 1: Build_Action_List[count].action = BUILD_ACTION_ELEM_TURN_LEFT;     break;
+                case 2: Build_Action_List[count].action = BUILD_ACTION_ELEM_TURN_RIGHT;    break;
+                case 3: Build_Action_List[count].action = BUILD_ACTION_ELEM_STRAIGHT_SHORT; break;
+                case 4: Build_Action_List[count].action = BUILD_ACTION_ELEM_STRAIGHT_LONG;  break;
+                default: Build_Action_List[count].action = BUILD_ACTION_NONE; break;
+            }
+            Build_Action_List[count].segment_index = seg;
+            Build_Action_List[count].element_index = elem;
+            count++;
+        }
+
+        // Then node (if within node count)
+        if (seg < Flash_Node_Num && count < BUILD_ACTION_MAX)
+        {
+            switch (Flash_Node_Dir[seg])
+            {
+                case 0: Build_Action_List[count].action = BUILD_ACTION_NODE_STRAIGHT;  break;
+                case 1: Build_Action_List[count].action = BUILD_ACTION_NODE_TURN_LEFT; break;
+                case 2: Build_Action_List[count].action = BUILD_ACTION_NODE_TURN_RIGHT; break;
+                default: Build_Action_List[count].action = BUILD_ACTION_NONE; break;
+            }
+            Build_Action_List[count].segment_index = seg;
+            Build_Action_List[count].element_index = 0;
+            count++;
         }
     }
+
+    Build_Action_Count = count;
 }
 
 /**
@@ -347,7 +326,7 @@ static void OLED_Load_Build_Mode_Map_From_Flash(void)
     }
 
     // 应用到运行赛�?
-    OLED_Apply_Build_Mode_To_RunTrack();
+OLED_Apply_Build_Mode();
 }
 
 /**
@@ -409,9 +388,8 @@ static void OLED_Build_Mode_Input(void)
         OLED_CLS();
     }
 
-    // 应用并保�?
-    OLED_Apply_Build_Mode_To_RunTrack();
-    OLED_Save_Build_Mode_Map_To_Flash();
+    OLED_Apply_Build_Mode();
+    // FIXME: OLED_Save_Build_Mode_Map_To_Flash(); // flash format changed
 }
 
 /**
@@ -434,23 +412,21 @@ static void OLED_Show_Light_Row(void)
 static void OLED_View_Mileage_Data(void)
 {
     uint16 seg, elem, ele_num, total_ele, tr_page, tr_pages;
-    uint8  node_dir, edir, row;
+    uint8  row;
     char   buf[22];
-    const char *dname;
 
-    OLED_Load_Build_Mode_Map_From_Flash();
     Load_All_Flash_Data_For_VOFA();
 
     // 统计元素总数
     total_ele = 0;
-    for (seg = 0; seg <= Run_Track.Node_Num; seg++)
-        total_ele += Run_Track.Node_Arr_Mileage_Num[seg];
+    for (seg = 0; seg <= BUILD_NODE_NUM; seg++)
+        total_ele += Mileage_Num_By_Segment[seg];
 
     //===== Page 0: 摘要 (F8x16 大字) =====
     OLED_CLS();
-    sprintf(buf, "Nodes:%d", Run_Track.Node_Num);
+    sprintf(buf, "Nodes:%d", BUILD_NODE_NUM);
     OLED_Show_Str(0, 0, buf, TextSize_F8x16);
-    sprintf(buf, "Segs:%d", Run_Track.Node_Num + 1);
+    sprintf(buf, "Segs:%d", BUILD_NODE_NUM + 1);
     OLED_Show_Str(64, 0, buf, TextSize_F8x16);
 
     sprintf(buf, "Turns:%d", Turn_Mileage_Record_Num);
@@ -458,31 +434,23 @@ static void OLED_View_Mileage_Data(void)
     sprintf(buf, "Elems:%d", total_ele);
     OLED_Show_Str(64, 2, buf, TextSize_F8x16);
 
-    sprintf(buf, "Stop:%s", Run_Track.Stop_Mode ? "par" : "ser");
+    sprintf(buf, "Actions:%d", BUILD_ACTION_COUNT);
     OLED_Show_Str(0, 4, buf, TextSize_F8x16);
     CH455_GetOneKey();
 
     //===== 逐段显示：所有段，一页一�?=====
-    for (seg = 0; seg <= Run_Track.Node_Num && seg < TRACK_SEGMENT_NUM_MAX; seg++)
+    for (seg = 0; seg <= BUILD_NODE_NUM && seg < TRACK_SEGMENT_NUM_MAX; seg++)
     {
-        ele_num = Run_Track.Node_Arr_Mileage_Num[seg];
+        ele_num = Mileage_Num_By_Segment[seg];
         OLED_CLS();
 
-        // Row 0: 段标�?F8x16 + 节点方向
-        if (seg < Run_Track.Node_Num)
-        {
-            node_dir = Run_Track.Node_Arr_Dir[seg];
-            dname = (node_dir == 0) ? "NodeStr" : (node_dir == 1) ? "NodeL90" :
-                    (node_dir == 2) ? "NodeR90" : "?";
-            sprintf(buf, "Seg%d/%d", seg, Run_Track.Node_Num);
-        }
-        else
-        {
-            dname = "End";
-            sprintf(buf, "Seg%d/%d", seg, Run_Track.Node_Num);
-        }
+        // Row 0: 段标�?F8x16
+        sprintf(buf, "Seg%d/%d", seg, BUILD_NODE_NUM);
         OLED_Show_Str(0, 0, buf, TextSize_F8x16);
-        OLED_Show_Str(56, 0, dname, TextSize_F8x16);
+        if (ele_num > 0)
+            OLED_Show_Str(56, 0, "Elem", TextSize_F8x16);
+        else
+            OLED_Show_Str(56, 0, "Node", TextSize_F8x16);
 
         // Rows 2+: 元素详情 (F6x8)
         if (ele_num == 0)
@@ -504,18 +472,7 @@ static void OLED_View_Mileage_Data(void)
             row = 2;
             for (elem = 0; elem < ele_num && row <= 6; elem++)
             {
-                edir = Run_Track.Node_Arr_Mileage_Dir[seg][elem];
-                if (edir == 0) continue;
-
-                switch (edir)
-                {
-                    case 1: dname = "ElemL";   break;
-                    case 2: dname = "ElemR";   break;
-                    case 3: dname = "ElemSS";  break;
-                    case 4: dname = "ElemLS";  break;
-                    default: dname = "?";     break;
-                }
-                sprintf(buf, "E%d %s @%.0f", elem, dname,
+                sprintf(buf, "E%d @%.0f", elem + 1,
                         Segment_Edge_Mileage_Record[seg][elem]);
                 OLED_Show_Str(1, row, buf, TextSize_F6x8);
                 row++;

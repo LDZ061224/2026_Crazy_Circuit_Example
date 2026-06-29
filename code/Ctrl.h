@@ -29,6 +29,10 @@ Cross_Z     2026.1.30      0.0        閸掓稑缂撻崚婵嗩潗閻楀牊婀?
 #define TURN_MILEAGE_RECORD_MAX 120
 #define DEBUG_ANGLE_STEP_TICKS 667U          // Angle debug: 90-degree target changes every 2s
 
+// Build mode default track constants
+#define BUILD_NODE_NUM          17
+#define BUILD_ACTION_COUNT      31
+
 #define SAFETY_LOW_VOLTAGE_THRESHOLD    10.9f
 
 #define GYRO_PID { \
@@ -164,21 +168,6 @@ typedef struct
     int     Stall;       // 閸絻娴嗙拋鈩冩殶
 } Count_Typedef;
 
-/**
- * @brief 鐠ф盯浜炬穱鈩冧紖缂佹挻鐎担鎿勭礄鐎涙ê鍋嶉懞鍌滃仯閵嗕礁鍘撶槐鐘偓浣规煙閸氭垯鈧線鍣风粙瀣剁礆
- */
-typedef struct
-{
-    uint8_t Node_Arr_Dir[NODE_NUM_MAX];
-    uint8_t Node_Arr_Mileage_Num[TRACK_SEGMENT_NUM_MAX];
-    uint8_t Node_Arr_Mileage_Dir[TRACK_SEGMENT_NUM_MAX][ELEMENT_NUM_MAX];
-    int     Node_Arr_Mileage_Normal[TRACK_SEGMENT_NUM_MAX][ELEMENT_NUM_MAX];
-    int     Node_Arr_Mileage_Element[TRACK_SEGMENT_NUM_MAX][ELEMENT_NUM_MAX];
-    uint8_t Node_Num;
-    uint8_t Element_Num;    // 閺堝鏅ラ崗鍐閹粯鏆?
-    uint8_t Stop_Mode;      // 閸嬫粏婧呭Ο鈥崇础
-} Racing_track_Typedef;
-
 typedef struct
 {
     Build_Action_Enum        action;
@@ -252,27 +241,20 @@ extern float  Total_Run_Mileage;       // 閹槒绻嶇悰宀勫櫡缁嬪�
 // 缂佹挻鐎担鎾崇杽娓?
 extern Count_Typedef Count;
 extern Mode_Define Mode;
-extern float Gyro_Z_For_PID; // PID閻劑妾ч摶杞板崕Z鏉炲瓨鏆熼幑?
+extern float Gyro_Z_For_PID; // PID使用的陀螺仪Z轴角速度
+extern float gyro_z_offset;  // 陀螺仪Z轴零漂（上电校准）
 // 瑜版挸澧犳潻鎰攽閻樿埖鈧?
 extern Run_Mode_Enum       Run_Mode;
 extern Mileage_Stage_Enum  Mileage_Stage;
-extern Racing_track_Typedef Run_Track;
 extern Build_Action_Typedef Build_Action_List[BUILD_ACTION_MAX];
+extern const Build_Action_Typedef Default_Build_Actions[BUILD_ACTION_COUNT];
+extern const uint8 Mileage_Num_By_Segment[BUILD_NODE_NUM + 1];
 
 // Flash闁插瞼鈻奸弫鐗堝祦閿涘湸OFA鐎电厧鍤悽顭掔礆
 extern float Segment_Edge_Mileage_Record[TRACK_SEGMENT_NUM_MAX][ELEMENT_NUM_MAX];
 extern float Segment_Total_Mileage[TRACK_SEGMENT_NUM_MAX];
 extern float Turn_Mileage_Record[TURN_MILEAGE_RECORD_MAX];
 extern uint16_t Turn_Mileage_Record_Num;
-// 妫板嫯绂岀挧娑壕
-extern Racing_track_Typedef Pre_Contest_1;
-extern Racing_track_Typedef Pre_Contest_2;
-extern Racing_track_Typedef Pre_Contest_3;
-
-// 閸愬疇绂岀挧娑壕
-extern Racing_track_Typedef Final_Contest_1;
-extern Racing_track_Typedef Final_Contest_2;
-extern Racing_track_Typedef Final_Contest_3;
 
 // PID 閹貉冨煑閸?
 extern PID_HandleTypeDef Gyro_PID;
