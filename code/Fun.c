@@ -245,7 +245,7 @@ void Light_Init()
 void Encoder_Init()
 {
     // 左电机编码器初始化
-    encoder_quad_init(TIM2_ENCODER, TIM2_ENCODER_CH1_P00_7, TIM2_ENCODER_CH2_P00_8);
+    encoder_quad_init(TIM4_ENCODER, TIM4_ENCODER_CH1_P02_8, TIM4_ENCODER_CH2_P00_9);
     // 右电机编码器初始化
     encoder_quad_init(TIM3_ENCODER, TIM3_ENCODER_CH1_P02_6, TIM3_ENCODER_CH2_P02_7);
 }
@@ -260,15 +260,15 @@ void Encoder_Init()
 *************************************/
 void Motor_Init()
 {
-    // 左电机两路PWM初始化，频率30000Hz，初始占空比0
-    pwm_init(Left_Motor_IN1,    30000, 0);
-    pwm_init(Left_Motor_IN2,    30000, 0);
-    // 右电机两路PWM初始化，频率30000Hz，初始占空比0
-    pwm_init(Right_Motor_IN1,   30000, 0);
-    pwm_init(Right_Motor_IN2,   30000, 0);
-    // 吸风电机两路PWM初始化，频率70000Hz，初始占空比0
-    pwm_init(Suction_Motor_IN1, 100000, 0);
-    pwm_init(Suction_Motor_IN2, 100000, 0);
+    // DIR PWM: 10000=forward, 0=reverse, 30kHz
+    pwm_init(Left_Motor_DIR,  30000, 10000);
+    pwm_init(Right_Motor_DIR, 30000, 10000);
+    // duty PWM: 30kHz, start at 0
+    pwm_init(Left_Motor_PWM,  30000, 0);
+    pwm_init(Right_Motor_PWM, 30000, 0);
+    // 风扇: DIR=10000=吸风, duty=0
+    pwm_init(Suction_Motor_DIR, 100000, 10000);
+    pwm_init(Suction_Motor_PWM, 100000, 0);
 }
 
 /*************************************
@@ -284,8 +284,8 @@ void Other_Init()
     OLED_Init();                                  // OLED显示屏初始化
 //    gpio_init(P15_1,    GPO, 0, GPO_PUSH_PULL);
     gpio_init(P33_4,    GPO, 0, GPO_PUSH_PULL);   // 推挽输出GPIO初始化
-    gpio_init(P00_2,    GPI, 0, GPI_PULL_DOWN);   // 下拉输入GPIO初始化
-    gpio_init(P20_10,   GPI, 0, GPI_FLOATING_IN); // 浮空输入GPIO初始化
+    gpio_init(P20_7,    GPI, 0, GPI_PULL_DOWN);   // 使能开关输入
+    gpio_init(P22_3,    GPI, 0, GPI_PULL_DOWN);   // 自定义按键输入
     adc_init(ADC0_CH5_A5,   ADC_12BIT); // 电池电压检测ADC
     adc_init(ADC0_CH10_A10, ADC_12BIT); // 电池电流检测ADC
 }

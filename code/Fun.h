@@ -33,18 +33,20 @@ typedef union floatu8data
 }floatu8data;
 
 /*********************************** 硬件引脚宏定义 ***********************************/
-#define Left_Motor_IN1      ATOM0_CH7_P20_8
-#define Left_Motor_IN2      ATOM2_CH6_P13_1
-//#define Left_Motor_IN2      ATOM2_CH6_P15_3
-//#define Left_Motor_IN1      ATOM2_CH0_P20_12
-//#define Left_Motor_IN2      ATOM2_CH4_P11_9
-#define Right_Motor_IN1     ATOM1_CH2_P02_2
-#define Right_Motor_IN2     ATOM1_CH0_P02_8
-#define Suction_Motor_IN1   ATOM2_CH0_P00_9
-#define Suction_Motor_IN2   ATOM3_CH3_P00_12
+/*
+ *  新车 PWM 驱动方式：
+ *    _PWM = 占空比通道
+ *    _DIR = 方向通道（PWM, 10000=正转/吸风, 0=反转）
+ */
+#define Left_Motor_PWM      ATOM3_CH1_P15_7
+#define Left_Motor_DIR      ATOM3_CH0_P15_5
+#define Right_Motor_PWM     ATOM1_CH3_P00_4
+#define Right_Motor_DIR     ATOM1_CH5_P00_6
+#define Suction_Motor_PWM   ATOM1_CH6_P00_7
+#define Suction_Motor_DIR   ATOM3_CH3_P00_12
 
-// 使能开关判断宏：P00_2引脚为高电平表示开启
-#define EnableSwitch_ON     gpio_get_level(P00_2) == 1
+// 使能开关：P20_7 高电平 = 开启
+#define EnableSwitch_ON     gpio_get_level(P20_7) == 1
 
 /********************************* 全局外部变量声明 *********************************/
 // 15路光敏传感器ADC原始值数组

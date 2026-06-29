@@ -872,12 +872,12 @@ void Safety_Check(void)
 
     if (Stop_Flag != 0)
     {
-        pwm_set_duty(Suction_Motor_IN1, 0);
-        pwm_set_duty(Suction_Motor_IN2, 0);
-        pwm_set_duty(Left_Motor_IN1, 0);
-        pwm_set_duty(Left_Motor_IN2, 0);
-        pwm_set_duty(Right_Motor_IN1, 0);
-        pwm_set_duty(Right_Motor_IN2, 0);
+        pwm_set_duty(Suction_Motor_PWM, 0);
+        pwm_set_duty(Suction_Motor_DIR, 0);
+        pwm_set_duty(Left_Motor_DIR, 0);
+        pwm_set_duty(Left_Motor_PWM, 0);
+        pwm_set_duty(Right_Motor_DIR, 0);
+        pwm_set_duty(Right_Motor_PWM, 0);
 
         Left_Exp_Spd = 0;
         Right_Exp_Spd = 0;
@@ -1029,8 +1029,8 @@ void Debug_Wheel_Tuning(void)
     }
 
     Debug_Set_Out();
-    pwm_set_duty(Suction_Motor_IN1, 0);
-    pwm_set_duty(Suction_Motor_IN2, 0);
+    pwm_set_duty(Suction_Motor_PWM, 0);
+    pwm_set_duty(Suction_Motor_DIR, 0);
 }
 
 /*************************************
@@ -1220,55 +1220,55 @@ void Debug_Normal_Trace(void)
 void Debug_Set_Out(void)
 {
 
-//    pwm_set_duty(Suction_Motor_IN1, 0);
-//    pwm_set_duty(Suction_Motor_IN2, 0);
+//    pwm_set_duty(Suction_Motor_PWM, 0);
+//    pwm_set_duty(Suction_Motor_DIR, 0);
     if (Debug_Motor_Enable != 0)
     {
-        pwm_set_duty(Suction_Motor_IN1, Debug_Fan_Duty);
-        pwm_set_duty(Suction_Motor_IN2, 10000);
+        pwm_set_duty(Suction_Motor_PWM, Debug_Fan_Duty);
+        pwm_set_duty(Suction_Motor_DIR, 10000);
     }
     else
     {
-        pwm_set_duty(Suction_Motor_IN1, 0);
-        pwm_set_duty(Suction_Motor_IN2, 0);
+        pwm_set_duty(Suction_Motor_PWM, 0);
+        pwm_set_duty(Suction_Motor_DIR, 0);
     }
 
     if (Debug_Motor_Enable == 0 || Left_PID_Out == 0)
     {
-        pwm_set_duty(Left_Motor_IN1, 0);
-        pwm_set_duty(Left_Motor_IN2, 0);
+        pwm_set_duty(Left_Motor_DIR, 0);
+        pwm_set_duty(Left_Motor_PWM, 0);
     }
-    else if (Left_PID_Out < 0)
+    else if (Left_PID_Out > 0)   // forward
     {
-        pwm_set_duty(Left_Motor_IN1, 10000);
-        pwm_set_duty(Left_Motor_IN2, 10000 - fabs(Left_PID_Out));
+        pwm_set_duty(Left_Motor_DIR, 10000);
+        pwm_set_duty(Left_Motor_PWM, fabs(Left_PID_Out));
     }
-    else  // Left_PID_Out < 0
+    else                         // reverse
     {
-        pwm_set_duty(Left_Motor_IN1, 10000 - fabs(Left_PID_Out));
-        pwm_set_duty(Left_Motor_IN2, 10000);
+        pwm_set_duty(Left_Motor_DIR, 0);
+        pwm_set_duty(Left_Motor_PWM, fabs(Left_PID_Out));
     }
 
 
     if (Debug_Motor_Enable == 0 || Right_PID_Out == 0)
     {
-        pwm_set_duty(Right_Motor_IN1, 0);
-        pwm_set_duty(Right_Motor_IN2, 0);
+        pwm_set_duty(Right_Motor_DIR, 0);
+        pwm_set_duty(Right_Motor_PWM, 0);
     }
-    else if (Right_PID_Out < 0)
+    else if (Right_PID_Out > 0)  // forward
     {
-        pwm_set_duty(Right_Motor_IN1, 10000);
-        pwm_set_duty(Right_Motor_IN2, 10000 - fabs(Right_PID_Out));
+        pwm_set_duty(Right_Motor_DIR, 10000);
+        pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
     }
-    else  // Right_PID_Out < 0
+    else                         // reverse
     {
-        pwm_set_duty(Right_Motor_IN1, 10000 - fabs(Right_PID_Out));
-        pwm_set_duty(Right_Motor_IN2, 10000);
+        pwm_set_duty(Right_Motor_DIR, 0);
+        pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
     }
-//    pwm_set_duty(Left_Motor_IN1, 0);
-//    pwm_set_duty(Left_Motor_IN2, 9000);
-//    pwm_set_duty(Right_Motor_IN1, 0);
-//    pwm_set_duty(Right_Motor_IN2, 6000);
+//    pwm_set_duty(Left_Motor_DIR, 0);
+//    pwm_set_duty(Left_Motor_PWM, 9000);
+//    pwm_set_duty(Right_Motor_DIR, 0);
+//    pwm_set_duty(Right_Motor_PWM, 6000);
 }
 
 /*************************************
@@ -1283,10 +1283,10 @@ void Get_Speed()
     float instant_speed;
 
 
-    left_raw  =  1 * encoder_get_count(TIM3_ENCODER) / 3;
-    right_raw = -1 * encoder_get_count(TIM2_ENCODER) / 3;
+    left_raw  =  1 * encoder_get_count(TIM4_ENCODER) / 3;
+    right_raw = -1 * encoder_get_count(TIM3_ENCODER) / 3;
+    encoder_clear_count(TIM4_ENCODER);
     encoder_clear_count(TIM3_ENCODER);
-    encoder_clear_count(TIM2_ENCODER);
 
 
     giSpeed_Left[2] = giSpeed_Left[1];
@@ -1969,12 +1969,12 @@ void Set_Out(void)
         Enable_Start_Delay_Count--;
 
 
-        pwm_set_duty(Suction_Motor_IN1, 9520);
-        pwm_set_duty(Suction_Motor_IN2, 10000);
-        pwm_set_duty(Left_Motor_IN1, 0);
-        pwm_set_duty(Left_Motor_IN2, 0);
-        pwm_set_duty(Right_Motor_IN1, 0);
-        pwm_set_duty(Right_Motor_IN2, 0);
+        pwm_set_duty(Suction_Motor_PWM, 9520);
+        pwm_set_duty(Suction_Motor_DIR, 10000);
+        pwm_set_duty(Left_Motor_DIR, 0);
+        pwm_set_duty(Left_Motor_PWM, 0);
+        pwm_set_duty(Right_Motor_DIR, 0);
+        pwm_set_duty(Right_Motor_PWM, 0);
 
         PID_cleardata(&Left_PID);
         PID_cleardata(&Right_PID);
@@ -1983,13 +1983,13 @@ void Set_Out(void)
 
     if (EnableSwitch_ON && Stop_Flag == 0)
     {
-        pwm_set_duty(Suction_Motor_IN1, 9500);
-        pwm_set_duty(Suction_Motor_IN2, 10000);
+        pwm_set_duty(Suction_Motor_PWM, 9500);
+        pwm_set_duty(Suction_Motor_DIR, 10000);
     }
     else
     {
-        pwm_set_duty(Suction_Motor_IN1, 0);
-        pwm_set_duty(Suction_Motor_IN2, 10000);
+        pwm_set_duty(Suction_Motor_PWM, 0);
+        pwm_set_duty(Suction_Motor_DIR, 0);
     }
 
 
@@ -1998,49 +1998,43 @@ void Set_Out(void)
 
         if (Left_PID_Out == 0)
         {
-
-            pwm_set_duty(Left_Motor_IN1, 0);
-            pwm_set_duty(Left_Motor_IN2, 0);
+            pwm_set_duty(Left_Motor_DIR, 0);
+            pwm_set_duty(Left_Motor_PWM, 0);
         }
-        else if (Left_PID_Out < 0)
+        else if (Left_PID_Out > 0)   // forward
         {
-            pwm_set_duty(Left_Motor_IN1, 10000);
-            pwm_set_duty(Left_Motor_IN2, 10000 - fabs(Left_PID_Out));
+            pwm_set_duty(Left_Motor_DIR, 10000);
+            pwm_set_duty(Left_Motor_PWM, fabs(Left_PID_Out));
         }
-        else  // Left_PID_Out < 0
+        else                         // reverse
         {
-            pwm_set_duty(Left_Motor_IN1, 10000 - fabs(Left_PID_Out));
-            pwm_set_duty(Left_Motor_IN2, 10000);
+            pwm_set_duty(Left_Motor_DIR, 0);
+            pwm_set_duty(Left_Motor_PWM, fabs(Left_PID_Out));
         }
 
 
         if (Right_PID_Out == 0)
         {
-
-            pwm_set_duty(Right_Motor_IN2, 0);
-            pwm_set_duty(Right_Motor_IN1, 0);
+            pwm_set_duty(Right_Motor_DIR, 0);
+            pwm_set_duty(Right_Motor_PWM, 0);
         }
-        else if (Right_PID_Out > 0)
+        else if (Right_PID_Out > 0)  // forward
         {
-
-            pwm_set_duty(Right_Motor_IN2, 10000);
-            pwm_set_duty(Right_Motor_IN1, 10000 - fabs(Right_PID_Out));
+            pwm_set_duty(Right_Motor_DIR, 10000);
+            pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
         }
-        else  // Right_PID_Out < 0
+        else                         // reverse
         {
-
-            pwm_set_duty(Right_Motor_IN2, 10000 - fabs(Right_PID_Out));
-            pwm_set_duty(Right_Motor_IN1, 10000);
+            pwm_set_duty(Right_Motor_DIR, 0);
+            pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
         }
     }
     else
     {
-
-        pwm_set_duty(Left_Motor_IN1, 0);
-        pwm_set_duty(Left_Motor_IN2, 0);
-        pwm_set_duty(Right_Motor_IN1, 0);
-        pwm_set_duty(Right_Motor_IN2, 0);
-
+        pwm_set_duty(Left_Motor_DIR, 0);
+        pwm_set_duty(Left_Motor_PWM, 0);
+        pwm_set_duty(Right_Motor_DIR, 0);
+        pwm_set_duty(Right_Motor_PWM, 0);
 
         PID_cleardata(&Left_PID);
         PID_cleardata(&Right_PID);
