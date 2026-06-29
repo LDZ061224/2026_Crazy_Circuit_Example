@@ -45,10 +45,15 @@ int core0_main(void)
 //    spi_init(IMU660RB_SPI, SPI_MODE0, IMU660RB_SPI_SPEED, IMU660RB_SPC_PIN, IMU660RB_SDI_PIN, IMU660RB_SDO_PIN, SPI_CS_NULL);
     gpio_set_level(P33_4, 0);
     TCA9555_Init();
-    OLED_Input();
-    OLED_Data_Load();
+    // OLED_Input();        // OLED 不可用，跳过按键初始化
+    // OLED_Data_Load();    // Flash 参数由 Ctrl.c 默认值 + 串口调参覆盖
     uart_init(UART_0, 115200, UART0_TX_P14_0, UART0_RX_P14_1);
-    uart_rx_interrupt(UART_0, 1);           // 开启串口 0 接收中断
+    uart_rx_interrupt(UART_0, 1);           // 开启串口 0 接收中断（@STOP# 紧急停车）
+
+    /* 串口2：调参命令接收（新房车 OLED 不可用时的替代方案） */
+    uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
+    uart_rx_interrupt(UART_2, 1);           // 开启串口 2 接收中断
+
     interrupt_global_enable(0);             // 允许全局中断
 
     if (vofa_flash_dump_mode)

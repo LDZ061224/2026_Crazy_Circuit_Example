@@ -111,9 +111,9 @@
 #define UART1_ER_INT_PRIO       0                   // 未使用：关闭
 
 #define	UART2_INT_SERVICE       IfxSrc_Tos_cpu0
-#define UART2_TX_INT_PRIO       0                   // 未使用：关闭
-#define UART2_RX_INT_PRIO       0                   // 未使用：关闭
-#define UART2_ER_INT_PRIO       0                   // 未使用：关闭
+#define UART2_TX_INT_PRIO       30                  // 串口2发送中断
+#define UART2_RX_INT_PRIO       250                 // 串口2接收中断（串口调参）
+#define UART2_ER_INT_PRIO       249                 // 串口2错误中断
 
 #define	UART3_INT_SERVICE       IfxSrc_Tos_cpu0
 #define UART3_TX_INT_PRIO       0                   // 未使用：关闭
