@@ -54,7 +54,7 @@ void Debug_Car_Go(void)
     /* --- IMU + sensors + safety --- */
     Get_IMU();
     Get_Light();
-    Light_Process();
+//    Light_Process();
     Safety_Check();
     
     if (Stop_Flag != 0)

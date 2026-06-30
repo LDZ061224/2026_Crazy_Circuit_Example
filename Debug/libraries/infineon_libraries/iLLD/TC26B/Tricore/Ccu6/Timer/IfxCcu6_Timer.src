@@ -1,6 +1,6 @@
 	; Module start
 	.compiler_version	"TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler v1.1r8 Build 22011964"
-	.compiler_invocation	"ctc -f cc36680a --dep-file=IfxCcu6_Timer.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc26xb -D__CPU_TC26XB__ --core=tc1.6.x --fp-model=+float -D__CPU__=tc26xb -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\code -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\code\\\\OLED -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Configurations -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B\\\\_Reg -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin\\\\Asc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6\\\\Timer -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\CStart -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\Irq -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma\\\\Dma -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Flash -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Flash\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12\\\\IncrEnc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Atom -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Mtu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Mtu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Port -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Port\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi\\\\SpiMaster -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Scu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Scu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Src -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Src\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Stm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Stm\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc\\\\Adc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Impl -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Lib -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Lib\\\\DataHandling -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_PinMap -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_common -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_components -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_device -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_driver -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o libraries/infineon_libraries/iLLD/TC26B/Tricore/Ccu6/Timer/IfxCcu6_Timer.src ../libraries/infineon_libraries/iLLD/TC26B/Tricore/Ccu6/Timer/IfxCcu6_Timer.c"
+	.compiler_invocation	"ctc -f cc45220a --dep-file=IfxCcu6_Timer.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc26xb -D__CPU_TC26XB__ --core=tc1.6.x --fp-model=+float -D__CPU__=tc26xb -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\code -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\code\\\\OLED -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Configurations -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B\\\\_Reg -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin\\\\Asc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6\\\\Timer -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\CStart -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\Irq -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma\\\\Dma -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Flash -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Flash\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12\\\\IncrEnc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Atom -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Mtu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Mtu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Port -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Port\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi\\\\SpiMaster -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Scu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Scu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Src -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Src\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Stm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Stm\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc\\\\Adc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Impl -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Lib -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Lib\\\\DataHandling -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_PinMap -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_common -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_components -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_device -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_driver -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o libraries/infineon_libraries/iLLD/TC26B/Tricore/Ccu6/Timer/IfxCcu6_Timer.src ../libraries/infineon_libraries/iLLD/TC26B/Tricore/Ccu6/Timer/IfxCcu6_Timer.c"
 	.compiler_name		"ctc"
 	;source	'../libraries/infineon_libraries/iLLD/TC26B/Tricore/Ccu6/Timer/IfxCcu6_Timer.c'
 
@@ -18713,13 +18713,13 @@ __IfxCcu6_Timer_synchronousStop_function_end:
 	.word	0,0
 .L351:
 	.word	0,0
-.L370:
-	.word	-1,.L74,.L533-.L74,.L534-.L74
+.L352:
+	.word	-1,.L74,.L528-.L74,.L529-.L74
 	.half	1
 	.byte	81
 	.word	0,0
-.L352:
-	.word	-1,.L74,.L528-.L74,.L529-.L74
+.L370:
+	.word	-1,.L74,.L533-.L74,.L534-.L74
 	.half	1
 	.byte	81
 	.word	0,0
@@ -18741,13 +18741,13 @@ __IfxCcu6_Timer_synchronousStop_function_end:
 	.half	1
 	.byte	81
 	.word	0,0
-.L367:
-	.word	-1,.L74,.L532-.L74,.L533-.L74
+.L346:
+	.word	-1,.L74,.L527-.L74,.L528-.L74
 	.half	1
 	.byte	81
 	.word	0,0
-.L346:
-	.word	-1,.L74,.L527-.L74,.L528-.L74
+.L367:
+	.word	-1,.L74,.L532-.L74,.L533-.L74
 	.half	1
 	.byte	81
 	.word	0,0
@@ -18847,13 +18847,13 @@ __IfxCcu6_Timer_synchronousStop_function_end:
 	.half	5
 	.byte	144,32,157,32,0
 	.word	0,0
-.L209:
-	.word	-1,.L76,.L551-.L76,.L552-.L76
+.L154:
+	.word	-1,.L76,.L543-.L76,.L544-.L76
 	.half	5
 	.byte	144,32,157,32,0
 	.word	0,0
-.L154:
-	.word	-1,.L76,.L543-.L76,.L544-.L76
+.L209:
+	.word	-1,.L76,.L551-.L76,.L552-.L76
 	.half	5
 	.byte	144,32,157,32,0
 	.word	0,0
@@ -19060,13 +19060,13 @@ __IfxCcu6_Timer_synchronousStop_function_end:
 	.half	1
 	.byte	81
 	.word	0,0
-.L412:
-	.word	-1,.L80,.L587-.L80,.L54-.L80
+.L403:
+	.word	-1,.L80,.L581-.L80,.L48-.L80
 	.half	1
 	.byte	81
 	.word	0,0
-.L403:
-	.word	-1,.L80,.L581-.L80,.L48-.L80
+.L412:
+	.word	-1,.L80,.L587-.L80,.L54-.L80
 	.half	1
 	.byte	81
 	.word	0,0
@@ -19198,13 +19198,13 @@ __IfxCcu6_Timer_synchronousStop_function_end:
 	.word	0,0
 .L479:
 	.word	0,0
-.L496:
-	.word	-1,.L84,.L614-.L84,.L615-.L84
+.L472:
+	.word	-1,.L84,.L609-.L84,.L610-.L84
 	.half	5
 	.byte	144,32,157,32,0
 	.word	0,0
-.L472:
-	.word	-1,.L84,.L609-.L84,.L610-.L84
+.L496:
+	.word	-1,.L84,.L614-.L84,.L615-.L84
 	.half	5
 	.byte	144,32,157,32,0
 	.word	0,0
@@ -19212,13 +19212,13 @@ __IfxCcu6_Timer_synchronousStop_function_end:
 	.word	0,0
 .L476:
 	.word	0,0
-.L471:
-	.word	-1,.L84,.L608-.L84,.L69-.L84
+.L495:
+	.word	-1,.L84,.L613-.L84,.L72-.L84
 	.half	1
 	.byte	81
 	.word	0,0
-.L495:
-	.word	-1,.L84,.L613-.L84,.L72-.L84
+.L471:
+	.word	-1,.L84,.L608-.L84,.L69-.L84
 	.half	1
 	.byte	81
 	.word	0,0
@@ -19230,13 +19230,13 @@ __IfxCcu6_Timer_synchronousStop_function_end:
 	.word	0,0
 .L488:
 	.word	0,0
-.L493:
-	.word	-1,.L84,.L612-.L84,.L613-.L84
+.L466:
+	.word	-1,.L84,.L607-.L84,.L608-.L84
 	.half	1
 	.byte	81
 	.word	0,0
-.L466:
-	.word	-1,.L84,.L607-.L84,.L608-.L84
+.L493:
+	.word	-1,.L84,.L612-.L84,.L613-.L84
 	.half	1
 	.byte	81
 	.word	0,0

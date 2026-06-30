@@ -32,8 +32,8 @@ int Right_Real_Spd = 0;
 
 int Left_Exp_Spd = 0;
 int Right_Exp_Spd = 0;
-int Basic_Speed = 500;   // TODO: 硬编码，调完后恢复flash读取
-int Run_Speed = 120;
+int Basic_Speed = 90;   // TODO: 硬编码，调完后恢复flash读取
+int Run_Speed = 0;
 float Average_Speed = 0;
 int Speed_Get_Count = 1;
 uint8 First_Mode = 0;
@@ -213,12 +213,12 @@ float  Debug_Angle_Vel_Real = 0.0f;
 #define TURN_GYRO_SETTLE_RATE_DPS      45.0f
 #define TURN_SETTLE_CYCLE_MIN          3
 
-float Mileage_Element_Turn_Delay = 100.0f;          // Element turn pre-straight distance, OLED/Flash adjustable
-float Mileage_Node_Turn_Delay = 0.0f;             // Node turn pre-straight distance, OLED/Flash adjustable
+float Mileage_Element_Turn_Delay = 1000.0f;          // Element turn pre-straight distance, OLED/Flash adjustable
+float Mileage_Node_Turn_Delay = 100.0f;             // Node turn pre-straight distance, OLED/Flash adjustable
 uint8 vofa_flash_dump_mode = 0;
 
 #define MILEAGE_COMPENSATION_X (-100.0f)
-#define MILEAGE_STRAIGHT_SHORT 2000.0f
+#define MILEAGE_STRAIGHT_SHORT 2300.0f
 #define MILEAGE_STRAIGHT_LONG  0.0f
 
 

@@ -114,7 +114,7 @@ int core0_main(void)
     // ========================= 扫线 END =========================
     pwm_set_duty(Suction_Motor_PWM, 0);
     /* 串口2：调参命令接收 */
-    uart_init(UART_2, 921600, UART2_TX_P33_9, UART2_RX_P33_8);
+    uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
     uart_rx_interrupt(UART_2, 1);
 
     interrupt_global_enable(0);
