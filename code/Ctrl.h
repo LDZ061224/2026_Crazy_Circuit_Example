@@ -33,14 +33,14 @@ Cross_Z     2026.1.30      0.0        閸掓稑缂撻崚婵嗩潗閻楀牊婀?
 #define BUILD_NODE_NUM          17
 #define BUILD_ACTION_COUNT      31
 
-#define SAFETY_LOW_VOLTAGE_THRESHOLD    10.9f
+#define SAFETY_LOW_VOLTAGE_THRESHOLD    11.3f
 
 #define GYRO_PID { \
     .kp         = 0.16, \
     .ki         = 0.006, \
     .kd         = 0.075, \
     .iOutMax    = 0, \
-    .outMax     = 50, \
+    .outMax     = 500, \
     .mode       = PID_MODE_ADD \
 }
 
@@ -49,7 +49,7 @@ Cross_Z     2026.1.30      0.0        閸掓稑缂撻崚婵嗩潗閻楀牊婀?
     .ki         = 0, \
     .kd         = 9, \
     .iOutMax    = 0, \
-    .outMax     = 900, \
+    .outMax     = 1500, \
     .mode       = PID_MODE_POSITION_D_ON_MEASUREMENT \
 }
 
@@ -76,7 +76,7 @@ Cross_Z     2026.1.30      0.0        閸掓稑缂撻崚婵嗩潗閻楀牊婀?
     .ki         = 2.1, \
     .kd         = 0, \
     .iOutMax    = 5000, \
-    .outMax     = 6000, \
+    .outMax     = 9500, \
     .mode       = PID_MODE_ADD \
 }
 
@@ -271,7 +271,7 @@ extern uint8  Debug_Which_Wheel;            // 瑜版挸澧犵拫鍐槸閻ㄥ
 extern int    Debug_Target_Speed;           // 鐠嬪啳鐦惄顔界垼闁喎瀹?
 extern int    Debug_Fan_Duty;               // 娑撳婀村ù瀣槸鐠愮喎甯囨搴㈠閸楃姷鈹栧В?
 extern uint8  Debug_Ground_Dir;             // 1=瀹革附顒滈崣鍐插冀, 2=瀹革箑寮介崣铏劀
-extern uint8  Debug_Angle_Mode;             // 1=sin target, 2=step target
+extern uint8  Debug_Angle_Mode;             // 1=sin target, 2=step angle, 3=direct gyro rate (AVT)
 extern uint8  Debug_Angle_D_First;          // 0=error D, 1=measurement D
 extern float  Debug_Angle_Vel_Target;       // VOFA: 鐟欐帡鈧喎瀹抽惄顔界垼
 extern uint8_t g_led_flag;                // 0=green(normal) 1=blue(object) 2=yellow(low voltage)

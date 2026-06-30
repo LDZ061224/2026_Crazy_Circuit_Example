@@ -54,7 +54,7 @@ int core0_main(void)
     WS2812_Effect_Set((WS2812_Effect_Config){
         .type = EFF_OFF });
 
-#define CALIB_BUFFER_MS 3000
+#define CALIB_BUFFER_MS 1000
     for (int i = 0; i < CALIB_BUFFER_MS / 10; i++)
     {
         WS2812_Effect_Update();
@@ -63,7 +63,7 @@ int core0_main(void)
 
     // ========================= 陀螺仪除零漂校准 =========================
     // 负压开到最大，灯板红灯呼吸，提醒用户保持车辆静止
-    pwm_set_duty(Suction_Motor_DIR, 0);
+    pwm_set_duty(Suction_Motor_DIR, 10000);
     pwm_set_duty(Suction_Motor_PWM, 9500);
 
     WS2812_Effect_Set((WS2812_Effect_Config){
@@ -82,7 +82,7 @@ int core0_main(void)
     }
 
     gyro_z_offset = imu660rb_gyro_transition((float)gyro_z_sum / GYRO_CALIB_SAMPLES);
-    pwm_set_duty(Suction_Motor_PWM, 0);
+//    pwm_set_duty(Suction_Motor_PWM, 0);
 
     // ========================= 扫线 =========================
     // 绿灯进度条，全程在 PIT 启动前完成
@@ -112,9 +112,9 @@ int core0_main(void)
         .r = 0, .g = 255, .b = 0 });
     WS2812_Effect_Update();
     // ========================= 扫线 END =========================
-
+    pwm_set_duty(Suction_Motor_PWM, 0);
     /* 串口2：调参命令接收 */
-    uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
+    uart_init(UART_2, 921600, UART2_TX_P33_9, UART2_RX_P33_8);
     uart_rx_interrupt(UART_2, 1);
 
     interrupt_global_enable(0);
@@ -133,21 +133,21 @@ int core0_main(void)
     while (TRUE)
     {
         Vofa_Send_Data();
+//        pwm_set_duty(Right_Motor_DIR, 0);
+//        pwm_set_duty(Right_Motor_PWM, 6000);
+//        pwm_set_duty(Left_Motor_PWM, 6000);
+//        pwm_set_duty(Left_Motor_DIR, 0);
 
         // run-time LED: 0=green(normal) 1=blue(object) 2=yellow(low voltage)
-        if (g_led_flag != last_led)
+        WS2812_Effect_Config cfg = { .type = EFF_SOLID };
+        switch (g_led_flag)
         {
-            last_led = g_led_flag;
-            WS2812_Effect_Config cfg = { .type = EFF_SOLID };
-            switch (g_led_flag)
-            {
-                case 2:  cfg.r = 255; cfg.g = 255; cfg.b = 0;   break; // yellow
-                case 1:  cfg.r = 0;   cfg.g = 0;   cfg.b = 255; break; // blue
-                default: cfg.r = 0;   cfg.g = 255; cfg.b = 0;   break; // green
-            }
-            WS2812_Effect_Set(cfg);
+            case 2:  cfg.r = 255; cfg.g = 0; cfg.b = 255;   break; // yellow
+            case 1:  cfg.r = 0;   cfg.g = 0;   cfg.b = 255; break; // blue
+            default: cfg.r = 0;   cfg.g = 255; cfg.b = 0;   break; // green
         }
-        WS2812_Effect_Update();
+        WS2812_Effect_Set(cfg);
+       WS2812_Effect_Update();
     }
 }
 

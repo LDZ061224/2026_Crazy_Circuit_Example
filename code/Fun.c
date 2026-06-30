@@ -246,8 +246,8 @@ void Encoder_Init()
 {
     // 左电机编码器初始化
     encoder_quad_init(TIM4_ENCODER, TIM4_ENCODER_CH1_P02_8, TIM4_ENCODER_CH2_P00_9);
-    // 右电机编码器初始化
-    encoder_quad_init(TIM3_ENCODER, TIM3_ENCODER_CH1_P02_6, TIM3_ENCODER_CH2_P02_7);
+    // 右电机编码器初始化 (TIM3→TIM2: P02_7线断，换用P33_6/P33_7)
+    encoder_quad_init(TIM2_ENCODER, TIM2_ENCODER_CH1_P33_7, TIM2_ENCODER_CH2_P33_6);
 }
 
 /*************************************

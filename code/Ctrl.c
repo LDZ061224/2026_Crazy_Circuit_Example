@@ -32,8 +32,8 @@ int Right_Real_Spd = 0;
 
 int Left_Exp_Spd = 0;
 int Right_Exp_Spd = 0;
-int Basic_Speed = 0;
-int Run_Speed = 0;
+int Basic_Speed = 500;   // TODO: 硬编码，调完后恢复flash读取
+int Run_Speed = 120;
 float Average_Speed = 0;
 int Speed_Get_Count = 1;
 uint8 First_Mode = 0;
@@ -196,9 +196,9 @@ Debug_Sub_Mode_Enum Debug_Sub_Mode = Debug_Sub_PI_Tuning;
 uint8  Debug_Motor_Enable = 0;
 uint8  Debug_Which_Wheel = 0;
 int    Debug_Target_Speed = 40;
-int    Debug_Fan_Duty = 2000;
+int    Debug_Fan_Duty = 9500;
 uint8  Debug_Ground_Dir = 1;
-uint8  Debug_Angle_Mode = 2;                         // 1=sine rate target, 2=90-degree angle target
+uint8  Debug_Angle_Mode = 2;                         // 1=sine rate, 2=step angle, 3=direct gyro rate
 uint8  Debug_Angle_D_First = 0;                      // 0=error D, 1=measurement D
 float  Debug_Angle_Vel_Target = 0.0f;
 float  Debug_Angle_Vel_Real = 0.0f;
@@ -213,12 +213,12 @@ float  Debug_Angle_Vel_Real = 0.0f;
 #define TURN_GYRO_SETTLE_RATE_DPS      45.0f
 #define TURN_SETTLE_CYCLE_MIN          3
 
-float Mileage_Element_Turn_Delay = 560.0f;          // Element turn pre-straight distance, OLED/Flash adjustable
-float Mileage_Node_Turn_Delay = 260.0f;             // Node turn pre-straight distance, OLED/Flash adjustable
+float Mileage_Element_Turn_Delay = 100.0f;          // Element turn pre-straight distance, OLED/Flash adjustable
+float Mileage_Node_Turn_Delay = 0.0f;             // Node turn pre-straight distance, OLED/Flash adjustable
 uint8 vofa_flash_dump_mode = 0;
 
 #define MILEAGE_COMPENSATION_X (-100.0f)
-#define MILEAGE_STRAIGHT_SHORT 900.0f
+#define MILEAGE_STRAIGHT_SHORT 2000.0f
 #define MILEAGE_STRAIGHT_LONG  0.0f
 
 
@@ -843,13 +843,24 @@ void Load_All_Flash_Data_For_VOFA(void)
 void Safety_Check(void)
 {
     static uint16_t stop_beep_count = 0;
-    static uint8_t  low_voltage = 0;    // latch: stays 1 after first trigger
+    static uint8_t  low_voltage = 0;         // latch: stays 1 after confirmed trigger
+    static uint8_t  low_volt_frames = 0;     // consecutive low-voltage frame counter
 
-    // Voltage check: latch yellow warning
+#define LOW_VOLT_FRAME_THRESH 1000  // frames of sustained low voltage before stop
+
+    // Voltage check: debounce — require N consecutive frames below threshold
     if (Voltage_Check[0] < SAFETY_LOW_VOLTAGE_THRESHOLD)
     {
-        Stop_Flag = 1;
-        low_voltage = 1;
+        low_volt_frames++;
+        if (low_volt_frames >= LOW_VOLT_FRAME_THRESH)
+        {
+            Stop_Flag = 1;
+            low_voltage = 1;
+        }
+    }
+    else
+    {
+        low_volt_frames = 0;
     }
 
     if(Count.Stop > SAFETY_STOP_CYCLE_MAX)
@@ -922,7 +933,7 @@ void Car_Go()
 
     if (EnableSwitch_ON == 1 && Last_EnableSwitch_ON == 0)
     {
-        Enable_Start_Delay_Count = 100;
+        Enable_Start_Delay_Count = 800;
     }
     Last_EnableSwitch_ON = EnableSwitch_ON;
 
@@ -964,7 +975,7 @@ void Car_Go()
 
     Set_Speed();
 
-    // Set_Out();
+     Set_Out();
 }
 
 
@@ -976,9 +987,9 @@ void Get_Speed()
 
 
     right_raw  = encoder_get_count(TIM4_ENCODER);
-    left_raw =  encoder_get_count(TIM3_ENCODER);
+    left_raw =  encoder_get_count(TIM2_ENCODER);
     encoder_clear_count(TIM4_ENCODER);
-    encoder_clear_count(TIM3_ENCODER);
+    encoder_clear_count(TIM2_ENCODER);
 
 
     giSpeed_Left[2] = giSpeed_Left[1];
@@ -1011,8 +1022,8 @@ void Get_IMU()
     imu660rb_get_gyro();
 
     float gyro_raw = imu660rb_gyro_transition(imu660rb_gyro_z) - gyro_z_offset;
-    uint8 debug_angle_run = (Mode == Debug_Mode
-        && (Debug_Sub_Mode == Debug_Sub_Angle || Debug_Sub_Mode == Debug_Sub_NormalTrace)
+    uint8 debug_angle_run = (
+        (Debug_Sub_Mode == Debug_Sub_Angle || Debug_Sub_Mode == Debug_Sub_NormalTrace)
         && Debug_Motor_Enable == 1);
 
     if (fabs(gyro_raw) < 2.0f)
@@ -1211,6 +1222,10 @@ void Build_Mode_Get_Error()
             break;
     }
 
+    // single-point LED: green when normal tracing, blue when object detected
+    if (Mode == Build_Mode)
+        g_led_flag = (Run_Mode == Normal_Mode) ? 0 : 1;
+
 }
 
 /*************************************
@@ -1223,7 +1238,6 @@ void Normal_Run()
     if (Track_Num > 0)
     {
         Middle = (Track_Arr[0] + Track_Arr[Track_Num - 1]) / 2;
-        g_led_flag = 0;
         Last_Error = Error;
     }
 
@@ -1254,8 +1268,6 @@ void Turn_Left_Run(void)
 
     if (Turn_Action_Done)
         return;
-
-    g_led_flag = 1;
 
     if (Mode == Build_Mode)
     {
@@ -1317,8 +1329,6 @@ void Turn_Right_Run(void)
     if (Turn_Action_Done)
         return;
 
-    g_led_flag = 1;
-
     if (Mode == Build_Mode)
     {
         if (Turn_Decel_Phase == 0)
@@ -1376,8 +1386,6 @@ void Turn_Right_Run(void)
 *************************************/
 void Mileage_Mode_Run()
 {
-    g_led_flag = 1;
-
     float section_mileage = Count.Mileage - Mileage_Element_Base;
 
     if (Current_Element_Dir == 1 || Current_Element_Dir == 2)
@@ -1737,7 +1745,6 @@ void Set_Out(void)
 *************************************/
 void Straight_Run(void)
 {
-    g_led_flag = 1;
     Error = 0;
     Middle = Get_Track_Middle_Point();
 

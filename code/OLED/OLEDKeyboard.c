@@ -727,14 +727,14 @@ void Data_Load()
     Gyro_PD_PID.ki = 0;
     Gyro_PD_PID.mode = PID_MODE_POSITION;
 
-    // 加载基础速度
-    flash_read_page(0, 0, Speed_OKb, 1);
-    if (Speed_OKb[0] != 0 && Speed_OKb[0] <= 300) Basic_Speed = Speed_OKb[0];
+    // 加载基础速度（暂时硬编码，调完后恢复）
+//    flash_read_page(0, 0, Speed_OKb, 1);
+//    if (Speed_OKb[0] != 0 && Speed_OKb[0] <= 300) Basic_Speed = Speed_OKb[0];
 
-    // 加载控制参数
-    flash_read_page(0, 2, Ctrl_OKb, 8);
-    if (Ctrl_OKb[0] != 0 && Ctrl_OKb[0] <= 5000) Mileage_Element_Turn_Delay = Ctrl_OKb[0];
-    if (Ctrl_OKb[1] != 0 && Ctrl_OKb[1] <= 5000) Mileage_Node_Turn_Delay = Ctrl_OKb[1];
+    // 加载控制参数（暂时硬编码，调完后恢复）
+//    flash_read_page(0, 2, Ctrl_OKb, 8);
+//    if (Ctrl_OKb[0] != 0 && Ctrl_OKb[0] <= 5000) Mileage_Element_Turn_Delay = Ctrl_OKb[0];
+//    if (Ctrl_OKb[1] != 0 && Ctrl_OKb[1] <= 5000) Mileage_Node_Turn_Delay = Ctrl_OKb[1];
 }
 
 /**

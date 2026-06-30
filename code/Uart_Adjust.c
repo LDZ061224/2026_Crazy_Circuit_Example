@@ -24,9 +24,10 @@ Claude    2026.6.29   0.2  clean unused uart_* vars, fix BSP, add all keys
   Gyro PID  : @GKP=val#  @GKI=val#  @GKD=val#              | ×0.001
   Base      : @BSP=val#   (Basic_Speed + Debug_Target_Speed)
   Debug     : @FAN=val#   @TGT=val#   @GDI=val#(1 or 2)
-              @AMO=val#(1/2)  @MEN=val#(toggle if value matches)
+              @AMO=val#(1=sin 2=step 3=gyro rate)  @AVT=val#(gyro rate target deg/s)
+              @MEN=val#(toggle if value matches)
               @WHL=val#   @MOD=val#(0=PI 1=GroundTest 2=Angle 3=NormTrace)
-  Flash     : @SAV=val#   (any value, triggers save)
+  Flash     : @SAV#   (no value, triggers save)
 ============================================================================= */
 
 uart_tuning_cmd_t g_tuning_cmd = {0};
@@ -94,6 +95,17 @@ static void uart_tuning_parse_frame(const char *frame, uint8 len)
         return;
     }
 
+    /* ---------- @SAV# (no value, triggers flash save) ---------- */
+    if (len == 4 && frame[0] == '@'
+        && frame[1] == 'S' && frame[2] == 'A' && frame[3] == 'V')
+    {
+        g_tuning_cmd.key[0] = 'S'; g_tuning_cmd.key[1] = 'A';
+        g_tuning_cmd.key[2] = 'V'; g_tuning_cmd.key[3] = '\0';
+        g_tuning_cmd.value = 0;
+        g_tuning_cmd.valid = 1;
+        return;
+    }
+
     /* ---------- @XXX=value# (generic) ---------- */
     /* minimum: @X=Y# → 6 bytes.  frame[0]='@', frame[4]='=' */
     if (len < 6) return;
@@ -111,13 +123,17 @@ static void uart_tuning_parse_frame(const char *frame, uint8 len)
 
 /*
  *  Per-byte state machine.  '@' starts a frame, '#' ends it.
- *  Buffer size 32 = enough for "@XXX=-123.456" (~14 bytes) + margin.
+ *  Buffer size 16 = enough for "@XXX=-123.456" (~14 bytes) + margin.
+ *  Max frame len 14 bytes to reject noise: floating RX pin generates
+ *  random '@'…'#' sequences that can fake @STP#.
  */
 static void uart_tuning_parse_byte(uint8 byte)
 {
-    static uint8 buf[32];
+    static uint8 buf[16];
     static uint8 idx = 0;
     static uint8 receiving = 0;
+
+#define UART_FRAME_MAX_LEN 14
 
     if (byte == '@')
     {
@@ -127,7 +143,15 @@ static void uart_tuning_parse_byte(uint8 byte)
         return;
     }
 
-    if (!receiving) return;          // garbage between frames — ignore
+    if (!receiving) return;
+
+    // Noise guard: discard partial frame if it runs too long
+    if (idx >= UART_FRAME_MAX_LEN)
+    {
+        idx = 0;
+        receiving = 0;
+        return;
+    }
 
     if (byte == '#')
     {
@@ -136,14 +160,9 @@ static void uart_tuning_parse_byte(uint8 byte)
         uart_tuning_parse_frame((const char *)buf, idx);
         idx = 0;
     }
-    else if (idx < sizeof(buf) - 1)
+    else
     {
         buf[idx++] = byte;
-    }
-    else                              // overflow — discard
-    {
-        idx = 0;
-        receiving = 0;
     }
 }
 
@@ -211,7 +230,6 @@ void Uart_Adjust_Apply(void)
     else if (strcmp(g_tuning_cmd.key, "BSP") == 0)
     {
         Basic_Speed = (int16)g_tuning_cmd.value;
-        Debug_Target_Speed = (int16)g_tuning_cmd.value;
     }
     /* ---------- debug parameters ---------- */
     else if (strcmp(g_tuning_cmd.key, "FAN") == 0)
@@ -219,11 +237,19 @@ void Uart_Adjust_Apply(void)
     else if (strcmp(g_tuning_cmd.key, "TGT") == 0)
         Debug_Target_Speed = (int)g_tuning_cmd.value;
     else if (strcmp(g_tuning_cmd.key, "GDI") == 0)
-        Debug_Ground_Dir = ((uint8)g_tuning_cmd.value == 2) ? 2 : 1;
+        Debug_Ground_Dir = ((uint8)g_tuning_cmd.value == 0) ? 0 : 1;
     else if (strcmp(g_tuning_cmd.key, "AMO") == 0)
-        Debug_Angle_Mode = ((uint8)g_tuning_cmd.value == 2) ? 2 : 1;
+    {
+        uint8 amo = (uint8)g_tuning_cmd.value;
+        if (amo >= 1 && amo <= 3) Debug_Angle_Mode = amo;
+    }
+    else if (strcmp(g_tuning_cmd.key, "AVT") == 0)
+        Debug_Angle_Vel_Target = g_tuning_cmd.value;
     else if (strcmp(g_tuning_cmd.key, "MEN") == 0)
+    {
         Debug_Motor_Enable = (g_tuning_cmd.value > 0) ? 1 : 0;
+        if (Debug_Motor_Enable) Stop_Flag = 0;  // clear stale stop
+    }
     else if (strcmp(g_tuning_cmd.key, "WHL") == 0)
         Debug_Which_Wheel = (uint8)g_tuning_cmd.value;
     else if (strcmp(g_tuning_cmd.key, "MOD") == 0)
@@ -256,7 +282,7 @@ void Uart_Adjust_SaveToFlash(void)
     PID_OKb[7] = (uint32)(Gyro_PID.ki * 1000.0f);
     PID_OKb[8] = (uint32)(Gyro_PID.kd * 1000.0f);
 
-    Speed_OKb[0] = (uint32)Debug_Target_Speed;
+    Speed_OKb[0] = (uint32)Basic_Speed;
 
     DBG_OKb[0] = (uint32)Debug_Target_Speed;
     DBG_OKb[1] = (uint32)Debug_Fan_Duty;

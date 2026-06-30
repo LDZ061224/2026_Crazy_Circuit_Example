@@ -71,6 +71,9 @@ void Debug_Car_Go(void)
         case Debug_Sub_NormalTrace: Debug_Normal_Trace();   break;
         default:                    Debug_Wheel_Tuning();   break;
     }
+
+    // LED: green=motor off, blue=motor on (Safety_Check overrides on stop)
+    g_led_flag = Debug_Motor_Enable ? 1 : 0;
 }
 
 /**********************************Debug_Wheel_Tuning**********************************/
@@ -126,7 +129,7 @@ void Debug_Ground_Test(void)
             Left_Exp_Spd  = Debug_Target_Speed;
             Right_Exp_Spd = -Debug_Target_Speed;
         }
-        else if(Debug_Ground_Dir == 2)
+        else if(Debug_Ground_Dir == 0)
         {
             Left_Exp_Spd  = -Debug_Target_Speed;
             Right_Exp_Spd = Debug_Target_Speed;
@@ -179,6 +182,7 @@ void Debug_Angle_Tuning(void)
 
     if (Debug_Angle_Mode == 2)
     {
+        // ----- angle tracking (Angle_PID outer + Gyro_PID inner) -----
         uint32 step_index = angle_tick / DEBUG_ANGLE_STEP_TICKS;
         uint32 phase = step_index % 8U;
         if (phase <= 4U)
@@ -194,12 +198,23 @@ void Debug_Angle_Tuning(void)
         Turn_PID_Out = PID_calc(&Angle_PID, angle_target, Gyro_Integral);
         gyro_target = Turn_PID_Out;
     }
-    else
+    else if (Debug_Angle_Mode == 3)
     {
+        // ----- direct gyro rate target (Gyro_PID only, set by serial AVT) -----
+        // User sends @AVT=200# to set Debug_Angle_Vel_Target=200 deg/s
+        // This bypasses Angle_PID — pure rate-loop tuning
         angle_target = 0;
         Turn_PID_Out = 0;
         Debug_Angle_D_First = 0;
-        gyro_target = 800.0f * sinf(6.2831853f * (float)(angle_tick % 333U) / 333.0f);
+        gyro_target = Debug_Angle_Vel_Target;
+    }
+    else
+    {
+        // ----- sine rate target (default mode 1) -----
+        angle_target = 0;
+        Turn_PID_Out = 0;
+        Debug_Angle_D_First = 0;
+        gyro_target = 1200.0f * sinf(6.2831853f * (float)(angle_tick % 333U) / 333.0f);
     }
 
     Debug_Angle_Vel_Target = gyro_target;
@@ -281,7 +296,7 @@ void Debug_Set_Out(void)
     if (Debug_Motor_Enable != 0)
     {
         pwm_set_duty(Suction_Motor_PWM, Debug_Fan_Duty);
-        pwm_set_duty(Suction_Motor_DIR, 0);
+        pwm_set_duty(Suction_Motor_DIR, 0);     // 跟 Car_Go 一致：0=吸风
     }
     else
     {

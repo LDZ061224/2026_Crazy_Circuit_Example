@@ -1,6 +1,6 @@
 	; Module start
 	.compiler_version	"TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler v1.1r8 Build 22011964"
-	.compiler_invocation	"ctc -f cc25680a --dep-file=cpu0_main.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc26xb -D__CPU_TC26XB__ --core=tc1.6.x --fp-model=+float -D__CPU__=tc26xb -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\code -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\code\\\\OLED -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Configurations -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B\\\\_Reg -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin\\\\Asc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6\\\\Timer -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\CStart -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\Irq -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma\\\\Dma -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Flash -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Flash\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12\\\\IncrEnc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Atom -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Mtu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Mtu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Port -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Port\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi\\\\SpiMaster -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Scu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Scu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Src -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Src\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Stm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Stm\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc\\\\Adc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Impl -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Lib -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Lib\\\\DataHandling -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_PinMap -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_common -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_components -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_device -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_driver -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o user/cpu0_main.src ../user/cpu0_main.c"
+	.compiler_invocation	"ctc -f cc13672a --dep-file=cpu0_main.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc26xb -D__CPU_TC26XB__ --core=tc1.6.x --fp-model=+float -D__CPU__=tc26xb -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\code -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\code\\\\OLED -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Configurations -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B\\\\_Reg -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin\\\\Asc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6\\\\Timer -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\CStart -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\Irq -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma\\\\Dma -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Flash -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Flash\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12\\\\IncrEnc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Atom -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Mtu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Mtu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Port -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Port\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi\\\\SpiMaster -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Scu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Scu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Src -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Src\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Stm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Stm\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc\\\\Adc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Impl -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Lib -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Lib\\\\DataHandling -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_PinMap -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_common -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_components -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_device -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_driver -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o user/cpu0_main.src ../user/cpu0_main.c"
 	.compiler_name		"ctc"
 	;source	'../user/cpu0_main.c'
 
@@ -13,28 +13,28 @@ $TC16X
 	
 	.global	core0_main
 ; Function core0_main
-.L25:
+.L33:
 core0_main:	.type	func
-	sub.a	a10,#16
-.L50:
+	sub.a	a10,#24
+.L63:
 	call	clock_init
-.L64:
+.L77:
 	call	debug_init
-.L65:
+.L78:
 	call	Encoder_Init
-.L66:
+.L79:
 	call	Motor_Init
-.L67:
+.L80:
 	call	Other_Init
-.L68:
+.L81:
 	call	Light_Init
-.L69:
+.L82:
 	j	.L2
 .L3:
 	call	imu660rb_init
-.L70:
+.L83:
 	jeq	d2,#0,.L4
-.L71:
+.L84:
 	j	.L5
 .L4:
 	j	.L6
@@ -45,16 +45,16 @@ core0_main:	.type	func
 	j	.L3
 .L6:
 	mov	d4,#1060
-.L72:
+.L85:
 	mov	d5,#0
 	call	gpio_set_level
-.L73:
+.L86:
 	call	TCA9555_Init
-.L74:
+.L87:
 	call	Data_Load
-.L75:
+.L88:
 	call	WS2812_Init
-.L76:
+.L89:
 	movh.a	a15,#@his(.1.lit)
 	lea	a15,[a15]@los(.1.lit)
 	lea	a15,[a15]0
@@ -65,32 +65,32 @@ core0_main:	.type	func
 	st.w	[a2+],d15
 	loop	a4,.L7
 	call	WS2812_Effect_Set
-.L39:
-	mov	d15,#0
-.L51:
+.L47:
+	mov	d8,#0
+.L65:
 	j	.L8
 .L9:
 	call	WS2812_Effect_Update
-.L77:
+.L90:
 	mov	d4,#10
 	call	system_delay_ms
-.L78:
-	add	d15,#1
+.L91:
+	add	d8,#1
 .L8:
-	mov	d0,#300
-.L79:
-	jlt	d15,d0,.L9
-.L40:
+	mov	d15,#100
+.L92:
+	jlt	d8,d15,.L9
+.L48:
 	mov	d4,#154
-.L80:
-	mov	d5,#0
+.L93:
+	mov	d5,#10000
 	call	pwm_set_duty
-.L81:
+.L94:
 	mov	d4,#91
-.L82:
+.L95:
 	mov	d5,#9500
 	call	pwm_set_duty
-.L83:
+.L96:
 	movh.a	a15,#@his(.2.lit)
 	lea	a15,[a15]@los(.2.lit)
 	lea	a15,[a15]0
@@ -101,51 +101,46 @@ core0_main:	.type	func
 	st.w	[a2+],d15
 	loop	a4,.L10
 	call	WS2812_Effect_Set
-.L42:
+.L50:
 	mov	d15,#0
-.L44:
+.L52:
 	mov	d8,#0
-.L53:
+.L66:
 	j	.L11
 .L12:
 	call	imu660rb_get_gyro
-.L84:
+.L97:
 	movh.a	a15,#@his(imu660rb_gyro_z)
 	lea	a15,[a15]@los(imu660rb_gyro_z)
 	ld.h	d0,[a15]
-.L85:
+.L98:
 	add	d15,d0
-.L86:
+.L99:
 	call	WS2812_Effect_Update
-.L87:
+.L100:
 	mov	d4,#5
 	call	system_delay_ms
-.L88:
+.L101:
 	add	d8,#1
 .L11:
 	mov	d0,#500
-.L89:
+.L102:
 	jlt	d8,d0,.L12
-.L45:
+.L53:
 	movh.a	a2,#@his(gyro_z_offset)
 	lea	a2,[a2]@los(gyro_z_offset)
-.L90:
+.L103:
 	itof	d15,d15
-.L52:
+.L67:
 	movh	d0,#17402
 	div.f	d0,d15,d0
 	movh.a	a15,#@his(imu660rb_transition_factor)
 	lea	a15,[a15]@los(imu660rb_transition_factor)
 	ld.w	d15,[a15]4
 	div.f	d15,d0,d15
-.L91:
+.L104:
 	st.w	[a2],d15
-.L92:
-	mov	d4,#91
-.L93:
-	mov	d5,#0
-	call	pwm_set_duty
-.L94:
+.L105:
 	movh.a	a15,#@his(.3.lit)
 	lea	a15,[a15]@los(.3.lit)
 	lea	a15,[a15]0
@@ -156,34 +151,34 @@ core0_main:	.type	func
 	st.w	[a2+],d15
 	loop	a4,.L13
 	call	WS2812_Effect_Set
-.L47:
+.L55:
 	mov	d8,#0
-.L54:
+.L68:
 	j	.L14
 .L15:
 	mov	d15,#200
-.L95:
+.L106:
 	jge	d15,d8,.L16
-.L96:
+.L107:
 	mov	d15,#1600
-.L97:
+.L108:
 	jge	d8,d15,.L17
-.L98:
+.L109:
 	call	Get_Threshold
-.L99:
+.L110:
 	movh.a	a15,#@his(g_scan_progress)
 	lea	a15,[a15]@los(g_scan_progress)
-.L100:
+.L111:
 	add	d15,d8,#-200
-.L101:
+.L112:
 	mul	d15,d15,#100
-.L102:
+.L113:
 	mov	d0,#1400
-.L103:
+.L114:
 	div.u	e0,d15,d0
-.L104:
+.L115:
 	st.b	[a15],d0
-.L105:
+.L116:
 	movh.a	a15,#@his(g_scan_progress)
 	lea	a15,[a15]@los(g_scan_progress)
 	ld.bu	d4,[a15]
@@ -191,23 +186,23 @@ core0_main:	.type	func
 .L17:
 .L16:
 	call	WS2812_Effect_Update
-.L106:
+.L117:
 	mov	d4,#3
 	call	system_delay_ms
-.L107:
+.L118:
 	add	d8,#1
 .L14:
 	mov	d15,#1600
-.L108:
+.L119:
 	jge	d15,d8,.L15
-.L48:
+.L56:
 	movh.a	a15,#@his(g_scan_progress)
 	lea	a15,[a15]@los(g_scan_progress)
-.L109:
+.L120:
 	mov	d15,#0
-.L110:
+.L121:
 	st.b	[a15],d15
-.L111:
+.L122:
 	movh.a	a15,#@his(.4.lit)
 	lea	a15,[a15]@los(.4.lit)
 	lea	a15,[a15]0
@@ -218,33 +213,38 @@ core0_main:	.type	func
 	st.w	[a2+],d15
 	loop	a4,.L18
 	call	WS2812_Effect_Set
-.L112:
+.L123:
 	call	WS2812_Effect_Update
-.L113:
+.L124:
+	mov	d4,#91
+.L125:
+	mov	d5,#0
+	call	pwm_set_duty
+.L126:
 	mov	d4,#2
-.L114:
-	mov.u	d5,#49664
-	addih	d5,d5,#1
-.L115:
+.L127:
+	mov	d5,#4096
+	addih	d5,d5,#14
+.L128:
 	mov	d6,#18
-.L116:
+.L129:
 	mov	d7,#12
 	call	uart_init
-.L117:
+.L130:
 	mov	d4,#2
-.L118:
+.L131:
 	mov	d5,#1
 	call	uart_rx_interrupt
-.L119:
+.L132:
 	mov	d4,#0
 	call	interrupt_global_enable
-.L120:
+.L133:
 	movh.a	a15,#@his(vofa_flash_dump_mode)
 	lea	a15,[a15]@los(vofa_flash_dump_mode)
 	ld.bu	d15,[a15]
-.L121:
+.L134:
 	jeq	d15,#0,.L19
-.L122:
+.L135:
 	j	.L20
 .L21:
 	call	Vofa_Send_Flash_Data
@@ -254,21 +254,98 @@ core0_main:	.type	func
 	mov	d4,#0
 	mov	d5,#3000
 	call	pit_init
-.L123:
+.L136:
 	call	cpu_wait_event_ready
-.L124:
+.L58:
 	j	.L22
 .L23:
 	call	Vofa_Send_Data
+.L60:
+	movh.a	a15,#@his(.5.ini)
+	lea	a15,[a15]@los(.5.ini)
+	lea	a15,[a15]0
+.L137:
+	lea	a2,[a10]12
+	mov.a	a4,#2
+.L24:
+	ld.w	d15,[a15+]
+	st.w	[a2+],d15
+	loop	a4,.L24
+.L138:
+	movh.a	a15,#@his(g_led_flag)
+	lea	a15,[a15]@los(g_led_flag)
+	ld.bu	d15,[a15]
+.L139:
+	mov	d0,#1
+	jeq	d15,d0,.L25
+.L140:
+	mov	d0,#2
+	jeq	d15,d0,.L26
+	j	.L27
+.L26:
+	mov	d15,#255
+.L141:
+	st.b	[a10]13,d15
+.L142:
+	mov	d15,#0
+.L143:
+	st.b	[a10]14,d15
+.L144:
+	mov	d15,#255
+.L145:
+	st.b	[a10]15,d15
+.L146:
+	j	.L28
+.L25:
+	mov	d15,#0
+.L147:
+	st.b	[a10]13,d15
+.L148:
+	mov	d15,#0
+.L149:
+	st.b	[a10]14,d15
+.L150:
+	mov	d15,#255
+.L151:
+	st.b	[a10]15,d15
+.L152:
+	j	.L29
+.L27:
+	mov	d15,#0
+.L153:
+	st.b	[a10]13,d15
+.L154:
+	mov	d15,#255
+.L155:
+	st.b	[a10]14,d15
+.L156:
+	mov	d15,#0
+.L157:
+	st.b	[a10]15,d15
+.L158:
+	j	.L30
+.L30:
+.L29:
+.L28:
+	lea	a15,[a10]12
+	lea	a2,[a10]0
+	mov.a	a4,#2
+.L31:
+	ld.w	d15,[a15+]
+	st.w	[a2+],d15
+	loop	a4,.L31
+	call	WS2812_Effect_Set
+.L159:
+	call	WS2812_Effect_Update
 .L22:
 	j	.L23
-.L55:
+.L64:
 	ret
-.L38:
+.L46:
 	
 __core0_main_function_end:
 	.size	core0_main,__core0_main_function_end-core0_main
-.L34:
+.L42:
 	; End of function
 	
 	.sdecl	'.data.cpu0_dsram',data,cluster('imu_Check')
@@ -311,6 +388,13 @@ imu_Check:	.type	object
 	.space	1
 	.byte	255
 	.space	9
+	.sdecl	'.rodata.cpu0_dsram',data,rom
+	.sect	'.rodata.cpu0_dsram'
+	.align	4
+.5.ini:	.type	object
+	.size	.5.ini,12
+	.byte	1
+	.space	11
 	.calls	'core0_main','clock_init'
 	.calls	'core0_main','debug_init'
 	.calls	'core0_main','Encoder_Init'
@@ -363,25 +447,26 @@ imu_Check:	.type	object
 	.extern	Data_Load
 	.extern	vofa_flash_dump_mode
 	.extern	gyro_z_offset
+	.extern	g_led_flag
 	.extern	g_scan_progress
 	.extern	WS2812_Init
 	.extern	WS2812_Effect_Set
 	.extern	WS2812_Effect_SetProgress
 	.extern	WS2812_Effect_Update
-	.calls	'core0_main','',16
+	.calls	'core0_main','',24
 	.sdecl	'.debug_info',debug
 	.sect	'.debug_info'
-.L27:
-	.word	146325
+.L35:
+	.word	146347
 	.half	3
-	.word	.L28
+	.word	.L36
 	.byte	4
-.L26:
+.L34:
 	.byte	1
 	.byte	'../user/cpu0_main.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'D:\\workspace\\2026_Crazy_Circuit_V4.0\\Debug\\',0,12,1
-	.word	.L29
+	.word	.L37
 	.byte	2,1,1,3
 	.word	159
 	.byte	4
@@ -416,7 +501,7 @@ imu_Check:	.type	object
 	.word	305
 	.byte	6,0,7
 	.byte	'unsigned int',0,4,7
-.L37:
+.L45:
 	.byte	7
 	.byte	'int',0,4,5,7
 	.byte	'unsigned int',0,4,7,10
@@ -6296,7 +6381,9 @@ imu_Check:	.type	object
 	.byte	'EFF_RAINBOW_FLOW',0,3,18
 	.byte	'EFF_FLOW',0,4,18
 	.byte	'EFF_CYCLE',0,5,18
-	.byte	'EFF_PROGRESS',0,6,0,20,32,45,9,12,13
+	.byte	'EFF_PROGRESS',0,6,0
+.L61:
+	.byte	20,32,45,9,12,13
 	.byte	'type',0
 	.word	40498
 	.byte	1,2,35,0,13
@@ -19938,6 +20025,9 @@ imu_Check:	.type	object
 	.byte	'gyro_z_offset',0,61,245,1,14
 	.word	219
 	.byte	1,1,36
+	.byte	'g_led_flag',0,61,149,2,16
+	.word	598
+	.byte	1,1,36
 	.byte	'g_scan_progress',0,61,150,2,16
 	.word	598
 	.byte	1,1,30
@@ -19949,7 +20039,7 @@ imu_Check:	.type	object
 	.byte	0
 	.sdecl	'.debug_abbrev',debug
 	.sect	'.debug_abbrev'
-.L28:
+.L36:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,16,6,0,0,2,21,0,54,15,39,12,0,0,3,15,0,73,19,0,0,4,46,1,3,8,32,13
 	.byte	58,15,59,15,57,15,54,15,39,12,0,0,5,5,0,3,8,58,15,59,15,57,15,73,19,0,0,6,11,0,0,0,7,36,0,3,8,11,15,62
 	.byte	15,0,0,8,46,1,3,8,32,13,58,15,59,15,57,15,73,19,54,15,39,12,0,0,9,59,0,3,8,0,0,10,19,1,3,8,58,15,59,15
@@ -19963,12 +20053,12 @@ imu_Check:	.type	object
 	.byte	0,73,19,0,0,35,21,1,73,19,54,15,39,12,0,0,36,52,0,3,8,58,15,59,15,57,15,73,19,63,12,60,12,0,0,0
 	.sdecl	'.debug_line',debug
 	.sect	'.debug_line'
-.L29:
-	.word	.L57-.L56
-.L56:
+.L37:
+	.word	.L70-.L69
+.L69:
 	.half	3
-	.word	.L59-.L58
-.L58:
+	.word	.L72-.L71
+.L71:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1
 	.byte	'D:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B\\\\_Reg',0
 	.byte	'D:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_common',0
@@ -20066,89 +20156,99 @@ imu_Check:	.type	object
 	.byte	'seekfree_assistant.h',0,11,0,0
 	.byte	'pid.h',0,5,0,0
 	.byte	'Ctrl.h',0,5,0,0,0
-.L59:
-.L57:
+.L72:
+.L70:
 	.sdecl	'.debug_info',debug,cluster('core0_main')
 	.sect	'.debug_info'
-.L30:
-	.word	318
+.L38:
+	.word	377
 	.half	3
-	.word	.L31
+	.word	.L39
 	.byte	4,1
 	.byte	'../user/cpu0_main.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'D:\\workspace\\2026_Crazy_Circuit_V4.0\\Debug\\',0,12,1
-	.word	.L33,.L32
+	.word	.L41,.L40
 	.byte	2
-	.word	.L26
+	.word	.L34
 	.byte	3
 	.byte	'core0_main',0,1,31,5
-	.word	.L37
+	.word	.L45
 	.byte	1,1,1
-	.word	.L25,.L38,.L24
+	.word	.L33,.L46,.L32
 	.byte	4
-	.word	.L25,.L38
+	.word	.L33,.L46
 	.byte	4
-	.word	.L39,.L40
-	.byte	5
-	.byte	'i',0,1,58,14
-	.word	.L37,.L41
-	.byte	0,4
-	.word	.L42,.L38
-	.byte	5
-	.byte	'gyro_z_sum',0,1,75,13
-	.word	.L37,.L43
-	.byte	4
-	.word	.L44,.L45
-	.byte	5
-	.byte	'i',0,1,76,14
-	.word	.L37,.L46
-	.byte	0,4
 	.word	.L47,.L48
 	.byte	5
+	.byte	'i',0,1,58,14
+	.word	.L45,.L49
+	.byte	0,4
+	.word	.L50,.L46
+	.byte	5
+	.byte	'gyro_z_sum',0,1,75,13
+	.word	.L45,.L51
+	.byte	4
+	.word	.L52,.L53
+	.byte	5
+	.byte	'i',0,1,76,14
+	.word	.L45,.L54
+	.byte	0,4
+	.word	.L55,.L56
+	.byte	5
 	.byte	'tick',0,1,95,14
-	.word	.L37,.L49
-	.byte	0,0,0,0,0
+	.word	.L45,.L57
+	.byte	0,4
+	.word	.L58,.L46
+	.byte	5
+	.byte	'last_led',0,1,131,1,9
+	.word	.L45,.L59
+	.byte	4
+	.word	.L60,.L22
+	.byte	5
+	.byte	'cfg',0,1,142,1,30
+	.word	.L61,.L62
+	.byte	0,0,0,0,0,0
 	.sdecl	'.debug_abbrev',debug,cluster('core0_main')
 	.sect	'.debug_abbrev'
-.L31:
+.L39:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
 	.byte	54,15,39,12,63,12,17,1,18,1,64,6,0,0,4,11,1,17,1,18,1,0,0,5,52,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,0
 	.sdecl	'.debug_line',debug,cluster('core0_main')
 	.sect	'.debug_line'
-.L32:
-	.word	.L61-.L60
-.L60:
+.L40:
+	.word	.L74-.L73
+.L73:
 	.half	3
-	.word	.L63-.L62
-.L62:
+	.word	.L76-.L75
+.L75:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../user/cpu0_main.c',0,0,0,0,0
-.L63:
+.L76:
 	.byte	5,5,7,0,5,2
-	.word	.L25
+	.word	.L33
 	.byte	3,30,1,5,15,9
-	.half	.L50-.L25
+	.half	.L63-.L33
 	.byte	3,2,1,9
-	.half	.L64-.L50
+	.half	.L77-.L63
 	.byte	3,1,1,5,17,9
-	.half	.L65-.L64
+	.half	.L78-.L77
 	.byte	3,1,1,5,15,9
-	.half	.L66-.L65
+	.half	.L79-.L78
 	.byte	3,1,1,9
-	.half	.L67-.L66
+	.half	.L80-.L79
 	.byte	3,1,1,9
-	.half	.L68-.L67
+	.half	.L81-.L80
 	.byte	3,1,1,5,12,9
-	.half	.L69-.L68
+	.half	.L82-.L81
 	.byte	3,1,1,5,25,9
-	.half	.L3-.L69
+	.half	.L3-.L82
 	.byte	3,2,1,5,8,9
-	.half	.L70-.L3
+	.half	.L83-.L3
 	.byte	1,7,9
-	.half	.L71-.L70
+	.half	.L84-.L83
 	.byte	1,5,12,9
-	.half	.L4-.L71
+	.half	.L4-.L84
 	.byte	3,2,1,5,26,9
 	.half	.L5-.L4
 	.byte	3,1,1,5,12,9
@@ -20156,220 +20256,283 @@ imu_Check:	.type	object
 	.byte	3,123,1,5,20,9
 	.half	.L6-.L2
 	.byte	3,7,1,5,27,9
-	.half	.L72-.L6
+	.half	.L85-.L6
 	.byte	1,5,17,9
-	.half	.L73-.L72
-	.byte	3,1,1,5,14,9
-	.half	.L74-.L73
-	.byte	3,1,1,5,16,9
-	.half	.L75-.L74
-	.byte	3,1,1,5,45,9
-	.half	.L76-.L75
-	.byte	3,5,1,5,16,9
-	.half	.L39-.L76
-	.byte	3,4,1,5,45,9
-	.half	.L51-.L39
-	.byte	1,5,29,9
-	.half	.L9-.L51
-	.byte	3,2,1,5,25,9
-	.half	.L77-.L9
-	.byte	3,1,1,5,48,9
-	.half	.L78-.L77
-	.byte	3,125,1,5,41,9
-	.half	.L8-.L78
-	.byte	1,5,45,9
-	.half	.L79-.L8
-	.byte	1,5,18,7,9
-	.half	.L40-.L79
-	.byte	3,8,1,5,37,9
-	.half	.L80-.L40
-	.byte	1,5,18,9
-	.half	.L81-.L80
-	.byte	3,1,1,5,37,9
-	.half	.L82-.L81
-	.byte	1,5,45,9
-	.half	.L83-.L82
-	.byte	3,2,1,5,24,9
-	.half	.L42-.L83
-	.byte	3,6,1,5,16,9
-	.half	.L44-.L42
-	.byte	3,1,1,5,43,9
-	.half	.L53-.L44
-	.byte	1,5,26,9
-	.half	.L12-.L53
-	.byte	3,2,1,5,23,9
-	.half	.L84-.L12
-	.byte	3,1,1,5,20,9
-	.half	.L85-.L84
-	.byte	1,5,29,9
 	.half	.L86-.L85
-	.byte	3,1,1,5,25,9
+	.byte	3,1,1,5,14,9
 	.half	.L87-.L86
-	.byte	3,1,1,5,46,9
+	.byte	3,1,1,5,16,9
 	.half	.L88-.L87
-	.byte	3,123,1,5,25,9
-	.half	.L11-.L88
-	.byte	1,5,43,9
-	.half	.L89-.L11
-	.byte	1,5,5,7,9
-	.half	.L45-.L89
-	.byte	3,8,1,5,21,9
-	.half	.L90-.L45
-	.byte	1,5,19,9
-	.half	.L91-.L90
-	.byte	1,5,18,9
-	.half	.L92-.L91
-	.byte	3,1,1,5,37,9
-	.half	.L93-.L92
-	.byte	1,5,45,9
-	.half	.L94-.L93
-	.byte	3,4,1,5,19,9
-	.half	.L47-.L94
-	.byte	3,6,1,5,40,9
-	.half	.L54-.L47
-	.byte	1,5,20,9
-	.half	.L15-.L54
-	.byte	3,2,1,5,13,9
-	.half	.L95-.L15
-	.byte	1,5,41,7,9
-	.half	.L96-.L95
-	.byte	1,5,39,9
-	.half	.L97-.L96
-	.byte	1,5,26,7,9
-	.half	.L98-.L97
-	.byte	3,2,1,5,13,9
-	.half	.L99-.L98
-	.byte	3,1,1,5,47,9
-	.half	.L100-.L99
-	.byte	1,5,61,9
-	.half	.L101-.L100
-	.byte	1,5,81,9
-	.half	.L102-.L101
-	.byte	1,5,69,9
-	.half	.L103-.L102
+	.byte	3,1,1,5,45,9
+	.half	.L89-.L88
+	.byte	3,5,1,5,16,9
+	.half	.L47-.L89
+	.byte	3,4,1,5,45,9
+	.half	.L65-.L47
 	.byte	1,5,29,9
-	.half	.L104-.L103
-	.byte	1,5,39,9
-	.half	.L105-.L104
-	.byte	3,1,1,5,29,9
-	.half	.L16-.L105
+	.half	.L9-.L65
 	.byte	3,2,1,5,25,9
-	.half	.L106-.L16
-	.byte	3,1,1,5,46,9
-	.half	.L107-.L106
-	.byte	3,119,1,5,32,9
-	.half	.L14-.L107
-	.byte	1,5,40,9
-	.half	.L108-.L14
-	.byte	1,5,5,7,9
-	.half	.L48-.L108
-	.byte	3,12,1,5,23,9
-	.half	.L109-.L48
-	.byte	1,5,21,9
-	.half	.L110-.L109
+	.half	.L90-.L9
+	.byte	3,1,1,5,48,9
+	.half	.L91-.L90
+	.byte	3,125,1,5,41,9
+	.half	.L8-.L91
 	.byte	1,5,45,9
-	.half	.L111-.L110
-	.byte	3,3,1,5,25,9
-	.half	.L112-.L111
-	.byte	3,3,1,5,15,9
-	.half	.L113-.L112
-	.byte	3,4,1,5,23,9
-	.half	.L114-.L113
-	.byte	1,5,31,9
-	.half	.L115-.L114
-	.byte	1,5,47,9
-	.half	.L116-.L115
-	.byte	1,5,23,9
-	.half	.L117-.L116
-	.byte	3,1,1,5,31,9
-	.half	.L118-.L117
+	.half	.L92-.L8
+	.byte	1,5,18,7,9
+	.half	.L48-.L92
+	.byte	3,8,1,5,37,9
+	.half	.L93-.L48
+	.byte	1,5,18,9
+	.half	.L94-.L93
+	.byte	3,1,1,5,37,9
+	.half	.L95-.L94
+	.byte	1,5,45,9
+	.half	.L96-.L95
+	.byte	3,2,1,5,24,9
+	.half	.L50-.L96
+	.byte	3,6,1,5,16,9
+	.half	.L52-.L50
+	.byte	3,1,1,5,43,9
+	.half	.L66-.L52
+	.byte	1,5,26,9
+	.half	.L12-.L66
+	.byte	3,2,1,5,23,9
+	.half	.L97-.L12
+	.byte	3,1,1,5,20,9
+	.half	.L98-.L97
 	.byte	1,5,29,9
-	.half	.L119-.L118
-	.byte	3,2,1,5,9,9
-	.half	.L120-.L119
-	.byte	3,2,1,5,5,9
+	.half	.L99-.L98
+	.byte	3,1,1,5,25,9
+	.half	.L100-.L99
+	.byte	3,1,1,5,46,9
+	.half	.L101-.L100
+	.byte	3,123,1,5,25,9
+	.half	.L11-.L101
+	.byte	1,5,43,9
+	.half	.L102-.L11
+	.byte	1,5,5,7,9
+	.half	.L53-.L102
+	.byte	3,8,1,5,21,9
+	.half	.L103-.L53
+	.byte	1,5,19,9
+	.half	.L104-.L103
+	.byte	1,5,45,9
+	.half	.L105-.L104
+	.byte	3,5,1,5,19,9
+	.half	.L55-.L105
+	.byte	3,6,1,5,40,9
+	.half	.L68-.L55
+	.byte	1,5,20,9
+	.half	.L15-.L68
+	.byte	3,2,1,5,13,9
+	.half	.L106-.L15
+	.byte	1,5,41,7,9
+	.half	.L107-.L106
+	.byte	1,5,39,9
+	.half	.L108-.L107
+	.byte	1,5,26,7,9
+	.half	.L109-.L108
+	.byte	3,2,1,5,13,9
+	.half	.L110-.L109
+	.byte	3,1,1,5,47,9
+	.half	.L111-.L110
+	.byte	1,5,61,9
+	.half	.L112-.L111
+	.byte	1,5,81,9
+	.half	.L113-.L112
+	.byte	1,5,69,9
+	.half	.L114-.L113
+	.byte	1,5,29,9
+	.half	.L115-.L114
+	.byte	1,5,39,9
+	.half	.L116-.L115
+	.byte	3,1,1,5,29,9
+	.half	.L16-.L116
+	.byte	3,2,1,5,25,9
+	.half	.L117-.L16
+	.byte	3,1,1,5,46,9
+	.half	.L118-.L117
+	.byte	3,119,1,5,32,9
+	.half	.L14-.L118
+	.byte	1,5,40,9
+	.half	.L119-.L14
+	.byte	1,5,5,7,9
+	.half	.L56-.L119
+	.byte	3,12,1,5,23,9
+	.half	.L120-.L56
+	.byte	1,5,21,9
 	.half	.L121-.L120
-	.byte	1,5,20,7,9
+	.byte	1,5,45,9
 	.half	.L122-.L121
+	.byte	3,3,1,5,25,9
+	.half	.L123-.L122
+	.byte	3,3,1,5,18,9
+	.half	.L124-.L123
+	.byte	3,2,1,5,37,9
+	.half	.L125-.L124
+	.byte	1,5,15,9
+	.half	.L126-.L125
+	.byte	3,2,1,5,23,9
+	.half	.L127-.L126
+	.byte	1,5,31,9
+	.half	.L128-.L127
+	.byte	1,5,47,9
+	.half	.L129-.L128
+	.byte	1,5,23,9
+	.half	.L130-.L129
+	.byte	3,1,1,5,31,9
+	.half	.L131-.L130
+	.byte	1,5,29,9
+	.half	.L132-.L131
+	.byte	3,2,1,5,9,9
+	.half	.L133-.L132
+	.byte	3,2,1,5,5,9
+	.half	.L134-.L133
+	.byte	1,5,20,7,9
+	.half	.L135-.L134
 	.byte	3,2,1,5,44,9
-	.half	.L21-.L122
+	.half	.L21-.L135
 	.byte	1,5,20,9
 	.half	.L20-.L21
 	.byte	1,5,5,9
 	.half	.L19-.L20
 	.byte	3,4,1,5,25,9
-	.half	.L123-.L19
+	.half	.L136-.L19
 	.byte	3,1,1,5,16,9
-	.half	.L124-.L123
-	.byte	3,2,1,5,23,9
-	.half	.L23-.L124
-	.byte	3,2,1,5,16,9
-	.half	.L22-.L23
-	.byte	3,126,1,5,1,9
-	.half	.L55-.L22
-	.byte	3,4,1,7,9
-	.half	.L34-.L55
+	.half	.L58-.L136
+	.byte	3,4,1,5,23,9
+	.half	.L23-.L58
+	.byte	3,2,1,5,36,9
+	.half	.L60-.L23
+	.byte	3,7,1,5,34,9
+	.half	.L137-.L60
+	.byte	1,5,17,9
+	.half	.L138-.L137
+	.byte	3,1,1,5,18,9
+	.half	.L139-.L138
+	.byte	3,3,1,9
+	.half	.L140-.L139
+	.byte	3,127,1,5,30,9
+	.half	.L26-.L140
+	.byte	1,5,28,9
+	.half	.L141-.L26
+	.byte	1,5,43,9
+	.half	.L142-.L141
+	.byte	1,5,41,9
+	.half	.L143-.L142
+	.byte	1,5,54,9
+	.half	.L144-.L143
+	.byte	1,5,52,9
+	.half	.L145-.L144
+	.byte	1,5,61,9
+	.half	.L146-.L145
+	.byte	1,5,30,9
+	.half	.L25-.L146
+	.byte	3,1,1,5,28,9
+	.half	.L147-.L25
+	.byte	1,5,43,9
+	.half	.L148-.L147
+	.byte	1,5,41,9
+	.half	.L149-.L148
+	.byte	1,5,56,9
+	.half	.L150-.L149
+	.byte	1,5,54,9
+	.half	.L151-.L150
+	.byte	1,5,61,9
+	.half	.L152-.L151
+	.byte	1,5,30,9
+	.half	.L27-.L152
+	.byte	3,1,1,5,28,9
+	.half	.L153-.L27
+	.byte	1,5,43,9
+	.half	.L154-.L153
+	.byte	1,5,41,9
+	.half	.L155-.L154
+	.byte	1,5,56,9
+	.half	.L156-.L155
+	.byte	1,5,54,9
+	.half	.L157-.L156
+	.byte	1,5,61,9
+	.half	.L158-.L157
+	.byte	1,5,27,9
+	.half	.L28-.L158
+	.byte	3,2,1,5,28,9
+	.half	.L159-.L28
+	.byte	3,1,1,5,16,9
+	.half	.L22-.L159
+	.byte	3,111,1,5,1,9
+	.half	.L64-.L22
+	.byte	3,19,1,7,9
+	.half	.L42-.L64
 	.byte	0,1,1
-.L61:
+.L74:
 	.sdecl	'.debug_ranges',debug,cluster('core0_main')
 	.sect	'.debug_ranges'
-.L33:
-	.word	-1,.L25,0,.L34-.L25,0,0
+.L41:
+	.word	-1,.L33,0,.L42-.L33,0,0
 	.sdecl	'.debug_info',debug,cluster('imu_Check')
 	.sect	'.debug_info'
-.L35:
+.L43:
 	.word	182
 	.half	3
-	.word	.L36
+	.word	.L44
 	.byte	4,1
 	.byte	'../user/cpu0_main.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'D:\\workspace\\2026_Crazy_Circuit_V4.0\\Debug\\',0,12,1,2
-	.word	.L26
+	.word	.L34
 	.byte	3
 	.byte	'imu_Check',0,33,28,5
-	.word	.L37
+	.word	.L45
 	.byte	1,5,3
 	.word	imu_Check
 	.byte	0
 	.sdecl	'.debug_abbrev',debug,cluster('imu_Check')
 	.sect	'.debug_abbrev'
-.L36:
+.L44:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,0,0,2,61,0,24,16,0,0,3,52,0,3,8,58,15,59,15,57,15,73,16,63,12,2,9
 	.byte	0,0,0
 	.sdecl	'.debug_loc',debug,cluster('core0_main')
 	.sect	'.debug_loc'
-.L24:
-	.word	-1,.L25,0,.L50-.L25
+.L62:
+	.word	-1,.L33,0,.L64-.L33
+	.half	2
+	.byte	145,116
+	.word	0,0
+.L32:
+	.word	-1,.L33,0,.L63-.L33
 	.half	2
 	.byte	138,0
-	.word	.L50-.L25,.L38-.L25
+	.word	.L63-.L33,.L46-.L33
 	.half	2
-	.byte	138,16
+	.byte	138,24
 	.word	0,0
-.L43:
-	.word	-1,.L25,.L44-.L25,.L52-.L25
+.L51:
+	.word	-1,.L33,.L52-.L33,.L67-.L33
 	.half	1
 	.byte	95
 	.word	0,0
-.L41:
-	.word	-1,.L25,.L51-.L25,.L10-.L25
-	.half	1
-	.byte	95
-	.word	0,0
-.L46:
-	.word	-1,.L25,.L53-.L25,.L54-.L25
+.L49:
+	.word	-1,.L33,.L65-.L33,.L66-.L33
 	.half	1
 	.byte	88
 	.word	0,0
-.L49:
-	.word	-1,.L25,.L54-.L25,.L55-.L25
+.L54:
+	.word	-1,.L33,.L66-.L33,.L68-.L33
+	.half	1
+	.byte	88
+	.word	0,0
+.L59:
+	.word	0,0
+.L57:
+	.word	-1,.L33,.L68-.L33,.L64-.L33
 	.half	1
 	.byte	88
 	.word	0,0
 	.sdecl	'.debug_frame',debug
 	.sect	'.debug_frame'
-.L125:
+.L160:
 	.word	48
 	.word	-1
 	.byte	3,0,2,1,27,12,26,0,8,26,8,27,8,30,8,29,8,28,8,16,8,17,8,24,8,25,8,31,8,32,8,33,8,34,8,35,8,36,8,37,8,38
@@ -20377,8 +20540,8 @@ imu_Check:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('core0_main')
 	.sect	'.debug_frame'
 	.word	28
-	.word	.L125,.L25,.L38-.L25
+	.word	.L160,.L33,.L46-.L33
 	.byte	4
-	.word	(.L50-.L25)/2
-	.byte	19,16,22,26,3,19,138,16,0,0,0
+	.word	(.L63-.L33)/2
+	.byte	19,24,22,26,3,19,138,24,0,0,0
 	; Module end
