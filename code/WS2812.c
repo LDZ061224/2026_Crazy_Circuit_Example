@@ -3,18 +3,18 @@ Copyright (C), 2016-2026, TYUT JBD TEAM C.
 File name: WS2812.c
 Author: Cross_Z
 Version:0.0               Date: 2026.6.23
-Description:  WS2812 LED椹卞姩 + 鐏晥寮曟搸
-Others:      GPIO Bit-Bang, NOP绮剧‘鏃跺簭, 閰嶇疆缁撴瀯浣撴帴鍙�
+Description:  WS2812 LED driver + light effect engine
+Others:      GPIO bit-bang, NOP precise timing, configuration struct interface
 Function List:
 History:
 <author>  <time>      <version > <desc>
-Cross_Z   2026.6.23   0.0      鍒濆
+Cross_Z   2026.6.23   0.0      Initial
 **************************************************/
 #include "zf_common_headfile.h"
 #include "zf_driver_delay.h"
 #include "WS2812.h"
 
-/***********************************绉佹湁鍙橀噺***********************************/
+/***********************************Private Variables***********************************/
 static WS2812_Color_Typedef  s_buf_a[WS2812_MAX_LEDS];
 static WS2812_Color_Typedef  s_buf_b[WS2812_MAX_LEDS];
 static WS2812_Color_Typedef * volatile s_front = s_buf_a;
@@ -23,14 +23,14 @@ static volatile uint8_t      s_tx_busy   = 0;
 
 static WS2812_Effect_Config  s_cfg;
 static uint32_t              s_phase     = 0;
-static volatile uint8_t      s_progress  = 0;      // 杩涘害 0-100锛圛SR鍙啓锛�
+static volatile uint8_t      s_progress  = 0;      // Progress 0-100 (ISR-writable)
 
-/***********************************NOP鏃跺簭 (5ns/涓� @200MHz)*******************/
+/***********************************NOP Timing (~5ns per nop @200MHz)*******************/
 static inline void WS2812_SendBit(uint8_t bit)
 {
     if (bit)
     {
-        // '1': 800ns楂� + 450ns浣�
+        // '1': 800ns high + 450ns low
         P20_OUT.B.P9 = 1;
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
@@ -61,7 +61,7 @@ static inline void WS2812_SendBit(uint8_t bit)
     }
     else
     {
-        // '0': 400ns楂� + 850ns浣�
+        // '0': 400ns high + 850ns low
         P20_OUT.B.P9 = 1;
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
@@ -92,10 +92,10 @@ static inline void WS2812_SendBit(uint8_t bit)
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
-        __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
     }
 }
 
+/* Send one byte (MSB first) via bit-bang on the data pin */
 static inline void WS2812_SendByte(uint8_t byte)
 {
     WS2812_SendBit((byte >> 7) & 1);
@@ -108,7 +108,9 @@ static inline void WS2812_SendByte(uint8_t byte)
     WS2812_SendBit((byte >> 0) & 1);
 }
 
-/***********************************鍐呴儴宸ュ叿鍑芥暟********************************/
+/***********************************Internal Utility Functions********************************/
+
+/* Convert HSV color space to RGB (h=0..768, s=0..255, v=0..255) */
 static WS2812_Color_Typedef WS2812_HSV(uint16_t h, uint8_t s, uint8_t v)
 {
     uint8_t region = h / 256;
@@ -128,12 +130,14 @@ static WS2812_Color_Typedef WS2812_HSV(uint16_t h, uint8_t s, uint8_t v)
     return c;
 }
 
+/* Triangle wave generator: 0 -> peak -> 0, phase-driven */
 static uint16_t WS2812_Triangle(uint32_t phase, uint16_t peak)
 {
     uint32_t p = phase % (peak * 2);
     return (p < peak) ? p : peak * 2 - p;
 }
 
+/* Push the front buffer to WS2812 LEDs via bit-bang (disables interrupts during transmission) */
 static void WS2812_ShowBuf(void)
 {
     if (s_tx_busy) return;
@@ -151,7 +155,7 @@ static void WS2812_ShowBuf(void)
     s_tx_busy = 0;
 }
 
-/***********************************鍩虹鍑芥暟***********************************/
+/***********************************Basic Functions***********************************/
 
 void WS2812_Init(void)
 {
@@ -182,7 +186,7 @@ void WS2812_Show(void) { WS2812_ShowBuf(); }
 
 void WS2812_Clear(void) { WS2812_Set_All(0, 0, 0); WS2812_ShowBuf(); }
 
-/***********************************鐏晥寮曟搸***********************************/
+/***********************************Light Effect Engine***********************************/
 
 void WS2812_Effect_Set(WS2812_Effect_Config cfg)
 {
@@ -192,9 +196,9 @@ void WS2812_Effect_Set(WS2812_Effect_Config cfg)
 
 /*************************************
 ** Function: WS2812_Effect_SetProgress
-** Description: 鐩存帴鏇存柊杩涘害鍊硷紙ISR瀹夊叏锛屽彧鏀瑰彉閲忥級
-** Others: 鍦↖SR涓皟鐢ㄦ鍑芥暟鏇存柊杩涘害
-**         涓诲惊鐜腑 Effect_Update 浼氳嚜鍔ㄥ埛鏂版樉绀�
+** Description: Directly update progress value (ISR-safe, only modifies variable)
+** Others: Call this function from ISR to update progress
+**         Effect_Update in main loop will automatically refresh display
 *************************************/
 void WS2812_Effect_SetProgress(uint8_t progress)
 {
@@ -204,16 +208,16 @@ void WS2812_Effect_SetProgress(uint8_t progress)
 
 /*************************************
 ** Function: WS2812_Effect_Update
-** Description: 鐏晥姣忓抚鏇存柊
-** Others: 鍦ㄤ富寰幆涓互鍥哄畾闂撮殧璋冪敤锛堝10ms锛�
-**         鑷姩鏍规嵁褰撳墠閰嶇疆娓叉煋涓�甯у苟鍒锋柊鏄剧ず
+** Description: Per-frame light effect update
+** Others: Call at fixed interval in main loop (e.g. 10ms)
+**         Automatically renders one frame based on current config and refreshes display
 *************************************/
 void WS2812_Effect_Update(void)
 {
     WS2812_Color_Typedef *back = (s_front == s_buf_a) ? s_buf_b : s_buf_a;
     uint8_t n = s_led_count;
 
-    // 鍘熷瓙蹇収 s_cfg锛岄伩鍏� ISR 閲� Effect_Set 瑕嗙洊鏃惰鍒板崐鎴愬搧
+    // Atomic snapshot of s_cfg to avoid reading partial data when ISR overwrites via Effect_Set
     WS2812_Effect_Config cfg;
     {
         uint32 primask = interrupt_global_disable();
@@ -223,16 +227,16 @@ void WS2812_Effect_Update(void)
 
     switch (cfg.type)
     {
-    case EFF_OFF:   // 鍏ㄧ伃
+    case EFF_OFF:   // All off
         memset(back, 0, sizeof(WS2812_Color_Typedef) * n);
         break;
 
-    case EFF_SOLID: // 绾壊甯镐寒
+    case EFF_SOLID: // Solid solid color
         for (uint8_t i = 0; i < n; i++)
             { back[i].r = cfg.r; back[i].g = cfg.g; back[i].b = cfg.b; }
         break;
 
-    case EFF_BREATHING: // 鍛煎惛鐏細浜害鎸変笁瑙掓尝 0鈫�255鈫�0 寰幆
+    case EFF_BREATHING: // Breathing: brightness follows triangle wave 0->255->0 cycle
     {
         uint16_t bright = WS2812_Triangle(s_phase, 255);
         for (uint8_t i = 0; i < n; i++)
@@ -246,7 +250,7 @@ void WS2812_Effect_Update(void)
         break;
     }
 
-    case EFF_RAINBOW_FLOW: // 褰╄櫣娴佹按鎷栧熬锛氬僵鑹叉嫋灏剧粫鐜Щ鍔�
+    case EFF_RAINBOW_FLOW: // Rainbow flow with tail: colorful trailing loop movement
     {
         uint8_t tail = cfg.tail ? cfg.tail : 4;
         uint8_t head = (s_phase / 4) % n;
@@ -270,7 +274,7 @@ void WS2812_Effect_Update(void)
         break;
     }
 
-    case EFF_FLOW: // 鍗曡壊娴佹按锛氭寚瀹氶鑹�+鏂瑰悜+鎷栧熬闀垮害
+    case EFF_FLOW: // Single-color flow: specified color + direction + tail length
     {
         uint8_t tail = cfg.tail ? cfg.tail : 3;
         uint8_t head;
@@ -303,7 +307,7 @@ void WS2812_Effect_Update(void)
         break;
     }
 
-    case EFF_CYCLE: // 鍏ㄥ眬鑹茬浉寰幆锛氭墍鏈塋ED鍚屾鍙樿壊
+    case EFF_CYCLE: // Global hue cycle: all LEDs change color synchronously
     {
         WS2812_Color_Typedef c = WS2812_HSV(s_phase % 768, 255, 255);
         for (uint8_t i = 0; i < n; i++)
@@ -312,7 +316,7 @@ void WS2812_Effect_Update(void)
         break;
     }
 
-    case EFF_PROGRESS: // 杩涘害鏉★細浠庣0棰楀紑濮嬮�愰鐐逛寒
+    case EFF_PROGRESS: // Progress bar: light up LEDs sequentially from index 0
     {
         uint8_t lit = (uint16_t)s_progress * n / 100;
         for (uint8_t i = 0; i < n; i++)
@@ -330,11 +334,11 @@ void WS2812_Effect_Update(void)
     WS2812_ShowBuf();
 }
 
-/*********************************** 璺戣溅 LED 鐘舵�佹満 ***********************************/
+/*********************************** Car LED State Machine ***********************************/
 
-// led_state: 0=绛夊彂杞�(榛勫父浜�) 1=璺戣溅(鎸塕un_Mode鍙樿壊) 2=鍋滆溅(榛勫懠鍚�) 3=Flash淇濆瓨(钃濇祦姘�)
+// led_state: 0=waiting to launch (yellow solid) 1=running (color by Run_Mode) 2=stopped (yellow breathing) 3=Flash saved (blue flow)
 static uint8_t s_led_state          = 0;
-static uint8_t s_last_run_mode      = 0xFF;  // 鍝ㄥ叺锛屽己鍒堕娆℃洿鏂�
+static uint8_t s_last_run_mode      = 0xFF;  // Sentinel, force first update
 static uint8_t s_last_mileage_phase = 0;
 
 void WS2812_ScanDone(void)
@@ -358,16 +362,16 @@ void WS2812_FlashSaved(void)
 
 void WS2812_UpdateCarLED(uint8_t enable_on)
 {
-    // 璺戣溅 = 浣胯兘寮� 涓� 鏈仠杞�(Stop_Flag=0)
+    // Running = enable switch on AND not stopped (Stop_Flag=0)
     uint8_t car_running = enable_on && !Stop_Flag;
 
-    // state 3 (Flash淇濆瓨钃濇祦姘�) 涓嶈鍋滆溅瑕嗙洊锛屽彂杞︽椂鎵嶉��鍑�
+    // state 3 (Flash saved blue flow) is not overridden by stop; only exits on launch
     if (car_running && (s_led_state == 3 || s_led_state != 1))
     {
         s_led_state = 1;
         s_last_run_mode = 0xFF;
     }
-    // 鍋滆溅锛堜娇鑳藉叧 鎴� 鑷姩鍋滆溅锛夛細鍒囬粍鑹插懠鍚哥伅锛坰tate 3 闄ゅ锛�
+    // Stopped (enable off OR auto stop): switch to yellow breathing (except state 3)
     else if (!car_running && (s_led_state == 1 || s_led_state == 0))
     {
         WS2812_Effect_Set((WS2812_Effect_Config){
@@ -378,10 +382,10 @@ void WS2812_UpdateCarLED(uint8_t enable_on)
         s_led_state = 2;
     }
 
-    // 璺戣溅涓細鎸� Run_Mode 鍙樿壊锛屼粎鍦ㄦā寮忚烦鍙樻椂璋� Effect_Set
+    // While running: change color by Run_Mode, only call Effect_Set on mode change
     if (s_led_state == 1)
     {
-        // Mileage_Mode 涓ら樁娈碉細0=寰抗(缁�) 1=鐗规畩鍏冪礌(绱�)
+        // Mileage_Mode two phases: 0=trace (green) 1=special element (purple)
         uint8_t mphase = 0;
         if (Run_Mode == Mileage_Mode)
 //            mphase = (Count.Mileage < Run_Track.Node_Mileage[Execute_Times][0]) ? 0 : 1;
@@ -394,20 +398,20 @@ void WS2812_UpdateCarLED(uint8_t enable_on)
             switch (Run_Mode)
             {
                 case Normal_Mode: default:
-                    // Remember 妯″紡锛氭寜閫熷害鏇茬嚎鐩镐綅鍙樿壊
-                    //   0=鍔犻��(榛�) 1=鍖�閫�(缁�) 2=鍑忛��(绾�) 3=杞集(绾�)
-                    // 鍏朵粬妯″紡锛氱伃
+                    // Remember mode: color by speed curve phase
+                    //   0=accel (yellow) 1=cruise (green) 2=decel (red) 3=turn (red)
+                    // Other modes: off
 //                    if (Work_Mode == Remember_Mode)
 //                    {
 //                        switch (Remember_Speed_Phase)
 //                        {
-//                            case 0:  // 鍔犻��
+//                            case 0:  // Accel
 //                                WS2812_Effect_Set((WS2812_Effect_Config){.type = EFF_SOLID, .r = 255, .g = 255, .b = 0});
 //                                break;
-//                            case 1:  // 鍖�閫�
+//                            case 1:  // Cruise
 //                                WS2812_Effect_Set((WS2812_Effect_Config){.type = EFF_SOLID, .r = 0, .g = 255, .b = 0});
 //                                break;
-//                            case 2:  // 鍑忛��
+//                            case 2:  // Decel
 //                            default:
 //                                WS2812_Effect_Set((WS2812_Effect_Config){.type = EFF_SOLID, .r = 255, .g = 0, .b = 0});
 //                                break;
@@ -418,13 +422,13 @@ void WS2812_UpdateCarLED(uint8_t enable_on)
 //                        WS2812_Effect_Set((WS2812_Effect_Config){.type = EFF_OFF});
 //                    }
                     break;
-                case Turn_Left: case Turn_Right:        // 杞集锛氱孩
+                case Turn_Left: case Turn_Right:        // Turning: red
                     WS2812_Effect_Set((WS2812_Effect_Config){.type = EFF_SOLID, .r = 255, .g = 0, .b = 0});
                     break;
-                case Straight_Mode:                     // 鐩寸嚎锛氳摑
+                case Straight_Mode:                     // Straight: blue
                     WS2812_Effect_Set((WS2812_Effect_Config){.type = EFF_SOLID, .r = 0, .g = 0, .b = 255});
                     break;
-                case Mileage_Mode:                      // 閲岀▼锛氶樁娈�1缁� 闃舵2绱�
+                case Mileage_Mode:                      // Mileage: phase1 green, phase2 purple
                     if (mphase == 0)
                         WS2812_Effect_Set((WS2812_Effect_Config){.type = EFF_SOLID, .r = 0, .g = 255, .b = 0});
                     else

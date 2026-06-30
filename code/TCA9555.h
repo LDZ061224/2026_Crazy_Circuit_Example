@@ -1,18 +1,18 @@
 /*************************************************
 Copyright (C), 2016-2026, TYUT JBD TEAM C.
-File name: OLEDKeyboard.h
+File name: TCA9555.h
 Author: TEAM  A B C
 Version:0.0               Date: 2026.1.27
-Description:  TCA9555.h
-Others:      无
+Description:  TCA9555 I2C IO expander driver header
+Others:      None
 Function List:
 History:
 <author>  <time>      <version > <desc>
-Cross_Z   2026.1.27   0.0        初始
+Cross_Z   2026.1.27   0.0        Initial
 **************************************************/
 /*
-* 芯片型号：TCA9555
-* 核心功能：16位I²C至并行端口扩展器，用于为微控制器提供通用远程I/O扩展。
+* Chip model: TCA9555
+* Core function: 16-bit I2C to parallel port expander, provides remote I/O expansion for MCUs.
 */
 #ifndef __TCA9555_H
 #define __TCA9555_H
@@ -20,16 +20,16 @@ Cross_Z   2026.1.27   0.0        初始
 #include "zf_common_headfile.h"
 #include "headfiles.h"
 
-/***********************************宏定义***********************************/
-#define TCA9555_BASE_ADDR      0x20  // 设备写地址（A0 A1 A2均为低）
-#define TCA9555_REG_INPUT_P0   0x00  // 输入端口0
-#define TCA9555_REG_INPUT_P1   0x01  // 输入端口1
-#define TCA9555_REG_OUTPUT_P0  0x02  // 输出端口0
-#define TCA9555_REG_OUTPUT_P1  0x03  // 输出端口1
-#define TCA9555_REG_POLARITY_P0 0x04  // 极性反转端口0
-#define TCA9555_REG_POLARITY_P1 0x05  // 极性反转端口1
-#define TCA9555_REG_CONFIG_P0  0x06  // 配置端口0
-#define TCA9555_REG_CONFIG_P1  0x07  // 配置端口1
+/***********************************Macro Definitions***********************************/
+#define TCA9555_BASE_ADDR      0x20  // Device write address (A0 A1 A2 all low)
+#define TCA9555_REG_INPUT_P0   0x00  // Input port 0
+#define TCA9555_REG_INPUT_P1   0x01  // Input port 1
+#define TCA9555_REG_OUTPUT_P0  0x02  // Output port 0
+#define TCA9555_REG_OUTPUT_P1  0x03  // Output port 1
+#define TCA9555_REG_POLARITY_P0 0x04  // Polarity inversion port 0
+#define TCA9555_REG_POLARITY_P1 0x05  // Polarity inversion port 1
+#define TCA9555_REG_CONFIG_P0  0x06  // Configuration port 0
+#define TCA9555_REG_CONFIG_P1  0x07  // Configuration port 1
 
 typedef enum {
     // --- Port 0 (P00 - P07) ---
@@ -52,14 +52,14 @@ typedef enum {
     LED_14,
     LED_15,
 
-    LED_ALL  // 特殊值，可用于全亮/全灭操作
+    LED_ALL  // Special value, usable for all-on / all-off operations
 
 } TCA9555_LED_t;
 
-/*********************************全局变量声明*********************************/
+/*********************************Global Variable Declarations*********************************/
 extern TCA9555_LED_t LED[16];
 
-/***********************************函数声明***********************************/
+/***********************************Function Declarations***********************************/
 extern void TCA9555_Init();
 extern void TCA9555_LED_Ctrl(TCA9555_LED_t pin, int state);
 extern uint8_t TCA9555_Read_Input(uint8_t port);

@@ -19,7 +19,7 @@ extern int   Left_Scan_Point;
 extern int   Right_Scan_Point;
 extern int   Last_Error;
 
-/* file-scope in Ctrl.c 鈥� needed for common preprocessing */
+/* file-scope in Ctrl.c -- needed for common preprocessing */
 extern int      Speed_Get_Count;
 extern int      Enable_Start_Delay_Count;
 extern uint8_t  Last_EnableSwitch_ON;
@@ -56,7 +56,7 @@ void Debug_Car_Go(void)
     Get_Light();
 //    Light_Process();
     Safety_Check();
-    
+
     if (Stop_Flag != 0)
     {
         return;
@@ -202,7 +202,7 @@ void Debug_Angle_Tuning(void)
     {
         // ----- direct gyro rate target (Gyro_PID only, set by serial AVT) -----
         // User sends @AVT=200# to set Debug_Angle_Vel_Target=200 deg/s
-        // This bypasses Angle_PID — pure rate-loop tuning
+        // This bypasses Angle_PID -- pure rate-loop tuning
         angle_target = 0;
         Turn_PID_Out = 0;
         Debug_Angle_D_First = 0;
@@ -296,7 +296,7 @@ void Debug_Set_Out(void)
     if (Debug_Motor_Enable != 0)
     {
         pwm_set_duty(Suction_Motor_PWM, Debug_Fan_Duty);
-        pwm_set_duty(Suction_Motor_DIR, 0);     // 跟 Car_Go 一致：0=吸风
+        pwm_set_duty(Suction_Motor_DIR, 0);     // Same as Car_Go: 0=suction
     }
     else
     {

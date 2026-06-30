@@ -1,9 +1,9 @@
 /*************************************************
 Copyright (C), 2016-2026, TYUT JBD TEAM C.
 File name: Uart_Adjust.c
-Description:  UART remote tuning protocol — implementation.
+Description:  UART remote tuning protocol -- implementation.
              Frame: @XXX=value# (3-char key, '=' separator, '#' terminator).
-             Special: @STOP# → key="STP" val=1 ; @RUN# → key="RUN" val=0.
+             Special: @STOP# -> key="STP" val=1 ; @RUN# -> key="RUN" val=0.
              Works on UART_2, ISR feeds bytes, CPU1 loop calls Apply.
 Others:      All XXX keys are 3 chars (Apply uses strcmp on a 4-byte buffer).
 History:
@@ -18,10 +18,10 @@ Claude    2026.6.29   0.2  clean unused uart_* vars, fix BSP, add all keys
 /* ============================== supported commands ==============================
 
   Stop/Run  : @STOP#  @RUN#
-  Speed PID : @LKP=val# / @DLP=val#   @LKI=val# / @DLI=val#   | kp×1  ki×0.01
+  Speed PID : @LKP=val# / @DLP=val#   @LKI=val# / @DLI=val#   | kp*1  ki*0.01
               @RKP=val# / @DRP=val#   @RKI=val# / @DRI=val#
-  Steer PID : @TKP=val#  @TKD=val#                          | ×0.01
-  Gyro PID  : @GKP=val#  @GKI=val#  @GKD=val#              | ×0.001
+  Steer PID : @TKP=val#  @TKD=val#                          | *0.01
+  Gyro PID  : @GKP=val#  @GKI=val#  @GKD=val#              | *0.001
   Base      : @BSP=val#   (Basic_Speed + Debug_Target_Speed)
   Debug     : @FAN=val#   @TGT=val#   @GDI=val#(1 or 2)
               @AMO=val#(1=sin 2=step 3=gyro rate)  @AVT=val#(gyro rate target deg/s)
@@ -34,6 +34,7 @@ uart_tuning_cmd_t g_tuning_cmd = {0};
 
 /* ============================== static helpers ============================== */
 
+/* Convert a decimal string to float (lightweight, no stdlib dependency) */
 static float uart_tuning_atof(const char *str)
 {
     float result = 0.0f;
@@ -56,12 +57,12 @@ static float uart_tuning_atof(const char *str)
 }
 
 /*
- *  Parse a complete frame (already delimited by '@' … '#') into g_tuning_cmd.
+ *  Parse a complete frame (already delimited by '@' ... '#') into g_tuning_cmd.
  *
  *  Supported formats:
- *    @STOP#           → key="STP"  val=1    (no '=')
- *    @RUN#            → key="RUN"  val=0
- *    @XXX=value#      → key="XXX"  val=parsed float  (3-char key, '=' required)
+ *    @STOP#           -> key="STP"  val=1    (no '=')
+ *    @RUN#            -> key="RUN"  val=0
+ *    @XXX=value#      -> key="XXX"  val=parsed float  (3-char key, '=' required)
  *
  *  frame: points to '@' (byte-parser stored '@' in buf[0])
  *  len:   number of bytes before '#'
@@ -107,7 +108,7 @@ static void uart_tuning_parse_frame(const char *frame, uint8 len)
     }
 
     /* ---------- @XXX=value# (generic) ---------- */
-    /* minimum: @X=Y# → 6 bytes.  frame[0]='@', frame[4]='=' */
+    /* minimum: @X=Y# -> 6 bytes.  frame[0]='@', frame[4]='=' */
     if (len < 6) return;
     if (frame[0] != '@') return;
     if (frame[4] != '=') return;
@@ -125,7 +126,7 @@ static void uart_tuning_parse_frame(const char *frame, uint8 len)
  *  Per-byte state machine.  '@' starts a frame, '#' ends it.
  *  Buffer size 16 = enough for "@XXX=-123.456" (~14 bytes) + margin.
  *  Max frame len 14 bytes to reject noise: floating RX pin generates
- *  random '@'…'#' sequences that can fake @STP#.
+ *  random '@'...'#' sequences that can fake @STP#.
  */
 static void uart_tuning_parse_byte(uint8 byte)
 {
@@ -168,11 +169,13 @@ static void uart_tuning_parse_byte(uint8 byte)
 
 /* ============================== public API ============================== */
 
+/* Feed one byte into the frame-parsing state machine (call from ISR) */
 void Uart_Adjust_ParseByte(uint8 byte)
 {
     uart_tuning_parse_byte(byte);
 }
 
+/* Consume g_tuning_cmd and apply the parameter change (call from main loop) */
 void Uart_Adjust_Apply(void)
 {
     extern int Stop_Flag;
@@ -270,6 +273,7 @@ void Uart_Adjust_Apply(void)
     g_tuning_cmd.valid = 0;
 }
 
+/* Persist current PID + speed + debug parameters to Flash */
 void Uart_Adjust_SaveToFlash(void)
 {
     PID_OKb[0] = (uint32)Left_PID.kp;

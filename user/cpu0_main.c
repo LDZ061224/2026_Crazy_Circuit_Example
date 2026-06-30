@@ -2,19 +2,20 @@
 * TC264 Open Source Library
 * Copyright (c) 2022 SEEKFREE
 *
-* 本文件是 CPU0 的启动入口，负责完成系统初始化、外设初始化和调试数据输出。
+* This file is the CPU0 startup entry and is responsible for system initialization,
+* peripheral initialization, and debug data output.
 *
-* 版权与许可说明请以 libraries/doc 目录中的 LICENSE 和
-* GPL3_permission_statement.txt 为准。
+* Copyright and licensing details are governed by the LICENSE and
+* GPL3_permission_statement.txt files in the libraries/doc directory.
 *
-* 文件名            cpu0_main
-* 适用平台          TC264D
-* 开发环境          ADS v1.10.2
-* 项目主页          https://seekfree.taobao.com/
+* Filename           cpu0_main
+* Platform           TC264D
+* Dev environment    ADS v1.10.2
+* Project home       https://seekfree.taobao.com/
 *
-* 日期              作者                说明
-* 2022-09-15       pudding            first version
-* 2026-06-30       Claude             陀螺仪校准加缓冲, 扫线移到 PIT 之前, WS2812 启动阶段放 CPU0
+* Date               Author              Description
+* 2022-09-15         pudding             first version
+* 2026-06-30         Claude              gyro calibration with buffer, line scan moved before PIT, WS2812 startup on CPU0
 ********************************************************************************************************************/
 #include "zf_common_headfile.h"
 #include "headfiles.h"
@@ -24,33 +25,39 @@
 
 #pragma section all "cpu0_dsram"
 
-/* CPU0 负责整车启动、外设初始化和持续调试输出。 */
+/* CPU0 handles vehicle startup, peripheral initialization, and continuous debug output. */
 int imu_Check = 1;
 
-/* ======================== CPU0 主入口 ======================== */
+/* ======================== CPU0 Main Entry ======================== */
 int core0_main(void)
 {
+    /* ---- System & peripheral initialization ---- */
     clock_init();
     debug_init();
     Encoder_Init();
     Motor_Init();
     Other_Init();
     Light_Init();
+
+    /* ---- IMU (gyro) initialization with retry ---- */
     while(1)
     {
        if (imu660rb_init()){}
        else
            break;
-       gpio_toggle_level(P33_4);
+       gpio_toggle_level(P33_4);   // toggle LED on each retry attempt
     }
-    gpio_set_level(P33_4, 0);
+    gpio_set_level(P33_4, 0);      // turn LED off after successful init
+
+    /* ---- I/O expander, saved data, and LED strip ---- */
     TCA9555_Init();
     Data_Load();
     WS2812_Init();
 
-    // ========================= 启动缓冲：等 3 秒再校准 =========================
-    // 给用户时间放稳车辆、打开使能开关，避免上车抖动干扰零漂采集
-    // 此时 CPU1 阻塞在 cpu_wait_event_ready()，CPU0 独占灯板，无竞争
+    // ========================= Startup Buffer: wait 3 seconds before calibration =========================
+    // Give the user time to place the car steadily and turn on the enable switch,
+    // so that vehicle shake does not corrupt the zero-drift acquisition.
+    // CPU1 is blocked at cpu_wait_event_ready(), so CPU0 has exclusive access to the LED board.
     WS2812_Effect_Set((WS2812_Effect_Config){
         .type = EFF_OFF });
 
@@ -61,8 +68,8 @@ int core0_main(void)
         system_delay_ms(10);
     }
 
-    // ========================= 陀螺仪除零漂校准 =========================
-    // 负压开到最大，灯板红灯呼吸，提醒用户保持车辆静止
+    // ========================= Gyro Zero-Drift Calibration =========================
+    // Turn on suction to maximum, LED board breathing red to remind the user to keep the vehicle still.
     pwm_set_duty(Suction_Motor_DIR, 10000);
     pwm_set_duty(Suction_Motor_PWM, 9500);
 
@@ -84,8 +91,8 @@ int core0_main(void)
     gyro_z_offset = imu660rb_gyro_transition((float)gyro_z_sum / GYRO_CALIB_SAMPLES);
 //    pwm_set_duty(Suction_Motor_PWM, 0);
 
-    // ========================= 扫线 =========================
-    // 绿灯进度条，全程在 PIT 启动前完成
+    // ========================= Line Scan =========================
+    // Green progress bar on LED strip, completed entirely before PIT starts.
     WS2812_Effect_Set((WS2812_Effect_Config){
         .type = EFF_PROGRESS,
         .r = 0, .g = 255, .b = 0 });
@@ -106,30 +113,34 @@ int core0_main(void)
 
     g_scan_progress = 0;
 
-    // 扫线结束：绿灯常亮
+    // Line scan finished: solid green
     WS2812_Effect_Set((WS2812_Effect_Config){
         .type = EFF_SOLID,
         .r = 0, .g = 255, .b = 0 });
     WS2812_Effect_Update();
-    // ========================= 扫线 END =========================
+    // ========================= Line Scan END =========================
     pwm_set_duty(Suction_Motor_PWM, 0);
-    /* 串口2：调参命令接收 */
-    uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
+
+    /* UART_2: tuning command receiver */
+    uart_init(UART_2, 921600, UART2_TX_P33_9, UART2_RX_P33_8);
     uart_rx_interrupt(UART_2, 1);
 
+    /* Enable interrupts on CPU0 */
     interrupt_global_enable(0);
 
+    /* ---- VOFA flash dump mode: skip normal operation, dump stored data only ---- */
     if (vofa_flash_dump_mode)
     {
         while (TRUE) { Vofa_Send_Flash_Data(); }
     }
 
-    // PIT 启动后，ISR 调用 Car_Go；灯板由 CPU0 主循环统一驱动
+    // After PIT starts, ISR calls Car_Go; LED board is driven by the CPU0 main loop.
     pit_ms_init(CCU60_CH0, 3);
     cpu_wait_event_ready();
 
     int last_led = -1;
 
+    /* ---- Main loop: telemetry output and runtime LED indication ---- */
     while (TRUE)
     {
         Vofa_Send_Data();

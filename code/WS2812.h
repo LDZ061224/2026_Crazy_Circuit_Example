@@ -3,12 +3,12 @@ Copyright (C), 2016-2026, TYUT JBD TEAM C.
 File name: WS2812.h
 Author: Cross_Z
 Version:0.0               Date: 2026.6.23
-Description:  WS2812 LED驱动 + 灯效引擎
-Others:      GPIO Bit-Bang, 配置结构体接口
+Description:  WS2812 LED driver + light effect engine
+Others:      GPIO bit-bang, configuration struct interface
 Function List:
 History:
 <author>  <time>      <version > <desc>
-Cross_Z   2026.6.23   0.0      初始
+Cross_Z   2026.6.23   0.0      Initial
 **************************************************/
 #ifndef __WS2812_H
 #define __WS2812_H
@@ -16,92 +16,92 @@ Cross_Z   2026.6.23   0.0      初始
 #include "zf_common_headfile.h"
 #include "headfiles.h"
 
-/***********************************硬件配置***********************************/
+/***********************************Hardware Configuration***********************************/
 #define WS2812_MAX_LEDS         8
-#define WS2812_DATA_PIN         P20_9           // 数据引脚
+#define WS2812_DATA_PIN         P20_9           // Data pin
 
-/***********************************类型定义***********************************/
+/***********************************Type Definitions***********************************/
 
-// RGB颜色
+// RGB color
 typedef struct {
     uint8_t r;
     uint8_t g;
     uint8_t b;
 } WS2812_Color_Typedef;
 
-// 灯效类型
+// Light effect types
 typedef enum {
-    EFF_OFF = 0,            // 全灭
-    EFF_SOLID,              // 纯色常亮
-    EFF_BREATHING,          // 呼吸灯（亮度渐变）
-    EFF_RAINBOW_FLOW,       // 彩虹流水拖尾（彩色拖尾绕圈）
-    EFF_FLOW,               // 单色流水（可选方向+拖尾）
-    EFF_CYCLE,              // 全局色相循环（整体变色）
-    EFF_PROGRESS,           // 进度条（从0到满圈）
+    EFF_OFF = 0,            // All off
+    EFF_SOLID,              // Solid color
+    EFF_BREATHING,          // Breathing (brightness fade)
+    EFF_RAINBOW_FLOW,       // Rainbow flow with tail (colorful trailing loop)
+    EFF_FLOW,               // Single-color flow (direction + tail configurable)
+    EFF_CYCLE,              // Global hue cycle (all LEDs change color together)
+    EFF_PROGRESS,           // Progress bar (from 0 to full ring)
 } WS2812_Effect_Enum;
 
-// 灯效配置结构体
-// 用法：指定 type，然后按需填写对应字段，其余填0
+// Light effect configuration struct
+// Usage: specify type, then fill corresponding fields as needed, fill 0 for unused fields
 typedef struct {
-    WS2812_Effect_Enum type;    // 灯效类型（必填）
-    uint8_t  r, g, b;           // 颜色（EFF_SOLID / EFF_BREATHING / EFF_FLOW 用）
-    uint8_t  speed;             // 动画速度 1-10（EFF_RAINBOW_FLOW / EFF_CYCLE 用）
-    uint8_t  tail;              // 拖尾长度 2-8（EFF_RAINBOW_FLOW / EFF_FLOW 用）
-    uint8_t  dir;               // 方向 0=正向 1=反向（EFF_FLOW 用）
-    uint16_t period_ms;         // 周期毫秒（EFF_BREATHING 用）
-    uint8_t  progress;          // 进度 0-100（EFF_PROGRESS 用）
+    WS2812_Effect_Enum type;    // Light effect type (required)
+    uint8_t  r, g, b;           // Color (for EFF_SOLID / EFF_BREATHING / EFF_FLOW)
+    uint8_t  speed;             // Animation speed 1-10 (for EFF_RAINBOW_FLOW / EFF_CYCLE)
+    uint8_t  tail;              // Tail length 2-8 (for EFF_RAINBOW_FLOW / EFF_FLOW)
+    uint8_t  dir;               // Direction 0=forward 1=reverse (for EFF_FLOW)
+    uint16_t period_ms;         // Period in ms (for EFF_BREATHING)
+    uint8_t  progress;          // Progress 0-100 (for EFF_PROGRESS)
 } WS2812_Effect_Config;
 
-/***********************************使用示例***********************************/
+/***********************************Usage Example***********************************/
 /*
-    // 初始化
+    // Initialize
     WS2812_Init();
 
-    // 设置效果（在需要切换效果时调用，如初始化时或状态改变时）
+    // Set effect (call when switching effects, e.g. at init or state change)
     WS2812_Effect_Set((WS2812_Effect_Config){
         .type  = EFF_BREATHING,
-        .r = 0, .g = 255, .b = 0,  // 绿色
-        .period_ms = 2000           // 2秒一个呼吸周期
+        .r = 0, .g = 255, .b = 0,  // Green
+        .period_ms = 2000           // 2-second breathing cycle
     });
 
-    // 主循环中每帧调用（推进动画 + 刷新显示）
+    // Call per frame in main loop (advance animation + refresh display)
     while (1) {
-        WS2812_Effect_Update();     // 自动按当前效果更新LED
-        system_delay_ms(10);        // 10ms一帧，控制动画速度
+        WS2812_Effect_Update();     // Auto-update LEDs per current effect
+        system_delay_ms(10);        // 10ms per frame, controls animation speed
     }
 */
 
-/***********************************函数声明***********************************/
+/***********************************Function Declarations***********************************/
 
-// 初始化（在Other_Init中已调用，不需要手动调）
+// Initialize (already called in Other_Init, no need to call manually)
 void WS2812_Init(void);
 
-// 设置所有LED为同一颜色（直接刷新，不影响当前灯效配置）
+// Set all LEDs to one color (direct refresh, does not affect current effect config)
 void WS2812_Set_All(uint8_t r, uint8_t g, uint8_t b);
 
-// 立即刷新显示（将当前缓冲区数据发送到灯板）
+// Immediately refresh display (send current buffer data to LED strip)
 void WS2812_Show(void);
 
-// 全部熄灭
+// Turn off all LEDs
 void WS2812_Clear(void);
 
-// 设置灯效（切换效果时调用，会重置动画状态）
+// Set light effect (call when switching effects, resets animation state)
 void WS2812_Effect_Set(WS2812_Effect_Config cfg);
 
-// 直接更新进度（ISR安全，只改变量不发送数据）
+// Directly update progress (ISR-safe, only modifies variable, does not send data)
 void WS2812_Effect_SetProgress(uint8_t progress);
 
-// 灯效每帧更新（主循环中以固定间隔调用，如10ms）
+// Per-frame light effect update (call at fixed interval in main loop, e.g. 10ms)
 void WS2812_Effect_Update(void);
 
-// 扫描完成 → 黄色常亮（等发车）
+// Scan complete -> yellow solid (waiting to launch)
 void WS2812_ScanDone(void);
 
-// Flash保存成功 → 蓝色流水（主循环调用，ISR状态机不覆盖）
+// Flash save success -> blue flow (call in main loop, ISR state machine does not override)
 void WS2812_FlashSaved(void);
 
-// 跑车 LED 状态机：按 Run_Mode 变色，停车黄呼吸（ISR 中每 tick 调用）
-//   enable_on: 使能开关状态（1=跑车 0=停车）
+// Car LED state machine: color by Run_Mode, yellow breathing when stopped (call per tick in ISR)
+//   enable_on: enable switch state (1=running 0=stopped)
 void WS2812_UpdateCarLED(uint8_t enable_on);
 
 #endif

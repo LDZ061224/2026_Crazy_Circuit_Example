@@ -1,20 +1,20 @@
 /*************************************************
 Copyright (C), 2016-2026, TYUT JBD TEAM C.
-File name: OLEDKeyboard.h
+File name: TCA9555.c
 Author: TEAM  A B C
 Version:0.0               Date: 2026.1.27
-Description:  TCA9555.c
+Description:  TCA9555 I2C IO expander driver implementation
 Others:
 Function List:
 History:
 <author>  <time>      <version > <desc>
-Cross_Z   2026.1.27   0.0        ʼ
+Cross_Z   2026.1.27   0.0        Initial
 **************************************************/
 
 #include "TCA9555.h"
 
 soft_iic_info_struct TC9555_I2C_Struct;
-TCA9555_LED_t LED[16] =  // 修正为16个元素
+TCA9555_LED_t LED[16] =  // 16 elements
 {
     LED_0, LED_1, LED_2, LED_3, LED_4, LED_5, LED_6, LED_7,
     LED_8, LED_9, LED_10, LED_11, LED_12, LED_13, LED_14, LED_15
@@ -24,87 +24,87 @@ TCA9555_LED_t LED[16] =  // 修正为16个元素
 
 /*************************************
 ** Function: TCA9555_Init
-** Description: TCA9555初始化
-** Others: IO配置为输出模式
+** Description: TCA9555 initialization
+** Others: IO configured as output mode
 *************************************/
 void TCA9555_Init()
 {
     uint8_t cmd, data;
 
-    // 初始化IIC
+    // Initialize I2C
     soft_iic_init(&TC9555_I2C_Struct, TCA9555_BASE_ADDR, 10, P21_7, P20_6);
 
-    // 配置 Port 0 为输出
-    cmd = TCA9555_REG_CONFIG_P0;  // 选择配置寄存器0
-    data = 0x00;                  // 1=输入, 0=输出 -> 全部配置为输出
+    // Configure Port 0 as output
+    cmd = TCA9555_REG_CONFIG_P0;  // Select configuration register 0
+    data = 0x00;                  // 1=input, 0=output -> all configured as output
 
-    // I2C写设备地址 -> 命令字节(0x06) -> 数据(0x00)
+    // I2C write device addr -> command byte(0x06) -> data(0x00)
     soft_iic_write_8bit_register(&TC9555_I2C_Struct, cmd, data);
 
-    // 配置 Port 1 为输出
-    cmd = TCA9555_REG_CONFIG_P1;  // 选择配置寄存器1
-    data = 0x00;                  // 全部配置为输出
+    // Configure Port 1 as output
+    cmd = TCA9555_REG_CONFIG_P1;  // Select configuration register 1
+    data = 0x00;                  // All configured as output
 
     soft_iic_write_8bit_register(&TC9555_I2C_Struct, cmd, data);
 
-    // 初始化输出寄存器，所有LED熄灭
+    // Initialize output registers, all LEDs off
     cmd = TCA9555_REG_OUTPUT_P0;
-    data = 0x00;  // 高电平熄灭LED
+    data = 0x00;  // High level turns off LED
     soft_iic_write_8bit_register(&TC9555_I2C_Struct, cmd, data);
 
     cmd = TCA9555_REG_OUTPUT_P1;
-    data = 0x00;  // 高电平熄灭LED
+    data = 0x00;  // High level turns off LED
     soft_iic_write_8bit_register(&TC9555_I2C_Struct, cmd, data);
 }
 
 /*************************************
 ** Function: TCA9555_LED_Ctrl
-** Description: TCA9555 LED控制
-** Others: pin为LED编号，state为LED状态 0-熄灭 1-点亮
+** Description: TCA9555 LED control
+** Others: pin is LED number, state is LED state 0=off 1=on
 *************************************/
 void TCA9555_LED_Ctrl(TCA9555_LED_t pin, int state)
 {
-    uint8_t reg_addr;      // 寄存器地址
-    uint8_t current_data;  // 当前寄存器值
-    uint8_t pin_index;     // 端口内的位索引 (0-7)
+    uint8_t reg_addr;      // Register address
+    uint8_t current_data;  // Current register value
+    uint8_t pin_index;     // Bit index within port (0-7)
 
-    // 判断属于哪个端口，计算位索引
+    // Determine which port, calculate bit index
     if (pin < 8)
     {
         reg_addr = 0x02; // Output Port 0
-        pin_index = pin; // P00-P07 对应位 0-7
+        pin_index = pin; // P00-P07 correspond to bits 0-7
     }
     else if (pin < 16)
     {
         reg_addr = 0x03; // Output Port 1
-        pin_index = pin - 8; // P10-P17 对应位 0-7
+        pin_index = pin - 8; // P10-P17 correspond to bits 0-7
     }
     else
     {
-        return; // 无效的pin编号
+        return; // Invalid pin number
     }
 
-    // 读取当前端口状态
+    // Read current port state
     current_data = soft_iic_read_8bit_register(&TC9555_I2C_Struct, reg_addr);
 
-    // 设置状态位
+    // Set state bit
     if (state == 0)
     {
-        current_data &= ~(1 << pin_index); // 置0点亮LED（低电平有效）
+        current_data &= ~(1 << pin_index); // Clear bit to turn on LED (active low)
     }
     else
     {
-        current_data |= (1 << pin_index); // 置1熄灭LED（高电平有效）
+        current_data |= (1 << pin_index); // Set bit to turn off LED (active high)
     }
 
-    // 写回寄存器
+    // Write back to register
     soft_iic_write_8bit_register(&TC9555_I2C_Struct, reg_addr, current_data);
 }
 
 /*************************************
 ** Function: TCA9555_Read_Input
-** Description: 读取输入端口状态
-** Others: port为端口号 0-Port0, 1-Port1
+** Description: Read input port status
+** Others: port is port number 0=Port0, 1=Port1
 *************************************/
 uint8_t TCA9555_Read_Input(uint8_t port)
 {
@@ -124,8 +124,8 @@ uint8_t TCA9555_Read_Input(uint8_t port)
 
 /*************************************
 ** Function: TCA9555_Set_Polarity
-** Description: 设置极性反转
-** Others: port为端口号，polarity_mask为极性掩码
+** Description: Set polarity inversion
+** Others: port is port number, polarity_mask is polarity mask
 *************************************/
 void TCA9555_Set_Polarity(uint8_t port, uint8_t polarity_mask)
 {
@@ -145,26 +145,26 @@ void TCA9555_Set_Polarity(uint8_t port, uint8_t polarity_mask)
 
 /*************************************
 ** Function: TCA9555_All_LED_On
-** Description: 点亮所有LED
-** Others: 无
+** Description: Turn on all LEDs
+** Others: None
 *************************************/
 void TCA9555_All_LED_On(void)
 {
-    // Port 0 所有位清零
+    // Port 0 all bits cleared
     soft_iic_write_8bit_register(&TC9555_I2C_Struct, 0x02, 0x00);
-    // Port 1 所有位清零
+    // Port 1 all bits cleared
     soft_iic_write_8bit_register(&TC9555_I2C_Struct, 0x03, 0x00);
 }
 
 /*************************************
 ** Function: TCA9555_All_LED_Off
-** Description: 熄灭所有LED
-** Others: 无
+** Description: Turn off all LEDs
+** Others: None
 *************************************/
 void TCA9555_All_LED_Off(void)
 {
-    // Port 0 所有位置1
+    // Port 0 all bits set
     soft_iic_write_8bit_register(&TC9555_I2C_Struct, 0x02, 0xFF);
-    // Port 1 所有位置1
+    // Port 1 all bits set
     soft_iic_write_8bit_register(&TC9555_I2C_Struct, 0x03, 0xFF);
 }

@@ -1,16 +1,16 @@
 /*********************************************************************************************************************
-* TC264 Opensourec Library 即（TC264 开源库）是一个基于官方 SDK 接口的第三方开源库
-* Copyright (c) 2022 SEEKFREE 逐飞科技
-* …[license truncated]…
-* 文件名称          isr
-* 公司名称          成都逐飞科技有限公司
-* 开发环境          ADS v1.10.2
-* 适用平台          TC264D
+* TC264 Open Source Library (third-party open source library based on official SDK interfaces)
+* Copyright (c) 2022 SEEKFREE (Zhufei Technology)
+* ... [license truncated] ...
+* Filename           isr
+* Company            Chengdu Zhufei Technology Co., Ltd.
+* Dev environment    ADS v1.10.2
+* Platform           TC264D
 *
-* 修改记录
-* 日期              作者                备注
-* 2022-09-15       pudding            first version
-* 2026-06-28       Claude             UART_2 串口调参, 移除重复 parser
+* Modification history
+* Date               Author              Notes
+* 2022-09-15         pudding             first version
+* 2026-06-28         Claude              UART_2 serial tuning, removed duplicate parser
 ********************************************************************************************************************/
 
 #include "zf_common_headfile.h"
@@ -22,9 +22,11 @@
 
 extern uint8 debug_uart_data;
 
-// 扫线已在 cpu0_main.c 的 PIT 启动前完成，ISR 只需跑车调度
+// Line scan is done before PIT starts in cpu0_main.c; ISR only needs to run the car control schedule.
 
-// **************************** PIT中断函数 ****************************
+// ============================ PIT Timer ISR ============================
+
+/* CCU60 CH0: 3ms periodic interrupt — main car control tick (Car_Go core beat) */
 IFX_INTERRUPT(cc60_pit_ch0_isr, 0, CCU6_0_CH0_ISR_PRIORITY)
 {
     interrupt_global_enable(0);
@@ -37,25 +39,31 @@ IFX_INTERRUPT(cc60_pit_ch0_isr, 0, CCU6_0_CH0_ISR_PRIORITY)
 #endif
 }
 
+/* CCU60 CH1: unused, closed */
 IFX_INTERRUPT(cc60_pit_ch1_isr, 0, CCU6_0_CH1_ISR_PRIORITY)
 {
     interrupt_global_enable(0);
     pit_clear_flag(CCU60_CH1);
 }
 
+/* CCU61 CH0: unused, closed */
 IFX_INTERRUPT(cc61_pit_ch0_isr, 0, CCU6_1_CH0_ISR_PRIORITY)
 {
     interrupt_global_enable(0);
     pit_clear_flag(CCU61_CH0);
 }
 
+/* CCU61 CH1: unused, closed */
 IFX_INTERRUPT(cc61_pit_ch1_isr, 0, CCU6_1_CH1_ISR_PRIORITY)
 {
     interrupt_global_enable(0);
     pit_clear_flag(CCU61_CH1);
 }
 
-// **************************** 外部中断函数 ****************************
+// ============================ External Interrupt (ERU) ISR ============================
+
+/* ERU channels 0 & 4 share one ISR;
+ * actual pins: CH0_REQ0_P15_4 / CH4_REQ13_P15_5 (idle handling). */
 IFX_INTERRUPT(exti_ch0_ch4_isr, 0, EXTI_CH0_CH4_INT_PRIO)
 {
     interrupt_global_enable(0);
@@ -69,6 +77,8 @@ IFX_INTERRUPT(exti_ch0_ch4_isr, 0, EXTI_CH0_CH4_INT_PRIO)
     }
 }
 
+/* ERU channels 1 & 5 share one ISR;
+ * CH1_REQ10_P14_3: ToF module (deprecated); CH5_REQ1_P15_8: idle handling. */
 IFX_INTERRUPT(exti_ch1_ch5_isr, 0, EXTI_CH1_CH5_INT_PRIO)
 {
     interrupt_global_enable(0);
@@ -83,6 +93,8 @@ IFX_INTERRUPT(exti_ch1_ch5_isr, 0, EXTI_CH1_CH5_INT_PRIO)
     }
 }
 
+/* ERU channels 3 & 7 share one ISR;
+ * CH3_REQ6_P02_0: camera VSYNC; CH7_REQ16_P15_1: idle handling. */
 IFX_INTERRUPT(exti_ch3_ch7_isr, 0, EXTI_CH3_CH7_INT_PRIO)
 {
     interrupt_global_enable(0);
@@ -97,16 +109,18 @@ IFX_INTERRUPT(exti_ch3_ch7_isr, 0, EXTI_CH3_CH7_INT_PRIO)
     }
 }
 
-// **************************** DMA中断函数 ****************************
+// ============================ DMA ISR ============================
+
+/* DMA channel 5: camera DMA transfer complete handler */
 IFX_INTERRUPT(dma_ch5_isr, 0, DMA_INT_PRIO)
 {
     interrupt_global_enable(0);
     camera_dma_handler();
 }
 
-// **************************** 串口中断函数 ****************************
+// ============================ UART ISR ============================
 
-// UART_0: debug printf / VOFA output
+// --- UART_0: debug printf / VOFA output ---
 IFX_INTERRUPT(uart0_tx_isr, 0, UART0_TX_INT_PRIO)
 {
     interrupt_global_enable(0);
@@ -118,7 +132,7 @@ IFX_INTERRUPT(uart0_rx_isr, 0, UART0_RX_INT_PRIO)
 
 }
 
-// UART_1: camera
+// --- UART_1: camera data ---
 IFX_INTERRUPT(uart1_tx_isr, 0, UART1_TX_INT_PRIO)
 {
     interrupt_global_enable(0);
@@ -130,7 +144,7 @@ IFX_INTERRUPT(uart1_rx_isr, 0, UART1_RX_INT_PRIO)
     camera_uart_handler();
 }
 
-// UART_2: 串口调参（新车 OLED 不可用时的替代方案）
+// --- UART_2: serial tuning (replacement when OLED is unavailable on new car) ---
 IFX_INTERRUPT(uart2_tx_isr, 0, UART2_TX_INT_PRIO)
 {
     interrupt_global_enable(0);
@@ -145,7 +159,7 @@ IFX_INTERRUPT(uart2_rx_isr, 0, UART2_RX_INT_PRIO)
 #endif
 }
 
-// UART_3: GNSS
+// --- UART_3: GNSS ---
 IFX_INTERRUPT(uart3_tx_isr, 0, UART3_TX_INT_PRIO)
 {
     interrupt_global_enable(0);
@@ -157,22 +171,30 @@ IFX_INTERRUPT(uart3_rx_isr, 0, UART3_RX_INT_PRIO)
     gnss_uart_callback();
 }
 
-// 串口通讯错误中断
+// ============================ UART Error ISR ============================
+
+/* UART0 communication error handler */
 IFX_INTERRUPT(uart0_er_isr, 0, UART0_ER_INT_PRIO)
 {
     interrupt_global_enable(0);
     IfxAsclin_Asc_isrError(&uart0_handle);
 }
+
+/* UART1 communication error handler */
 IFX_INTERRUPT(uart1_er_isr, 0, UART1_ER_INT_PRIO)
 {
     interrupt_global_enable(0);
     IfxAsclin_Asc_isrError(&uart1_handle);
 }
+
+/* UART2 communication error handler */
 IFX_INTERRUPT(uart2_er_isr, 0, UART2_ER_INT_PRIO)
 {
     interrupt_global_enable(0);
     IfxAsclin_Asc_isrError(&uart2_handle);
 }
+
+/* UART3 communication error handler */
 IFX_INTERRUPT(uart3_er_isr, 0, UART3_ER_INT_PRIO)
 {
     interrupt_global_enable(0);

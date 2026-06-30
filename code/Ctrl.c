@@ -3,17 +3,17 @@ Copyright (C), 2016-2026, TYUT JBD TEAM C.
 File name: Ctrl.c
 Author: Cross_Z
 Version:0.0               Date: 2026.1.30
-Description:  ?
-- ?+  + ?
-- PID /
-- (Build_Mode)Flash
-Others:      3ms Car_Go() ?
+Description: Main control logic for the smart car
+- Track following and element recognition
+- PID control for speed, steering, and angle
+- Build mode (Build_Mode) and Flash parameter storage
+Others:      Car_Go() is called every 3ms main loop tick
 Function List:
 Car_Go / Get_Speed / Get_IMU / Light_Process / Set_Speed / Set_Out
-? Normal_Run / Straight_Run / Turn_Left_Run / Turn_Right_Run
-? Mileage_Mode_Run / Mileage_Run_Stage_2
-? Build_Mode_Get_Error
-? Save_Turn_Mileage / Load_Turn_Mileage / Save_Segment_Edge / Load_Segment_Edge
+Normal_Run / Straight_Run / Turn_Left_Run / Turn_Right_Run
+Mileage_Mode_Run / Mileage_Run_Stage_2
+Build_Mode_Get_Error
+Save_Turn_Mileage / Load_Turn_Mileage / Save_Segment_Edge / Load_Segment_Edge
 History:
 <author>  <time>      <version > <desc>
 Cross_Z   2026.1.30    0.0
@@ -22,9 +22,10 @@ Cross_Z   2026.1.30    0.0
 #include "Ctrl.h"
 
 #include "Debug_Car.h"
-/*********************************  *********************************/
+/********************************* Global Variables *********************************/
 
 /*------------------------------*/
+// Moving-window speed buffer (weighted IIR: 0.5/0.3/0.2)
 int16 giSpeed_Left[3] = {0};
 int16 giSpeed_Right[3] = {0};
 int Left_Real_Spd = 0;
@@ -32,20 +33,20 @@ int Right_Real_Spd = 0;
 
 int Left_Exp_Spd = 0;
 int Right_Exp_Spd = 0;
-int Basic_Speed = 90;   // TODO: 硬编码，调完后恢复flash读取
+int Basic_Speed = 70;   // TODO: hardcoded, restore flash read after tuning
 int Run_Speed = 0;
 float Average_Speed = 0;
 int Speed_Get_Count = 1;
 uint8 First_Mode = 0;
 
-/*---------------?---------------*/
+/*--------------- Light Sensor Data ---------------*/
 uint8 Light_Convert[15] = {0};
 uint8 Last_Light_Convert[15] = {0};
 
-/*-----------------PID----------------*/
+/*----------------- PID Controller Handles ----------------*/
 float Gyro_Z = 0;
 float Gyro_Z_For_PID = 0;
-float gyro_z_offset = 0;   // 陀螺仪Z轴零漂，上电校准时采集
+float gyro_z_offset = 0;   // Gyro Z-axis zero-drift offset, sampled during power-on calibration
 PID_HandleTypeDef Gyro_PID = GYRO_PID;     // Gyro rate incremental PID
 PID_HandleTypeDef Gyro_PD_PID = GYRO_PD_PID; // Gyro rate position PD for normal trace debug
 PID_HandleTypeDef Angle_PID = ANGLE_PID;   // Angle PD with derivative on measurement
@@ -54,7 +55,7 @@ PID_HandleTypeDef Left_PID = LEFT_PID;
 PID_HandleTypeDef Right_PID = RIGHT_PID;
 PID_HandleTypeDef Turn_PID = TURN_PID;
 
-/*--------------------------------*/
+/*--------------- Track Following State ---------------*/
 int Left_Scan_Point = 0;
 int Right_Scan_Point = 0;
 int Error = 0;
@@ -96,7 +97,8 @@ float Total_Run_Mileage = 0;
 float Last_Turn_Mileage_Base = 0;
 float Turn_Begin_Mileage = 0;
 
-/*---------------?---------------*/
+/*--------------- Direction Offset Table ---------------*/
+// 15-element sensor direction weight array (mm-level offset mapping)
 
 
 
@@ -107,13 +109,13 @@ uint8_t Current_Element_Dir = 0;    // Direction of current element action (1=le
 
 /*-------------------------------*/
 // Single-row 15-sensor tracking: all indexes below participate in Track_Num.
-#define TRACK_SENSOR_ACTIVE_NUM 15
+#define TRACK_SENSOR_ACTIVE_NUM 14
 static const uint8_t Track_Sensor_Active_Index[TRACK_SENSOR_ACTIVE_NUM] =
 {
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 };
 
-/*--------------------------*/
+/*--------------- Default Build Action Table ---------------*/
 // Default build actions (pre-computed from track map: 17 nodes + 14 elements = 31 actions)
 const Build_Action_Typedef Default_Build_Actions[BUILD_ACTION_COUNT] =
 {
@@ -180,7 +182,7 @@ uint8_t Build_Action_Index = 0;
 uint8_t Build_Action_Count = 0;
 static uint8_t Build_Action_Active_Index = 0;
 
-/*----------------PID----------------*/
+/*--------------- PID Output Values ---------------*/
 float Turn_PID_Out = 0.0;
 float Gyro_PID_Out = 0.0;
 float Left_PID_Out = 0.0;
@@ -191,7 +193,7 @@ Run_Mode_Enum Last_Run_Mode = Normal_Mode;
 Mileage_Stage_Enum Mileage_Stage = Normal_Stage;
 Mode_Define Mode = Build_Mode;
 
-/*-------------------------------*/
+/*--------------- Debug Sub-mode State ---------------*/
 Debug_Sub_Mode_Enum Debug_Sub_Mode = Debug_Sub_PI_Tuning;
 uint8  Debug_Motor_Enable = 0;
 uint8  Debug_Which_Wheel = 0;
@@ -204,7 +206,7 @@ float  Debug_Angle_Vel_Target = 0.0f;
 float  Debug_Angle_Vel_Real = 0.0f;
 
 
-/*---------------?/s ??---------------*/
+/*--------------- Build Mode Turn Control Parameters ---------------*/
 
 
 
@@ -213,12 +215,15 @@ float  Debug_Angle_Vel_Real = 0.0f;
 #define TURN_GYRO_SETTLE_RATE_DPS      45.0f
 #define TURN_SETTLE_CYCLE_MIN          3
 
-float Mileage_Element_Turn_Delay = 1000.0f;          // Element turn pre-straight distance, OLED/Flash adjustable
-float Mileage_Node_Turn_Delay = 100.0f;             // Node turn pre-straight distance, OLED/Flash adjustable
+float Mileage_Element_Turn_Delay = 850.0f;          // Element turn pre-straight distance, OLED/Flash adjustable
+float Mileage_Node_Turn_Delay = 75.0f;             // Node turn pre-straight distance, OLED/Flash adjustable
 uint8 vofa_flash_dump_mode = 0;
 
+// Mileage compensation for turn elements (negative = advance element edge)
 #define MILEAGE_COMPENSATION_X (-100.0f)
+// Short straight element mileage threshold (encoder ticks)
 #define MILEAGE_STRAIGHT_SHORT 2300.0f
+// Long straight element mileage threshold (0 = disabled / handled by node)
 #define MILEAGE_STRAIGHT_LONG  0.0f
 
 
@@ -228,17 +233,18 @@ uint8 vofa_flash_dump_mode = 0;
 #define BUILD_CHECK_EDGE_MILEAGE_STRAIGHT_MILEAGE 100.0f
 #define BUILD_CHECK_EDGE_MILEAGE_TURN_MILEAGE     400.0f
 
+// Max consecutive cycles with all sensors on or all off before emergency stop
 #define SAFETY_STOP_CYCLE_MAX         80
 
 #define GYRO_INTEGRATION_PERIOD_S 0.003f
 #define NORMAL_GYRO_OUT_STEP_MAX 12.0f   // Normal trace steering slew limit per 3ms tick
 
-/*---------------Flash----------------*/
+/*--------------- Flash Storage Layout ---------------*/
 /*
-* Flash
-* 0, ?~7, ??64int32_t)?Turn_Mileage_Record
-*  Turn_Mileage_Record_Num(uint16), Turn_Mileage_Record[120](float) }
-* ?OLEDKeyboard.c  BUILD_MAP_FLASH_START_PAGE(4)
+* Flash sector and page layout:
+* Sector 0, pages 5~7, each page holds 64 uint32_t words -> Turn_Mileage_Record
+* Layout: Turn_Mileage_Record_Num(uint16), Turn_Mileage_Record[120](float)
+* Corresponds to BUILD_MAP_FLASH_START_PAGE(4) in OLEDKeyboard.c
  */
 #define TURN_MILEAGE_FLASH_SECTOR 0
 #define TURN_MILEAGE_FLASH_START_PAGE 5
@@ -246,16 +252,16 @@ uint8 vofa_flash_dump_mode = 0;
 #define TURN_MILEAGE_FLASH_WORDS_PER_PAGE 64
 
 /*
-* Flash
-* 0, ?~9, ? Segment_Edge_Mileage_Record
-* NODE_NUM_MAX(20)  ELEMENT_NUM_MAX(5)  sizeof(float)(4) = 400
+* Flash sector and page layout:
+* Sector 0, pages 8~9, for Segment_Edge_Mileage_Record
+* Storage size: NODE_NUM_MAX(20) * ELEMENT_NUM_MAX(5) * sizeof(float)(4) = 400 bytes
  */
 #define SEGMENT_EDGE_MILEAGE_FLASH_SECTOR 0
 #define SEGMENT_EDGE_MILEAGE_FLASH_START_PAGE 8
 #define SEGMENT_EDGE_MILEAGE_FLASH_PAGE_COUNT 2
 #define SEGMENT_EDGE_MILEAGE_FLASH_WORDS_PER_PAGE 64
 
-/*---------------Flash?---------------*/
+/*--------------- Flash Data Structures ---------------*/
 
 typedef struct
 {
@@ -284,7 +290,7 @@ Count_Typedef Count =
 static uint8_t Straight_Node_Pending = 0;
 static uint8_t Turn_Angle_Settle_Count = 0;
 
-/*---------------?--------------*/
+/*--------------- Static Function Declarations ---------------*/
 static void Load_Turn_Mileage_Record_From_Flash(void);
 static void Save_Segment_Edge_Mileage_Record_To_Flash(void);
 static void Load_Segment_Edge_Mileage_Record_From_Flash(void);
@@ -304,11 +310,15 @@ static void Build_Dispatch_Current_Action(void);
 static void Build_Finish_Current_Action(void);
 static uint8_t Build_Action_To_Element_Dir(Build_Action_Enum action);
 
-/********************************* ?*********************************/
+/********************************* Static Helper Functions *********************************/
 
 /*************************************
 ** Function: Is_Track_Sensor_Adjacent
-** Description: ?
+** Description: Check if two track sensors are physically adjacent
+**              (either consecutive indexes, or the center pair 5 and 9)
+** Input:      left_index  - Left-side sensor index
+**             right_index - Right-side sensor index
+** Return:     1 if adjacent, 0 otherwise
 *************************************/
 static uint8_t Is_Track_Sensor_Adjacent(uint8_t left_index, uint8_t right_index)
 {
@@ -339,6 +349,7 @@ static uint8_t Build_Action_To_Element_Dir(Build_Action_Enum action)
     }
 }
 
+// Load the pre-defined default build action list for the current track
 static void Build_Load_Default_Action_List(void)
 {
     Build_Action_Count = BUILD_ACTION_COUNT;
@@ -348,6 +359,7 @@ static void Build_Load_Default_Action_List(void)
     memcpy(Build_Action_List, Default_Build_Actions, sizeof(Default_Build_Actions));
 }
 
+// Mark the current action as finished and advance segment/element counters
 static void Build_Finish_Current_Action(void)
 {
     uint8_t finished_index = Build_Action_Active_Index;
@@ -379,6 +391,7 @@ static void Build_Finish_Current_Action(void)
     }
 }
 
+// Dispatch the next queued build action (node turn/straight or element)
 static void Build_Dispatch_Current_Action(void)
 {
     Build_Action_Typedef *action;
@@ -444,6 +457,7 @@ static void Build_Dispatch_Current_Action(void)
     }
 }
 
+// Select the current run speed from the configured Basic_Speed
 static int Select_Run_Speed(void)
 {
     if (Basic_Speed < 0)
@@ -456,7 +470,8 @@ static int Select_Run_Speed(void)
 
 /*************************************
 ** Function: Advance_Turn_Section_Index
-** Description:
+** Description: Advance the turn section counter after a turn completes
+**              (currently a placeholder; logic to be implemented if needed)
 *************************************/
 static void Advance_Turn_Section_Index(void)
 {
@@ -464,9 +479,11 @@ static void Advance_Turn_Section_Index(void)
 
 /*************************************
 ** Function: Reset_Turn_Action_State
-** Description: ?
+** Description: Reset all turn-related state variables to prepare for the next action
 ** Details:
-**            ?Check_Edge_Skip_Count=30 ?
+**         Clears PID data, expected speeds, turn flags, and sets the
+**         edge-check cooldown threshold to BUILD_CHECK_EDGE_NODE_TURN_MILEAGE.
+**         Resets Run_Mode back to Normal_Mode.
 *************************************/
 static void Reset_Turn_Action_State(void)
 {
@@ -494,12 +511,13 @@ static void Reset_Turn_Action_State(void)
 
 /*************************************
 ** Function: Complete_Turn_Action
-** Description:
-** Details:   1.  Turn_Action_Done
-**            2. Flash
-**            3.
-**            4. ?Reset_Turn_Action_State ?
-**    Turn_Left_Run / Turn_Right_Run ?Complete_Turn_Action ?Record_Turn_Mileage
+** Description: Finalize the current turn action
+** Details:    1. Set Turn_Action_Done flag
+**             2. Save turn mileage to Flash
+**             3. Advance the action index via Build_Finish_Current_Action
+**             4. Call Reset_Turn_Action_State to clear state
+**    Called by Turn_Left_Run / Turn_Right_Run after angle settles.
+**    Complete_Turn_Action also calls Record_Turn_Mileage.
 *************************************/
 static void Complete_Turn_Action(void)
 {
@@ -510,6 +528,7 @@ static void Complete_Turn_Action(void)
     Reset_Turn_Action_State();
 }
 
+// Check if the accumulated gyro angle has settled within the target tolerance
 static uint8_t Is_Turn_Angle_Settled(float angle_target)
 {
     float angle_error = fabsf(angle_target - Gyro_Integral);
@@ -531,9 +550,10 @@ static uint8_t Is_Turn_Angle_Settled(float angle_target)
 
 /*************************************
 ** Function: Get_Track_Middle_Point
-** Description:
-** Return:     Track_Num>0 ?(??/2,  Track_Num==0 ?7
-** Details:   ?
+** Description: Compute the middle point of the detected track line
+** Return:     If Track_Num > 0: average of first and last active sensor index
+**             If Track_Num == 0: default center sensor index 7
+** Details:    Uses Track_Arr[0] and Track_Arr[Track_Num-1] to compute midpoint.
 *************************************/
 static int Get_Track_Middle_Point(void)
 {
@@ -547,9 +567,10 @@ static int Get_Track_Middle_Point(void)
 
 /*************************************
 ** Function: Set_Node_Run_Mode
-** Description:
-** Input:      node_dir - ?=, 1=, 2=, 3=? 4=?
-** Details:   ?Run_Mode
+** Description: Configure the run mode based on the node direction at an intersection
+** Input:      node_dir - 0=straight, 1=left turn, 2=right turn, 3/4=reserved
+** Details:    Resets gyro integral, PID state, mileage counters, and sets Run_Mode
+**             to the appropriate turning or straight mode.
 *************************************/
 static void Set_Node_Run_Mode(uint8_t node_dir)
 {
@@ -594,8 +615,10 @@ static void Set_Node_Run_Mode(uint8_t node_dir)
 
 /*************************************
 ** Function: Finish_Mileage_Section
-** Description: ?
-** Details:
+** Description: Complete the current mileage-based section (element or node segment)
+** Details:    Resets turn flags, sets cooldown threshold for edge detection,
+**             and transitions back to Normal_Mode. Calls Build_Finish_Current_Action
+**             to advance the action queue.
 *************************************/
 static void Finish_Mileage_Section(void)
 {
@@ -614,9 +637,10 @@ static void Finish_Mileage_Section(void)
 }
 
 /*************************************
-** Function: Record_Segment_Edge_MileageSegment_Total_Mileage
-** Description: ?
-** Details:
+** Function: Record_Segment_Edge_Mileage
+** Description: Record the mileage at each element edge within a segment for Segment_Total_Mileage
+** Details:    Applies MILEAGE_COMPENSATION_X adjustment for turn elements (dir 1 or 2)
+**             to mark the element boundary slightly before the actual edge.
 *************************************/
 static void Record_Segment_Edge_Mileage(void)
 {
@@ -635,8 +659,9 @@ static void Record_Segment_Edge_Mileage(void)
 
 /*************************************
 ** Function: Save_Segment_Edge_Mileage_Record_To_Flash
-** Description: Flash
-** Details:
+** Description: Save segment edge mileage records to Flash memory
+** Details:    Copies Segment_Edge_Mileage_Record and Segment_Total_Mileage into a
+**             packed struct, then writes to the designated Flash sector/page range.
 *************************************/
 static void Save_Segment_Edge_Mileage_Record_To_Flash(void)
 {
@@ -662,8 +687,9 @@ static void Save_Segment_Edge_Mileage_Record_To_Flash(void)
 
 /*************************************
 ** Function: Load_Segment_Edge_Mileage_Record_From_Flash
-** Description: lash
-** Details:
+** Description: Load segment edge mileage records from Flash memory
+** Details:    Reads from the designated Flash sector/page range into a packed struct,
+**             then copies back to Segment_Edge_Mileage_Record and Segment_Total_Mileage.
 *************************************/
 static void Load_Segment_Edge_Mileage_Record_From_Flash(void)
 {
@@ -689,8 +715,9 @@ static void Load_Segment_Edge_Mileage_Record_From_Flash(void)
 
 /*************************************
 ** Function: Save_Turn_Mileage_Record_To_Flash
-** Description: Flash
-** Details:
+** Description: Save turn mileage interval records to Flash memory
+** Details:    Copies Turn_Mileage_Record_Num and Turn_Mileage_Record into a packed
+**             struct, then writes to the designated Flash sector/page range.
 *************************************/
 static void Save_Turn_Mileage_Record_To_Flash(void)
 {
@@ -712,8 +739,9 @@ static void Save_Turn_Mileage_Record_To_Flash(void)
 
 /*************************************
 ** Function: Load_Turn_Mileage_Record_From_Flash
-** Description: lash
-** Details:
+** Description: Load turn mileage interval records from Flash memory
+** Details:    Reads from the designated Flash sector/page range into a packed struct,
+**             performs bounds checking on Record_Num, then copies back.
 *************************************/
 static void Load_Turn_Mileage_Record_From_Flash(void)
 {
@@ -743,13 +771,13 @@ static void Load_Turn_Mileage_Record_From_Flash(void)
 
 /*************************************
 ** Function: Save_Flash_Page_Block
-** Description: Flash
-** Input:      sector       - Flash?
-**             start_page   -
-**             page_count   -
-**             words_per_page - int32_t
-**             words        - ?
-** Details:   URIX Flash
+** Description: Write data to a contiguous block of Flash pages
+** Input:      sector       - Flash sector number
+**             start_page   - First page within the sector
+**             page_count   - Number of pages to write
+**             words_per_page - Number of uint32_t words per page
+**             words        - Pointer to source data array
+** Details:    Uses the URIX Flash API: erase each page, then write.
 *************************************/
 static void Save_Flash_Page_Block(uint8_t sector, uint8_t start_page, uint8_t page_count, uint16_t words_per_page, const uint32_t *words)
 {
@@ -767,10 +795,10 @@ static void Save_Flash_Page_Block(uint8_t sector, uint8_t start_page, uint8_t pa
 
 /*************************************
 ** Function: Load_Flash_Page_Block
-** Description: Flash
-** Input:      sector/start_page/page_count/words_per_page ?
-** Output:     words - ?
-** Details:   Flashint32_t
+** Description: Read data from a contiguous block of Flash pages
+** Input:      sector/start_page/page_count/words_per_page - Same as Save counterpart
+** Output:     words - Pointer to destination buffer (filled with uint32_t data)
+** Details:    Reads uint32_t words from Flash pages into the output buffer.
 *************************************/
 static void Load_Flash_Page_Block(uint8_t sector, uint8_t start_page, uint8_t page_count, uint16_t words_per_page, uint32_t *words)
 {
@@ -787,11 +815,11 @@ static void Load_Flash_Page_Block(uint8_t sector, uint8_t start_page, uint8_t pa
 
 /*************************************
 ** Function: Record_Turn_Mileage
-** Description:  Turn_Mileage_Record
-** Details:   ?
-**            turn_interval_mileage = Turn_Begin_Mileage - Last_Turn_Mileage_Base
-**             -  =
-**            lash?
+** Description: Record the mileage interval between turns into Turn_Mileage_Record
+** Details:    Calculates turn_interval_mileage = Turn_Begin_Mileage - Last_Turn_Mileage_Base
+**             as the distance traveled since the last recorded turn. Updates
+**             Last_Turn_Mileage_Base to Total_Run_Mileage for the next interval.
+**             Records are used for Flash-based self-learning.
 *************************************/
 static void Record_Turn_Mileage(void)
 {
@@ -819,9 +847,9 @@ static void Record_Turn_Mileage(void)
 
 /*************************************
 ** Function: Load_All_Flash_Data_For_VOFA
-** Description: VOFAFlash
-** Details:    Turn_Mileage_Record ?Segment_Edge_Mileage_Record
-**            lash
+** Description: Load all Flash records for VOFA visualization/debugging tool
+** Details:    Loads Turn_Mileage_Record and Segment_Edge_Mileage_Record from Flash
+**             so they can be displayed and analyzed in VOFA.
 *************************************/
 void Load_All_Flash_Data_For_VOFA(void)
 {
@@ -829,16 +857,19 @@ void Load_All_Flash_Data_For_VOFA(void)
     Load_Segment_Edge_Mileage_Record_From_Flash();
 }
 
-/*********************************  *********************************/
+/********************************* Core Run-Time Functions *********************************/
 
 /*************************************
 ** Function: Safety_Check
-** Description: WM?
-** Details:   1.  < SAFETY_LOW_VOLTAGE_THRESHOLD ?
-**             2.  @STOP# ?Count.Stop ?Stop_Flag
-**             3. lash?
-**             4.  + ?00=600ms?
-**               ?Stop_Flag
+** Description: Safety monitoring — low voltage, stall detection, finish detection, LED indication
+** Details:    1. Low voltage: if Voltage_Check[0] stays below SAFETY_LOW_VOLTAGE_THRESHOLD
+**                for LOW_VOLT_FRAME_THRESH consecutive frames, trigger stop with yellow LED.
+**             2. Stall detection: if Count.Stop exceeds SAFETY_STOP_CYCLE_MAX (all-on/all-off),
+**                trigger Stop_Flag.
+**             3. Finish detection: if Finish_Flag is set for over 200 cycles, stop and
+**                save Flash records (Build_Mode only).
+**             4. LED priority: yellow(low voltage) > blue(stopped beep) > green(normal).
+**             5. On stop: zero all motor outputs and clear PID state.
 *************************************/
 void Safety_Check(void)
 {
@@ -922,11 +953,12 @@ void Safety_Check(void)
 
 /*************************************
 ** Function: Car_Go
-** Description: ?ms
-** Call Order:  Safety_Check ?Get_Light ?(3ms) ?(??Get_Speed(6ms) ?Get_IMU ?Get_Error ?Set_Out
-** Details:    3ms3ms
-**             Left_Real_Spd/Right_Real_Spd ?ms?
-**             nableSwitch_ON?00?00ms?
+** Description: Main control loop entry point, called every 3ms
+** Call Order:  Safety_Check -> Get_Light (3ms) -> (alternating) Get_Speed(6ms) -> Get_IMU
+**              -> Light_Process -> Build_Mode_Get_Error -> Set_Speed -> Set_Out
+** Details:    Runs at 3ms interval. Speed sampling alternates every other tick (effective 6ms).
+**             Left_Real_Spd/Right_Real_Spd are updated with weighted IIR filter.
+**             On EnableSwitch ON rising edge, inserts 800-cycle (2.4s) start delay.
 *************************************/
 void Car_Go()
 {
@@ -980,6 +1012,8 @@ void Car_Go()
 
 
 /* Debug functions moved to Debug_Car.c */
+
+// Read encoder counts and compute filtered speed via weighted moving average
 void Get_Speed()
 {
     int left_raw, right_raw;
@@ -1000,6 +1034,7 @@ void Get_Speed()
     giSpeed_Left[0]  = left_raw;
     giSpeed_Right[0] = right_raw;
 
+    // Weighted IIR: 0.5*window[0] + 0.3*window[1] + 0.2*window[2]
     Left_Real_Spd  = (int)(0.5f * giSpeed_Left[0]  + 0.3f * giSpeed_Left[1]  + 0.2f * giSpeed_Left[2]);
     Right_Real_Spd = (int)(0.5f * giSpeed_Right[0] + 0.3f * giSpeed_Right[1] + 0.2f * giSpeed_Right[2]);
 
@@ -1014,8 +1049,10 @@ void Get_Speed()
 
 /*************************************
 ** Function: Get_IMU
-** Description: IMU?ms
-** Details:
+** Description: Read and process IMU gyro data every 3ms
+** Details:    Reads gyro Z-axis from IMU660RB, applies zero-drift offset.
+**             Small values (|raw| < 2.0 deg/s) are clamped to zero.
+**             Gyro_Integral is accumulated only during turns or Angle debug mode.
 *************************************/
 void Get_IMU()
 {
@@ -1061,9 +1098,12 @@ void Get_IMU()
 
 /*************************************
 ** Function: Check_Edge
-** Description:
-** Return:     0=, 1=
-** Details:
+** Description: Detect track segment edges (intersections / element boundaries)
+** Return:     0 = no edge detected, 1 = edge detected
+** Details:    Respects mileage-based cooldown before allowing detection.
+**             Edge is detected when either end sensor sees white AND at least
+**             4 sensors are on, or when at least 5 sensors are on.
+**             On detection, resets Count.Mileage and increments Check_Edge_Count.
 *************************************/
 uint8 Check_Edge()
 {
@@ -1090,8 +1130,11 @@ uint8 Check_Edge()
 
 /*************************************
 ** Function: Light_Process
-** Description: ?ms
-** Details:
+** Description: Process light sensor ADCs and update track line detection, called every 3ms
+** Details:    Applies binary thresholding to each sensor based on Light_Thr array.
+**             LEDs mirror sensor state when not in mileage/turn modes.
+**             Builds Track_Arr of active (white) sensor indexes, validates contiguity
+**             (adjacent only via Is_Track_Sensor_Adjacent), and updates Stop counter.
 *************************************/
 void Light_Process()
 {
@@ -1141,6 +1184,7 @@ void Light_Process()
         }
     }
 
+    // Validate sensor contiguity: if a gap is found, revert to last valid frame
     for (int i = 0; i < Track_Num - 1; i++)
     {
         if (!Is_Track_Sensor_Adjacent((uint8_t)Track_Arr[i], (uint8_t)Track_Arr[i + 1]))
@@ -1172,8 +1216,11 @@ void Light_Process()
 
 /*************************************
 ** Function: Build_Mode_Get_Error
-** Description: ?+
-** Details:
+** Description: Build mode main dispatcher — select run mode and compute tracking error
+** Details:    On first call (First_Mode==0), initializes action list, counters, and
+**             resets Flash-stored records.
+**             Dispatches to Normal_Run, Turn_Left_Run, Turn_Right_Run, Mileage_Mode_Run,
+**             or Straight_Run depending on current Run_Mode.
 *************************************/
 void Build_Mode_Get_Error()
 {
@@ -1230,8 +1277,10 @@ void Build_Mode_Get_Error()
 
 /*************************************
 ** Function: Normal_Run
-** Description:
-** Details:
+** Description: Normal line-following mode: compute steering error from track position
+** Details:    Calculates the midpoint of detected track line and the lateral error
+**             (average of direction offset values for leftmost and rightmost sensors).
+**             Checks for segment edges and dispatches the next build action if found.
 *************************************/
 void Normal_Run()
 {
@@ -1259,8 +1308,11 @@ void Normal_Run()
 }
 /*************************************
 ** Function: Turn_Left_Run
-** Description: 3ms
-** Details:
+** Description: Execute a left turn (node or element), called every 3ms
+** Details:    For Build_Mode: Phase 0 drives straight for Mileage_Node_Turn_Delay distance,
+**             then Phase 1/2 uses angle PID to turn to the target angle (-90 deg).
+**             Once the angle is settled, calls Complete_Turn_Action.
+**             For non-Build_Mode: immediately executes the turn with Set_Mileage_Turn_Exp_Speed.
 *************************************/
 void Turn_Left_Run(void)
 {
@@ -1322,7 +1374,7 @@ void Turn_Left_Run(void)
 
 /*************************************
 ** Function: Turn_Right_Run
-** Description:  - Build?
+** Description: Execute a right turn (mirror of Turn_Left_Run) - same Build_Mode phases
 *************************************/
 void Turn_Right_Run(void)
 {
@@ -1381,8 +1433,13 @@ void Turn_Right_Run(void)
 }
 /*************************************
 ** Function: Mileage_Mode_Run
-** Description: ?ms
-** Details:
+** Description: Mileage-based element execution, called every 3ms
+** Details:    Dispatches based on Current_Element_Dir:
+**             Dir 1/2 (turn elements): delegates to Mileage_Run_Stage_2, then finishes
+**             section and sets cooldown for edge detection.
+**             Dir 3 (short straight): forces straight with Error=0 until MILEAGE_STRAIGHT_SHORT reached.
+**             Dir 4 (long straight): forces straight with Error=0 until MILEAGE_STRAIGHT_LONG reached.
+**             Other: forces straight indefinitely.
 *************************************/
 void Mileage_Mode_Run()
 {
@@ -1429,14 +1486,15 @@ void Mileage_Mode_Run()
 }
 
 /*************************************
-** Function: Mileage_Run_Stage_2
-** Description:
-** Details:
+** Function: Mileage_Run_Stage_2 / Set_Mileage_Turn_Exp_Speed
+** Description: Stage 2 of element turn execution using angle PID cascade
 *************************************/
 
 /*************************************
 ** Function: Set_Mileage_Turn_Exp_Speed
-** Description:
+** Description: Calculate expected wheel speeds for an angle-based turn
+**              using cascaded PID: outer angle PID -> inner gyro PID -> wheel speeds
+** Input:      angle_target - Target gyro angle (deg, e.g. +/-90)
 *************************************/
 void Set_Mileage_Turn_Exp_Speed(float angle_target)
 {
@@ -1449,6 +1507,7 @@ void Set_Mileage_Turn_Exp_Speed(float angle_target)
     Turn_Angle_Last_Real = Gyro_Integral;
 }
 
+// Stage 2 of element turn: deceleration phase, then angle PID turn with settle detection
 void Mileage_Run_Stage_2()
 {
     float section_mileage = Count.Mileage - Mileage_Element_Base;
@@ -1559,9 +1618,11 @@ void Mileage_Run_Stage_2()
 }
 /*************************************
 ** Function: Set_Speed
-** Description: ID?
-** Control Chain: Error ?Turn_PID ?Gyro_PID(+Gyro_Z) ??
-** Details:
+** Description: PID speed control — compute expected wheel speeds from tracking error
+** Control Chain: Error -> Turn_PID -> Gyro_PID(+Gyro_Z damping) -> left/right speeds
+** Details:    Either uses angle-based control (during turns) or normal trace control
+**             with gyro rate as damping. Force_Straight_Speed overrides steering when set.
+**             Outputs Left_Exp_Spd and Right_Exp_Spd, and computes wheel speed PID outputs.
 *************************************/
 void Set_Speed()
 {
@@ -1653,8 +1714,11 @@ void Set_Speed()
 
 /*************************************
 ** Function: Set_Out
-** Description: PWM3ms
-** Details:
+** Description: Apply PWM outputs to motors based on PID results, called every 3ms
+** Details:    Handles start delay (Enable_Start_Delay_Count) with suction motor on.
+**             Sets suction motor PWM when enabled and not stopped.
+**             Applies left/right motor direction and PWM based on sign of PID output:
+**             positive = forward, negative = reverse.
 *************************************/
 void Set_Out(void)
 {
@@ -1740,8 +1804,10 @@ void Set_Out(void)
 
 /*************************************
 ** Function: Straight_Run
-** Description: 3ms
-** Details:
+** Description: Straight line mode — maintain straight until track narrows enough, called every 3ms
+** Details:    Waits until track narrows (Track_Num < 5) and the midpoint is near center,
+**             counts consecutive straight-valid cycles, then either finishes a pending
+**             node straight section or falls back to Normal_Mode.
 *************************************/
 void Straight_Run(void)
 {
@@ -1766,7 +1832,7 @@ void Straight_Run(void)
             Straight_Node_Pending = 0;
             Count.Straight = 0;
         }
-        else  //
+        else  // triggered by element, not a pending node; revert to normal
         {
             Run_Mode = Normal_Mode;
             Count.Straight = 0;

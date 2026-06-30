@@ -3,24 +3,28 @@ Copyright (C), 2016-2026, TYUT JBD TEAM C.
 File name: Ctrl.h
 Author: Cross_Z
 Version:0.0        Date: 2026.1.30
-Description: 閺呴缚鍏樻潪锔界壋韫囧啯甯堕崚璺恒仈閺傚洣娆?
-             閸栧懎鎯圥ID閸欏倹鏆熼妴浣界箥鐞涘本膩瀵繈鈧浇绂岄柆鎾剁波閺嬪嫪缍嬮妴浣稿弿鐏炩偓閸欐﹢鍣洪妴浣割樆闁劌鍤遍弫鏉匡紣閺?
-Others:  閸╄桨绨稉顓熸珯閺呴缚顢戞惔鏇炵湴鎼存挸绱戦崣?
-Function List: 鏉╂劕濮╅幒褍鍩楅妴渚€鈧喎瀹抽梻顓犲箚閵嗕礁鎯婃潻骞库偓渚€鍣风粙瀣ㄢ偓浣芥祮閸氭垯鈧礁缂撻崶?閸ョ偞鏂佸Ο鈥崇础
+Description: Main control module header - track following and element recognition
+             PID control, speed control, turn control and mode definitions
+Others:   All run modes declared - Normal/Straight/Turn/Mileage/Debug
+Function List: Car_Go / Get_Speed / Get_IMU / Light_Process / Set_Speed / Set_Out
+              Normal_Run / Straight_Run / Turn_Left_Run / Turn_Right_Run
+              Mileage_Mode_Run / Mileage_Run_Stage_2 / Build_Mode_Get_Error
+              Safety_Check / Load_All_Flash_Data_For_VOFA
+              Debug_Wheel_Tuning / Debug_Ground_Test / Debug_Angle_Tuning / Debug_Normal_Trace
 History:
 <author>    <time>       <version>    <desc>
-Cross_Z     2026.1.30      0.0        閸掓稑缂撻崚婵嗩潗閻楀牊婀?
+Cross_Z     2026.1.30      0.0         Initial creation
 **************************************************/
 
 #ifndef __CTRL_H
 #define __CTRL_H
 
-// 鎼存洖鐪伴柅姘辨暏婢跺瓨鏋冩禒?+ 閼奉亜鐣炬稊澶嬧偓璇层仈閺傚洣娆?
+// Common headers: MCU peripheral + project-specific headfiles
 #include "zf_common_headfile.h"
 #include "headfiles.h"
 
 /**********************************************
-* 鐎瑰繐鐣炬稊?
+* Numeric Constants
 **********************************************/
 #define NODE_NUM_MAX            20
 #define ELEMENT_NUM_MAX         5
@@ -35,6 +39,7 @@ Cross_Z     2026.1.30      0.0        閸掓稑缂撻崚婵嗩潗閻楀牊婀?
 
 #define SAFETY_LOW_VOLTAGE_THRESHOLD    11.3f
 
+// Gyro rate incremental PID — used in normal trace and turn inner loop
 #define GYRO_PID { \
     .kp         = 0.16, \
     .ki         = 0.006, \
@@ -44,6 +49,7 @@ Cross_Z     2026.1.30      0.0        閸掓稑缂撻崚婵嗩潗閻楀牊婀?
     .mode       = PID_MODE_ADD \
 }
 
+// Angle position PD with derivative on measurement — outer loop for turns
 #define ANGLE_PID { \
     .kp         = 19.5, \
     .ki         = 0, \
@@ -53,6 +59,7 @@ Cross_Z     2026.1.30      0.0        閸掓稑缂撻崚婵嗩潗閻楀牊婀?
     .mode       = PID_MODE_POSITION_D_ON_MEASUREMENT \
 }
 
+// Gyro position PD — for normal trace debug
 #define GYRO_PD_PID { \
     .kp         = 0.008, \
     .ki         = 0, \
@@ -62,6 +69,7 @@ Cross_Z     2026.1.30      0.0        閸掓稑缂撻崚婵嗩潗閻楀牊婀?
     .mode       = PID_MODE_POSITION \
 }
 
+// Left wheel speed incremental PID
 #define LEFT_PID { \
     .kp         = 150, \
     .ki         = 1.2, \
@@ -71,6 +79,7 @@ Cross_Z     2026.1.30      0.0        閸掓稑缂撻崚婵嗩潗閻楀牊婀?
     .mode       = PID_MODE_ADD \
 }
 
+// Right wheel speed incremental PID
 #define RIGHT_PID { \
     .kp         = 150, \
     .ki         = 2.1, \
@@ -80,6 +89,7 @@ Cross_Z     2026.1.30      0.0        閸掓稑缂撻崚婵嗩潗閻楀牊婀?
     .mode       = PID_MODE_ADD \
 }
 
+// Turn error position PID (outer loop for normal trace steering)
 #define TURN_PID { \
     .kp         = 80, \
     .ki         = 0, \
@@ -90,39 +100,40 @@ Cross_Z     2026.1.30      0.0        閸掓稑缂撻崚婵嗩潗閻楀牊婀?
 }
 
 /**********************************************
-* 閺嬫矮濡囩猾璇茬€风€规矮绠?
+* Mode and State Enumerations
 **********************************************/
 
 /**
- * @brief 鐏忓繗婧呮潻鎰攽濡€崇础
+ * @brief Run mode enumeration — main operating state machine
  */
 typedef enum
 {
-    Normal_Mode,     // 鐢瓕顫夊顏囨姉
-    Turn_Left,       // 瀹革箒娴嗗Ο鈥崇础
-    Turn_Right,      // 閸欏疇娴嗗Ο鈥崇础
-    Mileage_Mode,    // 闁插瞼鈻奸幒褍鍩楀Ο鈥崇础
-    Straight_Mode,   // 閻╃顢戝Ο鈥崇础
+    Normal_Mode,     // Normal line-following trace
+    Turn_Left,       // Left turn mode
+    Turn_Right,      // Right turn mode
+    Mileage_Mode,    // Mileage-based element execution mode
+    Straight_Mode,   // Straight line mode
 } Run_Mode_Enum;
 
 /**
- * @brief 闁插瞼鈻肩拋陇绻嶇悰宀勬▉濞?
+ * @brief Mileage stage enumeration within Mileage_Mode
  */
 typedef enum
 {
-    Normal_Stage,    // 鐢瓕顫夐梼鑸殿唽
-    Straight_Stage,  // 閻╃顢戦梼鑸殿唽
+    Normal_Stage,    // Normal stage
+    Straight_Stage,  // Straight stage
 } Mileage_Stage_Enum;
 
 /**
- * @brief 闁款喚娲忛弰鍓с仛瀹搞儰缍斿Ο鈥崇础
+ * @brief Global operating mode
  */
 typedef enum
 {
-    Build_Mode,      // 瀵ゅ搫娴樺Ο鈥崇础
-    Debug_Mode,      // 鐠嬪啳鐦Ο鈥崇础
+    Build_Mode,      // Build mode (autonomous track traversal)
+    Debug_Mode,      // Debug mode (manual parameter tuning)
 } Mode_Define;
 
+// Build action type — defines what the car does at each track node/element
 typedef enum
 {
     BUILD_ACTION_NONE              = 0,  // unused / placeholder
@@ -140,34 +151,36 @@ typedef enum
 #define BUILD_ACTION_IS_ELEMENT(a)  ((a) >= BUILD_ACTION_ELEM_STRAIGHT_SHORT && (a) <= BUILD_ACTION_ELEM_TURN_RIGHT)
 
 /**
- * @brief 鐠嬪啳鐦€涙劖膩瀵?
+ * @brief Debug sub-mode enumeration
+ *        Debug_Which_Wheel: 0=left wheel, 1=right wheel
  */
 typedef enum
 {
-    Debug_Sub_PI_Tuning,     // 鏉烆喖鐡橮I鐠嬪啫寮敍鍫濆讲闁俺绻僁ebug_Which_Wheel閸掑洦宕插锕€褰搁敍?
-    Debug_Sub_Ground_Test,   // 娑撳婀村ù瀣槸鐠嬪啫寮敍鍫ヮ暕閻ｆ瑱绱?
-    Debug_Sub_Angle,         // 鐟欐帒瀹抽悳顖濈殶閸欏偊绱欐０鍕殌閿?
-    Debug_Sub_NormalTrace,   // 閺咁噣鈧艾鎯婃潻鐧哥礄妫板嫮鏆€閿?
+    Debug_Sub_PI_Tuning,     // Single-wheel PI tuning — uses Debug_Which_Wheel to select wheel
+    Debug_Sub_Ground_Test,   // Ground/floor test mode
+    Debug_Sub_Angle,         // Angle PID tuning with incremental step target
+    Debug_Sub_NormalTrace,   // Normal trace debug with gyro PD
 } Debug_Sub_Mode_Enum;
 
 /**********************************************
-* 缂佹挻鐎担鎾崇暰娑?
+* Runtime Data Structures
 **********************************************/
 
 /**
- * @brief 鐠佲剝鏆熺紒鎾寸€担鎿勭礄缂傛牜鐖滈崳銊ｂ偓渚€鍣风粙瀣ㄢ偓浣哄Ц閹浇顓搁弫甯礆
+ * @brief Odometer/counter struct — encoder ticks and stall detection
  */
 typedef struct
 {
-    int     Left;        // 瀹革箒娴嗛崙鍝勯泦鐠佲剝鏆?
-    int     Right;       // 閸欏疇娴嗛崙鍝勯泦鐠佲剝鏆?
-    int     Stop;        // 閸嬫粏婧呯拋鈩冩殶
-    float   Mileage;     // 瑜版挸澧犲▓鐢稿櫡缁?
-    float   Spd_Mileage; // 闁喎瀹抽柌宀€鈻?
-    int     Straight;    // 閻╃顢戠拋鈩冩殶
-    int     Stall;       // 閸絻娴嗙拋鈩冩殶
+    int     Left;        // Left encoder count (per-cycle)
+    int     Right;       // Right encoder count (per-cycle)
+    int     Stop;        // Stall counter (consecutive all-on/all-off cycles)
+    float   Mileage;     // Resettable mileage (encoder ticks, reset on edge)
+    float   Spd_Mileage; // Speed-weighted mileage accumulator
+    int     Straight;    // Consecutive straight-valid cycle counter
+    int     Stall;       // Motor stall counter
 } Count_Typedef;
 
+// Build action descriptor: links an action type to a track segment and element
 typedef struct
 {
     Build_Action_Enum        action;
@@ -176,23 +189,23 @@ typedef struct
 } Build_Action_Typedef;
 
 /**********************************************
-* 婢舵牠鍎撮崗銊ョ湰閸欐﹢鍣烘竟鐗堟
+* Global Variable Extern Declarations
 **********************************************/
-// 閸╄櫣顢呴柅鐔峰
+// Base speed
 extern int Basic_Speed;
 
-// 閺堢喐婀滈柅鐔峰
+// Expected/target wheel speeds
 extern int Left_Exp_Spd;
 extern int Right_Exp_Spd;
 extern int Middle;
-// 鐎圭偤妾柅鐔峰
+// Actual measured wheel speeds
 extern int Left_Real_Spd;
 extern int Right_Real_Spd;
 
-// 楠炲啿娼庨柅鐔峰
+// Speed average
 extern float Average_Speed;
 
-// 瀵邦亣鎶楃拠顖氭▕
+// Track detection variables
 extern int Error;
 extern int   Track_Arr[15];
 extern int16_t Dir_Arr[15];
@@ -200,63 +213,63 @@ extern int   Left_Scan_Point;
 extern int   Right_Scan_Point;
 extern int   Last_Error;
 
-// 閸忓鏅辨导鐘冲妳閸?
+// Light sensor raw ADC and binary conversion
 extern uint16 Light_ADC[15];
 extern uint8  Light_Convert[15];
 
-// PID 鏉堟挸鍤?
+// PID output values
 extern float Turn_PID_Out;
 extern float Gyro_PID_Out;
 extern float Left_PID_Out;
 extern float Right_PID_Out;
 
-// 閻樿埖鈧焦鐖ｈ箛?
-extern int  Stop_Flag;          // 閸嬫粏婧呴弽鍥х箶
-extern int  Finish_Flag;         // 娴犺濮熺€瑰本鍨氶弽鍥х箶
-extern int  Finish_Count;        // 鐎瑰本鍨氱拋鈩冩殶
-extern int  Track_Num;           // 閺堝鏅ュ顏囨姉娴肩姵鍔呴崳銊︽殶
+// Stop and finish flags
+extern int  Stop_Flag;          // Emergency stop flag
+extern int  Finish_Flag;        // Finish flag (all actions completed)
+extern int  Finish_Count;       // Finish confirmation counter
+extern int  Track_Num;          // Number of sensors seeing the track line
 
-// 閹笛嗩攽鐠佲剝鏆?
-extern int8_t  Execute_Times;    // 瑜版挸澧犻幍褑顢戦懞鍌滃仯缁便垹绱?
-extern int8_t  Mileage_Times;     // 瑜版挸澧犻懞鍌滃仯闁插瞼鈻煎▓鍨偓缁樻殶
+// Segment and element counters
+extern int8_t  Execute_Times;   // Current segment index (from action dispatch)
+extern int8_t  Mileage_Times;   // Element count in current segment (from Mileage_Num_By_Segment)
 
-// 閸忓啰绀?鐠侯垳鍤庣拋鈩冩殶
-extern uint8_t Line_Num_Count;    // 鐠侯垳鍤庨弫浼村櫤
-extern uint8_t In_Line_Ele_Count; // 瑜版挸澧犵痪鑳熅閸忓啰绀岀槐銏犵穿
+// Lane and line element counters
+extern uint8_t Line_Num_Count;    // Completed lane (full segment) counter
+extern uint8_t In_Line_Ele_Count; // Current element counter within the lane
 extern uint8_t Build_Action_Index;
 extern uint8_t Build_Action_Count;
 
-// 闂勨偓閾昏桨鍗庨惄绋垮彠
+// Gyro angle integral for turn control
 extern float Gyro_Integral;
-// 鏉烆剙闆嗛惄顔界垼鐟欐帒瀹抽敍鍫ｎ潡鎼达箓妫撮悳鐤↖D娴ｈ法鏁ら敍姘箯鏉?90, 閸欏疇娴?90閿?
+// Turn target angle: left turn = -90, right turn = +90
 extern float  Turn_Angle_Target;
 
-// 瀵ゅ搫娴橀幒褍鍩楅崣鍌涙殶
-extern int16  Check_Edge_Count;    // Check_Edge鐟欙箑褰傚▎鈩冩殶
+// Build mode mileage tracking
+extern int16  Check_Edge_Count;    // Check_Edge call count for diagnostics
 extern float  Mileage_Element_Turn_Delay;
 extern float  Mileage_Node_Turn_Delay;
 extern uint8  Current_Element_Dir;      // Element direction of currently executing action (for Mileage_Mode_Run)
-extern uint8  vofa_flash_dump_mode;     // VOFA Flash閺佺増宓佺€电厧鍤Ο鈥崇础閺嶅洤绻?
-extern float  Total_Run_Mileage;       // 閹槒绻嶇悰宀勫櫡缁嬪绱欓崶鐐存杹濡€崇础闁插瞼鈻肩€佃鐦崺鍝勫櫙閿?
-// 缂佹挻鐎担鎾崇杽娓?
+extern uint8  vofa_flash_dump_mode;     // VOFA Flash dump mode flag (OLED toggle)
+extern float  Total_Run_Mileage;       // Total accumulated run mileage (never reset, for Flash records)
+// Counters struct
 extern Count_Typedef Count;
 extern Mode_Define Mode;
-extern float Gyro_Z_For_PID; // PID使用的陀螺仪Z轴角速度
-extern float gyro_z_offset;  // 陀螺仪Z轴零漂（上电校准）
-// 瑜版挸澧犳潻鎰攽閻樿埖鈧?
+extern float Gyro_Z_For_PID; // Gyro Z-axis angular velocity used by PID
+extern float gyro_z_offset;  // Gyro Z-axis zero-drift (sampled at power-on calibration)
+// Run mode and mileage stage
 extern Run_Mode_Enum       Run_Mode;
 extern Mileage_Stage_Enum  Mileage_Stage;
 extern Build_Action_Typedef Build_Action_List[BUILD_ACTION_MAX];
 extern const Build_Action_Typedef Default_Build_Actions[BUILD_ACTION_COUNT];
 extern const uint8 Mileage_Num_By_Segment[BUILD_NODE_NUM + 1];
 
-// Flash闁插瞼鈻奸弫鐗堝祦閿涘湸OFA鐎电厧鍤悽顭掔礆
+// Flash mileage records for VOFA display
 extern float Segment_Edge_Mileage_Record[TRACK_SEGMENT_NUM_MAX][ELEMENT_NUM_MAX];
 extern float Segment_Total_Mileage[TRACK_SEGMENT_NUM_MAX];
 extern float Turn_Mileage_Record[TURN_MILEAGE_RECORD_MAX];
 extern uint16_t Turn_Mileage_Record_Num;
 
-// PID 閹貉冨煑閸?
+// PID controller handles
 extern PID_HandleTypeDef Gyro_PID;
 extern PID_HandleTypeDef Left_PID;
 extern PID_HandleTypeDef Right_PID;
@@ -264,53 +277,53 @@ extern PID_HandleTypeDef Turn_PID;
 extern PID_HandleTypeDef Angle_PID;
 extern PID_HandleTypeDef Gyro_PD_PID;
 
-// 鐠嬪啳鐦Ο鈥崇础
-extern Debug_Sub_Mode_Enum Debug_Sub_Mode;  // 瑜版挸澧犵拫鍐槸鐎涙劖膩瀵?
-extern uint8  Debug_Motor_Enable;           // 鐠嬪啳鐦Ο鈥崇础閻㈠灚婧€娴ｈ儻鍏橀弽鍥х箶閿?=閸? 1=鏉?
-extern uint8  Debug_Which_Wheel;            // 瑜版挸澧犵拫鍐槸閻ㄥ嫯鐤嗙€涙劧绱?=瀹革箒鐤? 1=閸欏疇鐤?
-extern int    Debug_Target_Speed;           // 鐠嬪啳鐦惄顔界垼闁喎瀹?
-extern int    Debug_Fan_Duty;               // 娑撳婀村ù瀣槸鐠愮喎甯囨搴㈠閸楃姷鈹栧В?
-extern uint8  Debug_Ground_Dir;             // 1=瀹革附顒滈崣鍐插冀, 2=瀹革箑寮介崣铏劀
+// Debug mode variables
+extern Debug_Sub_Mode_Enum Debug_Sub_Mode;  // Current debug sub-mode
+extern uint8  Debug_Motor_Enable;           // Debug mode motor enable flag: 0=disabled, 1=enabled
+extern uint8  Debug_Which_Wheel;            // Debug wheel selection: 0=left wheel, 1=right wheel
+extern int    Debug_Target_Speed;           // Debug target speed
+extern int    Debug_Fan_Duty;               // Debug ground test fan duty cycle (suction motor)
+extern uint8  Debug_Ground_Dir;             // 1=forward ground test, 2=reverse ground test
 extern uint8  Debug_Angle_Mode;             // 1=sin target, 2=step angle, 3=direct gyro rate (AVT)
 extern uint8  Debug_Angle_D_First;          // 0=error D, 1=measurement D
-extern float  Debug_Angle_Vel_Target;       // VOFA: 鐟欐帡鈧喎瀹抽惄顔界垼
+extern float  Debug_Angle_Vel_Target;       // VOFA: target angular velocity
 extern uint8_t g_led_flag;                // 0=green(normal) 1=blue(object) 2=yellow(low voltage)
 extern uint8_t g_scan_progress;            // Scan progress 0-100, 0=not scanning
-extern float  Debug_Angle_Vel_Real;         // VOFA: 鐎圭偤妾憴鎺椻偓鐔峰
-extern float  Debug_Kp_Left;               // 瀹革箒鐤嗙拫鍐槸Kp
-extern float  Debug_Ki_Left;               // 瀹革箒鐤嗙拫鍐槸Ki
-extern float  Debug_Kp_Right;              // 閸欏疇鐤嗙拫鍐槸Kp
-extern float  Debug_Ki_Right;              // 閸欏疇鐤嗙拫鍐槸Ki
+extern float  Debug_Angle_Vel_Real;         // VOFA: actual angular velocity
+extern float  Debug_Kp_Left;               // Left wheel debug Kp
+extern float  Debug_Ki_Left;               // Left wheel debug Ki
+extern float  Debug_Kp_Right;              // Right wheel debug Kp
+extern float  Debug_Ki_Right;              // Right wheel debug Ki
 
 /**********************************************
-* 婢舵牠鍎撮崙鑺ユ殶婢圭増妲?
+* Public Function Declarations
 **********************************************/
-void Car_Go(void);                          // 鐏忓繗婧呮稉鏄忕箥鐞涘苯鍤遍弫?
+void Car_Go(void);                          // Main control loop entry: called every 3ms from ISR
 void Light_Process(void);
-void Set_Speed(void);                       // 鐠佸墽鐤嗛惄顔界垼闁喎瀹?
-void Get_Speed(void);                       // 閼惧嘲褰囩€圭偤妾柅鐔峰
-uint8 Check_Edge(void);                      // 鏉堝湱绱Λ鈧ù?
-void Get_IMU(void);                         // 閼惧嘲褰囬梽鈧摶杞板崕閺佺増宓?
-void Set_Out(void);                         // 閻㈠灚婧€鏉堟挸鍤幒褍鍩?
+void Set_Speed(void);                       // Compute expected wheel speeds from tracking error
+void Get_Speed(void);                       // Read encoder counts and compute filtered actual speeds
+uint8 Check_Edge(void);                      // Edge detection for segment/element boundaries
+void Get_IMU(void);                         // Read and process IMU gyro data
+void Set_Out(void);                         // Apply PID output to motor PWM
 
-void Normal_Run(void);                      // 鐢瓕顫夊顏囨姉鏉╂劘顢?
-void Straight_Run(void);                    // 閻╃顢戞潻鎰攽
-void Turn_Left_Run(void);                   // 瀹革箒娴嗛幒褍鍩?
-void Turn_Right_Run(void);                  // 閸欏疇娴嗛幒褍鍩?
+void Normal_Run(void);                      // Normal line-following trace
+void Straight_Run(void);                    // Straight line mode execution
+void Turn_Left_Run(void);                   // Left turn execution
+void Turn_Right_Run(void);                  // Right turn execution
 
-void Mileage_Mode_Run(void);                // 闁插瞼鈻煎Ο鈥崇础閹粯甯?
-void Mileage_Run_Stage_2(void);             // 闁插瞼鈻奸梼鑸殿唽2
+void Mileage_Mode_Run(void);                // Mileage-based element mode dispatcher
+void Mileage_Run_Stage_2(void);             // Mileage run stage 2 — turn element execution
 
-void Safety_Check(void);                    // 缂佺喍绔寸€瑰鍙忓Λ鈧ù瀣剁礄娴ｅ骸甯?閸絻娴嗛敍灞剧槨濞嗏€茶厬閺傤厽娓堕崗鍫ｇ殶閻㈩煉绱?
-void Build_Mode_Get_Error(void);            // 瀵ゅ搫娴樺Ο鈥崇础閼惧嘲褰囩拠顖氭▕
-void Load_All_Flash_Data_For_VOFA(void);    // VOFA鐎电厧鍤敍姘鏉炵唇lash閸忋劑鍎撮崷鏉挎禈閺佺増宓?
+void Safety_Check(void);                    // Safety monitoring: voltage, stall, finish detection; motor cutoff and LED indication
+void Build_Mode_Get_Error(void);            // Build mode: get tracking error and dispatch run mode
+void Load_All_Flash_Data_For_VOFA(void);    // VOFA: load all Flash mileage records for visualization
 
-// 鐠嬪啳鐦Ο鈥崇础
-void Debug_Wheel_Tuning(void);              // 鏉烆喖鐡橮I鐠嬪啫寮敍鍫濅箯閸欏疇鐤嗛崗杈╂暏閿?
-void Debug_Ground_Test(void);               // 娑撳婀村ù瀣槸
-void Debug_Angle_Tuning(void);              // 鐟欐帒瀹抽悳顖濈殶閸欏偊绱欐０鍕殌閿?
-void Debug_Normal_Trace(void);              // 閺咁噣鈧艾鎯婃潻鐧哥礄妫板嫮鏆€閿?
-void Debug_Set_Out(void);                   // 鐠嬪啳鐦稉鎾舵暏缁墽鐣漃WM鏉堟挸鍤?
+// Debug mode control functions
+void Debug_Wheel_Tuning(void);              // Single-wheel PI tuning for left/right wheel
+void Debug_Ground_Test(void);               // Ground test mode
+void Debug_Angle_Tuning(void);              // Angle PID tuning with incremental step target
+void Debug_Normal_Trace(void);              // Normal trace debug with PD control
+void Debug_Set_Out(void);                   // Debug mode PWM output
 
 void Set_Mileage_Turn_Exp_Speed(float angle_target);
 

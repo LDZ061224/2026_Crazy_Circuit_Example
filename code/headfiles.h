@@ -1,37 +1,37 @@
 /*************************************************
 Copyright (C), 2016-2026, TYUT JBD TEAM C.
-File name: Fun.h
+File name: headfiles.h
 Author: Cross_Z
 Version:0.0               Date: 2026.1.30
-Description:  通用宏定义、头文件包含
-Others:      无
+Description:  Common macro definitions, header file includes
+Others:      None
 Function List:
-             1. 数值限制、绝对值、符号等通用宏函数
-             2. 工程所需头文件统一包含
+             1. Universal macro functions: value limit, absolute value, sign, etc.
+             2. Project-wide header file include list
 History:
 <author>  <time>      <version > <desc>
-Cross_Z   2026.1.30   0.0        创建初始版本
+Cross_Z   2026.1.30   0.0        Initial version
 **************************************************/
 
 #ifndef __HEADFILES_H
 #define __HEADFILES_H
 
-/*********************************** 通用宏定义 ***********************************/
-// 绝对值宏：返回输入数值的绝对值
+/*********************************** Common Macro Definitions ***********************************/
+// Absolute value macro: returns the absolute value of the input
 #define ABS(x)                          (((x) >= (0.0f)) ? (x) : (-(x)))
 
-// 符号判断宏：返回数值的符号，负数返回-1.0，正数/0返回1.0
+// Sign judgment macro: returns the sign of the value, negative returns -1.0, positive/0 returns 1.0
 #define SignOf(Value)                   ((Value < 0.0) ? (-1.0) : (1.0))
 
-// 圆周率常量定义（高精度浮点数）
+// Pi constant definition (high-precision float)
 #define PI                              (3.1415926535897932384626433832795f)
 
-/*********************************** 头文件包含 ***********************************/
-#include "zf_common_headfile.h"    // 智峰官方通用公共头文件
-#include "pid.h"                   // PID算法相关头文件
-#include "Fun.h"                   // 功能驱动实现头文件
-#include "TCA9555.h"               // TCA9555 IO扩展芯片驱动头文件
-#include "OLEDKeyboard.h"          // OLED显示屏与按键驱动头文件
-#include "Ctrl.h"                  // 系统控制逻辑头文件
+/*********************************** Header File Includes ***********************************/
+#include "zf_common_headfile.h"    // Zhifeng official common public header
+#include "pid.h"                   // PID algorithm related header
+#include "Fun.h"                   // Function driver implementation header
+#include "TCA9555.h"               // TCA9555 IO expander chip driver header
+#include "OLEDKeyboard.h"          // OLED display and keyboard driver header
+#include "Ctrl.h"                  // System control logic header
 
 #endif

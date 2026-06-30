@@ -3,56 +3,56 @@ Copyright (C), 2016-2026, TYUT JBD TEAM C.
 File name: Fun.c
 Author: Cross_Z
 Version:0.0               Date: 2026.1.30
-Description: 外设驱动、数据采集、初始化等功能实现
-Others:      无
+Description: Peripheral driver, data acquisition, initialization functions
+Others:      None
 Function List:
-              1. Vofa_Send_Data    - VOFA上位机数据发送
-              2. Wit_Send_Data     - 无线模块数据发送
-              3. Light_Init        - 光敏传感器ADC初始化
-              4. Encoder_Init      - 编码器初始化
-              5. Motor_Init        - 电机PWM初始化
-              6. Other_Init        - 其他外设初始化
-              7. Get_Light         - 读取光敏传感器ADC值
-              8. Get_Threshold     - 计算光敏传感器阈值
+              1. Vofa_Send_Data    - Send debug data to VOFA host software
+              2. Wit_Send_Data     - Send sensor data via wireless module
+              3. Light_Init        - Light sensor ADC initialization
+              4. Encoder_Init      - Encoder initialization
+              5. Motor_Init        - Motor PWM initialization
+              6. Other_Init        - Other peripherals initialization
+              7. Get_Light         - Read light sensor ADC values
+              8. Get_Threshold     - Calculate light sensor thresholds
 History:
 <author>  <time>      <version > <desc>
-Cross_Z   2026.1.30   0.0        创建初始版本
+Cross_Z   2026.1.30   0.0        Initial version
 **************************************************/
 
 #include "Fun.h"
 
-/********************************* 全局变量定义 *********************************/
-uint8 imu660rb_Check = 0;                // IMU660RB传感器初始化状态标志
-uint16 Light_ADC[15] = {0};              // 15路光敏传感器原始ADC值
-float Current_Check = 0;                 // 电流检测值
-float Voltage_Check[2] = {0};            // 两路电压检测值
+/********************************* Global Variable Definitions *********************************/
+uint8 imu660rb_Check = 0;                // IMU660RB sensor initialization status flag
+uint16 Light_ADC[15] = {0};              // 15-channel light sensor raw ADC values
+float Current_Check = 0;                 // Current detection value
+float Voltage_Check[2] = {0};            // Two-channel voltage detection values
 int Dbg[10] = {0};
 
-/* --------------- 光敏传感器校准参数 --------------- */
-int Light_Raw_Min[15] =                  // 15路光敏传感器ADC最小值（初始化为最大值）
+/* --------------- Light Sensor Calibration Parameters --------------- */
+int Light_Raw_Min[15] =                  // 15-channel light sensor ADC minimum values (initialized to max)
 {
     4096, 4096, 4096, 4096, 4096,
     4096, 4096, 4096, 4096, 4096,
     4096, 4096, 4096, 4096, 4096
 };
-int Light_Raw_Max[15] = {0};             // 15路光敏传感器ADC最大值（初始化为0）
-float  Light_Thr[15][2];                 // 15路光敏传感器上下阈值
+int Light_Raw_Max[15] = {0};             // 15-channel light sensor ADC maximum values (initialized to 0)
+float  Light_Thr[15][2];                 // 15-channel light sensor upper and lower thresholds
 
-/********************************* 函数实现 *********************************/
+/********************************* Function Implementations *********************************/
 
 /*************************************
 ** Function: Vofa_Send_Data
-** Description: 向VOFA上位机发送调试数据
-** Input:      无
-** Output:     无
-** Return:     无
-** Others:     串口0发送，遵循VOFA协议帧格式
+** Description: Send debug data to VOFA host software
+** Input:      None
+** Output:     None
+** Return:     None
+** Others:     UART_2 transmit, follows VOFA protocol frame format
 *************************************/
 void Vofa_Send_Data(void)
 {
-    floatu8data VOFA_data[20];           // 浮点数与字节数组共用体
+    floatu8data VOFA_data[20];           // Union for float and byte array conversion
     uint8 frame[15 * 4 + 4];
-    // 清空数据缓存
+    // Clear data buffer
     memset(VOFA_data, 0, sizeof(VOFA_data));
 
     int i = 0;
@@ -60,40 +60,62 @@ void Vofa_Send_Data(void)
        {
            VOFA_data[i].floatdata = Light_ADC[i];
        }
-    // 赋值需要发送的调试数据
-//     VOFA_data[0].floatdata  = Left_Exp_Spd;
-//     VOFA_data[1].floatdata  = Right_Exp_Spd;
-//     VOFA_data[2].floatdata  = Left_Real_Spd;
-//     VOFA_data[3].floatdata  = Right_Real_Spd;
-//     VOFA_data[4].floatdata  = Gyro_Z;
-//     VOFA_data[5].floatdata  = Total_Run_Mileage;
-//     VOFA_data[6].floatdata  = Voltage_Check[0];
-//     VOFA_data[7].floatdata  = Count.Mileage;
-//     VOFA_data[8].floatdata  = Left_PID_Out;
-//     VOFA_data[9].floatdata  = Right_PID_Out;
-//     VOFA_data[10].floatdata = Dbg[0];
-//     VOFA_data[11].floatdata = Error;
-//     VOFA_data[12].floatdata = Gyro_Integral;
-//     VOFA_data[13].floatdata = Debug_Angle_Vel_Target;
-//     VOFA_data[14].floatdata = Debug_Angle_Vel_Real;
-//     VOFA_data[15].floatdata = Gyro_PID.kd;
-//     VOFA_data[16].floatdata = Gyro_PID.ki;
-//     VOFA_data[17].floatdata = Gyro_PID.kp;
-    // 循环发送15组浮点数数据
+    // Assign debug data to be sent
+     VOFA_data[0].floatdata  = Left_Exp_Spd;
+     VOFA_data[1].floatdata  = Right_Exp_Spd;
+     VOFA_data[2].floatdata  = Left_Real_Spd;
+     VOFA_data[3].floatdata  = Right_Real_Spd;
+     VOFA_data[4].floatdata  = Gyro_Z;
+     VOFA_data[5].floatdata  = Total_Run_Mileage;
+     VOFA_data[6].floatdata  = Voltage_Check[0];
+     VOFA_data[7].floatdata  = Count.Mileage;
+     VOFA_data[8].floatdata  = Left_PID_Out;
+     VOFA_data[9].floatdata  = Right_PID_Out;
+     VOFA_data[10].floatdata = Dbg[0];
+     VOFA_data[11].floatdata = Error;
+     VOFA_data[12].floatdata = Gyro_Integral;
+     VOFA_data[13].floatdata = Debug_Angle_Vel_Target;
+     VOFA_data[14].floatdata = Debug_Angle_Vel_Real;
+
+    // ---- Reserved ADC channels (swap with any line above for debugging) ----
+//   VOFA_data[ N].floatdata = Light_ADC[0];   // Inductor ADC ch0
+//   VOFA_data[ N].floatdata = Light_ADC[1];   // Inductor ADC ch1
+//   VOFA_data[ N].floatdata = Light_ADC[2];   // Inductor ADC ch2
+//   VOFA_data[ N].floatdata = Light_ADC[3];   // Inductor ADC ch3
+//   VOFA_data[ N].floatdata = Light_ADC[4];   // Inductor ADC ch4
+//   VOFA_data[ N].floatdata = Light_ADC[5];   // Inductor ADC ch5
+//   VOFA_data[ N].floatdata = Light_ADC[6];   // Inductor ADC ch6
+//   VOFA_data[ N].floatdata = Light_ADC[7];   // Inductor ADC ch7
+//   VOFA_data[ N].floatdata = Light_ADC[8];   // Inductor ADC ch8
+//   VOFA_data[ N].floatdata = Light_ADC[9];   // Inductor ADC ch9
+//   VOFA_data[ N].floatdata = Light_ADC[10];  // Inductor ADC ch10
+//   VOFA_data[ N].floatdata = Light_ADC[11];  // Inductor ADC ch11
+//   VOFA_data[ N].floatdata = Light_ADC[12];  // Inductor ADC ch12
+//   VOFA_data[ N].floatdata = Light_ADC[13];  // Inductor ADC ch13
+//   VOFA_data[ N].floatdata = Light_ADC[14];  // Inductor ADC ch14
+//   VOFA_data[ N].floatdata = Current_Check;   // Current detection
+//   VOFA_data[ N].floatdata = Voltage_Check[1];// Voltage detection ch1
+//   VOFA_data[ N].floatdata = Gyro_PID.kp;     // Gyro PID kp
+//   VOFA_data[ N].floatdata = Gyro_PID.ki;     // Gyro PID ki
+//   VOFA_data[ N].floatdata = Gyro_PID.kd;     // Gyro PID kd
+//   VOFA_data[ N].floatdata = Count.Stop;       // Stop count
+//   VOFA_data[ N].floatdata = Stop_Flag;        // Stop flag
+//   VOFA_data[ N].floatdata = Track_Num;        // Track line count
+    // Send 15 groups of float data in a loop
     for(i = 0; i < 15; i++)
     {
-        // 提取浮点数拆分后的4个字节
+        // Extract the 4 bytes from the split float
         frame[i * 4 + 0] = VOFA_data[i].u8data[0];
         frame[i * 4 + 1] = VOFA_data[i].u8data[1];
         frame[i * 4 + 2] = VOFA_data[i].u8data[2];
         frame[i * 4 + 3] = VOFA_data[i].u8data[3];
     }
 
-    // 发送VOFA协议固定帧尾 00 00 80 7F
+    // Send VOFA protocol fixed frame tail 00 00 80 7F
+    frame[60] = 0x00;
     frame[61] = 0x00;
-    frame[62] = 0x00;
-    frame[63] = 0x80;
-    frame[64] = 0x7f;
+    frame[62] = 0x80;
+    frame[63] = 0x7f;
 
     uart_write_buffer(UART_2, frame, sizeof(frame));
 
@@ -102,9 +124,9 @@ void Vofa_Send_Data(void)
 
 /*************************************
 ** Function: Vofa_Send_Flash_Data
-** Description: VOFA Flash里程数据导出——单帧发送全部有效里程值
-** Details:   顺序：Turn_Mileage_Record[0..N-1] + 各路段边缘里程
-**            一帧包含所有数据，循环发送
+** Description: VOFA Flash mileage data export -- send all valid mileage values in one frame
+** Details:    Order: Turn_Mileage_Record[0..N-1] + segment edge mileages
+**             One frame contains all data, cycles through
 *************************************/
 void Vofa_Send_Flash_Data(void)
 {
@@ -120,12 +142,12 @@ void Vofa_Send_Flash_Data(void)
     }
     uint16_t pos = 0;
 
-    // 转向间隔里程
+    // Turn interval mileages
     for (uint16_t i = 0; i < turn_count && pos < 50; i++, pos++)
     {
         vofa[pos].floatdata = Turn_Mileage_Record[i];
     }
-    // 各路段边缘里程（按行展开，只取有效条目）
+    // Segment edge mileages (expanded by row, only valid entries)
     for (uint8_t r = 0; r <= BUILD_NODE_NUM && pos < 50; r++)
     {
         uint8_t num = Mileage_Num_By_Segment[r];
@@ -135,7 +157,7 @@ void Vofa_Send_Flash_Data(void)
         }
     }
 
-    // 一次性发送全部有效数据
+    // Send all valid data at once
     for (uint16_t i = 0; i < pos; i++)
     {
         frame[i * 4 + 0] = vofa[i].u8data[0];
@@ -152,55 +174,55 @@ void Vofa_Send_Flash_Data(void)
 
 /*************************************
 ** Function: Wit_Send_Data
-** Description: 通过无线模块发送传感器数据
-** Input:      无
-** Output:     无
-** Return:     无
-** Others:     串口3发送，自定义数据帧格式
+** Description: Send sensor data via wireless module
+** Input:      None
+** Output:     None
+** Return:     None
+** Others:     UART_3 transmit, custom data frame format
 *************************************/
 void Wit_Send_Data(void)
 {
-    uint8 data[4];                       // 单精度浮点数拆分后的4字节缓存
-    floatu8data VOFA_data[20];           // 浮点数与字节数组共用体
-    // 清空数据缓存
+    uint8 data[4];                       // 4-byte buffer for float decomposition
+    floatu8data VOFA_data[20];           // Union for float and byte array conversion
+    // Clear data buffer
     memset(VOFA_data, 0, sizeof(VOFA_data));
 
     int i = 0;
 
-    // 赋值15路光敏传感器处理后数据
+    // Assign 15-channel processed light sensor data
     for (int i = 0; i < 15; i++)
     {
         VOFA_data[i].floatdata = Light_Convert[i];
     }
 
-    // 赋值状态参数
-    VOFA_data[15].floatdata = Run_Mode;   // 运行模式
-    VOFA_data[16].floatdata = Error;      // 错误码
-    VOFA_data[17].floatdata = 0;          // 保留位
+    // Assign status parameters
+    VOFA_data[15].floatdata = Run_Mode;   // Run mode
+    VOFA_data[16].floatdata = Error;      // Error code
+    VOFA_data[17].floatdata = 0;          // Reserved
 
-    // 发送数据帧头 00 00 7F 80
+    // Send data frame header 00 00 7F 80
     uart_write_byte(UART_3, 0x00);
     uart_write_byte(UART_3, 0x00);
     uart_write_byte(UART_3, 0x7f);
     uart_write_byte(UART_3, 0x80);
 
-    // 循环发送18组浮点数数据
+    // Send 18 groups of float data in a loop
     for(i = 0; i < 18; i++)
     {
-        // 提取浮点数拆分后的4个字节
+        // Extract the 4 bytes from the split float
         data[0] = VOFA_data[i].u8data[0];
         data[1] = VOFA_data[i].u8data[1];
         data[2] = VOFA_data[i].u8data[2];
         data[3] = VOFA_data[i].u8data[3];
 
-        // 通过串口3逐字节发送
+        // Send byte by byte via UART_3
         uart_write_byte(UART_3, data[0]);
         uart_write_byte(UART_3, data[1]);
         uart_write_byte(UART_3, data[2]);
         uart_write_byte(UART_3, data[3]);
     }
 
-    // 发送数据帧尾 00 00 80 7F
+    // Send data frame tail 00 00 80 7F
     uart_write_byte(UART_3, 0x00);
     uart_write_byte(UART_3, 0x00);
     uart_write_byte(UART_3, 0x80);
@@ -211,15 +233,15 @@ void Wit_Send_Data(void)
 
 /*************************************
 ** Function: Light_Init
-** Description: 15路光敏传感器ADC初始化
-** Input:      无
-** Output:     无
-** Return:     无
-** Others:     配置为12位ADC精度
+** Description: Initialize 15-channel light sensor ADCs
+** Input:      None
+** Output:     None
+** Return:     None
+** Others:     Configured for 12-bit ADC precision
 *************************************/
 void Light_Init()
 {
-    // 初始化15路光敏传感器对应的ADC通道，12位精度
+    // Initialize ADC channels for 15 light sensors, 12-bit precision
     adc_init(ADC2_CH14_A48, ADC_12BIT);
     adc_init(ADC2_CH12_A46, ADC_12BIT);
     adc_init(ADC2_CH10_A44, ADC_12BIT);
@@ -239,27 +261,27 @@ void Light_Init()
 
 /*************************************
 ** Function: Encoder_Init
-** Description: 左右电机编码器初始化
-** Input:      无
-** Output:     无
-** Return:     无
-** Others:     正交编码器模式
+** Description: Initialize left and right motor encoders
+** Input:      None
+** Output:     None
+** Return:     None
+** Others:     Quadrature encoder mode
 *************************************/
 void Encoder_Init()
 {
-    // 左电机编码器初始化
+    // Left motor encoder initialization
     encoder_quad_init(TIM4_ENCODER, TIM4_ENCODER_CH1_P02_8, TIM4_ENCODER_CH2_P00_9);
-    // 右电机编码器初始化 (TIM3→TIM2: P02_7线断，换用P33_6/P33_7)
+    // Right motor encoder initialization (TIM3->TIM2: P02_7 wire broken, switched to P33_6/P33_7)
     encoder_quad_init(TIM2_ENCODER, TIM2_ENCODER_CH1_P33_7, TIM2_ENCODER_CH2_P33_6);
 }
 
 /*************************************
 ** Function: Motor_Init
-** Description: 电机驱动PWM初始化
-** Input:      无
-** Output:     无
-** Return:     无
-** Others:     左右电机30KHz，吸风电机70KHz
+** Description: Initialize motor driver PWM
+** Input:      None
+** Output:     None
+** Return:     None
+** Others:     Left/right motors 30KHz, suction motor 70KHz
 *************************************/
 void Motor_Init()
 {
@@ -269,7 +291,7 @@ void Motor_Init()
     // duty PWM: 30kHz, start at 0
     pwm_init(Left_Motor_PWM,  30000, 0);
     pwm_init(Right_Motor_PWM, 30000, 0);
-    // 风扇: DIR=0=吸风, duty=0
+    // Fan: DIR=0=suction, duty=0
     pwm_init(Suction_Motor_DIR, 100000, 10000);
     pwm_init(Suction_Motor_PWM, 100000, 0);
 
@@ -278,36 +300,36 @@ void Motor_Init()
 
 /*************************************
 ** Function: Other_Init
-** Description: 其他外设初始化
-** Input:      无
-** Output:     无
-** Return:     无
-** Others:     包含OLED、IMU660RB、GPIO初始化
+** Description: Initialize other peripherals
+** Input:      None
+** Output:     None
+** Return:     None
+** Others:     Includes OLED, IMU660RB, GPIO initialization
 *************************************/
 void Other_Init()
 {
-    OLED_Init();                                  // OLED显示屏初始化
+    OLED_Init();                                  // OLED display initialization
 //    gpio_init(P15_1,    GPO, 0, GPO_PUSH_PULL);
-    gpio_init(P33_4,    GPO, 0, GPO_PUSH_PULL);   // 推挽输出GPIO初始化
-    gpio_init(P20_7,    GPI, 0, GPI_PULL_DOWN);   // 使能开关输入
-    gpio_init(P22_3,    GPI, 0, GPI_PULL_DOWN);   // 自定义按键输入
-    adc_init(ADC0_CH5_A5,   ADC_12BIT); // 电池电压检测ADC
-    adc_init(ADC0_CH10_A10, ADC_12BIT); // 电池电流检测ADC
+    gpio_init(P33_4,    GPO, 0, GPO_PUSH_PULL);   // Push-pull output GPIO initialization
+    gpio_init(P20_7,    GPI, 0, GPI_PULL_DOWN);   // Enable switch input
+    gpio_init(P22_3,    GPI, 0, GPI_PULL_DOWN);   // Custom button input
+    adc_init(ADC0_CH5_A5,   ADC_12BIT); // Battery voltage detection ADC
+    adc_init(ADC0_CH10_A10, ADC_12BIT); // Battery current detection ADC
 }
 
 /*************************************
 ** Function: Get_Light
-** Description: 读取15路光敏传感器ADC、电池电压和电流
-** Input:      无
-** Output:     Light_ADC数组、Voltage_Check、Current_Check
-** Return:     无
-** Others:     数组下标0~14对应传感器1~15
-**             电压公式：raw * 3.3 * 11 / 4095 + 0.567，经一阶低通滤波
-**             电流公式：raw * 3.3 / (4095 * 20 * 0.015)
+** Description: Read 15-channel light sensor ADCs, battery voltage and current
+** Input:      None
+** Output:     Light_ADC array, Voltage_Check, Current_Check
+** Return:     None
+** Others:     Array index 0~14 corresponds to sensors 1~15
+**             Voltage formula: raw * 3.3 * 11 / 4095 + 0.567, with first-order low-pass filter
+**             Current formula: raw * 3.3 / (4095 * 20 * 0.015)
 *************************************/
 void Get_Light()
 {
-    // 读取15路ADC值并存入对应数组
+    // Read 15-channel ADC values into corresponding array
     Light_ADC[14]  = adc_convert(ADC2_CH14_A48);
     Light_ADC[13]  = adc_convert(ADC2_CH12_A46);
     Light_ADC[12]  = adc_convert(ADC2_CH10_A44);
@@ -324,17 +346,17 @@ void Get_Light()
     Light_ADC[1]   = adc_convert(ADC0_CH2_A2);
     Light_ADC[0]   = adc_convert(ADC0_CH0_A0);
 
-    // 电池电流检测（raw * 3.3 / (4095 * 运放增益 * 采样电阻)）
+    // Battery current detection (raw * 3.3 / (4095 * op-amp gain * sense resistor))
     Current_Check = (adc_convert(ADC0_CH10_A10) * 3.3 / (4095 * 20 * 0.015));
 
-    // 电池电压检测（分压比11:1 + 校准偏移 + 突变滤波 + 一阶低通滤波）
+    // Battery voltage detection (11:1 divider + calibration offset + glitch filter + first-order LPF)
     {
         float raw_voltage = (adc_convert(ADC0_CH5_A5) * 3.3 * 11 / 4095.0) + 0.567;
 
-        // 突变过滤：相邻两次差值 > 0.5V 则丢弃本次数据，保留上次值
+        // Glitch filter: if adjacent readings differ by >0.5V, discard the new value and keep the previous
         if (Voltage_Check[0] - raw_voltage > 0.5f)
         {
-            raw_voltage = Voltage_Check[0];  // 认为是毛刺，使用上次有效值
+            raw_voltage = Voltage_Check[0];  // Treat as spike, keep previous valid value
         }
 
         Voltage_Check[1] = Voltage_Check[0];
@@ -345,45 +367,45 @@ void Get_Light()
 
 /*************************************
 ** Function: Get_Threshold
-** Description: 计算并更新光敏传感器阈值
-** Input:      无
-** Output:     Light_Thr数组
-** Return:     无
-** Others:     自动校准最大值、最小值，计算上下阈值
+** Description: Calculate and update light sensor thresholds
+** Input:      None
+** Output:     Light_Thr array
+** Return:     None
+** Others:     Auto-calibrate max/min values, calculate upper and lower thresholds
 *************************************/
 void Get_Threshold()
 {
-    Get_Light();  // 先读取最新的光敏传感器ADC值
+    Get_Light();  // Read latest light sensor ADC values first
 
-    // 遍历15路传感器，更新ADC最大值和最小值
+    // Iterate 15-channel sensors, update ADC max and min values
     for (uint8_t ch = 0; ch < 15; ch++)
     {
-        // 有效范围内更新最大值
+        // Update max within valid range
         if (Light_ADC[ch] > Light_Raw_Max[ch] && Light_ADC[ch] < 5000)
         {
             Light_Raw_Max[ch] = Light_ADC[ch];
         }
-        // 有效范围内更新最小值
+        // Update min within valid range
         if (Light_ADC[ch] < Light_Raw_Min[ch] && Light_ADC[ch] > 0)
         {
             Light_Raw_Min[ch] = Light_ADC[ch];
         }
     }
 
-    // 遍历15路传感器，计算上下阈值
+    // Iterate 15-channel sensors, calculate upper and lower thresholds
     for (uint8_t ch = 0; ch < 15; ch++)
     {
-        // 计算ADC量程，防止除0
+        // Calculate ADC span, prevent division by zero
         uint16_t span = Light_Raw_Max[ch] - Light_Raw_Min[ch];
         if (span == 0)
         {
             span = 1;
         }
-        // 计算上阈值：量程6/9位置
+        // Calculate upper threshold: 6/9 position of span
         float mid_Up   = (float)(Light_Raw_Max[ch] - Light_Raw_Min[ch]) * 6 / 9.0f + Light_Raw_Min[ch];
-        // 计算下阈值：量程5/9位置
+        // Calculate lower threshold: 5/9 position of span
         float mid_Down = (float)(Light_Raw_Max[ch] - Light_Raw_Min[ch]) * 5 / 9.0f + Light_Raw_Min[ch];
-        // 存入阈值数组
+        // Store into threshold array
         Light_Thr[ch][0] = mid_Up;
         Light_Thr[ch][1] = mid_Down;
     }

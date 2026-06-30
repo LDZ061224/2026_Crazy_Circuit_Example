@@ -1,124 +1,126 @@
 /*********************************************************************************************************************
-* TC264 Opensourec Library 鍗筹紙TC264 寮�婧愬簱锛夋槸涓�涓熀浜庡畼鏂� SDK 鎺ュ彛鐨勭涓夋柟寮�婧愬簱
-* Copyright (c) 2022 SEEKFREE 閫愰绉戞妧
+* TC264 Open Source Library (third-party open source library based on official SDK interfaces)
+* Copyright (c) 2022 SEEKFREE (Zhufei Technology)
 *
-* 鏈枃浠舵槸 TC264 寮�婧愬簱鐨勪竴閮ㄥ垎
+* This file is part of the TC264 Open Source Library
 *
-* TC264 寮�婧愬簱 鏄厤璐硅蒋浠�
-* 鎮ㄥ彲浠ユ牴鎹嚜鐢辫蒋浠跺熀閲戜細鍙戝竷鐨� GPL锛圙NU General Public License锛屽嵆 GNU閫氱敤鍏叡璁稿彲璇侊級鐨勬潯娆�
-* 鍗� GPL 鐨勭3鐗堬紙鍗� GPL3.0锛夋垨锛堟偍閫夋嫨鐨勶級浠讳綍鍚庢潵鐨勭増鏈紝閲嶆柊鍙戝竷鍜�/鎴栦慨鏀瑰畠
+* TC264 Open Source Library is free software
+* You may redistribute and/or modify it under the terms of the GNU General Public License
+* version 3 (GPL3.0) or (at your option) any later version.
 *
-* 鏈紑婧愬簱鐨勫彂甯冩槸甯屾湜瀹冭兘鍙戞尌浣滅敤锛屼絾骞舵湭瀵瑰叾浣滀换浣曠殑淇濊瘉
-* 鐢氳嚦娌℃湁闅愬惈鐨勯�傞攢鎬ф垨閫傚悎鐗瑰畾鐢ㄩ�旂殑淇濊瘉
-* 鏇村缁嗚妭璇峰弬瑙� GPL
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GPL for more details.
 *
-* 鎮ㄥ簲璇ュ湪鏀跺埌鏈紑婧愬簱鐨勫悓鏃舵敹鍒颁竴浠� GPL 鐨勫壇鏈�
-* 濡傛灉娌℃湁锛岃鍙傞槄<https://www.gnu.org/licenses/>
+* You should have received a copy of the GPL along with this library.
+* If not, see <https://www.gnu.org/licenses/>
 *
-* 棰濆娉ㄦ槑锛�
-* 鏈紑婧愬簱浣跨敤 GPL3.0 寮�婧愯鍙瘉鍗忚 浠ヤ笂璁稿彲鐢虫槑涓鸿瘧鏂囩増鏈�
-* 璁稿彲鐢虫槑鑻辨枃鐗堝湪 libraries/doc 鏂囦欢澶逛笅鐨� GPL3_permission_statement.txt 鏂囦欢涓�
-* 璁稿彲璇佸壇鏈湪 libraries 鏂囦欢澶逛笅 鍗宠鏂囦欢澶逛笅鐨� LICENSE 鏂囦欢
-* 娆㈣繋鍚勪綅浣跨敤骞朵紶鎾湰绋嬪簭 浣嗕慨鏀瑰唴瀹规椂蹇呴』淇濈暀閫愰绉戞妧鐨勭増鏉冨０鏄庯紙鍗虫湰澹版槑锛�
+* Additional notes:
+* This library uses the GPL3.0 open source license agreement; the above statement is a translated version.
+* The English license statement is in libraries/doc/GPL3_permission_statement.txt
+* The license copy is under the libraries folder, i.e. the LICENSE file in that folder.
+* Welcome to use and share this program, but when modifying, you must retain Zhufei Technology's copyright statement (i.e., this statement).
 *
-* 鏂囦欢鍚嶇О          isr_config
-* 鍏徃鍚嶇О          鎴愰兘閫愰绉戞妧鏈夐檺鍏徃
-* 鐗堟湰淇℃伅          鏌ョ湅 libraries/doc 鏂囦欢澶瑰唴 version 鏂囦欢 鐗堟湰璇存槑
-* 寮�鍙戠幆澧�          ADS v1.10.2
-* 閫傜敤骞冲彴          TC264D
-* 搴楅摵閾炬帴          https://seekfree.taobao.com/
+* Filename           isr_config
+* Company            Chengdu Zhufei Technology Co., Ltd.
+* Version info       See libraries/doc/version file for version description
+* Dev environment    ADS v1.10.2
+* Platform           TC264D
+* Store link         https://seekfree.taobao.com/
 *
-* 淇敼璁板綍
-* 鏃ユ湡              浣滆��                澶囨敞
-* 2022-09-15       pudding            first version
+* Modification history
+* Date               Author              Notes
+* 2022-09-15         pudding             first version
 ********************************************************************************************************************/
 
 #ifndef _isr_config_h
 #define _isr_config_h
 
 
+//====================================================================================================================
+// IMPORTANT: Interrupt priorities MUST NOT be set to the same value — every interrupt must have a unique priority.
+//====================================================================================================================
+//====================================================================================================================
+// IMPORTANT: Interrupt priorities MUST NOT be set to the same value — every interrupt must have a unique priority.
+//====================================================================================================================
+//====================================================================================================================
+// IMPORTANT: Interrupt priorities MUST NOT be set to the same value — every interrupt must have a unique priority.
+//====================================================================================================================
 
-//======================================================鐗瑰埆娉ㄦ剰====================================================
-// 涓柇浼樺厛绾т笉鑳借缃负鐩稿悓鍊硷紝鎵�鏈変腑鏂紭鍏堢骇閮藉繀椤昏缃负涓嶄竴鏍风殑鍊�
-//======================================================鐗瑰埆娉ㄦ剰====================================================
-//======================================================鐗瑰埆娉ㄦ剰====================================================
-// 涓柇浼樺厛绾т笉鑳借缃负鐩稿悓鍊硷紝鎵�鏈変腑鏂紭鍏堢骇閮藉繀椤昏缃负涓嶄竴鏍风殑鍊�
-//======================================================鐗瑰埆娉ㄦ剰====================================================
-//======================================================鐗瑰埆娉ㄦ剰====================================================
-// 涓柇浼樺厛绾т笉鑳借缃负鐩稿悓鍊硷紝鎵�鏈変腑鏂紭鍏堢骇閮藉繀椤昏缃负涓嶄竴鏍风殑鍊�
-//======================================================鐗瑰埆娉ㄦ剰====================================================
+// ISR_PRIORITY:  TC264 provides 255 configurable interrupt priority levels (1-255). Priority 0 means interrupt disabled; 255 is the highest priority.
+// INT_SERVICE:   Macro that determines who handles the interrupt, also known as the service provider.
+//                (On TC264, interrupts are called "services"). Valid range: IfxSrc_Tos_cpu0, IfxSrc_Tos_cpu1, IfxSrc_Tos_dma.
+//                Other values are not allowed.
+//                If INT_SERVICE is set to IfxSrc_Tos_dma, ISR_PRIORITY range is 0-47.
 
-// ISR_PRIORITY锛�    TC264鍏锋湁255涓腑鏂紭鍏堢骇鍙互璁剧疆 1-255锛�0浼樺厛绾ц〃绀轰笉寮�鍚腑鏂紝255涓烘渶楂樹紭鍏堢骇
-// INT_SERVICE锛�     瀹忓畾涔夊喅瀹氫腑鏂敱璋佸鐞嗭紝涔熺О涓烘湇鍔℃彁渚涜�咃紙鍦═C264涓紝涓柇琚彨鍋氭湇鍔★級锛屽彲璁剧疆鑼冨洿IfxSrc_Tos_cpu0 IfxSrc_Tos_cpu1 IfxSrc_Tos_dma  涓嶅彲璁剧疆涓哄叾浠栧��
-// 濡傛灉INT_SERVICE璁剧疆涓篒fxSrc_Tos_dma鐨勮瘽锛孖SR_PRIORITY鐨勫彲璁剧疆鑼冨洿鍒欐槸0-47銆�
-
-//================================================PIT涓柇鍙傛暟鐩稿叧瀹氫箟===============================================
-#define CCU6_0_CH0_INT_SERVICE	IfxSrc_Tos_cpu0	    // 瀹氫箟CCU6_0 PIT閫氶亾0涓柇鏈嶅姟绫诲瀷锛屽嵆涓柇鏄敱璋佸搷搴斿鐞� IfxSrc_Tos_cpu0 IfxSrc_Tos_cpu1 IfxSrc_Tos_dma  涓嶅彲璁剧疆涓哄叾浠栧��
-#define CCU6_0_CH0_ISR_PRIORITY 10	                // 3ms PIT 涓柇锛圕ar_Go 鏍稿績鑺傛媿锛�
+//================================================== PIT interrupt parameter definitions ==============================================
+#define CCU6_0_CH0_INT_SERVICE	IfxSrc_Tos_cpu0	    // CCU6_0 PIT channel 0 interrupt service type: defines which core handles this interrupt. IfxSrc_Tos_cpu0 / IfxSrc_Tos_cpu1 / IfxSrc_Tos_dma only.
+#define CCU6_0_CH0_ISR_PRIORITY 10	                // 3ms PIT interrupt (Car_Go core beat)
 
 #define CCU6_0_CH1_INT_SERVICE	IfxSrc_Tos_cpu0
-#define CCU6_0_CH1_ISR_PRIORITY 0                       // 鏈娇鐢細鍏抽棴
+#define CCU6_0_CH1_ISR_PRIORITY 0                       // Unused: closed
 
 #define CCU6_1_CH0_INT_SERVICE	IfxSrc_Tos_cpu0
-#define CCU6_1_CH0_ISR_PRIORITY 0                       // 鏈娇鐢細鍏抽棴
+#define CCU6_1_CH0_ISR_PRIORITY 0                       // Unused: closed
 
 #define CCU6_1_CH1_INT_SERVICE	IfxSrc_Tos_cpu0
-#define CCU6_1_CH1_ISR_PRIORITY 0                       // 鏈娇鐢細鍏抽棴
+#define CCU6_1_CH1_ISR_PRIORITY 0                       // Unused: closed
 
 
 
-//================================================GPIO涓柇鍙傛暟鐩稿叧瀹氫箟===============================================
-// 閫氶亾0涓庨�氶亾4鏄叕鐢ㄤ竴涓腑鏂嚱鏁� 鍦ㄤ腑鏂唴閮ㄩ�氳繃鏍囧織浣嶅垽鏂槸璋佽Е鍙戠殑涓柇
-// 瀹為檯浣跨敤鐨勯�氶亾: CH0_REQ0_P15_4 / CH4_REQ13_P15_5锛堢┖澶勭悊锛�
-#define EXTI_CH0_CH4_INT_SERVICE IfxSrc_Tos_cpu0	// 瀹氫箟ERU閫氶亾0鍜岄�氶亾4涓柇鏈嶅姟绫诲瀷锛屽嵆涓柇鏄敱璋佸搷搴斿鐞� IfxSrc_Tos_cpu0 IfxSrc_Tos_cpu1 IfxSrc_Tos_dma  涓嶅彲璁剧疆涓哄叾浠栧��
-#define EXTI_CH0_CH4_INT_PRIO  	0	                // 鏈娇鐢細鍏抽棴
+//================================================== GPIO (ERU) interrupt parameter definitions ==============================================
+// Channels 0 and 4 share one ISR function; inside the ISR, flag bits determine which channel triggered.
+// Actual pins used: CH0_REQ0_P15_4 / CH4_REQ13_P15_5 (idle handling)
+#define EXTI_CH0_CH4_INT_SERVICE IfxSrc_Tos_cpu0	// ERU channel 0 and channel 4 interrupt service type: defines which core handles. IfxSrc_Tos_cpu0 / IfxSrc_Tos_cpu1 / IfxSrc_Tos_dma only.
+#define EXTI_CH0_CH4_INT_PRIO  	0	                // Unused: closed
 
-// 閫氶亾1涓庨�氶亾5鏄叕鐢ㄤ竴涓腑鏂嚱鏁� 鍦ㄤ腑鏂唴閮ㄩ�氳繃鏍囧織浣� 鍒ゆ柇鏄皝瑙﹀彂鐨勪腑鏂�
-// CH1_REQ10_P14_3: ToF 妯″潡锛堝凡涓嶄娇鐢級; CH5_REQ1_P15_8: 绌哄鐞�
-#define EXTI_CH1_CH5_INT_SERVICE IfxSrc_Tos_cpu0	// 瀹氫箟ERU閫氶亾1鍜岄�氶亾5涓柇鏈嶅姟绫诲瀷锛屽悓涓�
-#define EXTI_CH1_CH5_INT_PRIO  	0	                // 鏈娇鐢細鍏抽棴
+// Channels 1 and 5 share one ISR function; inside the ISR, flag bits determine which channel triggered.
+// CH1_REQ10_P14_3: ToF module (deprecated); CH5_REQ1_P15_8: idle handling
+#define EXTI_CH1_CH5_INT_SERVICE IfxSrc_Tos_cpu0	// ERU channel 1 and channel 5 interrupt service type, same as above.
+#define EXTI_CH1_CH5_INT_PRIO  	0	                // Unused: closed
 
-// 閫氶亾2涓庨�氶亾6鏄叕鐢ㄤ竴涓腑鏂嚱鏁� 鍦ㄤ腑鏂唴閮ㄩ�氳繃鏍囧織浣� 鍒ゆ柇鏄皝瑙﹀彂鐨勪腑鏂�
-#define EXTI_CH2_CH6_INT_SERVICE IfxSrc_Tos_dma	    // 瀹氫箟ERU閫氶亾2鍜岄�氶亾6涓柇鏈嶅姟绫诲瀷锛屽悓涓�
-#define EXTI_CH2_CH6_INT_PRIO  	5	                // 瀹氫箟ERU閫氶亾2鍜岄�氶亾6涓柇浼樺厛绾� 鍙缃寖鍥翠负0-47
+// Channels 2 and 6 share one ISR function; inside the ISR, flag bits determine which channel triggered.
+#define EXTI_CH2_CH6_INT_SERVICE IfxSrc_Tos_dma	    // ERU channel 2 and channel 6 interrupt service type, same as above.
+#define EXTI_CH2_CH6_INT_PRIO  	5	                // ERU channel 2 and channel 6 interrupt priority. Valid range: 0-47.
 
-// 閫氶亾3涓庨�氶亾7鏄叕鐢ㄤ竴涓腑鏂嚱鏁� 鍦ㄤ腑鏂唴閮ㄩ�氳繃鏍囧織浣� 鍒ゆ柇鏄皝瑙﹀彂鐨勪腑鏂�
-// 鎽勫儚澶存湭浣跨敤
-#define EXTI_CH3_CH7_INT_SERVICE IfxSrc_Tos_cpu0	// 瀹氫箟ERU閫氶亾3鍜岄�氶亾7涓柇鏈嶅姟绫诲瀷锛屽悓涓�
-#define EXTI_CH3_CH7_INT_PRIO  	0	                // 鏈娇鐢細鍏抽棴
+// Channels 3 and 7 share one ISR function; inside the ISR, flag bits determine which channel triggered.
+// Camera not in use
+#define EXTI_CH3_CH7_INT_SERVICE IfxSrc_Tos_cpu0	// ERU channel 3 and channel 7 interrupt service type, same as above.
+#define EXTI_CH3_CH7_INT_PRIO  	0	                // Unused: closed
 
-// 閫氶亾2涓庨�氶亾6鏄叕鐢ㄤ竴涓腑鏂嚱鏁� 鍦ㄤ腑鏂唴閮ㄩ�氳繃鏍囧織浣� 鍒ゆ柇鏄皝瑙﹀彂鐨勪腑鏂�
-// 鎽勫儚澶碢CLK DMA鏈娇鐢�
-#define EXTI_CH2_CH6_INT_SERVICE IfxSrc_Tos_dma	    // 瀹氫箟ERU閫氶亾2鍜岄�氶亾6涓柇鏈嶅姟绫诲瀷锛屽悓涓�
-#define EXTI_CH2_CH6_INT_PRIO  	0	                // 鏈娇鐢細鍏抽棴
-
-
-//===================================================DMA涓柇鍙傛暟鐩稿叧瀹氫箟===============================================
-#define	DMA_INT_SERVICE         IfxSrc_Tos_cpu0	    // ERU瑙﹀彂DMA涓柇鏈嶅姟绫诲瀷锛屽嵆涓柇鏄敱璋佸搷搴斿鐞� IfxSrc_Tos_cpu0 IfxSrc_Tos_cpu1 IfxSrc_Tos_dma  涓嶅彲璁剧疆涓哄叾浠栧��
-#define DMA_INT_PRIO  	        0	                // 鎽勫儚澶碊MA鏈娇鐢細鍏抽棴
+// Channels 2 and 6 share one ISR function; inside the ISR, flag bits determine which channel triggered.
+// Camera PCLK DMA not in use
+#define EXTI_CH2_CH6_INT_SERVICE IfxSrc_Tos_dma	    // ERU channel 2 and channel 6 interrupt service type, same as above.
+#define EXTI_CH2_CH6_INT_PRIO  	0	                // Unused: closed
 
 
-//===================================================涓插彛涓柇鍙傛暟鐩稿叧瀹氫箟===============================================
-#define	UART0_INT_SERVICE       IfxSrc_Tos_cpu0	    // 瀹氫箟涓插彛0涓柇鏈嶅姟绫诲瀷锛屽嵆涓柇鏄敱璋佸搷搴斿鐞� IfxSrc_Tos_cpu0 IfxSrc_Tos_cpu1 IfxSrc_Tos_dma  涓嶅彲璁剧疆涓哄叾浠栧��
-#define UART0_TX_INT_PRIO       0                // 瀹氫箟涓插彛0鍙戦�佷腑鏂紭鍏堢骇 鑼冨洿1-255 瓒婂ぇ浼樺厛绾ц秺楂橈紙鎺ユ敹@STOP# 闇�瑕佹渶楂樹紭鍏堢骇锛�
-#define UART0_RX_INT_PRIO       0	                // 鈽� 涓插彛0鎺ユ敹涓柇鏈�楂樹紭鍏堢骇锛園STOP#绱ф�ュ仠杞﹀懡浠わ級
-#define UART0_ER_INT_PRIO       0	                // 涓插彛0閿欒涓柇娆￠珮浼樺厛绾�
+//=================================================== DMA interrupt parameter definitions ===============================================
+#define	DMA_INT_SERVICE         IfxSrc_Tos_cpu0	    // ERU-triggered DMA interrupt service type: defines which core handles. IfxSrc_Tos_cpu0 / IfxSrc_Tos_cpu1 / IfxSrc_Tos_dma only.
+#define DMA_INT_PRIO  	        0	                // Camera DMA not in use: closed
 
-// UART1-UART3 鏈娇鐢紝鍏抽棴涓柇
+
+//=================================================== UART interrupt parameter definitions ===============================================
+#define	UART0_INT_SERVICE       IfxSrc_Tos_cpu0	    // UART0 interrupt service type: defines which core handles. IfxSrc_Tos_cpu0 / IfxSrc_Tos_cpu1 / IfxSrc_Tos_dma only.
+#define UART0_TX_INT_PRIO       0                    // UART0 TX interrupt priority. Range: 1-255, higher = higher priority. (RX @STOP# needs highest priority.)
+#define UART0_RX_INT_PRIO       0	                // UART0 RX interrupt highest priority (emergency STOP# stop command)
+#define UART0_ER_INT_PRIO       0	                // UART0 error interrupt, second-highest priority
+
+// UART1-UART3 not in use, interrupts closed
 #define	UART1_INT_SERVICE       IfxSrc_Tos_cpu0
-#define UART1_TX_INT_PRIO       0                   // 鏈娇鐢細鍏抽棴
-#define UART1_RX_INT_PRIO       0                   // 鏈娇鐢細鍏抽棴
-#define UART1_ER_INT_PRIO       0                   // 鏈娇鐢細鍏抽棴
+#define UART1_TX_INT_PRIO       0                   // Unused: closed
+#define UART1_RX_INT_PRIO       0                   // Unused: closed
+#define UART1_ER_INT_PRIO       0                   // Unused: closed
 
 #define	UART2_INT_SERVICE       IfxSrc_Tos_cpu0
-#define UART2_TX_INT_PRIO       100                  // 涓插彛2鍙戦�佷腑鏂�
-#define UART2_RX_INT_PRIO       255                 // 涓插彛2鎺ユ敹涓柇锛堜覆鍙ｈ皟鍙傦級
-#define UART2_ER_INT_PRIO       254                 // 涓插彛2閿欒涓柇
+#define UART2_TX_INT_PRIO       100                  // UART2 TX interrupt
+#define UART2_RX_INT_PRIO       255                 // UART2 RX interrupt (serial tuning)
+#define UART2_ER_INT_PRIO       254                 // UART2 error interrupt
 
 #define	UART3_INT_SERVICE       IfxSrc_Tos_cpu0
-#define UART3_TX_INT_PRIO       0                   // 鏈娇鐢細鍏抽棴
-#define UART3_RX_INT_PRIO       0                   // 鏈娇鐢細鍏抽棴
-#define UART3_ER_INT_PRIO       0                   // 鏈娇鐢細鍏抽棴
+#define UART3_TX_INT_PRIO       0                   // Unused: closed
+#define UART3_RX_INT_PRIO       0                   // Unused: closed
+#define UART3_ER_INT_PRIO       0                   // Unused: closed
 
 
 #endif

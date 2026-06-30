@@ -2,6 +2,8 @@
 #define _isr_h
 
 #include "zf_common_headfile.h"
-#include "Uart_Adjust.h"        // uart_tuning_cmd_t + g_tuning_cmd + parser API
+
+/* UART tuning: uart_tuning_cmd_t type, g_tuning_cmd instance, and parser API */
+#include "Uart_Adjust.h"
 
 #endif

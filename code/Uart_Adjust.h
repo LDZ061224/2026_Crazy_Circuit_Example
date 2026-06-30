@@ -1,33 +1,33 @@
 /*************************************************
 Copyright (C), 2016-2026, TYUT JBD TEAM C.
 File name: Uart_Adjust.h
-Description:  UART 远程调参协议模块（可跨工程移植）
-Others:      依赖 pid.h（PID_HandleTypeDef/PID_cleardata）、Flash 驱动
+Description:  UART remote tuning protocol module (portable across projects)
+Others:      Depends on pid.h (PID_HandleTypeDef/PID_cleardata), Flash driver
 **************************************************/
 #ifndef __UART_ADJUST_H
 #define __UART_ADJUST_H
 
 #include "zf_common_headfile.h"
 
-/***********************************类型定义***********************************/
+/***********************************Type Definitions***********************************/
 typedef struct
 {
-    uint8   valid;       // 1 = 有新命令待消费
-    char    key[4];      // 3 字符键名 + '\0'
-    float   value;       // 解析出的浮点值
+    uint8   valid;       // 1 = new command pending consumption
+    char    key[4];      // 3-char key name + '\0'
+    float   value;       // Parsed float value
 } uart_tuning_cmd_t;
 
-/*********************************全局变量声明*********************************/
+/*********************************Global Variable Declarations*********************************/
 extern uart_tuning_cmd_t g_tuning_cmd;
 
-/* Flash 存储数组（定义在 OLEDKeyboard.c 中） */
+/* Flash storage arrays (defined in OLEDKeyboard.c) */
 extern uint32 PID_OKb[13];
 extern uint32 Speed_OKb[1];
 extern uint32 DBG_OKb[4];
 
-/***********************************API 声明***********************************/
-void Uart_Adjust_ParseByte(uint8 byte);    // 逐字节喂入帧解析状态机
-void Uart_Adjust_Apply(void);              // 消费 g_tuning_cmd，修改 PID/目标/开关
-void Uart_Adjust_SaveToFlash(void);        // 将当前 PID + 速度 + 调试参数存入 Flash
+/***********************************API Declarations***********************************/
+void Uart_Adjust_ParseByte(uint8 byte);    // Feed one byte into the frame-parsing state machine
+void Uart_Adjust_Apply(void);              // Consume g_tuning_cmd, modify PID/target/switches
+void Uart_Adjust_SaveToFlash(void);        // Persist current PID + speed + debug params to Flash
 
 #endif

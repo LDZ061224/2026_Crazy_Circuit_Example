@@ -3,40 +3,40 @@ Copyright (C), 2016-2026, TYUT JBD TEAM C.
 File name: Fun.h
 Author: Cross_Z
 Version:0.0               Date: 2026.1.30
-Description:  功能驱动声明头文件
-Others:      无
+Description:  Function driver declaration header
+Others:      None
 Function List:
-             1. 共用体、外设引脚宏定义
-             2. 全局外部变量声明
-             3. 驱动函数声明（ADC、电机、编码器、OLED等）
+             1. Union type, peripheral pin macro definitions
+             2. Global external variable declarations
+             3. Driver function declarations (ADC, motor, encoder, OLED, etc.)
 History:
 <author>  <time>      <version > <desc>
-Cross_Z   2026.1.30   0.0        创建初始版本
+Cross_Z   2026.1.30   0.0        Initial version
 **************************************************/
 
-// 防止头文件重复包含
+// Header guard
 #ifndef __FUN_H
 #define __FUN_H
 
-// 包含基础通用头文件
+// Include base common header
 #include "zf_common_headfile.h"
-// 包含全局宏定义与公共头文件
+// Include global macros and common header
 #include "headfiles.h"
 
-/*********************************** 数据类型定义 ***********************************/
-// 浮点数 <-> 4字节数组 共用体
-// 用于串口发送浮点数（拆分float为4个uint8_t）
+/*********************************** Data Type Definitions ***********************************/
+// Float <-> 4-byte array union
+// Used for UART float transmission (split float into 4 uint8_t bytes)
 typedef union floatu8data
 {
-    float floatdata;       // 浮点数类型数据
-    uint8 u8data[4];       // 对应4个字节数据
+    float floatdata;       // Float type data
+    uint8 u8data[4];       // Corresponding 4-byte data
 }floatu8data;
 
-/*********************************** 硬件引脚宏定义 ***********************************/
+/*********************************** Hardware Pin Macros ***********************************/
 /*
- *  新车 PWM 驱动方式：
- *    _PWM = 占空比通道
- *    _DIR = 方向通道（PWM, 10000=正转/吸风, 0=反转）
+ *  New car PWM drive method:
+ *    _PWM = duty cycle channel
+ *    _DIR = direction channel (PWM, 10000=forward/suction, 0=reverse)
  */
 #define Left_Motor_PWM      ATOM3_CH1_P15_7
 #define Left_Motor_DIR      ATOM3_CH0_P15_5
@@ -45,39 +45,39 @@ typedef union floatu8data
 #define Suction_Motor_PWM   ATOM1_CH6_P00_7
 #define Suction_Motor_DIR   ATOM3_CH3_P00_12
 
-// 使能开关：P20_7 高电平 = 开启
+// Enable switch: P20_7 high = enabled
 #define EnableSwitch_ON     gpio_get_level(P20_7) == 1
 
-/********************************* 全局外部变量声明 *********************************/
-// 15路光敏传感器ADC原始值数组
+/********************************* Global External Variable Declarations *********************************/
+// 15-channel light sensor raw ADC value array
 extern uint16 Light_ADC[15];
-// 15路光敏传感器阈值数组 [0]上阈值 [1]下阈值
+// 15-channel light sensor threshold array [0]=upper threshold [1]=lower threshold
 extern float Light_Thr[15][2];
-// IMU660RB传感器状态标志
+// IMU660RB sensor status flag
 extern uint8 imu660rb_Check;
-// 陀螺仪Z轴角速度
+// Gyro Z-axis angular velocity
 extern float Gyro_Z;
-// 电流检测值
+// Current detection value
 extern float Current_Check;
-// 两路电压检测值
+// Two-channel voltage detection values
 extern float Voltage_Check[2];
 extern int Dbg[10];
 
-/*********************************** 函数声明 ***********************************/
-// VOFA上位机数据发送函数
+/*********************************** Function Declarations ***********************************/
+// VOFA host software data transmit function
 void Vofa_Send_Data(void);
-void Vofa_Send_Flash_Data(void);    // VOFA Flash数据导出
-// 光敏传感器ADC初始化函数
+void Vofa_Send_Flash_Data(void);    // VOFA Flash data export
+// Light sensor ADC initialization function
 void Light_Init(void);
-// 编码器初始化函数
+// Encoder initialization function
 void Encoder_Init(void);
-// 电机PWM初始化函数
+// Motor PWM initialization function
 void Motor_Init(void);
-// 其他外设初始化（OLED、GPIO、IMU660RB）
+// Other peripheral initialization (OLED, GPIO, IMU660RB)
 void Other_Init(void);
-// 获取15路光敏传感器ADC值
+// Get 15-channel light sensor ADC values
 void Get_Light(void);
-// 获取光敏传感器阈值（自动校准）
+// Get light sensor thresholds (auto-calibration)
 void Get_Threshold(void);
 
 #endif
