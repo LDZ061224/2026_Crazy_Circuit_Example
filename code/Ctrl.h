@@ -274,7 +274,8 @@ extern uint8  Debug_Ground_Dir;             // 1=瀹革附顒滈崣鍐插冀, 2=
 extern uint8  Debug_Angle_Mode;             // 1=sin target, 2=step target
 extern uint8  Debug_Angle_D_First;          // 0=error D, 1=measurement D
 extern float  Debug_Angle_Vel_Target;       // VOFA: 鐟欐帡鈧喎瀹抽惄顔界垼
-extern uint8_t g_led_flag;                // Build mode LED: 1=blue, 0=green
+extern uint8_t g_led_flag;                // 0=green(normal) 1=blue(object) 2=yellow(low voltage)
+extern uint8_t g_scan_progress;            // Scan progress 0-100, 0=not scanning
 extern float  Debug_Angle_Vel_Real;         // VOFA: 鐎圭偤妾憴鎺椻偓鐔峰
 extern float  Debug_Kp_Left;               // 瀹革箒鐤嗙拫鍐槸Kp
 extern float  Debug_Ki_Left;               // 瀹革箒鐤嗙拫鍐槸Ki

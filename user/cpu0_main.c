@@ -14,6 +14,7 @@
 *
 * 日期              作者                说明
 * 2022-09-15       pudding            first version
+* 2026-06-30       Claude             陀螺仪校准加缓冲, 扫线移到 PIT 之前, WS2812 启动阶段放 CPU0
 ********************************************************************************************************************/
 #include "zf_common_headfile.h"
 #include "headfiles.h"
@@ -22,16 +23,15 @@
 #include "WS2812.h"
 
 #pragma section all "cpu0_dsram"
-// 将后续代码段放到 CPU0 的 DSRAM 中，便于快速访问。
 
 /* CPU0 负责整车启动、外设初始化和持续调试输出。 */
-int imu_Check = 1;  // IMU660RB初始化状态，1=未完成
-int i = 0;
+int imu_Check = 1;
+
 /* ======================== CPU0 主入口 ======================== */
 int core0_main(void)
 {
-    clock_init();                   // 初始化系统时钟
-    debug_init();                   // 初始化调试串口和基础输出
+    clock_init();
+    debug_init();
     Encoder_Init();
     Motor_Init();
     Other_Init();
@@ -43,27 +43,37 @@ int core0_main(void)
            break;
        gpio_toggle_level(P33_4);
     }
-//    spi_init(IMU660RB_SPI, SPI_MODE0, IMU660RB_SPI_SPEED, IMU660RB_SPC_PIN, IMU660RB_SDI_PIN, IMU660RB_SDO_PIN, SPI_CS_NULL);
     gpio_set_level(P33_4, 0);
     TCA9555_Init();
-    // OLED_Input();        // OLED 不可用，跳过按键初始化
-    Data_Load();    // 从 Flash 加载 PID + 速度 + DBG 参数
-    WS2812_Init();  // 灯板初始化
+    Data_Load();
+    WS2812_Init();
+
+    // ========================= 启动缓冲：等 3 秒再校准 =========================
+    // 给用户时间放稳车辆、打开使能开关，避免上车抖动干扰零漂采集
+    // 此时 CPU1 阻塞在 cpu_wait_event_ready()，CPU0 独占灯板，无竞争
+    WS2812_Effect_Set((WS2812_Effect_Config){
+        .type = EFF_OFF });
+
+#define CALIB_BUFFER_MS 3000
+    for (int i = 0; i < CALIB_BUFFER_MS / 10; i++)
+    {
+        WS2812_Effect_Update();
+        system_delay_ms(10);
+    }
 
     // ========================= 陀螺仪除零漂校准 =========================
-    // 校准期间：负压开到最大，灯板红灯呼吸，提醒用户保持车辆静止
+    // 负压开到最大，灯板红灯呼吸，提醒用户保持车辆静止
     pwm_set_duty(Suction_Motor_DIR, 0);
     pwm_set_duty(Suction_Motor_PWM, 9500);
 
     WS2812_Effect_Set((WS2812_Effect_Config){
         .type = EFF_BREATHING,
         .r = 255, .g = 0, .b = 0,
-        .period_ms = 1000
-    });
+        .period_ms = 1000 });
 
-    #define GYRO_CALIB_SAMPLES 500
+#define GYRO_CALIB_SAMPLES 500
     int32_t gyro_z_sum = 0;
-    for (int calib_i = 0; calib_i < GYRO_CALIB_SAMPLES; calib_i++)
+    for (int i = 0; i < GYRO_CALIB_SAMPLES; i++)
     {
         imu660rb_get_gyro();
         gyro_z_sum += imu660rb_gyro_z;
@@ -71,56 +81,74 @@ int core0_main(void)
         system_delay_ms(5);
     }
 
-    // 计算零漂（物理单位 °/s）
-    float gyro_z_offset_raw = (float)gyro_z_sum / GYRO_CALIB_SAMPLES;
-    gyro_z_offset = imu660rb_gyro_transition(gyro_z_offset_raw);
-
-    // 校准结束：关负压，绿灯常亮
+    gyro_z_offset = imu660rb_gyro_transition((float)gyro_z_sum / GYRO_CALIB_SAMPLES);
     pwm_set_duty(Suction_Motor_PWM, 0);
 
+    // ========================= 扫线 =========================
+    // 绿灯进度条，全程在 PIT 启动前完成
+    WS2812_Effect_Set((WS2812_Effect_Config){
+        .type = EFF_PROGRESS,
+        .r = 0, .g = 255, .b = 0 });
+
+#define SCAN_START 200
+#define SCAN_END   1600
+    for (int tick = 0; tick <= SCAN_END; tick++)
+    {
+        if (tick > SCAN_START && tick < SCAN_END)
+        {
+            Get_Threshold();
+            g_scan_progress = (uint8_t)((tick - SCAN_START) * 100UL / (SCAN_END - SCAN_START));
+            WS2812_Effect_SetProgress(g_scan_progress);
+        }
+        WS2812_Effect_Update();
+        system_delay_ms(3);
+    }
+
+    g_scan_progress = 0;
+
+    // 扫线结束：绿灯常亮
     WS2812_Effect_Set((WS2812_Effect_Config){
         .type = EFF_SOLID,
-        .r = 0, .g = 255, .b = 0
-    });
+        .r = 0, .g = 255, .b = 0 });
     WS2812_Effect_Update();
-    // ========================= 陀螺仪除零漂校准 END =========================
+    // ========================= 扫线 END =========================
 
-    /* 串口2：调参命令接收（新车 OLED 不可用时的替代方案） */
+    /* 串口2：调参命令接收 */
     uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
-    uart_rx_interrupt(UART_2, 1);           // 开启串口 2 接收中断
+    uart_rx_interrupt(UART_2, 1);
 
-    interrupt_global_enable(0);             // 允许全局中断
+    interrupt_global_enable(0);
 
     if (vofa_flash_dump_mode)
     {
-        // Flash数据导出模式：不启动PIT，不跑车，只循环发送Flash数据
-        while (TRUE)
-        {
-            Vofa_Send_Flash_Data();
-        }
+        while (TRUE) { Vofa_Send_Flash_Data(); }
     }
 
-//    // PIT 定时器提供周期任务节拍，主循环只保留轻量输出。
+    // PIT 启动后，ISR 调用 Car_Go；灯板由 CPU0 主循环统一驱动
     pit_ms_init(CCU60_CH0, 3);
-    cpu_wait_event_ready();                 // 等待事件调度器进入就绪状态
+    cpu_wait_event_ready();
 
-    /* 主循环只做持续型调试发送，不阻塞控制中断。 */
+    int last_led = -1;
+
     while (TRUE)
     {
         Vofa_Send_Data();
-        WS2812_Effect_Update();             // render + push LED frame
-//        system_delay_ms(1);
-//        gpio_toggle_level(P33_4);
-//         system_delay_ms(10);
-         pwm_set_duty(Left_Motor_DIR, 10000);
-         pwm_set_duty(Left_Motor_PWM, 6000);
-         pwm_set_duty(Right_Motor_DIR, 10000);
-         pwm_set_duty(Right_Motor_PWM, 6000);
-//        pwm_set_duty(Suction_Motor_IN1, 9500);
-//        pwm_set_duty(Suction_Motor_IN2, 10000);
 
+        // run-time LED: 0=green(normal) 1=blue(object) 2=yellow(low voltage)
+        if (g_led_flag != last_led)
+        {
+            last_led = g_led_flag;
+            WS2812_Effect_Config cfg = { .type = EFF_SOLID };
+            switch (g_led_flag)
+            {
+                case 2:  cfg.r = 255; cfg.g = 255; cfg.b = 0;   break; // yellow
+                case 1:  cfg.r = 0;   cfg.g = 0;   cfg.b = 255; break; // blue
+                default: cfg.r = 0;   cfg.g = 255; cfg.b = 0;   break; // green
+            }
+            WS2812_Effect_Set(cfg);
+        }
+        WS2812_Effect_Update();
     }
 }
 
 #pragma section all restore
-// 结束 CPU0 专用 RAM 段

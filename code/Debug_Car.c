@@ -313,12 +313,12 @@ void Debug_Set_Out(void)
     }
     else if (Right_PID_Out > 0)  // forward
     {
-        pwm_set_duty(Right_Motor_DIR, 10000);
+        pwm_set_duty(Right_Motor_DIR, 0);
         pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
     }
     else                         // reverse
     {
-        pwm_set_duty(Right_Motor_DIR, 0);
+        pwm_set_duty(Right_Motor_DIR, 10000);
         pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
     }
 }

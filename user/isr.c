@@ -22,10 +22,7 @@
 
 extern uint8 debug_uart_data;
 
-// TC: ISR 内默认关全局中断, 需要时用 interrupt_global_enable(0) 开启嵌套
-
-int Scan_Count = 0;
-int Scan_Complete = 0;
+// 扫线已在 cpu0_main.c 的 PIT 启动前完成，ISR 只需跑车调度
 
 // **************************** PIT中断函数 ****************************
 IFX_INTERRUPT(cc60_pit_ch0_isr, 0, CCU6_0_CH0_ISR_PRIORITY)
@@ -33,26 +30,11 @@ IFX_INTERRUPT(cc60_pit_ch0_isr, 0, CCU6_0_CH0_ISR_PRIORITY)
     interrupt_global_enable(0);
     pit_clear_flag(CCU60_CH0);
 
-    if (Scan_Complete == 0) Scan_Count++;
-
-    if (Scan_Count > 200 && Scan_Count < 800)
-    {
-        Get_Threshold();
-    }
-    else if (Scan_Count == 800)
-    {
-        Scan_Complete = 1;
-    }
-
-    if (Scan_Complete)
-    {
 #if USE_DEBUG_MODE
-        // if (Mode == Debug_Mode)
-            Debug_Car_Go();
+    Debug_Car_Go();
 #else
-            Car_Go();
+    Car_Go();
 #endif
-    }
 }
 
 IFX_INTERRUPT(cc60_pit_ch1_isr, 0, CCU6_0_CH1_ISR_PRIORITY)

@@ -83,7 +83,8 @@ float Check_Edge_Skip_Thresh = 0;      // Edge-detect cooldown mileage threshold
 float Check_Edge_Skip_Mileage_Base = 0; // Count.Mileage snapshot when cooldown started
 int Enable_Start_Delay_Count = 0;
 uint8_t Last_EnableSwitch_ON = 0;
-uint8_t g_led_flag = 0;                        // Build mode LED flag (P33_4 replaced by WS2812)
+uint8_t g_led_flag = 0;                        // 0=green(normal) 1=blue(object) 2=yellow(low voltage)
+uint8_t g_scan_progress = 0;                  // Scan progress 0-100 (0=not scanning)
 int Middle = 0;
 float Gyro_Integral = 0;
 float Mileage_Element_Base = 0;
@@ -842,17 +843,19 @@ void Load_All_Flash_Data_For_VOFA(void)
 void Safety_Check(void)
 {
     static uint16_t stop_beep_count = 0;
+    static uint8_t  low_voltage = 0;    // latch: stays 1 after first trigger
 
+    // Voltage check: latch yellow warning
+    if (Voltage_Check[0] < SAFETY_LOW_VOLTAGE_THRESHOLD)
+    {
+        Stop_Flag = 1;
+        low_voltage = 1;
+    }
 
-   if (Voltage_Check[0] < SAFETY_LOW_VOLTAGE_THRESHOLD)
-   {
-       Stop_Flag = 1;
-   }
-
-   if(Count.Stop > SAFETY_STOP_CYCLE_MAX)
-   {
-       Stop_Flag = 1;
-   }
+    if(Count.Stop > SAFETY_STOP_CYCLE_MAX)
+    {
+        Stop_Flag = 1;
+    }
 
     if (Finish_Flag == 1)
     {
@@ -868,7 +871,7 @@ void Safety_Check(void)
         }
     }
 
-
+    // LED priority: yellow(voltage) > blue(beep) > green(normal)
     if (Stop_Flag != 0)
     {
         pwm_set_duty(Suction_Motor_PWM, 0);
@@ -885,16 +888,24 @@ void Safety_Check(void)
         PID_cleardata(&Left_PID);
         PID_cleardata(&Right_PID);
 
-        stop_beep_count++;
-        if (stop_beep_count >= 200)
+        if (low_voltage)
         {
-            stop_beep_count = 0;
+            g_led_flag = 2;  // yellow: low voltage warning
         }
-        g_led_flag = (stop_beep_count < 60) ? 1 : 0;
+        else
+        {
+            stop_beep_count++;
+            if (stop_beep_count >= 200)
+            {
+                stop_beep_count = 0;
+            }
+            g_led_flag = (stop_beep_count < 60) ? 1 : 0;  // blue beep / green idle
+        }
     }
     else
     {
         stop_beep_count = 0;
+        // g_led_flag set by run modes (Normal_Run=green, others=blue)
     }
 }
 
@@ -1698,12 +1709,12 @@ void Set_Out(void)
         }
         else if (Right_PID_Out > 0)  // forward
         {
-            pwm_set_duty(Right_Motor_DIR, 10000);
+            pwm_set_duty(Right_Motor_DIR, 0);
             pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
         }
         else                         // reverse
         {
-            pwm_set_duty(Right_Motor_DIR, 0);
+            pwm_set_duty(Right_Motor_DIR, 10000);
             pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
         }
     }
