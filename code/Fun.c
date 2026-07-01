@@ -71,6 +71,10 @@ void Vofa_Send_Data(void)
      VOFA_data[14].floatdata = Total_Angle;
 
     int i;
+//    for(i = 0; i < 15; i++)
+//      {
+//          VOFA_data[i].floatdata = Light_ADC[i];
+//      }
     for(i = 0; i < 15; i++)
     {
         frame[i * 4 + 0] = VOFA_data[i].u8data[0];

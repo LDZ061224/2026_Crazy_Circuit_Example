@@ -158,6 +158,7 @@ int core0_main(void)
         }
         WS2812_Effect_Set(cfg);
        WS2812_Effect_Update();
+       system_delay_ms(1);
     }
 }
 

@@ -43,7 +43,7 @@ void Debug_Car_Go(void)
     /* debug mode skips the startup delay */
     Count.StartDelay = 0;
 
-    /* --- alternating speed read (every 6ms, same as Car_Go) --- */
+    /* --- alternating speed read (every 3ms, same as Car_Go) --- */
     Get_Speed();
 
     /* --- IMU + sensors + safety --- */

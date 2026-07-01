@@ -177,7 +177,7 @@ uint8 vofa_flash_dump_mode = 0;
 // Mileage compensation for turn elements (negative = advance element edge)
 #define MILEAGE_COMPENSATION_X (-100.0f)
 // Short straight element mileage threshold (encoder ticks)
-#define MILEAGE_STRAIGHT_SHORT 2300.0f
+#define MILEAGE_STRAIGHT_SHORT 1200.0f
 // Long straight element mileage threshold (0 = disabled / handled by node)
 #define MILEAGE_STRAIGHT_LONG  0.0f
 
@@ -509,9 +509,10 @@ static void Set_Node_Run_Mode(uint8_t node_dir)
     Gyro_Integral = 0;
     Turn_Angle_Settle_Count = 0;
     PID_cleardata(&Angle_PID);
+    PID_cleardata(&Gyro_PID);   // one-shot clear on turn entry
     Turn_Action_Done = 0;
     Turn_Decel_Phase = 0;
-    // Count.Mileage already zeroed by Reset_Turn_Action_State — no need to re-zero here
+    Count.Mileage = 0;  // start turn segment from zero
 
     switch (node_dir)
     {
@@ -1208,6 +1209,7 @@ void Turn_Left_Run(void)
             Gyro_Integral = 0;
             Turn_Angle_Settle_Count = 0;
             PID_cleardata(&Angle_PID);
+            PID_cleardata(&Gyro_PID);
         }
     }
     else // Phase 1: in-place rotate
@@ -1246,6 +1248,7 @@ void Turn_Right_Run(void)
             Gyro_Integral = 0;
             Turn_Angle_Settle_Count = 0;
             PID_cleardata(&Angle_PID);
+            PID_cleardata(&Gyro_PID);
         }
     }
     else
@@ -1312,8 +1315,7 @@ void Set_Speed()
     if (is_left == 1 || is_right == 1)
     {
         straight_enter = 0;
-        PID_cleardata(&Gyro_PID);
-        PID_cleardata(&Turn_PID);
+        // PID cleared once in Set_Node_Run_Mode / Phase transitions — do NOT clear per-tick
     }
     else if (Run_Mode == Straight_Mode)
     {
