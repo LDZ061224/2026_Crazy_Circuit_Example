@@ -30,7 +30,6 @@ Cross_Z   2026.1.30   0.0        Initial version
 #include "zf_common_headfile.h"    // Zhifeng official common public header
 #include "pid.h"                   // PID algorithm related header
 #include "Fun.h"                   // Function driver implementation header
-#include "TCA9555.h"               // TCA9555 IO expander chip driver header
 #include "OLEDKeyboard.h"          // OLED display and keyboard driver header
 #include "Ctrl.h"                  // System control logic header
 

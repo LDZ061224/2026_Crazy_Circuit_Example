@@ -8,7 +8,7 @@ Description: Main control module header - track following and element recognitio
 Others:   All run modes declared - Normal/Straight/Turn/Mileage/Debug
 Function List: Car_Go / Get_Speed / Get_IMU / Light_Process / Set_Speed / Set_Out
               Normal_Run / Straight_Run / Turn_Left_Run / Turn_Right_Run
-              Mileage_Mode_Run / Mileage_Run_Stage_2 / Build_Mode_Get_Error
+              Build_Mode_Get_Error / Safety_Check
               Safety_Check / Load_All_Flash_Data_For_VOFA
               Debug_Wheel_Tuning / Debug_Ground_Test / Debug_Angle_Tuning / Debug_Normal_Trace
 History:
@@ -124,15 +124,6 @@ typedef enum
     Straight_Stage,  // Straight stage
 } Mileage_Stage_Enum;
 
-/**
- * @brief Global operating mode
- */
-typedef enum
-{
-    Build_Mode,      // Build mode (autonomous track traversal)
-    Debug_Mode,      // Debug mode (manual parameter tuning)
-} Mode_Define;
-
 // Build action type — defines what the car does at each track node/element
 typedef enum
 {
@@ -145,10 +136,6 @@ typedef enum
     BUILD_ACTION_ELEM_TURN_LEFT    = 6,  // element -> left turn (mileage mode, dir=1)
     BUILD_ACTION_ELEM_TURN_RIGHT   = 7,  // element -> right turn (mileage mode, dir=2)
 } Build_Action_Enum;
-
-// Helper: action value 1-3 = node action, 4-7 = element action
-#define BUILD_ACTION_IS_NODE(a)     ((a) >= BUILD_ACTION_NODE_STRAIGHT && (a) <= BUILD_ACTION_NODE_TURN_RIGHT)
-#define BUILD_ACTION_IS_ELEMENT(a)  ((a) >= BUILD_ACTION_ELEM_STRAIGHT_SHORT && (a) <= BUILD_ACTION_ELEM_TURN_RIGHT)
 
 /**
  * @brief Debug sub-mode enumeration
@@ -171,22 +158,21 @@ typedef enum
  */
 typedef struct
 {
-    int     Left;        // Left encoder count (per-cycle)
-    int     Right;       // Right encoder count (per-cycle)
+    float   Left;        // Left turn Phase 0 distance traveled
+    float   Right;       // Right turn Phase 0 distance traveled
     int     Stop;        // Stall counter (consecutive all-on/all-off cycles)
-    float   Mileage;     // Resettable mileage (encoder ticks, reset on edge)
-    float   Spd_Mileage; // Speed-weighted mileage accumulator
-    int     Straight;    // Consecutive straight-valid cycle counter
-    int     Stall;       // Motor stall counter
+    float   Mileage;     // Resettable segment mileage (zeroed after Phase 1)
+    float   Spd_Mileage; // Current action mileage base snapshot
+    float   Straight;    // Straight pass-through target distance (encoder ticks)
+    float   Stall;       // Turn delay distance / straight target (replaces Turn_Delay_Mileage)
+    int     Edge;        // Total Check_Edge trigger count
+    int     Line;        // Completed turn count (= segment row index)
+    int     Element;     // Straight action column index within current segment
+    int     Finish;      // Finish detection frame counter
+    int     StartDelay;  // Startup delay counter before enable-switch takes effect
 } Count_Typedef;
 
-// Build action descriptor: links an action type to a track segment and element
-typedef struct
-{
-    Build_Action_Enum        action;
-    uint8_t                  segment_index;
-    uint8_t                  element_index;
-} Build_Action_Typedef;
+// Build action list: flat enum array (one Build_Action_Enum per action)
 
 /**********************************************
 * Global Variable Extern Declarations
@@ -226,42 +212,34 @@ extern float Right_PID_Out;
 // Stop and finish flags
 extern int  Stop_Flag;          // Emergency stop flag
 extern int  Finish_Flag;        // Finish flag (all actions completed)
-extern int  Finish_Count;       // Finish confirmation counter
 extern int  Track_Num;          // Number of sensors seeing the track line
 
-// Segment and element counters
-extern int8_t  Execute_Times;   // Current segment index (from action dispatch)
-extern int8_t  Mileage_Times;   // Element count in current segment (from Mileage_Num_By_Segment)
-
-// Lane and line element counters
-extern uint8_t Line_Num_Count;    // Completed lane (full segment) counter
-extern uint8_t In_Line_Ele_Count; // Current element counter within the lane
+// (Execute_Times, Mileage_Times, Mileage_Num_By_Segment removed — now in Count struct / flat array)
 extern uint8_t Build_Action_Index;
 extern uint8_t Build_Action_Count;
 
 // Gyro angle integral for turn control
 extern float Gyro_Integral;
+extern float Total_Angle;              // Continuous gyro-derived total angle, corrected after each turn [-180..180]
 // Turn target angle: left turn = -90, right turn = +90
 extern float  Turn_Angle_Target;
 
-// Build mode mileage tracking
-extern int16  Check_Edge_Count;    // Check_Edge call count for diagnostics
-extern float  Mileage_Element_Turn_Delay;
-extern float  Mileage_Node_Turn_Delay;
-extern uint8  Current_Element_Dir;      // Element direction of currently executing action (for Mileage_Mode_Run)
+// Build mode mileage tracking (now #define macros, not runtime variables)
+#define Mileage_Element_Turn_Delay  850.0f  // Element turn pre-straight distance (encoder ticks)
+#define Mileage_Node_Turn_Delay     75.0f  // Node turn pre-straight distance (encoder ticks)
+// (Count.Stall holds the effective turn delay value at runtime)
 extern uint8  vofa_flash_dump_mode;     // VOFA Flash dump mode flag (OLED toggle)
 extern float  Total_Run_Mileage;       // Total accumulated run mileage (never reset, for Flash records)
 // Counters struct
 extern Count_Typedef Count;
-extern Mode_Define Mode;
+// (Mode removed — USE_DEBUG_MODE macro is the sole debug/build switch)
 extern float Gyro_Z_For_PID; // Gyro Z-axis angular velocity used by PID
 extern float gyro_z_offset;  // Gyro Z-axis zero-drift (sampled at power-on calibration)
 // Run mode and mileage stage
 extern Run_Mode_Enum       Run_Mode;
 extern Mileage_Stage_Enum  Mileage_Stage;
-extern Build_Action_Typedef Build_Action_List[BUILD_ACTION_MAX];
-extern const Build_Action_Typedef Default_Build_Actions[BUILD_ACTION_COUNT];
-extern const uint8 Mileage_Num_By_Segment[BUILD_NODE_NUM + 1];
+extern uint8_t Build_Action_List[BUILD_ACTION_MAX];
+extern const uint8_t Default_Build_Actions[BUILD_ACTION_COUNT];
 
 // Flash mileage records for VOFA display
 extern float Segment_Edge_Mileage_Record[TRACK_SEGMENT_NUM_MAX][ELEMENT_NUM_MAX];
@@ -311,8 +289,7 @@ void Straight_Run(void);                    // Straight line mode execution
 void Turn_Left_Run(void);                   // Left turn execution
 void Turn_Right_Run(void);                  // Right turn execution
 
-void Mileage_Mode_Run(void);                // Mileage-based element mode dispatcher
-void Mileage_Run_Stage_2(void);             // Mileage run stage 2 — turn element execution
+// (Mileage_Mode removed — element turns use Turn_Left/Turn_Right with Turn_Delay_Mileage)
 
 void Safety_Check(void);                    // Safety monitoring: voltage, stall, finish detection; motor cutoff and LED indication
 void Build_Mode_Get_Error(void);            // Build mode: get tracking error and dispatch run mode
@@ -325,6 +302,6 @@ void Debug_Angle_Tuning(void);              // Angle PID tuning with incremental
 void Debug_Normal_Trace(void);              // Normal trace debug with PD control
 void Debug_Set_Out(void);                   // Debug mode PWM output
 
-void Set_Mileage_Turn_Exp_Speed(float angle_target);
+void Set_Mileage_Turn_Exp_Speed(float angle_target, int base_speed);
 
 #endif

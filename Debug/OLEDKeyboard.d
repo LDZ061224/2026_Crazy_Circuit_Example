@@ -360,10 +360,6 @@ OLEDKeyboard.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\z
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :
 OLEDKeyboard.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\headfiles.h"
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\headfiles.h" :
-OLEDKeyboard.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\TCA9555.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\TCA9555.h" :
-OLEDKeyboard.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :
 OLEDKeyboard.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDKeyboard.h"
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDKeyboard.h" :
 OLEDKeyboard.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\Ctrl.h"

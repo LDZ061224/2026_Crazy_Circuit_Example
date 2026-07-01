@@ -20,8 +20,7 @@ extern int   Right_Scan_Point;
 extern int   Last_Error;
 
 /* file-scope in Ctrl.c -- needed for common preprocessing */
-extern int      Speed_Get_Count;
-extern int      Enable_Start_Delay_Count;
+// Count.StartDelay now in Count_Typedef struct, no standalone extern needed
 extern uint8_t  Last_EnableSwitch_ON;
 
 /**********************************debug entry point**********************************/
@@ -37,19 +36,15 @@ void Debug_Car_Go(void)
     /* --- EnableSwitch edge detection --- */
     if (EnableSwitch_ON == 1 && Last_EnableSwitch_ON == 0)
     {
-        Enable_Start_Delay_Count = 100;
+        Count.StartDelay = 100;
     }
     Last_EnableSwitch_ON = EnableSwitch_ON;
 
     /* debug mode skips the startup delay */
-    Enable_Start_Delay_Count = 0;
+    Count.StartDelay = 0;
 
     /* --- alternating speed read (every 6ms, same as Car_Go) --- */
-    if (Speed_Get_Count == 1)
-    {
-        Get_Speed();
-    }
-    Speed_Get_Count *= -1;
+    Get_Speed();
 
     /* --- IMU + sensors + safety --- */
     Get_IMU();

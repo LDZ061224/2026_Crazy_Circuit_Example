@@ -22,9 +22,6 @@ float PID_calc(PID_HandleTypeDef *pid, float exp_data, float real_data)
 
         pid->err3[2] = pid->err3[1];
         pid->err3[1] = pid->err3[0];
-        pid->real3[2] = pid->real3[1];
-        pid->real3[1] = pid->real3[0];
-        pid->real3[0] = real_data;
         pid->err3[0] = exp_data - real_data;// Error calculation
 
         pid->pOut = pid->kp * pid->err3[0];
@@ -75,9 +72,6 @@ float PID_calc(PID_HandleTypeDef *pid, float exp_data, float real_data)
         pid->set = exp_data;
         pid->err3[2] = pid->err3[1];
         pid->err3[1] = pid->err3[0];
-        pid->real3[2] = pid->real3[1];
-        pid->real3[1] = pid->real3[0];
-        pid->real3[0] = real_data;
         pid->err3[0] = exp_data - real_data;// Error calculation
 
         pid->pOut = pid->kp * (pid->err3[0] - pid->err3[1]);

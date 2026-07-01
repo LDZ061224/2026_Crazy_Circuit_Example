@@ -105,6 +105,7 @@ static void OLED_Show_Digit_Buffer(uint16 x, uint16 y, uint8 digits[], uint8 len
  */
 static void OLED_Load_Default_Build_Mode_Map(void)
 {
+#if 0   // (Mileage_Num_By_Segment removed — OLED disabled on new car)
     uint8 row;
     uint8 i;
 
@@ -121,6 +122,7 @@ static void OLED_Load_Default_Build_Mode_Map(void)
     memcpy(Build_Action_List, Default_Build_Actions, sizeof(Default_Build_Actions));
 
     // FIXME: flash map save skipped (format changed)
+#endif
 }
 
 /**
@@ -202,6 +204,7 @@ static uint8 OLED_Read_Digit_Line(uint8 title[], uint8 show_hint, uint8 show_row
  */
 static void OLED_Apply_Build_Mode(void)
 {
+#if 0  // (Build_Action_List now uint8_t[], OLED disabled on new car)
     uint8 seg, elem;
     uint8 count = 0;
 
@@ -215,14 +218,12 @@ static void OLED_Apply_Build_Mode(void)
         {
             switch (mileage_dir[seg][elem])
             {
-                case 1: Build_Action_List[count].action = BUILD_ACTION_ELEM_TURN_LEFT;     break;
-                case 2: Build_Action_List[count].action = BUILD_ACTION_ELEM_TURN_RIGHT;    break;
-                case 3: Build_Action_List[count].action = BUILD_ACTION_ELEM_STRAIGHT_SHORT; break;
-                case 4: Build_Action_List[count].action = BUILD_ACTION_ELEM_STRAIGHT_LONG;  break;
-                default: Build_Action_List[count].action = BUILD_ACTION_NONE; break;
+                case 1: Build_Action_List[count] = BUILD_ACTION_ELEM_TURN_LEFT;     break;
+                case 2: Build_Action_List[count] = BUILD_ACTION_ELEM_TURN_RIGHT;    break;
+                case 3: Build_Action_List[count] = BUILD_ACTION_ELEM_STRAIGHT_SHORT; break;
+                case 4: Build_Action_List[count] = BUILD_ACTION_ELEM_STRAIGHT_LONG;  break;
+                default: Build_Action_List[count] = BUILD_ACTION_NONE; break;
             }
-            Build_Action_List[count].segment_index = seg;
-            Build_Action_List[count].element_index = elem;
             count++;
         }
 
@@ -231,18 +232,17 @@ static void OLED_Apply_Build_Mode(void)
         {
             switch (Flash_Node_Dir[seg])
             {
-                case 0: Build_Action_List[count].action = BUILD_ACTION_NODE_STRAIGHT;  break;
-                case 1: Build_Action_List[count].action = BUILD_ACTION_NODE_TURN_LEFT; break;
-                case 2: Build_Action_List[count].action = BUILD_ACTION_NODE_TURN_RIGHT; break;
-                default: Build_Action_List[count].action = BUILD_ACTION_NONE; break;
+                case 0: Build_Action_List[count] = BUILD_ACTION_NODE_STRAIGHT;  break;
+                case 1: Build_Action_List[count] = BUILD_ACTION_NODE_TURN_LEFT; break;
+                case 2: Build_Action_List[count] = BUILD_ACTION_NODE_TURN_RIGHT; break;
+                default: Build_Action_List[count] = BUILD_ACTION_NONE; break;
             }
-            Build_Action_List[count].segment_index = seg;
-            Build_Action_List[count].element_index = 0;
             count++;
         }
     }
 
     Build_Action_Count = count;
+#endif
 }
 
 /**
@@ -411,6 +411,7 @@ static void OLED_Show_Light_Row(void)
  */
 static void OLED_View_Mileage_Data(void)
 {
+#if 0  // (Mileage_Num_By_Segment removed — OLED disabled on new car)
     uint16 seg, elem, ele_num, total_ele, tr_page, tr_pages;
     uint8  row;
     char   buf[22];
@@ -510,6 +511,7 @@ static void OLED_View_Mileage_Data(void)
             CH455_GetOneKey();
         }
     }
+#endif  // (Mileage_Num_By_Segment removed)
 }
 
 /**
@@ -527,35 +529,36 @@ void OLED_Input(void)
         OLED_Show_Str(20, 3, "Nothing or Best.", TextSize_F6x8);
         OLED_Choose = KeyboardInput(88, 6, TextSize_F8x16, 1.0);
 
-        //====== 模式选择 ======
+        //====== Mode selection (disabled — Mode removed, USE_DEBUG_MODE is the sole switch) ======
         switch (OLED_Choose)
         {
-            case 1:   // 建图模式
-                Mode = Build_Mode;
+#if 0
+            case 1:
                 mode_selected = 1;
                 break;
-            case 2:   // 回放模式暂时禁用，后续重�?
+            case 2:
                 OLED_Show_Str(0, 0, "Remember Off", TextSize_F6x8);
                 break;
-            case 3:   // 调试模式
-                Mode = Debug_Mode;
+            case 3:
                 mode_selected = 1;
                 break;
-            case 8:   // 查看里程数据模式（不调参不跑车，仅OLED显示�?
+#endif
+            case 8:   // View mileage data mode (no tuning, no running, OLED display only)
                 OLED_View_Mileage_Data();
                 break;
         }
         OLED_CLS();
     }
 
-    // 进入建图模式
-    if (Mode == Build_Mode)
+#if 0   // Mode removed — OLED mode selection disabled
+    // Enter build mode
+    if (0)
     {
         OLED_Build_Mode_Input();
     }
 
-    // 进入调试模式（选择子模�?+ 加载参数�?
-    if (Mode == Debug_Mode)
+    // Enter debug mode (select sub-mode + load parameters)
+    if (0)
     {
         int32 dbg_choose;
 
@@ -597,6 +600,7 @@ void OLED_Input(void)
         PID_cleardata(&Right_PID);
         return;
     }
+#endif  // Mode removed
 
     //====== 基础速度配置 ======
     flash_read_page(0, 0, Speed_OKb, 1);

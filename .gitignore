@@ -1,0 +1,5 @@
+# ADS/Tasking build artifacts
+Debug/
+*.bak
+.env
+*.src

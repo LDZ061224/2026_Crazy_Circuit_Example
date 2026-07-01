@@ -26,7 +26,6 @@ uint8 imu660rb_Check = 0;                // IMU660RB sensor initialization statu
 uint16 Light_ADC[15] = {0};              // 15-channel light sensor raw ADC values
 float Current_Check = 0;                 // Current detection value
 float Voltage_Check[2] = {0};            // Two-channel voltage detection values
-int Dbg[10] = {0};
 
 /* --------------- Light Sensor Calibration Parameters --------------- */
 int Light_Raw_Min[15] =                  // 15-channel light sensor ADC minimum values (initialized to max)
@@ -50,76 +49,43 @@ float  Light_Thr[15][2];                 // 15-channel light sensor upper and lo
 *************************************/
 void Vofa_Send_Data(void)
 {
-    floatu8data VOFA_data[20];           // Union for float and byte array conversion
+    floatu8data VOFA_data[20];
     uint8 frame[15 * 4 + 4];
-    // Clear data buffer
     memset(VOFA_data, 0, sizeof(VOFA_data));
 
-    int i = 0;
-       for (int i = 0; i < 15; i++)
-       {
-           VOFA_data[i].floatdata = Light_ADC[i];
-       }
-    // Assign debug data to be sent
-//     VOFA_data[0].floatdata  = Left_Exp_Spd;
-//     VOFA_data[1].floatdata  = Right_Exp_Spd;
-//     VOFA_data[2].floatdata  = Left_Real_Spd;
-//     VOFA_data[3].floatdata  = Right_Real_Spd;
-//     VOFA_data[4].floatdata  = Gyro_Z;
-//     VOFA_data[5].floatdata  = Total_Run_Mileage;
-//     VOFA_data[6].floatdata  = Voltage_Check[0];
-//     VOFA_data[7].floatdata  = Count.Mileage;
-//     VOFA_data[8].floatdata  = Left_PID_Out;
-//     VOFA_data[9].floatdata  = Right_PID_Out;
-//     VOFA_data[10].floatdata = Dbg[0];
-//     VOFA_data[11].floatdata = Error;
-//     VOFA_data[12].floatdata = Gyro_Integral;
-//     VOFA_data[13].floatdata = Debug_Angle_Vel_Target;
-//     VOFA_data[14].floatdata = Debug_Angle_Vel_Real;
+    // Assign debug data to be sent (15 float channels, 60 bytes + 4-byte tail)
+     VOFA_data[0].floatdata  = Left_Exp_Spd;
+     VOFA_data[1].floatdata  = Right_Exp_Spd;
+     VOFA_data[2].floatdata  = Left_Real_Spd;
+     VOFA_data[3].floatdata  = Right_Real_Spd;
+     VOFA_data[4].floatdata  = Gyro_Z;
+     VOFA_data[5].floatdata  = Total_Run_Mileage;
+     VOFA_data[6].floatdata  = Voltage_Check[0];
+     VOFA_data[7].floatdata  = Count.Mileage;
+     VOFA_data[8].floatdata  = Left_PID_Out;
+     VOFA_data[9].floatdata  = Right_PID_Out;
+     VOFA_data[10].floatdata = Current_Check;
+     VOFA_data[11].floatdata = Error;
+     VOFA_data[12].floatdata = Gyro_Integral;
+     VOFA_data[13].floatdata = Debug_Angle_Vel_Target;
+     VOFA_data[14].floatdata = Total_Angle;
 
-    // ---- Reserved ADC channels (swap with any line above for debugging) ----
-//   VOFA_data[ N].floatdata = Light_ADC[0];   // Inductor ADC ch0
-//   VOFA_data[ N].floatdata = Light_ADC[1];   // Inductor ADC ch1
-//   VOFA_data[ N].floatdata = Light_ADC[2];   // Inductor ADC ch2
-//   VOFA_data[ N].floatdata = Light_ADC[3];   // Inductor ADC ch3
-//   VOFA_data[ N].floatdata = Light_ADC[4];   // Inductor ADC ch4
-//   VOFA_data[ N].floatdata = Light_ADC[5];   // Inductor ADC ch5
-//   VOFA_data[ N].floatdata = Light_ADC[6];   // Inductor ADC ch6
-//   VOFA_data[ N].floatdata = Light_ADC[7];   // Inductor ADC ch7
-//   VOFA_data[ N].floatdata = Light_ADC[8];   // Inductor ADC ch8
-//   VOFA_data[ N].floatdata = Light_ADC[9];   // Inductor ADC ch9
-//   VOFA_data[ N].floatdata = Light_ADC[10];  // Inductor ADC ch10
-//   VOFA_data[ N].floatdata = Light_ADC[11];  // Inductor ADC ch11
-//   VOFA_data[ N].floatdata = Light_ADC[12];  // Inductor ADC ch12
-//   VOFA_data[ N].floatdata = Light_ADC[13];  // Inductor ADC ch13
-//   VOFA_data[ N].floatdata = Light_ADC[14];  // Inductor ADC ch14
-//   VOFA_data[ N].floatdata = Current_Check;   // Current detection
-//   VOFA_data[ N].floatdata = Voltage_Check[1];// Voltage detection ch1
-//   VOFA_data[ N].floatdata = Gyro_PID.kp;     // Gyro PID kp
-//   VOFA_data[ N].floatdata = Gyro_PID.ki;     // Gyro PID ki
-//   VOFA_data[ N].floatdata = Gyro_PID.kd;     // Gyro PID kd
-//   VOFA_data[ N].floatdata = Count.Stop;       // Stop count
-//   VOFA_data[ N].floatdata = Stop_Flag;        // Stop flag
-//   VOFA_data[ N].floatdata = Track_Num;        // Track line count
-    // Send 15 groups of float data in a loop
+    int i;
     for(i = 0; i < 15; i++)
     {
-        // Extract the 4 bytes from the split float
         frame[i * 4 + 0] = VOFA_data[i].u8data[0];
         frame[i * 4 + 1] = VOFA_data[i].u8data[1];
         frame[i * 4 + 2] = VOFA_data[i].u8data[2];
         frame[i * 4 + 3] = VOFA_data[i].u8data[3];
     }
 
-    // Send VOFA protocol fixed frame tail 00 00 80 7F
+    // VOFA protocol fixed frame tail 00 00 80 7F
     frame[60] = 0x00;
     frame[61] = 0x00;
     frame[62] = 0x80;
     frame[63] = 0x7f;
 
     uart_write_buffer(UART_2, frame, sizeof(frame));
-
-    return;
 }
 
 /*************************************
@@ -135,11 +101,6 @@ void Vofa_Send_Flash_Data(void)
     memset(vofa, 0, sizeof(vofa));
 
     uint16_t turn_count = Turn_Mileage_Record_Num;
-    uint16_t edge_count = 0;
-    for (uint8_t r = 0; r <= BUILD_NODE_NUM; r++)
-    {
-        edge_count += Mileage_Num_By_Segment[r];
-    }
     uint16_t pos = 0;
 
     // Turn interval mileages
@@ -147,11 +108,10 @@ void Vofa_Send_Flash_Data(void)
     {
         vofa[pos].floatdata = Turn_Mileage_Record[i];
     }
-    // Segment edge mileages (expanded by row, only valid entries)
-    for (uint8_t r = 0; r <= BUILD_NODE_NUM && pos < 50; r++)
+    // Segment edge mileages — 2D array: [segment_row][element_index]
+    for (uint8_t r = 0; r < TRACK_SEGMENT_NUM_MAX && pos < 50; r++)
     {
-        uint8_t num = Mileage_Num_By_Segment[r];
-        for (uint8_t c = 0; c < num && pos < 50; c++, pos++)
+        for (uint8_t c = 0; c < ELEMENT_NUM_MAX && pos < 50; c++, pos++)
         {
             vofa[pos].floatdata = Segment_Edge_Mileage_Record[r][c];
         }
@@ -347,21 +307,12 @@ void Get_Light()
     Light_ADC[0]   = adc_convert(ADC0_CH0_A0);
 
     // Battery current detection (raw * 3.3 / (4095 * op-amp gain * sense resistor))
-    Current_Check = (adc_convert(ADC0_CH10_A10) * 3.3 / (4095 * 20 * 0.015));
+    Current_Check = (adc_convert(ADC0_CH10_A10) * 0.0008f * 0.41f) / (20.0f * 0.015f);
 
     // Battery voltage detection (11:1 divider + calibration offset + glitch filter + first-order LPF)
-    {
-        float raw_voltage = (adc_convert(ADC0_CH5_A5) * 3.3 * 11 / 4095.0) + 0.567;
-
-        // Glitch filter: if adjacent readings differ by >0.5V, discard the new value and keep the previous
-        if (Voltage_Check[0] - raw_voltage > 0.5f)
-        {
-            raw_voltage = Voltage_Check[0];  // Treat as spike, keep previous valid value
-        }
-
-        Voltage_Check[1] = Voltage_Check[0];
-        Voltage_Check[0] = raw_voltage;
-    }
+    float raw_voltage = (adc_convert(ADC0_CH5_A5) * 3.3 * 11 / 4095.0) + 0.567;
+    Voltage_Check[1] = Voltage_Check[0];
+    Voltage_Check[0] = raw_voltage;
     Voltage_Check[0] = 0.3 * Voltage_Check[1] + 0.7 * Voltage_Check[0];
 }
 

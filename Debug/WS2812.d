@@ -340,10 +340,6 @@ WS2812.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_comm
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :
 WS2812.o :	..\code\headfiles.h
 ..\code\headfiles.h :
-WS2812.o :	..\code\TCA9555.h
-..\code\TCA9555.h :
-WS2812.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :
 WS2812.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDKeyboard.h"
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDKeyboard.h" :
 WS2812.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"

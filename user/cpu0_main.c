@@ -49,8 +49,7 @@ int core0_main(void)
     }
     gpio_set_level(P33_4, 0);      // turn LED off after successful init
 
-    /* ---- I/O expander, saved data, and LED strip ---- */
-    TCA9555_Init();
+    /* ---- saved data and LED strip ---- */
     Data_Load();
     WS2812_Init();
 

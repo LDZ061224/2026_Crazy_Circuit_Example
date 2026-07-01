@@ -1,6 +1,6 @@
 	; Module start
 	.compiler_version	"TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler v1.1r8 Build 22011964"
-	.compiler_invocation	"ctc -f cc15516a --dep-file=Debug_Car.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc26xb -D__CPU_TC26XB__ --core=tc1.6.x --fp-model=+float -D__CPU__=tc26xb -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\code -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\code\\\\OLED -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Configurations -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B\\\\_Reg -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin\\\\Asc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6\\\\Timer -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\CStart -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\Irq -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma\\\\Dma -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Flash -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Flash\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12\\\\IncrEnc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Atom -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Mtu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Mtu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Port -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Port\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi\\\\SpiMaster -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Scu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Scu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Src -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Src\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Stm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Stm\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc\\\\Adc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Impl -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Lib -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Lib\\\\DataHandling -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_PinMap -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_common -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_components -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_device -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_driver -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o code/Debug_Car.src ../code/Debug_Car.c"
+	.compiler_invocation	"ctc -f cc6976a --dep-file=Debug_Car.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc26xb -D__CPU_TC26XB__ --core=tc1.6.x --fp-model=+float -D__CPU__=tc26xb -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\code -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\code\\\\OLED -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Configurations -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B\\\\_Reg -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin\\\\Asc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6\\\\Timer -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\CStart -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\Irq -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma\\\\Dma -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Flash -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Flash\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12\\\\IncrEnc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Atom -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Mtu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Mtu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Port -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Port\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi\\\\SpiMaster -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Scu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Scu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Src -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Src\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Stm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Stm\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc\\\\Adc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Impl -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Lib -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Lib\\\\DataHandling -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_PinMap -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_common -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_components -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_device -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_driver -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o code/Debug_Car.src ../code/Debug_Car.c"
 	.compiler_name		"ctc"
 	;source	'../code/Debug_Car.c'
 
@@ -13,136 +13,121 @@ $TC16X
 	
 	.global	Debug_Car_Go
 ; Function Debug_Car_Go
-.L57:
+.L56:
 Debug_Car_Go:	.type	func
 	mov	d4,#647
 	call	gpio_get_level
 	jne	d2,#1,.L2
-.L524:
+.L523:
 	movh.a	a15,#@his(Last_EnableSwitch_ON)
 	lea	a15,[a15]@los(Last_EnableSwitch_ON)
 	ld.bu	d15,[a15]
-.L525:
+.L524:
 	jne	d15,#0,.L3
+.L525:
+	movh.a	a15,#@his(Count)
+	lea	a15,[a15]@los(Count)
 .L526:
-	movh.a	a15,#@his(Enable_Start_Delay_Count)
-	lea	a15,[a15]@los(Enable_Start_Delay_Count)
-.L527:
 	mov	d15,#100
-.L528:
-	st.w	[a15],d15
+.L527:
+	st.w	[a15]44,d15
 .L3:
 .L2:
 	movh.a	a15,#@his(Last_EnableSwitch_ON)
 	lea	a15,[a15]@los(Last_EnableSwitch_ON)
-.L529:
+.L528:
 	mov	d4,#647
 	call	gpio_get_level
 	eq	d15,d2,#1
-.L530:
+.L529:
 	st.b	[a15],d15
+.L530:
+	movh.a	a15,#@his(Count)
+	lea	a15,[a15]@los(Count)
 .L531:
-	movh.a	a15,#@his(Enable_Start_Delay_Count)
-	lea	a15,[a15]@los(Enable_Start_Delay_Count)
-.L532:
 	mov	d15,#0
+.L532:
+	st.w	[a15]44,d15
 .L533:
-	st.w	[a15],d15
-.L534:
-	movh.a	a15,#@his(Speed_Get_Count)
-	lea	a15,[a15]@los(Speed_Get_Count)
-	ld.w	d15,[a15]
-.L535:
-	jne	d15,#1,.L4
-.L536:
 	call	Get_Speed
-.L4:
-	movh.a	a15,#@his(Speed_Get_Count)
-	lea	a15,[a15]@los(Speed_Get_Count)
-	movh.a	a2,#@his(Speed_Get_Count)
-	lea	a2,[a2]@los(Speed_Get_Count)
-	ld.w	d15,[a2]
-.L537:
-	mul	d15,d15,#-1
-	st.w	[a15],d15
-.L538:
+.L534:
 	call	Get_IMU
-.L539:
+.L535:
 	call	Get_Light
-.L540:
+.L536:
 	call	Safety_Check
-.L541:
+.L537:
 	movh.a	a15,#@his(Stop_Flag)
 	lea	a15,[a15]@los(Stop_Flag)
 	ld.w	d15,[a15]
-.L542:
-	jeq	d15,#0,.L5
-.L543:
-	j	.L6
-.L5:
+.L538:
+	jeq	d15,#0,.L4
+.L539:
+	j	.L5
+.L4:
 	movh.a	a15,#@his(Debug_Sub_Mode)
 	lea	a15,[a15]@los(Debug_Sub_Mode)
 	ld.bu	d15,[a15]
-.L544:
+.L540:
 	mov	d0,#0
-	jeq	d15,d0,.L7
-.L545:
+	jeq	d15,d0,.L6
+.L541:
 	mov	d0,#1
-	jeq	d15,d0,.L8
-.L546:
+	jeq	d15,d0,.L7
+.L542:
 	mov	d0,#2
-	jeq	d15,d0,.L9
-.L547:
+	jeq	d15,d0,.L8
+.L543:
 	mov	d0,#3
-	jeq	d15,d0,.L10
+	jeq	d15,d0,.L9
+	j	.L10
+.L6:
+	call	Debug_Wheel_Tuning
+.L544:
 	j	.L11
 .L7:
-	call	Debug_Wheel_Tuning
-.L548:
+	call	Debug_Ground_Test
+.L545:
 	j	.L12
 .L8:
-	call	Debug_Ground_Test
-.L549:
+	call	Debug_Angle_Tuning
+.L546:
 	j	.L13
 .L9:
-	call	Debug_Angle_Tuning
-.L550:
+	call	Debug_Normal_Trace
+.L547:
 	j	.L14
 .L10:
-	call	Debug_Normal_Trace
-.L551:
-	j	.L15
-.L11:
 	call	Debug_Wheel_Tuning
-.L552:
-	j	.L16
-.L16:
+.L548:
+	j	.L15
 .L15:
 .L14:
 .L13:
 .L12:
+.L11:
 	movh.a	a15,#@his(Debug_Motor_Enable)
 	lea	a15,[a15]@los(Debug_Motor_Enable)
 	ld.bu	d15,[a15]
-	jeq	d15,#0,.L17
-.L553:
+	jeq	d15,#0,.L16
+.L549:
 	mov	d15,#1
-.L554:
-	j	.L18
-.L17:
+.L550:
+	j	.L17
+.L16:
 	mov	d15,#0
-.L18:
+.L17:
 	movh.a	a15,#@his(g_led_flag)
 	lea	a15,[a15]@los(g_led_flag)
-.L555:
+.L551:
 	st.b	[a15],d15
-.L6:
+.L5:
 	ret
-.L115:
+.L114:
 	
 __Debug_Car_Go_function_end:
 	.size	Debug_Car_Go,__Debug_Car_Go_function_end-Debug_Car_Go
-.L101:
+.L100:
 	; End of function
 	
 	.sdecl	'.text.Debug_Car.Debug_Wheel_Tuning',code,cluster('Debug_Wheel_Tuning')
@@ -151,161 +136,161 @@ __Debug_Car_Go_function_end:
 	
 	.global	Debug_Wheel_Tuning
 ; Function Debug_Wheel_Tuning
-.L59:
+.L58:
 Debug_Wheel_Tuning:	.type	func
 	movh.a	a15,#@his(Debug_Motor_Enable)
 	lea	a15,[a15]@los(Debug_Motor_Enable)
 	ld.bu	d15,[a15]
+.L129:
+	jne	d15,#0,.L18
 .L130:
-	jne	d15,#0,.L19
-.L131:
 	movh.a	a15,#@his(Left_PID_Out)
 	lea	a15,[a15]@los(Left_PID_Out)
-.L132:
+.L131:
 	mov	d15,#0
-.L133:
+.L132:
 	st.w	[a15],d15
-.L134:
+.L133:
 	movh.a	a15,#@his(Right_PID_Out)
 	lea	a15,[a15]@los(Right_PID_Out)
-.L135:
+.L134:
 	mov	d15,#0
-.L136:
+.L135:
 	st.w	[a15],d15
-.L137:
+.L136:
 	movh.a	a4,#@his(Left_PID)
 	lea	a4,[a4]@los(Left_PID)
 	call	PID_cleardata
-.L138:
+.L137:
 	movh.a	a4,#@his(Right_PID)
 	lea	a4,[a4]@los(Right_PID)
 	call	PID_cleardata
-.L139:
-	j	.L20
-.L19:
+.L138:
+	j	.L19
+.L18:
 	movh.a	a15,#@his(Debug_Which_Wheel)
 	lea	a15,[a15]@los(Debug_Which_Wheel)
 	ld.bu	d15,[a15]
+.L139:
+	jne	d15,#0,.L20
 .L140:
-	jne	d15,#0,.L21
-.L141:
 	movh.a	a15,#@his(Left_Exp_Spd)
 	lea	a15,[a15]@los(Left_Exp_Spd)
-.L142:
+.L141:
 	movh.a	a2,#@his(Debug_Target_Speed)
 	lea	a2,[a2]@los(Debug_Target_Speed)
 	ld.w	d15,[a2]
-.L143:
+.L142:
 	st.w	[a15],d15
-.L144:
+.L143:
 	movh.a	a15,#@his(Right_Exp_Spd)
 	lea	a15,[a15]@los(Right_Exp_Spd)
-.L145:
+.L144:
 	mov	d15,#0
-.L146:
+.L145:
 	st.w	[a15],d15
-.L147:
+.L146:
 	movh.a	a15,#@his(Left_PID_Out)
 	lea	a15,[a15]@los(Left_PID_Out)
-.L148:
+.L147:
 	movh.a	a4,#@his(Left_PID)
 	lea	a4,[a4]@los(Left_PID)
-.L149:
+.L148:
 	movh.a	a2,#@his(Debug_Target_Speed)
 	lea	a2,[a2]@los(Debug_Target_Speed)
 	ld.w	d15,[a2]
-.L150:
+.L149:
 	itof	d4,d15
-.L151:
+.L150:
 	movh.a	a2,#@his(Left_Real_Spd)
 	lea	a2,[a2]@los(Left_Real_Spd)
 	ld.w	d15,[a2]
-.L152:
+.L151:
 	itof	d5,d15
 	call	PID_calc
-.L153:
+.L152:
 	st.w	[a15],d2
-.L154:
+.L153:
 	movh.a	a15,#@his(Right_PID_Out)
 	lea	a15,[a15]@los(Right_PID_Out)
-.L155:
+.L154:
 	mov	d15,#0
-.L156:
+.L155:
 	st.w	[a15],d15
-.L157:
+.L156:
 	movh.a	a4,#@his(Right_PID)
 	lea	a4,[a4]@los(Right_PID)
 	call	PID_cleardata
-.L158:
-	j	.L22
-.L21:
+.L157:
+	j	.L21
+.L20:
 	movh.a	a15,#@his(Right_Exp_Spd)
 	lea	a15,[a15]@los(Right_Exp_Spd)
-.L159:
+.L158:
 	movh.a	a2,#@his(Debug_Target_Speed)
 	lea	a2,[a2]@los(Debug_Target_Speed)
 	ld.w	d15,[a2]
-.L160:
+.L159:
 	st.w	[a15],d15
-.L161:
+.L160:
 	movh.a	a15,#@his(Left_Exp_Spd)
 	lea	a15,[a15]@los(Left_Exp_Spd)
-.L162:
+.L161:
 	mov	d15,#0
-.L163:
+.L162:
 	st.w	[a15],d15
-.L164:
+.L163:
 	movh.a	a15,#@his(Right_PID_Out)
 	lea	a15,[a15]@los(Right_PID_Out)
-.L165:
+.L164:
 	movh.a	a4,#@his(Right_PID)
 	lea	a4,[a4]@los(Right_PID)
-.L166:
+.L165:
 	movh.a	a2,#@his(Debug_Target_Speed)
 	lea	a2,[a2]@los(Debug_Target_Speed)
 	ld.w	d15,[a2]
-.L167:
+.L166:
 	itof	d4,d15
-.L168:
+.L167:
 	movh.a	a2,#@his(Right_Real_Spd)
 	lea	a2,[a2]@los(Right_Real_Spd)
 	ld.w	d15,[a2]
-.L169:
+.L168:
 	itof	d5,d15
 	call	PID_calc
-.L170:
+.L169:
 	st.w	[a15],d2
-.L171:
+.L170:
 	movh.a	a15,#@his(Left_PID_Out)
 	lea	a15,[a15]@los(Left_PID_Out)
-.L172:
+.L171:
 	mov	d15,#0
-.L173:
+.L172:
 	st.w	[a15],d15
-.L174:
+.L173:
 	movh.a	a4,#@his(Left_PID)
 	lea	a4,[a4]@los(Left_PID)
 	call	PID_cleardata
-.L22:
-.L20:
+.L21:
+.L19:
 	call	Debug_Set_Out
-.L175:
+.L174:
 	mov	d4,#91
+.L175:
+	mov	d5,#0
+	call	pwm_set_duty
 .L176:
-	mov	d5,#0
-	call	pwm_set_duty
-.L177:
 	mov	d4,#154
-.L178:
+.L177:
 	mov	d5,#0
 	call	pwm_set_duty
-.L179:
+.L178:
 	ret
-.L102:
+.L101:
 	
 __Debug_Wheel_Tuning_function_end:
 	.size	Debug_Wheel_Tuning,__Debug_Wheel_Tuning_function_end-Debug_Wheel_Tuning
-.L76:
+.L75:
 	; End of function
 	
 	.sdecl	'.text.Debug_Car.Debug_Ground_Test',code,cluster('Debug_Ground_Test')
@@ -314,162 +299,162 @@ __Debug_Wheel_Tuning_function_end:
 	
 	.global	Debug_Ground_Test
 ; Function Debug_Ground_Test
-.L61:
+.L60:
 Debug_Ground_Test:	.type	func
 	movh.a	a15,#@his(Debug_Motor_Enable)
 	lea	a15,[a15]@los(Debug_Motor_Enable)
 	ld.bu	d15,[a15]
-	jne	d15,#1,.L23
-.L184:
+	jne	d15,#1,.L22
+.L183:
 	mov	d4,#647
 	call	gpio_get_level
+.L184:
+	jne	d2,#1,.L23
 .L185:
-	jne	d2,#1,.L24
+	movh.a	a15,#@his(Debug_Ground_Dir)
+	lea	a15,[a15]@los(Debug_Ground_Dir)
+	ld.bu	d15,[a15]
 .L186:
-	movh.a	a15,#@his(Debug_Ground_Dir)
-	lea	a15,[a15]@los(Debug_Ground_Dir)
-	ld.bu	d15,[a15]
+	jne	d15,#1,.L24
 .L187:
-	jne	d15,#1,.L25
-.L188:
 	movh.a	a15,#@his(Left_Exp_Spd)
 	lea	a15,[a15]@los(Left_Exp_Spd)
-.L189:
+.L188:
 	movh.a	a2,#@his(Debug_Target_Speed)
 	lea	a2,[a2]@los(Debug_Target_Speed)
 	ld.w	d15,[a2]
-.L190:
+.L189:
 	st.w	[a15],d15
-.L191:
+.L190:
 	movh.a	a15,#@his(Right_Exp_Spd)
 	lea	a15,[a15]@los(Right_Exp_Spd)
-.L192:
+.L191:
 	movh.a	a2,#@his(Debug_Target_Speed)
 	lea	a2,[a2]@los(Debug_Target_Speed)
 	ld.w	d15,[a2]
-.L193:
+.L192:
 	rsub	d15,#0
-.L194:
+.L193:
 	st.w	[a15],d15
-.L195:
-	j	.L26
-.L25:
+.L194:
+	j	.L25
+.L24:
 	movh.a	a15,#@his(Debug_Ground_Dir)
 	lea	a15,[a15]@los(Debug_Ground_Dir)
 	ld.bu	d15,[a15]
+.L195:
+	jne	d15,#0,.L26
 .L196:
-	jne	d15,#0,.L27
-.L197:
 	movh.a	a15,#@his(Left_Exp_Spd)
 	lea	a15,[a15]@los(Left_Exp_Spd)
-.L198:
+.L197:
 	movh.a	a2,#@his(Debug_Target_Speed)
 	lea	a2,[a2]@los(Debug_Target_Speed)
 	ld.w	d15,[a2]
-.L199:
+.L198:
 	rsub	d15,#0
-.L200:
+.L199:
 	st.w	[a15],d15
-.L201:
+.L200:
 	movh.a	a15,#@his(Right_Exp_Spd)
 	lea	a15,[a15]@los(Right_Exp_Spd)
-.L202:
+.L201:
 	movh.a	a2,#@his(Debug_Target_Speed)
 	lea	a2,[a2]@los(Debug_Target_Speed)
 	ld.w	d15,[a2]
-.L203:
+.L202:
 	st.w	[a15],d15
-.L27:
 .L26:
+.L25:
 	movh.a	a15,#@his(Left_PID_Out)
 	lea	a15,[a15]@los(Left_PID_Out)
-.L204:
+.L203:
 	movh.a	a4,#@his(Left_PID)
 	lea	a4,[a4]@los(Left_PID)
-.L205:
+.L204:
 	movh.a	a2,#@his(Left_Exp_Spd)
 	lea	a2,[a2]@los(Left_Exp_Spd)
 	ld.w	d15,[a2]
-.L206:
+.L205:
 	itof	d4,d15
-.L207:
+.L206:
 	movh.a	a2,#@his(Left_Real_Spd)
 	lea	a2,[a2]@los(Left_Real_Spd)
 	ld.w	d15,[a2]
-.L208:
+.L207:
 	itof	d5,d15
 	call	PID_calc
-.L209:
+.L208:
 	st.w	[a15],d2
-.L210:
+.L209:
 	movh.a	a15,#@his(Right_PID_Out)
 	lea	a15,[a15]@los(Right_PID_Out)
-.L211:
+.L210:
 	movh.a	a4,#@his(Right_PID)
 	lea	a4,[a4]@los(Right_PID)
-.L212:
+.L211:
 	movh.a	a2,#@his(Right_Exp_Spd)
 	lea	a2,[a2]@los(Right_Exp_Spd)
 	ld.w	d15,[a2]
-.L213:
+.L212:
 	itof	d4,d15
-.L214:
+.L213:
 	movh.a	a2,#@his(Right_Real_Spd)
 	lea	a2,[a2]@los(Right_Real_Spd)
 	ld.w	d15,[a2]
-.L215:
+.L214:
 	itof	d5,d15
 	call	PID_calc
-.L216:
+.L215:
 	st.w	[a15],d2
-.L217:
-	j	.L28
-.L24:
+.L216:
+	j	.L27
 .L23:
+.L22:
 	movh.a	a15,#@his(Left_Exp_Spd)
 	lea	a15,[a15]@los(Left_Exp_Spd)
-.L218:
+.L217:
 	mov	d15,#0
-.L219:
+.L218:
 	st.w	[a15],d15
-.L220:
+.L219:
 	movh.a	a15,#@his(Right_Exp_Spd)
 	lea	a15,[a15]@los(Right_Exp_Spd)
-.L221:
+.L220:
 	mov	d15,#0
-.L222:
+.L221:
 	st.w	[a15],d15
-.L223:
+.L222:
 	movh.a	a15,#@his(Left_PID_Out)
 	lea	a15,[a15]@los(Left_PID_Out)
-.L224:
+.L223:
 	mov	d15,#0
-.L225:
+.L224:
 	st.w	[a15],d15
-.L226:
+.L225:
 	movh.a	a15,#@his(Right_PID_Out)
 	lea	a15,[a15]@los(Right_PID_Out)
-.L227:
+.L226:
 	mov	d15,#0
-.L228:
+.L227:
 	st.w	[a15],d15
-.L229:
+.L228:
 	movh.a	a4,#@his(Left_PID)
 	lea	a4,[a4]@los(Left_PID)
 	call	PID_cleardata
-.L230:
+.L229:
 	movh.a	a4,#@his(Right_PID)
 	lea	a4,[a4]@los(Right_PID)
 	call	PID_cleardata
-.L28:
+.L27:
 	call	Debug_Set_Out
-.L231:
+.L230:
 	ret
-.L103:
+.L102:
 	
 __Debug_Ground_Test_function_end:
 	.size	Debug_Ground_Test,__Debug_Ground_Test_function_end-Debug_Ground_Test
-.L81:
+.L80:
 	; End of function
 	
 	.sdecl	'.text.Debug_Car.Debug_Angle_Tuning',code,cluster('Debug_Angle_Tuning')
@@ -478,368 +463,368 @@ __Debug_Ground_Test_function_end:
 	
 	.global	Debug_Angle_Tuning
 ; Function Debug_Angle_Tuning
-.L63:
+.L62:
 Debug_Angle_Tuning:	.type	func
 	movh.a	a15,#@his(Debug_Motor_Enable)
 	lea	a15,[a15]@los(Debug_Motor_Enable)
 	ld.bu	d15,[a15]
-	jeq	d15,#0,.L29
-.L236:
+	jeq	d15,#0,.L28
+.L235:
 	mov	d4,#647
 	call	gpio_get_level
 	eq	d15,d2,#1
-.L237:
-	jne	d15,#0,.L30
-.L29:
+.L236:
+	jne	d15,#0,.L29
+.L28:
 	movh.a	a15,#@his(_999001_angle_tick)
 	lea	a15,[a15]@los(_999001_angle_tick)
-.L238:
+.L237:
 	mov	d15,#0
-.L239:
+.L238:
 	st.w	[a15],d15
-.L240:
+.L239:
 	movh.a	a15,#@his(Gyro_Integral)
 	lea	a15,[a15]@los(Gyro_Integral)
-.L241:
+.L240:
 	mov	d15,#0
-.L242:
+.L241:
 	st.w	[a15],d15
-.L243:
+.L242:
 	movh.a	a15,#@his(Turn_PID_Out)
 	lea	a15,[a15]@los(Turn_PID_Out)
-.L244:
+.L243:
 	mov	d15,#0
-.L245:
+.L244:
 	st.w	[a15],d15
-.L246:
+.L245:
 	movh.a	a15,#@his(Gyro_PID_Out)
 	lea	a15,[a15]@los(Gyro_PID_Out)
-.L247:
+.L246:
 	mov	d15,#0
-.L248:
+.L247:
 	st.w	[a15],d15
-.L249:
+.L248:
 	movh.a	a15,#@his(Debug_Angle_Vel_Target)
 	lea	a15,[a15]@los(Debug_Angle_Vel_Target)
-.L250:
+.L249:
 	mov	d15,#0
-.L251:
+.L250:
 	st.w	[a15],d15
-.L252:
+.L251:
 	movh.a	a15,#@his(Debug_Angle_Vel_Real)
 	lea	a15,[a15]@los(Debug_Angle_Vel_Real)
-.L253:
+.L252:
 	mov	d15,#0
-.L254:
+.L253:
 	st.w	[a15],d15
-.L255:
+.L254:
 	movh.a	a15,#@his(Left_Exp_Spd)
 	lea	a15,[a15]@los(Left_Exp_Spd)
-.L256:
+.L255:
 	mov	d15,#0
-.L257:
+.L256:
 	st.w	[a15],d15
-.L258:
+.L257:
 	movh.a	a15,#@his(Right_Exp_Spd)
 	lea	a15,[a15]@los(Right_Exp_Spd)
-.L259:
+.L258:
 	mov	d15,#0
-.L260:
+.L259:
 	st.w	[a15],d15
-.L261:
+.L260:
 	movh.a	a15,#@his(Left_PID_Out)
 	lea	a15,[a15]@los(Left_PID_Out)
-.L262:
+.L261:
 	mov	d15,#0
-.L263:
+.L262:
 	st.w	[a15],d15
-.L264:
+.L263:
 	movh.a	a15,#@his(Right_PID_Out)
 	lea	a15,[a15]@los(Right_PID_Out)
-.L265:
+.L264:
 	mov	d15,#0
-.L266:
+.L265:
 	st.w	[a15],d15
-.L267:
+.L266:
 	movh.a	a15,#@his(Debug_Angle_D_First)
 	lea	a15,[a15]@los(Debug_Angle_D_First)
-.L268:
+.L267:
 	mov	d15,#0
-.L269:
+.L268:
 	st.b	[a15],d15
-.L270:
+.L269:
 	movh.a	a4,#@his(Angle_PID)
 	lea	a4,[a4]@los(Angle_PID)
 	call	PID_cleardata
-.L271:
+.L270:
 	movh.a	a4,#@his(Gyro_PID)
 	lea	a4,[a4]@los(Gyro_PID)
 	call	PID_cleardata
-.L272:
+.L271:
 	movh.a	a4,#@his(Gyro_PD_PID)
 	lea	a4,[a4]@los(Gyro_PD_PID)
 	call	PID_cleardata
-.L273:
+.L272:
 	movh.a	a4,#@his(Left_PID)
 	lea	a4,[a4]@los(Left_PID)
 	call	PID_cleardata
-.L274:
+.L273:
 	movh.a	a4,#@his(Right_PID)
 	lea	a4,[a4]@los(Right_PID)
 	call	PID_cleardata
-.L275:
+.L274:
 	call	Debug_Set_Out
-.L276:
-	j	.L31
-.L30:
+.L275:
+	j	.L30
+.L29:
 	movh.a	a15,#@his(Debug_Angle_Mode)
 	lea	a15,[a15]@los(Debug_Angle_Mode)
 	ld.bu	d15,[a15]
-.L277:
-	jne	d15,#2,.L32
-.L109:
+.L276:
+	jne	d15,#2,.L31
+.L108:
 	movh.a	a15,#@his(_999001_angle_tick)
 	lea	a15,[a15]@los(_999001_angle_tick)
 	ld.w	d15,[a15]
-.L278:
+.L277:
 	mov	d0,#667
-.L279:
+.L278:
 	div.u	e0,d15,d0
-.L116:
+.L115:
 	mov	d15,#8
-.L280:
+.L279:
 	div.u	e0,d0,d15
-.L117:
-	jge.u	d1,#5,.L33
-.L281:
+.L116:
+	jge.u	d1,#5,.L32
+.L280:
 	utof	d15,d1
+.L281:
+	movh	d0,#17076
 .L282:
-	movh	d0,#17076
-.L283:
 	mul.f	d4,d15,d0
-.L119:
-	j	.L34
-.L33:
+.L118:
+	j	.L33
+.L32:
 	rsub	d15,d1,#8
-.L284:
+.L283:
 	utof	d15,d15
-.L285:
+.L284:
 	movh	d0,#17076
-.L286:
+.L285:
 	mul.f	d4,d15,d0
-.L34:
+.L33:
 	movh.a	a15,#@his(Debug_Angle_D_First)
 	lea	a15,[a15]@los(Debug_Angle_D_First)
-.L287:
+.L286:
 	mov	d15,#1
-.L288:
+.L287:
 	st.b	[a15],d15
-.L289:
+.L288:
 	movh.a	a15,#@his(Turn_PID_Out)
 	lea	a15,[a15]@los(Turn_PID_Out)
-.L290:
+.L289:
 	movh.a	a4,#@his(Angle_PID)
 	lea	a4,[a4]@los(Angle_PID)
-.L291:
+.L290:
 	movh.a	a2,#@his(Gyro_Integral)
 	lea	a2,[a2]@los(Gyro_Integral)
 	ld.w	d5,[a2]
 	call	PID_calc
-.L118:
+.L117:
 	st.w	[a15],d2
-.L292:
+.L291:
 	movh.a	a15,#@his(Turn_PID_Out)
 	lea	a15,[a15]@los(Turn_PID_Out)
 	ld.w	d4,[a15]
-.L110:
-	j	.L35
-.L32:
+.L109:
+	j	.L34
+.L31:
 	movh.a	a15,#@his(Debug_Angle_Mode)
 	lea	a15,[a15]@los(Debug_Angle_Mode)
 	ld.bu	d15,[a15]
+.L292:
+	jne	d15,#3,.L35
 .L293:
-	jne	d15,#3,.L36
-.L294:
 	movh.a	a15,#@his(Turn_PID_Out)
 	lea	a15,[a15]@los(Turn_PID_Out)
-.L295:
+.L294:
 	mov	d15,#0
-.L296:
+.L295:
 	st.w	[a15],d15
-.L297:
+.L296:
 	movh.a	a15,#@his(Debug_Angle_D_First)
 	lea	a15,[a15]@los(Debug_Angle_D_First)
-.L298:
+.L297:
 	mov	d15,#0
-.L299:
+.L298:
 	st.b	[a15],d15
-.L300:
+.L299:
 	movh.a	a15,#@his(Debug_Angle_Vel_Target)
 	lea	a15,[a15]@los(Debug_Angle_Vel_Target)
 	ld.w	d4,[a15]
-.L120:
-	j	.L37
-.L36:
+.L119:
+	j	.L36
+.L35:
 	movh.a	a15,#@his(Turn_PID_Out)
 	lea	a15,[a15]@los(Turn_PID_Out)
-.L301:
+.L300:
 	mov	d15,#0
-.L302:
+.L301:
 	st.w	[a15],d15
-.L303:
+.L302:
 	movh.a	a15,#@his(Debug_Angle_D_First)
 	lea	a15,[a15]@los(Debug_Angle_D_First)
-.L304:
+.L303:
 	mov	d15,#0
-.L305:
+.L304:
 	st.b	[a15],d15
-.L306:
+.L305:
 	movh.a	a15,#@his(_999001_angle_tick)
 	lea	a15,[a15]@los(_999001_angle_tick)
 	ld.w	d15,[a15]
-.L307:
+.L306:
 	mov	d0,#333
-.L308:
+.L307:
 	div.u	e0,d15,d0
-.L309:
+.L308:
 	utof	d15,d1
-.L310:
+.L309:
 	mov	d0,#4059
 	addih	d0,d0,#16585
-.L311:
+.L310:
 	mul.f	d15,d15,d0
-.L312:
+.L311:
 	mov.u	d0,#32768
 	addih	d0,d0,#17318
-.L313:
+.L312:
 	div.f	d4,d15,d0
 	call	sinf
-.L314:
+.L313:
 	movh	d15,#17558
-.L315:
+.L314:
 	mul.f	d4,d2,d15
-.L37:
-.L35:
+.L36:
+.L34:
 	movh.a	a15,#@his(Debug_Angle_Vel_Target)
 	lea	a15,[a15]@los(Debug_Angle_Vel_Target)
-.L316:
+.L315:
 	st.w	[a15],d4
-.L317:
+.L316:
 	movh.a	a15,#@his(Debug_Angle_Vel_Real)
 	lea	a15,[a15]@los(Debug_Angle_Vel_Real)
-.L318:
+.L317:
 	movh.a	a2,#@his(Gyro_Z)
 	lea	a2,[a2]@los(Gyro_Z)
 	ld.w	d15,[a2]
-.L319:
+.L318:
 	st.w	[a15],d15
-.L320:
+.L319:
 	movh.a	a15,#@his(Gyro_PID_Out)
 	lea	a15,[a15]@los(Gyro_PID_Out)
-.L321:
+.L320:
 	movh.a	a4,#@his(Gyro_PID)
 	lea	a4,[a4]@los(Gyro_PID)
-.L322:
+.L321:
 	movh.a	a2,#@his(Gyro_Z)
 	lea	a2,[a2]@los(Gyro_Z)
 	ld.w	d5,[a2]
 	call	PID_calc
-.L121:
+.L120:
 	st.w	[a15],d2
-.L323:
+.L322:
 	movh.a	a15,#@his(Left_Exp_Spd)
 	lea	a15,[a15]@los(Left_Exp_Spd)
-.L324:
+.L323:
 	movh.a	a2,#@his(Debug_Target_Speed)
 	lea	a2,[a2]@los(Debug_Target_Speed)
 	ld.w	d15,[a2]
 	itof	d15,d15
-.L325:
+.L324:
 	movh.a	a2,#@his(Gyro_PID_Out)
 	lea	a2,[a2]@los(Gyro_PID_Out)
 	ld.w	d0,[a2]
-.L326:
+.L325:
 	add.f	d15,d15,d0
 	ftoiz	d15,d15
-.L327:
+.L326:
 	st.w	[a15],d15
-.L328:
+.L327:
 	movh.a	a15,#@his(Right_Exp_Spd)
 	lea	a15,[a15]@los(Right_Exp_Spd)
-.L329:
+.L328:
 	movh.a	a2,#@his(Debug_Target_Speed)
 	lea	a2,[a2]@los(Debug_Target_Speed)
 	ld.w	d15,[a2]
 	itof	d15,d15
-.L330:
+.L329:
 	movh.a	a2,#@his(Gyro_PID_Out)
 	lea	a2,[a2]@los(Gyro_PID_Out)
 	ld.w	d0,[a2]
-.L331:
+.L330:
 	sub.f	d15,d15,d0
 	ftoiz	d15,d15
-.L332:
+.L331:
 	st.w	[a15],d15
-.L333:
+.L332:
 	movh.a	a15,#@his(Left_PID_Out)
 	lea	a15,[a15]@los(Left_PID_Out)
-.L334:
+.L333:
 	movh.a	a4,#@his(Left_PID)
 	lea	a4,[a4]@los(Left_PID)
-.L335:
+.L334:
 	movh.a	a2,#@his(Left_Exp_Spd)
 	lea	a2,[a2]@los(Left_Exp_Spd)
 	ld.w	d15,[a2]
-.L336:
+.L335:
 	itof	d4,d15
-.L337:
+.L336:
 	movh.a	a2,#@his(Left_Real_Spd)
 	lea	a2,[a2]@los(Left_Real_Spd)
 	ld.w	d15,[a2]
-.L338:
+.L337:
 	itof	d5,d15
 	call	PID_calc
-.L339:
+.L338:
 	st.w	[a15],d2
-.L340:
+.L339:
 	movh.a	a15,#@his(Right_PID_Out)
 	lea	a15,[a15]@los(Right_PID_Out)
-.L341:
+.L340:
 	movh.a	a4,#@his(Right_PID)
 	lea	a4,[a4]@los(Right_PID)
-.L342:
+.L341:
 	movh.a	a2,#@his(Right_Exp_Spd)
 	lea	a2,[a2]@los(Right_Exp_Spd)
 	ld.w	d15,[a2]
-.L343:
+.L342:
 	itof	d4,d15
-.L344:
+.L343:
 	movh.a	a2,#@his(Right_Real_Spd)
 	lea	a2,[a2]@los(Right_Real_Spd)
 	ld.w	d15,[a2]
-.L345:
+.L344:
 	itof	d5,d15
 	call	PID_calc
-.L346:
+.L345:
 	st.w	[a15],d2
-.L347:
+.L346:
 	movh.a	a15,#@his(_999001_angle_tick)
 	lea	a15,[a15]@los(_999001_angle_tick)
 	movh.a	a2,#@his(_999001_angle_tick)
 	lea	a2,[a2]@los(_999001_angle_tick)
 	ld.w	d15,[a2]
-.L348:
+.L347:
 	add	d15,#1
 	st.w	[a15],d15
-.L349:
+.L348:
 	call	Debug_Set_Out
-.L31:
+.L30:
 	ret
-.L104:
+.L103:
 	
 __Debug_Angle_Tuning_function_end:
 	.size	Debug_Angle_Tuning,__Debug_Angle_Tuning_function_end-Debug_Angle_Tuning
-.L86:
+.L85:
 	; End of function
 	
 	.sdecl	'.text.Debug_Car.Debug_Normal_Trace',code,cluster('Debug_Normal_Trace')
@@ -848,370 +833,370 @@ __Debug_Angle_Tuning_function_end:
 	
 	.global	Debug_Normal_Trace
 ; Function Debug_Normal_Trace
-.L65:
+.L64:
 Debug_Normal_Trace:	.type	func
 	movh.a	a15,#@his(Debug_Motor_Enable)
 	lea	a15,[a15]@los(Debug_Motor_Enable)
 	ld.bu	d15,[a15]
-	jeq	d15,#0,.L38
-.L354:
+	jeq	d15,#0,.L37
+.L353:
 	mov	d4,#647
 	call	gpio_get_level
 	eq	d15,d2,#1
-.L355:
-	jne	d15,#0,.L39
-.L38:
+.L354:
+	jne	d15,#0,.L38
+.L37:
 	movh.a	a15,#@his(Error)
 	lea	a15,[a15]@los(Error)
-.L356:
+.L355:
 	mov	d15,#0
-.L357:
+.L356:
 	st.w	[a15],d15
-.L358:
+.L357:
 	movh.a	a15,#@his(Turn_PID_Out)
 	lea	a15,[a15]@los(Turn_PID_Out)
-.L359:
+.L358:
 	mov	d15,#0
-.L360:
+.L359:
 	st.w	[a15],d15
-.L361:
+.L360:
 	movh.a	a15,#@his(Gyro_PID_Out)
 	lea	a15,[a15]@los(Gyro_PID_Out)
-.L362:
+.L361:
 	mov	d15,#0
-.L363:
+.L362:
 	st.w	[a15],d15
-.L364:
+.L363:
 	movh.a	a15,#@his(Debug_Angle_Vel_Target)
 	lea	a15,[a15]@los(Debug_Angle_Vel_Target)
-.L365:
+.L364:
 	mov	d15,#0
-.L366:
+.L365:
 	st.w	[a15],d15
-.L367:
+.L366:
 	movh.a	a15,#@his(Debug_Angle_Vel_Real)
 	lea	a15,[a15]@los(Debug_Angle_Vel_Real)
-.L368:
+.L367:
 	mov	d15,#0
-.L369:
+.L368:
 	st.w	[a15],d15
-.L370:
+.L369:
 	movh.a	a15,#@his(Left_Exp_Spd)
 	lea	a15,[a15]@los(Left_Exp_Spd)
-.L371:
+.L370:
 	mov	d15,#0
-.L372:
+.L371:
 	st.w	[a15],d15
-.L373:
+.L372:
 	movh.a	a15,#@his(Right_Exp_Spd)
 	lea	a15,[a15]@los(Right_Exp_Spd)
-.L374:
+.L373:
 	mov	d15,#0
-.L375:
+.L374:
 	st.w	[a15],d15
-.L376:
+.L375:
 	movh.a	a15,#@his(Left_PID_Out)
 	lea	a15,[a15]@los(Left_PID_Out)
-.L377:
+.L376:
 	mov	d15,#0
-.L378:
+.L377:
 	st.w	[a15],d15
-.L379:
+.L378:
 	movh.a	a15,#@his(Right_PID_Out)
 	lea	a15,[a15]@los(Right_PID_Out)
-.L380:
+.L379:
 	mov	d15,#0
-.L381:
+.L380:
 	st.w	[a15],d15
-.L382:
+.L381:
 	movh.a	a4,#@his(Turn_PID)
 	lea	a4,[a4]@los(Turn_PID)
 	call	PID_cleardata
-.L383:
+.L382:
 	movh.a	a4,#@his(Angle_PID)
 	lea	a4,[a4]@los(Angle_PID)
 	call	PID_cleardata
-.L384:
+.L383:
 	movh.a	a4,#@his(Gyro_PID)
 	lea	a4,[a4]@los(Gyro_PID)
 	call	PID_cleardata
-.L385:
+.L384:
 	movh.a	a4,#@his(Gyro_PD_PID)
 	lea	a4,[a4]@los(Gyro_PD_PID)
 	call	PID_cleardata
-.L386:
+.L385:
 	movh.a	a4,#@his(Left_PID)
 	lea	a4,[a4]@los(Left_PID)
 	call	PID_cleardata
-.L387:
+.L386:
 	movh.a	a4,#@his(Right_PID)
 	lea	a4,[a4]@los(Right_PID)
 	call	PID_cleardata
-.L388:
+.L387:
 	call	Debug_Set_Out
-.L389:
-	j	.L40
-.L39:
+.L388:
+	j	.L39
+.L38:
 	movh.a	a15,#@his(Track_Num)
 	lea	a15,[a15]@los(Track_Num)
 	ld.w	d15,[a15]
+.L389:
+	jlt	d15,#1,.L40
 .L390:
-	jlt	d15,#1,.L41
-.L391:
 	movh.a	a15,#@his(Middle)
 	lea	a15,[a15]@los(Middle)
-.L392:
+.L391:
 	movh.a	a2,#@his(Track_Arr)
 	lea	a2,[a2]@los(Track_Arr)
-.L393:
+.L392:
 	ld.w	d0,[a2]
-.L394:
+.L393:
 	movh.a	a2,#@his(Track_Num)
 	lea	a2,[a2]@los(Track_Num)
 	ld.w	d15,[a2]
-.L395:
+.L394:
 	add	d15,#-1
-.L396:
+.L395:
 	mul	d15,d15,#4
-.L397:
+.L396:
 	movh.a	a2,#@his(Track_Arr)
 	lea	a2,[a2]@los(Track_Arr)
-.L398:
+.L397:
 	addsc.a	a2,a2,d15,#0
 	ld.w	d15,[a2]
-.L399:
+.L398:
 	add	d0,d15
-.L400:
+.L399:
 	mov	d15,#2
-.L401:
+.L400:
 	div	e0,d0,d15
-.L402:
+.L401:
 	st.w	[a15],d0
-.L403:
+.L402:
 	movh.a	a15,#@his(Last_Error)
 	lea	a15,[a15]@los(Last_Error)
-.L404:
+.L403:
 	movh.a	a2,#@his(Error)
 	lea	a2,[a2]@los(Error)
 	ld.w	d15,[a2]
-.L405:
+.L404:
 	st.w	[a15],d15
-.L41:
+.L40:
 	movh.a	a15,#@his(Track_Num)
 	lea	a15,[a15]@los(Track_Num)
 	ld.w	d15,[a15]
+.L405:
+	jge	d15,#2,.L41
 .L406:
-	jge	d15,#2,.L42
-.L407:
 	movh.a	a15,#@his(Error)
 	lea	a15,[a15]@los(Error)
-.L408:
+.L407:
 	mov	d15,#0
-.L409:
+.L408:
 	st.w	[a15],d15
-.L410:
-	j	.L43
-.L42:
+.L409:
+	j	.L42
+.L41:
 	movh.a	a15,#@his(Left_Scan_Point)
 	lea	a15,[a15]@los(Left_Scan_Point)
-.L411:
+.L410:
 	movh.a	a2,#@his(Track_Arr)
 	lea	a2,[a2]@los(Track_Arr)
-.L412:
+.L411:
 	ld.w	d15,[a2]
-.L413:
+.L412:
 	st.w	[a15],d15
-.L414:
+.L413:
 	movh.a	a15,#@his(Right_Scan_Point)
 	lea	a15,[a15]@los(Right_Scan_Point)
-.L415:
+.L414:
 	movh.a	a2,#@his(Track_Num)
 	lea	a2,[a2]@los(Track_Num)
 	ld.w	d15,[a2]
-.L416:
+.L415:
 	add	d15,#-1
-.L417:
+.L416:
 	mul	d15,d15,#4
-.L418:
+.L417:
 	movh.a	a2,#@his(Track_Arr)
 	lea	a2,[a2]@los(Track_Arr)
-.L419:
+.L418:
 	addsc.a	a2,a2,d15,#0
 	ld.w	d15,[a2]
-.L420:
+.L419:
 	st.w	[a15],d15
-.L421:
+.L420:
 	movh.a	a15,#@his(Error)
 	lea	a15,[a15]@los(Error)
-.L422:
+.L421:
 	movh.a	a2,#@his(Track_Arr)
 	lea	a2,[a2]@los(Track_Arr)
 	ld.w	d15,[a2]
-.L423:
+.L422:
 	mul	d15,d15,#2
-.L424:
+.L423:
 	movh.a	a2,#@his(Dir_Arr)
 	lea	a2,[a2]@los(Dir_Arr)
-.L425:
+.L424:
 	addsc.a	a2,a2,d15,#0
 	ld.h	d0,[a2]
-.L426:
+.L425:
 	movh.a	a2,#@his(Right_Scan_Point)
 	lea	a2,[a2]@los(Right_Scan_Point)
 	ld.w	d15,[a2]
-.L427:
+.L426:
 	mul	d15,d15,#2
-.L428:
+.L427:
 	movh.a	a2,#@his(Dir_Arr)
 	lea	a2,[a2]@los(Dir_Arr)
-.L429:
+.L428:
 	addsc.a	a2,a2,d15,#0
 	ld.h	d15,[a2]
-.L430:
+.L429:
 	add	d0,d15
-.L431:
+.L430:
 	mov	d15,#2
-.L432:
+.L431:
 	div	e0,d0,d15
-.L433:
+.L432:
 	st.w	[a15],d0
-.L43:
+.L42:
 	movh.a	a15,#@his(Turn_PID_Out)
 	lea	a15,[a15]@los(Turn_PID_Out)
-.L434:
+.L433:
 	movh.a	a4,#@his(Angle_PID)
 	lea	a4,[a4]@los(Angle_PID)
-.L435:
+.L434:
 	mov	d4,#0
-.L436:
+.L435:
 	movh.a	a2,#@his(Error)
 	lea	a2,[a2]@los(Error)
 	ld.w	d15,[a2]
-.L437:
+.L436:
 	itof	d5,d15
 	call	PID_calc
-.L438:
+.L437:
 	st.w	[a15],d2
-.L439:
+.L438:
 	movh.a	a15,#@his(Gyro_PID_Out)
 	lea	a15,[a15]@los(Gyro_PID_Out)
-.L440:
+.L439:
 	movh.a	a4,#@his(Gyro_PID)
 	lea	a4,[a4]@los(Gyro_PID)
-.L441:
+.L440:
 	movh.a	a2,#@his(Turn_PID_Out)
 	lea	a2,[a2]@los(Turn_PID_Out)
 	ld.w	d4,[a2]
-.L442:
+.L441:
 	movh.a	a2,#@his(Gyro_Z)
 	lea	a2,[a2]@los(Gyro_Z)
 	ld.w	d5,[a2]
 	call	PID_calc
-.L443:
+.L442:
 	st.w	[a15],d2
-.L444:
+.L443:
 	movh.a	a15,#@his(Debug_Angle_Vel_Target)
 	lea	a15,[a15]@los(Debug_Angle_Vel_Target)
-.L445:
+.L444:
 	movh.a	a2,#@his(Turn_PID_Out)
 	lea	a2,[a2]@los(Turn_PID_Out)
 	ld.w	d15,[a2]
-.L446:
+.L445:
 	st.w	[a15],d15
-.L447:
+.L446:
 	movh.a	a15,#@his(Debug_Angle_Vel_Real)
 	lea	a15,[a15]@los(Debug_Angle_Vel_Real)
-.L448:
+.L447:
 	movh.a	a2,#@his(Gyro_Z)
 	lea	a2,[a2]@los(Gyro_Z)
 	ld.w	d15,[a2]
-.L449:
+.L448:
 	st.w	[a15],d15
-.L450:
+.L449:
 	movh.a	a15,#@his(Left_Exp_Spd)
 	lea	a15,[a15]@los(Left_Exp_Spd)
-.L451:
+.L450:
 	movh.a	a2,#@his(Debug_Target_Speed)
 	lea	a2,[a2]@los(Debug_Target_Speed)
 	ld.w	d15,[a2]
 	itof	d15,d15
-.L452:
+.L451:
 	movh.a	a2,#@his(Gyro_PID_Out)
 	lea	a2,[a2]@los(Gyro_PID_Out)
 	ld.w	d0,[a2]
-.L453:
+.L452:
 	add.f	d15,d15,d0
 	ftoiz	d15,d15
-.L454:
+.L453:
 	st.w	[a15],d15
-.L455:
+.L454:
 	movh.a	a15,#@his(Right_Exp_Spd)
 	lea	a15,[a15]@los(Right_Exp_Spd)
-.L456:
+.L455:
 	movh.a	a2,#@his(Debug_Target_Speed)
 	lea	a2,[a2]@los(Debug_Target_Speed)
 	ld.w	d15,[a2]
 	itof	d15,d15
-.L457:
+.L456:
 	movh.a	a2,#@his(Gyro_PID_Out)
 	lea	a2,[a2]@los(Gyro_PID_Out)
 	ld.w	d0,[a2]
-.L458:
+.L457:
 	sub.f	d15,d15,d0
 	ftoiz	d15,d15
-.L459:
+.L458:
 	st.w	[a15],d15
-.L460:
+.L459:
 	movh.a	a15,#@his(Left_PID_Out)
 	lea	a15,[a15]@los(Left_PID_Out)
-.L461:
+.L460:
 	movh.a	a4,#@his(Left_PID)
 	lea	a4,[a4]@los(Left_PID)
-.L462:
+.L461:
 	movh.a	a2,#@his(Left_Exp_Spd)
 	lea	a2,[a2]@los(Left_Exp_Spd)
 	ld.w	d15,[a2]
-.L463:
+.L462:
 	itof	d4,d15
-.L464:
+.L463:
 	movh.a	a2,#@his(Left_Real_Spd)
 	lea	a2,[a2]@los(Left_Real_Spd)
 	ld.w	d15,[a2]
-.L465:
+.L464:
 	itof	d5,d15
 	call	PID_calc
-.L466:
+.L465:
 	st.w	[a15],d2
-.L467:
+.L466:
 	movh.a	a15,#@his(Right_PID_Out)
 	lea	a15,[a15]@los(Right_PID_Out)
-.L468:
+.L467:
 	movh.a	a4,#@his(Right_PID)
 	lea	a4,[a4]@los(Right_PID)
-.L469:
+.L468:
 	movh.a	a2,#@his(Right_Exp_Spd)
 	lea	a2,[a2]@los(Right_Exp_Spd)
 	ld.w	d15,[a2]
-.L470:
+.L469:
 	itof	d4,d15
-.L471:
+.L470:
 	movh.a	a2,#@his(Right_Real_Spd)
 	lea	a2,[a2]@los(Right_Real_Spd)
 	ld.w	d15,[a2]
-.L472:
+.L471:
 	itof	d5,d15
 	call	PID_calc
-.L473:
+.L472:
 	st.w	[a15],d2
-.L474:
+.L473:
 	call	Debug_Set_Out
-.L40:
+.L39:
 	ret
-.L113:
+.L112:
 	
 __Debug_Normal_Trace_function_end:
 	.size	Debug_Normal_Trace,__Debug_Normal_Trace_function_end-Debug_Normal_Trace
-.L91:
+.L90:
 	; End of function
 	
 	.sdecl	'.text.Debug_Car.Debug_Set_Out',code,cluster('Debug_Set_Out')
@@ -1220,174 +1205,174 @@ __Debug_Normal_Trace_function_end:
 	
 	.global	Debug_Set_Out
 ; Function Debug_Set_Out
-.L67:
+.L66:
 Debug_Set_Out:	.type	func
 	movh.a	a15,#@his(Debug_Motor_Enable)
 	lea	a15,[a15]@los(Debug_Motor_Enable)
 	ld.bu	d15,[a15]
+.L478:
+	jeq	d15,#0,.L43
 .L479:
-	jeq	d15,#0,.L44
-.L480:
 	mov	d4,#91
-.L481:
+.L480:
 	movh.a	a15,#@his(Debug_Fan_Duty)
 	lea	a15,[a15]@los(Debug_Fan_Duty)
 	ld.w	d5,[a15]
 	call	pwm_set_duty
+.L481:
+	mov	d4,#154
 .L482:
-	mov	d4,#154
+	mov	d5,#0
+	call	pwm_set_duty
 .L483:
-	mov	d5,#0
-	call	pwm_set_duty
-.L484:
-	j	.L45
-.L44:
+	j	.L44
+.L43:
 	mov	d4,#91
+.L484:
+	mov	d5,#0
+	call	pwm_set_duty
 .L485:
-	mov	d5,#0
-	call	pwm_set_duty
-.L486:
 	mov	d4,#154
+.L486:
+	mov	d5,#0
+	call	pwm_set_duty
+.L44:
+	movh.a	a15,#@his(Debug_Motor_Enable)
+	lea	a15,[a15]@los(Debug_Motor_Enable)
+	ld.bu	d15,[a15]
+	jeq	d15,#0,.L45
 .L487:
-	mov	d5,#0
-	call	pwm_set_duty
-.L45:
-	movh.a	a15,#@his(Debug_Motor_Enable)
-	lea	a15,[a15]@los(Debug_Motor_Enable)
-	ld.bu	d15,[a15]
-	jeq	d15,#0,.L46
+	movh.a	a15,#@his(Left_PID_Out)
+	lea	a15,[a15]@los(Left_PID_Out)
+	ld.w	d15,[a15]
 .L488:
-	movh.a	a15,#@his(Left_PID_Out)
-	lea	a15,[a15]@los(Left_PID_Out)
-	ld.w	d15,[a15]
-.L489:
 	extr.u	d15,d15,#23,#8
 	eq	d15,d15,#0
-	jeq	d15,#0,.L47
-.L46:
+	jeq	d15,#0,.L46
+.L45:
 	mov	d4,#140
+.L489:
+	mov	d5,#0
+	call	pwm_set_duty
 .L490:
-	mov	d5,#0
-	call	pwm_set_duty
-.L491:
 	mov	d4,#147
-.L492:
+.L491:
 	mov	d5,#0
 	call	pwm_set_duty
-.L493:
-	j	.L48
-.L47:
+.L492:
+	j	.L47
+.L46:
 	movh.a	a15,#@his(Left_PID_Out)
 	lea	a15,[a15]@los(Left_PID_Out)
 	ld.w	d15,[a15]
-.L494:
+.L493:
 	mov	d0,#0
-.L495:
+.L494:
 	cmp.f	d15,d15,d0
-	jnz.t	d15:2,.L49
-.L496:
+	jnz.t	d15:2,.L48
+.L495:
 	mov	d4,#140
-.L497:
+.L496:
 	mov	d5,#10000
 	call	pwm_set_duty
-.L498:
+.L497:
 	mov	d4,#147
-.L499:
+.L498:
 	movh.a	a15,#@his(Left_PID_Out)
 	lea	a15,[a15]@los(Left_PID_Out)
 	ld.w	d15,[a15]
 	insert	d15,d15,#0,#31,#1
 	ftouz	d5,d15
 	call	pwm_set_duty
-.L500:
-	j	.L50
-.L49:
+.L499:
+	j	.L49
+.L48:
 	mov	d4,#140
-.L501:
+.L500:
 	mov	d5,#0
 	call	pwm_set_duty
-.L502:
+.L501:
 	mov	d4,#147
-.L503:
+.L502:
 	movh.a	a15,#@his(Left_PID_Out)
 	lea	a15,[a15]@los(Left_PID_Out)
 	ld.w	d15,[a15]
 	insert	d15,d15,#0,#31,#1
 	ftouz	d5,d15
 	call	pwm_set_duty
-.L50:
-.L48:
+.L49:
+.L47:
 	movh.a	a15,#@his(Debug_Motor_Enable)
 	lea	a15,[a15]@los(Debug_Motor_Enable)
 	ld.bu	d15,[a15]
-	jeq	d15,#0,.L51
-.L504:
+	jeq	d15,#0,.L50
+.L503:
 	movh.a	a15,#@his(Right_PID_Out)
 	lea	a15,[a15]@los(Right_PID_Out)
 	ld.w	d15,[a15]
-.L505:
+.L504:
 	extr.u	d15,d15,#23,#8
 	eq	d15,d15,#0
-	jeq	d15,#0,.L52
-.L51:
+	jeq	d15,#0,.L51
+.L50:
 	mov	d4,#85
+.L505:
+	mov	d5,#0
+	call	pwm_set_duty
 .L506:
-	mov	d5,#0
-	call	pwm_set_duty
-.L507:
 	mov	d4,#72
-.L508:
+.L507:
 	mov	d5,#0
 	call	pwm_set_duty
-.L509:
-	j	.L53
-.L52:
+.L508:
+	j	.L52
+.L51:
 	movh.a	a15,#@his(Right_PID_Out)
 	lea	a15,[a15]@los(Right_PID_Out)
 	ld.w	d15,[a15]
-.L510:
+.L509:
 	mov	d0,#0
-.L511:
+.L510:
 	cmp.f	d15,d15,d0
-	jnz.t	d15:2,.L54
-.L512:
+	jnz.t	d15:2,.L53
+.L511:
 	mov	d4,#85
-.L513:
+.L512:
 	mov	d5,#10000
 	call	pwm_set_duty
-.L514:
+.L513:
 	mov	d4,#72
-.L515:
+.L514:
 	movh.a	a15,#@his(Right_PID_Out)
 	lea	a15,[a15]@los(Right_PID_Out)
 	ld.w	d15,[a15]
 	insert	d15,d15,#0,#31,#1
 	ftouz	d5,d15
 	call	pwm_set_duty
-.L516:
-	j	.L55
-.L54:
+.L515:
+	j	.L54
+.L53:
 	mov	d4,#85
-.L517:
+.L516:
 	mov	d5,#0
 	call	pwm_set_duty
-.L518:
+.L517:
 	mov	d4,#72
-.L519:
+.L518:
 	movh.a	a15,#@his(Right_PID_Out)
 	lea	a15,[a15]@los(Right_PID_Out)
 	ld.w	d15,[a15]
 	insert	d15,d15,#0,#31,#1
 	ftouz	d5,d15
 	call	pwm_set_duty
-.L55:
-.L53:
+.L54:
+.L52:
 	ret
-.L114:
+.L113:
 	
 __Debug_Set_Out_function_end:
 	.size	Debug_Set_Out,__Debug_Set_Out_function_end-Debug_Set_Out
-.L96:
+.L95:
 	; End of function
 	
 	.sdecl	'.data.Debug_Car._999001_angle_tick',data,cluster('_999001_angle_tick')
@@ -1453,6 +1438,7 @@ _999001_angle_tick:	.type	object
 	.extern	Stop_Flag
 	.extern	Track_Num
 	.extern	Gyro_Integral
+	.extern	Count
 	.extern	Gyro_PID
 	.extern	Left_PID
 	.extern	Right_PID
@@ -1473,23 +1459,21 @@ _999001_angle_tick:	.type	object
 	.extern	Get_Speed
 	.extern	Get_IMU
 	.extern	Safety_Check
-	.extern	Speed_Get_Count
-	.extern	Enable_Start_Delay_Count
 	.extern	Last_EnableSwitch_ON
 	.calls	'Debug_Set_Out','',0
 	.sdecl	'.debug_info',debug
 	.sect	'.debug_info'
-.L69:
-	.word	145727
-	.half	3
-	.word	.L70
-	.byte	4
 .L68:
+	.word	145634
+	.half	3
+	.word	.L69
+	.byte	4
+.L67:
 	.byte	1
 	.byte	'../code/Debug_Car.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'D:\\workspace\\2026_Crazy_Circuit_V4.0\\Debug\\',0,12,1
-	.word	.L71
+	.word	.L70
 	.byte	2,1,1,3
 	.word	159
 	.byte	4
@@ -1498,7 +1482,7 @@ _999001_angle_tick:	.type	object
 	.word	162
 	.byte	6,0,7
 	.byte	'__fract',0,4,128,1
-.L106:
+.L105:
 	.byte	7
 	.byte	'float',0,4,4,8
 	.byte	'Ifx__float_to_fract',0,3,1,152,2,18
@@ -3098,7 +3082,7 @@ _999001_angle_tick:	.type	object
 	.byte	'enabled',0,8,168,7,50
 	.word	598
 	.byte	6,0
-.L105:
+.L104:
 	.byte	7
 	.byte	'unsigned long int',0,4,7,8
 	.byte	'IfxCpu_getPerformanceCounter',0,3,8,161,6,19
@@ -7365,10 +7349,10 @@ _999001_angle_tick:	.type	object
 	.byte	'pid',0,23,55,40
 	.word	39323
 	.byte	0,31
-	.byte	'Get_Light',0,24,79,6,1,1,1,1,31
-	.byte	'Get_Speed',0,25,176,2,6,1,1,1,1,31
-	.byte	'Get_IMU',0,25,178,2,6,1,1,1,1,31
-	.byte	'Safety_Check',0,25,189,2,6,1,1,1,1,32
+	.byte	'Get_Light',0,24,78,6,1,1,1,1,31
+	.byte	'Get_Speed',0,25,154,2,6,1,1,1,1,31
+	.byte	'Get_IMU',0,25,156,2,6,1,1,1,1,31
+	.byte	'Safety_Check',0,25,166,2,6,1,1,1,1,32
 	.byte	'__wchar_t',0,26,1,1
 	.word	32458
 	.byte	32
@@ -20939,146 +20923,171 @@ _999001_angle_tick:	.type	object
 	.byte	38
 	.byte	'Gyro_Z',0,24,59,14
 	.word	219
-	.byte	1,1,17,25,137,1,9,1,18
-	.byte	'BUILD_ACTION_NONE',0,0,18
-	.byte	'BUILD_ACTION_NODE_STRAIGHT',0,1,18
-	.byte	'BUILD_ACTION_NODE_TURN_LEFT',0,2,18
-	.byte	'BUILD_ACTION_NODE_TURN_RIGHT',0,3,18
-	.byte	'BUILD_ACTION_ELEM_STRAIGHT_SHORT',0,4,18
-	.byte	'BUILD_ACTION_ELEM_STRAIGHT_LONG',0,5,18
-	.byte	'BUILD_ACTION_ELEM_TURN_LEFT',0,6,18
-	.byte	'BUILD_ACTION_ELEM_TURN_RIGHT',0,7,0,32
-	.byte	'Build_Action_Enum',0,25,147,1,3
-	.word	144365
-	.byte	17,25,157,1,9,1,18
+	.byte	1,1,17,25,144,1,9,1,18
 	.byte	'Debug_Sub_PI_Tuning',0,0,18
 	.byte	'Debug_Sub_Ground_Test',0,1,18
 	.byte	'Debug_Sub_Angle',0,2,18
 	.byte	'Debug_Sub_NormalTrace',0,3,0,32
-	.byte	'Debug_Sub_Mode_Enum',0,25,163,1,3
-	.word	144639
+	.byte	'Debug_Sub_Mode_Enum',0,25,150,1,3
+	.word	144365
+	.byte	20,25,159,1,9,48,13
+	.byte	'Left',0
+	.word	219
+	.byte	4,2,35,0,13
+	.byte	'Right',0
+	.word	219
+	.byte	4,2,35,4,13
+	.byte	'Stop',0
+	.word	439
+	.byte	4,2,35,8,13
+	.byte	'Mileage',0
+	.word	219
+	.byte	4,2,35,12,13
+	.byte	'Spd_Mileage',0
+	.word	219
+	.byte	4,2,35,16,13
+	.byte	'Straight',0
+	.word	219
+	.byte	4,2,35,20,13
+	.byte	'Stall',0
+	.word	219
+	.byte	4,2,35,24,13
+	.byte	'Edge',0
+	.word	439
+	.byte	4,2,35,28,13
+	.byte	'Line',0
+	.word	439
+	.byte	4,2,35,32,13
+	.byte	'Element',0
+	.word	439
+	.byte	4,2,35,36,13
+	.byte	'Finish',0
+	.word	439
+	.byte	4,2,35,40,13
+	.byte	'StartDelay',0
+	.word	439
+	.byte	4,2,35,44,0,32
+	.byte	'Count_Typedef',0,25,173,1,3
+	.word	144489
 	.byte	38
-	.byte	'Left_Exp_Spd',0,25,198,1,12
+	.byte	'Left_Exp_Spd',0,25,184,1,12
 	.word	439
 	.byte	1,1,38
-	.byte	'Right_Exp_Spd',0,25,199,1,12
+	.byte	'Right_Exp_Spd',0,25,185,1,12
 	.word	439
 	.byte	1,1,38
-	.byte	'Middle',0,25,200,1,12
+	.byte	'Middle',0,25,186,1,12
 	.word	439
 	.byte	1,1,38
-	.byte	'Left_Real_Spd',0,25,202,1,12
+	.byte	'Left_Real_Spd',0,25,188,1,12
 	.word	439
 	.byte	1,1,38
-	.byte	'Right_Real_Spd',0,25,203,1,12
+	.byte	'Right_Real_Spd',0,25,189,1,12
 	.word	439
 	.byte	1,1,38
-	.byte	'Error',0,25,209,1,12
+	.byte	'Error',0,25,195,1,12
 	.word	439
 	.byte	1,1,15,60
 	.word	439
 	.byte	16,14,0,38
-	.byte	'Track_Arr',0,25,210,1,14
-	.word	144898
+	.byte	'Track_Arr',0,25,196,1,14
+	.word	144849
 	.byte	1,1,15,30
 	.word	32458
 	.byte	16,14,0,38
-	.byte	'Dir_Arr',0,25,211,1,16
-	.word	144928
+	.byte	'Dir_Arr',0,25,197,1,16
+	.word	144879
 	.byte	1,1,38
-	.byte	'Left_Scan_Point',0,25,212,1,14
+	.byte	'Left_Scan_Point',0,25,198,1,14
 	.word	439
 	.byte	1,1,38
-	.byte	'Right_Scan_Point',0,25,213,1,14
+	.byte	'Right_Scan_Point',0,25,199,1,14
 	.word	439
 	.byte	1,1,38
-	.byte	'Last_Error',0,25,214,1,14
+	.byte	'Last_Error',0,25,200,1,14
 	.word	439
 	.byte	1,1,38
-	.byte	'Turn_PID_Out',0,25,221,1,14
+	.byte	'Turn_PID_Out',0,25,207,1,14
 	.word	219
 	.byte	1,1,38
-	.byte	'Gyro_PID_Out',0,25,222,1,14
+	.byte	'Gyro_PID_Out',0,25,208,1,14
 	.word	219
 	.byte	1,1,38
-	.byte	'Left_PID_Out',0,25,223,1,14
+	.byte	'Left_PID_Out',0,25,209,1,14
 	.word	219
 	.byte	1,1,38
-	.byte	'Right_PID_Out',0,25,224,1,14
+	.byte	'Right_PID_Out',0,25,210,1,14
 	.word	219
 	.byte	1,1,38
-	.byte	'Stop_Flag',0,25,227,1,13
+	.byte	'Stop_Flag',0,25,213,1,13
 	.word	439
 	.byte	1,1,38
-	.byte	'Track_Num',0,25,230,1,13
+	.byte	'Track_Num',0,25,215,1,13
 	.word	439
 	.byte	1,1,38
-	.byte	'Gyro_Integral',0,25,243,1,14
+	.byte	'Gyro_Integral',0,25,222,1,14
 	.word	219
 	.byte	1,1,38
-	.byte	'Gyro_PID',0,25,145,2,26
+	.byte	'Count',0,25,234,1,22
+	.word	144489
+	.byte	1,1,38
+	.byte	'Gyro_PID',0,25,251,1,26
 	.word	39137
 	.byte	1,1,38
-	.byte	'Left_PID',0,25,146,2,26
+	.byte	'Left_PID',0,25,252,1,26
 	.word	39137
 	.byte	1,1,38
-	.byte	'Right_PID',0,25,147,2,26
+	.byte	'Right_PID',0,25,253,1,26
 	.word	39137
 	.byte	1,1,38
-	.byte	'Turn_PID',0,25,148,2,26
+	.byte	'Turn_PID',0,25,254,1,26
 	.word	39137
 	.byte	1,1,38
-	.byte	'Angle_PID',0,25,149,2,26
+	.byte	'Angle_PID',0,25,255,1,26
 	.word	39137
 	.byte	1,1,38
-	.byte	'Gyro_PD_PID',0,25,150,2,26
+	.byte	'Gyro_PD_PID',0,25,128,2,26
 	.word	39137
 	.byte	1,1,38
-	.byte	'Debug_Sub_Mode',0,25,153,2,28
-	.word	144639
+	.byte	'Debug_Sub_Mode',0,25,131,2,28
+	.word	144365
 	.byte	1,1,38
-	.byte	'Debug_Motor_Enable',0,25,154,2,15
+	.byte	'Debug_Motor_Enable',0,25,132,2,15
 	.word	598
 	.byte	1,1,38
-	.byte	'Debug_Which_Wheel',0,25,155,2,15
+	.byte	'Debug_Which_Wheel',0,25,133,2,15
 	.word	598
 	.byte	1,1,38
-	.byte	'Debug_Target_Speed',0,25,156,2,15
+	.byte	'Debug_Target_Speed',0,25,134,2,15
 	.word	439
 	.byte	1,1,38
-	.byte	'Debug_Fan_Duty',0,25,157,2,15
+	.byte	'Debug_Fan_Duty',0,25,135,2,15
 	.word	439
 	.byte	1,1,38
-	.byte	'Debug_Ground_Dir',0,25,158,2,15
+	.byte	'Debug_Ground_Dir',0,25,136,2,15
 	.word	598
 	.byte	1,1,38
-	.byte	'Debug_Angle_Mode',0,25,159,2,15
+	.byte	'Debug_Angle_Mode',0,25,137,2,15
 	.word	598
 	.byte	1,1,38
-	.byte	'Debug_Angle_D_First',0,25,160,2,15
+	.byte	'Debug_Angle_D_First',0,25,138,2,15
 	.word	598
 	.byte	1,1,38
-	.byte	'Debug_Angle_Vel_Target',0,25,161,2,15
+	.byte	'Debug_Angle_Vel_Target',0,25,139,2,15
 	.word	219
 	.byte	1,1,38
-	.byte	'g_led_flag',0,25,162,2,16
+	.byte	'g_led_flag',0,25,140,2,16
 	.word	598
 	.byte	1,1,38
-	.byte	'Debug_Angle_Vel_Real',0,25,164,2,15
+	.byte	'Debug_Angle_Vel_Real',0,25,142,2,15
 	.word	219
 	.byte	1,1,38
-	.byte	'Speed_Get_Count',0,26,23,17
-	.word	439
-	.byte	1,1,38
-	.byte	'Enable_Start_Delay_Count',0,26,24,17
-	.word	439
-	.byte	1,1,38
-	.byte	'Last_EnableSwitch_ON',0,26,25,17
+	.byte	'Last_EnableSwitch_ON',0,26,24,17
 	.word	598
 	.byte	1,1,0
 	.sdecl	'.debug_abbrev',debug
 	.sect	'.debug_abbrev'
-.L70:
+.L69:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,16,6,0,0,2,21,0,54,15,39,12,0,0,3,15,0,73,19,0,0,4,46,1,3,8,32,13
 	.byte	58,15,59,15,57,15,54,15,39,12,0,0,5,5,0,3,8,58,15,59,15,57,15,73,19,0,0,6,11,0,0,0,7,36,0,3,8,11,15,62
 	.byte	15,0,0,8,46,1,3,8,32,13,58,15,59,15,57,15,73,19,54,15,39,12,0,0,9,59,0,3,8,0,0,10,19,1,3,8,58,15,59,15
@@ -21093,12 +21102,12 @@ _999001_angle_tick:	.type	object
 	.byte	58,15,59,15,57,15,73,19,63,12,60,12,0,0,0
 	.sdecl	'.debug_line',debug
 	.sect	'.debug_line'
-.L71:
-	.word	.L123-.L122
-.L122:
+.L70:
+	.word	.L122-.L121
+.L121:
 	.half	3
-	.word	.L125-.L124
-.L124:
+	.word	.L124-.L123
+.L123:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1
 	.byte	'D:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B\\\\_Reg',0
 	.byte	'D:\\AURIX-Studio-1.10.2\\AURIX-Studio-1.10.2\\tools\\Compilers\\Tasking_1.1r8\\ctc\\include\\',0
@@ -21185,438 +21194,440 @@ _999001_angle_tick:	.type	object
 	.byte	'zf_device_wifi_uart.h',0,8,0,0
 	.byte	'zf_device_wifi_spi.h',0,8,0,0
 	.byte	'seekfree_assistant.h',0,9,0,0,0
-.L125:
-.L123:
+.L124:
+.L122:
 	.sdecl	'.debug_info',debug,cluster('Debug_Wheel_Tuning')
 	.sect	'.debug_info'
-.L72:
+.L71:
 	.word	223
 	.half	3
-	.word	.L73
+	.word	.L72
 	.byte	4,1
 	.byte	'../code/Debug_Car.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'D:\\workspace\\2026_Crazy_Circuit_V4.0\\Debug\\',0,12,1
-	.word	.L75,.L74
+	.word	.L74,.L73
 	.byte	2
-	.word	.L68
+	.word	.L67
 	.byte	3
-	.byte	'Debug_Wheel_Tuning',0,1,81,6,1,1,1
-	.word	.L59,.L102,.L58
+	.byte	'Debug_Wheel_Tuning',0,1,76,6,1,1,1
+	.word	.L58,.L101,.L57
 	.byte	4
-	.word	.L59,.L102
+	.word	.L58,.L101
 	.byte	5
-	.word	.L19,.L20
+	.word	.L18,.L19
 	.byte	0,0,0
 	.sdecl	'.debug_abbrev',debug,cluster('Debug_Wheel_Tuning')
 	.sect	'.debug_abbrev'
-.L73:
+.L72:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
 	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,11,1,17,1,18,1,0,0,5,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('Debug_Wheel_Tuning')
 	.sect	'.debug_line'
-.L74:
-	.word	.L127-.L126
-.L126:
+.L73:
+	.word	.L126-.L125
+.L125:
 	.half	3
-	.word	.L129-.L128
-.L128:
+	.word	.L128-.L127
+.L127:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/Debug_Car.c',0,0,0,0,0
-.L129:
+.L128:
 	.byte	5,9,7,0,5,2
-	.word	.L59
-	.byte	3,210,0,1,5,5,9
-	.half	.L130-.L59
+	.word	.L58
+	.byte	3,205,0,1,5,5,9
+	.half	.L129-.L58
 	.byte	1,5,9,7,9
-	.half	.L131-.L130
+	.half	.L130-.L129
 	.byte	3,3,1,5,25,9
+	.half	.L131-.L130
+	.byte	1,5,23,9
 	.half	.L132-.L131
-	.byte	1,5,23,9
-	.half	.L133-.L132
 	.byte	1,5,9,9
-	.half	.L134-.L133
+	.half	.L133-.L132
 	.byte	3,1,1,5,25,9
-	.half	.L135-.L134
+	.half	.L134-.L133
 	.byte	1,5,23,9
-	.half	.L136-.L135
+	.half	.L135-.L134
 	.byte	1,5,24,9
-	.half	.L137-.L136
+	.half	.L136-.L135
 	.byte	3,1,1,9
-	.half	.L138-.L137
+	.half	.L137-.L136
 	.byte	3,1,1,5,26,9
-	.half	.L139-.L138
+	.half	.L138-.L137
 	.byte	3,125,1,5,13,9
-	.half	.L19-.L139
+	.half	.L18-.L138
 	.byte	3,9,1,5,9,9
-	.half	.L140-.L19
+	.half	.L139-.L18
 	.byte	1,5,13,7,9
-	.half	.L141-.L140
+	.half	.L140-.L139
 	.byte	3,2,1,5,28,9
-	.half	.L142-.L141
+	.half	.L141-.L140
 	.byte	1,5,26,9
+	.half	.L142-.L141
+	.byte	1,5,13,9
 	.half	.L143-.L142
-	.byte	1,5,13,9
+	.byte	3,1,1,5,29,9
 	.half	.L144-.L143
-	.byte	3,1,1,5,29,9
+	.byte	1,5,27,9
 	.half	.L145-.L144
-	.byte	1,5,27,9
+	.byte	1,5,13,9
 	.half	.L146-.L145
-	.byte	1,5,13,9
+	.byte	3,2,1,5,39,9
 	.half	.L147-.L146
-	.byte	3,2,1,5,39,9
-	.half	.L148-.L147
 	.byte	1,5,56,9
-	.half	.L149-.L148
+	.half	.L148-.L147
 	.byte	1,5,49,9
-	.half	.L150-.L149
+	.half	.L149-.L148
 	.byte	1,5,77,9
-	.half	.L151-.L150
+	.half	.L150-.L149
 	.byte	1,5,70,9
+	.half	.L151-.L150
+	.byte	1,5,27,9
 	.half	.L152-.L151
-	.byte	1,5,27,9
+	.byte	1,5,13,9
 	.half	.L153-.L152
-	.byte	1,5,13,9
+	.byte	3,1,1,5,29,9
 	.half	.L154-.L153
-	.byte	3,1,1,5,29,9
+	.byte	1,5,27,9
 	.half	.L155-.L154
-	.byte	1,5,27,9
+	.byte	1,5,28,9
 	.half	.L156-.L155
-	.byte	1,5,28,9
-	.half	.L157-.L156
 	.byte	3,1,1,5,46,9
-	.half	.L158-.L157
+	.half	.L157-.L156
 	.byte	3,123,1,5,13,9
-	.half	.L21-.L158
+	.half	.L20-.L157
 	.byte	3,9,1,5,29,9
-	.half	.L159-.L21
+	.half	.L158-.L20
 	.byte	1,5,27,9
+	.half	.L159-.L158
+	.byte	1,5,13,9
 	.half	.L160-.L159
-	.byte	1,5,13,9
+	.byte	3,1,1,5,29,9
 	.half	.L161-.L160
-	.byte	3,1,1,5,29,9
+	.byte	1,5,27,9
 	.half	.L162-.L161
-	.byte	1,5,27,9
+	.byte	1,5,13,9
 	.half	.L163-.L162
-	.byte	1,5,13,9
-	.half	.L164-.L163
 	.byte	3,2,1,5,39,9
-	.half	.L165-.L164
+	.half	.L164-.L163
 	.byte	1,5,57,9
-	.half	.L166-.L165
+	.half	.L165-.L164
 	.byte	1,5,50,9
-	.half	.L167-.L166
+	.half	.L166-.L165
 	.byte	1,5,79,9
-	.half	.L168-.L167
+	.half	.L167-.L166
 	.byte	1,5,72,9
+	.half	.L168-.L167
+	.byte	1,5,27,9
 	.half	.L169-.L168
-	.byte	1,5,27,9
-	.half	.L170-.L169
 	.byte	1,5,13,9
-	.half	.L171-.L170
+	.half	.L170-.L169
 	.byte	3,1,1,5,29,9
-	.half	.L172-.L171
+	.half	.L171-.L170
 	.byte	1,5,27,9
-	.half	.L173-.L172
+	.half	.L172-.L171
 	.byte	1,5,28,9
-	.half	.L174-.L173
+	.half	.L173-.L172
 	.byte	3,1,1,5,18,9
-	.half	.L20-.L174
+	.half	.L19-.L173
 	.byte	3,4,1,9
-	.half	.L175-.L20
+	.half	.L174-.L19
 	.byte	3,1,1,5,37,9
-	.half	.L176-.L175
+	.half	.L175-.L174
 	.byte	1,5,18,9
-	.half	.L177-.L176
+	.half	.L176-.L175
 	.byte	3,1,1,5,37,9
-	.half	.L178-.L177
+	.half	.L177-.L176
 	.byte	1,5,1,9
-	.half	.L179-.L178
+	.half	.L178-.L177
 	.byte	3,1,1,7,9
-	.half	.L76-.L179
+	.half	.L75-.L178
 	.byte	0,1,1
-.L127:
+.L126:
 	.sdecl	'.debug_ranges',debug,cluster('Debug_Wheel_Tuning')
 	.sect	'.debug_ranges'
-.L75:
-	.word	-1,.L59,0,.L76-.L59,0,0
+.L74:
+	.word	-1,.L58,0,.L75-.L58,0,0
 	.sdecl	'.debug_info',debug,cluster('Debug_Ground_Test')
 	.sect	'.debug_info'
-.L77:
+.L76:
 	.word	212
 	.half	3
-	.word	.L78
+	.word	.L77
 	.byte	4,1
 	.byte	'../code/Debug_Car.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'D:\\workspace\\2026_Crazy_Circuit_V4.0\\Debug\\',0,12,1
-	.word	.L80,.L79
+	.word	.L79,.L78
 	.byte	2
-	.word	.L68
+	.word	.L67
 	.byte	3
-	.byte	'Debug_Ground_Test',0,1,122,6,1,1,1
-	.word	.L61,.L103,.L60
+	.byte	'Debug_Ground_Test',0,1,117,6,1,1,1
+	.word	.L60,.L102,.L59
 	.byte	4
-	.word	.L61,.L103
+	.word	.L60,.L102
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('Debug_Ground_Test')
 	.sect	'.debug_abbrev'
-.L78:
+.L77:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
 	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('Debug_Ground_Test')
 	.sect	'.debug_line'
-.L79:
-	.word	.L181-.L180
-.L180:
+.L78:
+	.word	.L180-.L179
+.L179:
 	.half	3
-	.word	.L183-.L182
-.L182:
+	.word	.L182-.L181
+.L181:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/Debug_Car.c',0,0,0,0,0
-.L183:
+.L182:
 	.byte	5,9,7,0,5,2
-	.word	.L61
-	.byte	3,251,0,1,5,36,9
-	.half	.L184-.L61
+	.word	.L60
+	.byte	3,246,0,1,5,36,9
+	.half	.L183-.L60
 	.byte	1,5,52,9
-	.half	.L185-.L184
+	.half	.L184-.L183
 	.byte	1,5,12,7,9
-	.half	.L186-.L185
+	.half	.L185-.L184
 	.byte	3,3,1,5,9,9
+	.half	.L186-.L185
+	.byte	1,5,13,7,9
 	.half	.L187-.L186
-	.byte	1,5,13,7,9
-	.half	.L188-.L187
 	.byte	3,2,1,5,29,9
+	.half	.L188-.L187
+	.byte	1,5,27,9
 	.half	.L189-.L188
-	.byte	1,5,27,9
+	.byte	1,5,13,9
 	.half	.L190-.L189
-	.byte	1,5,13,9
-	.half	.L191-.L190
 	.byte	3,1,1,5,30,9
+	.half	.L191-.L190
+	.byte	1,5,29,9
 	.half	.L192-.L191
-	.byte	1,5,29,9
+	.byte	1,5,27,9
 	.half	.L193-.L192
-	.byte	1,5,27,9
-	.half	.L194-.L193
 	.byte	1,5,47,9
-	.half	.L195-.L194
+	.half	.L194-.L193
 	.byte	3,127,1,5,17,9
-	.half	.L25-.L195
+	.half	.L24-.L194
 	.byte	3,3,1,5,14,9
-	.half	.L196-.L25
+	.half	.L195-.L24
 	.byte	1,5,13,7,9
-	.half	.L197-.L196
+	.half	.L196-.L195
 	.byte	3,2,1,5,30,9
-	.half	.L198-.L197
+	.half	.L197-.L196
 	.byte	1,5,29,9
+	.half	.L198-.L197
+	.byte	1,5,27,9
 	.half	.L199-.L198
-	.byte	1,5,27,9
-	.half	.L200-.L199
 	.byte	1,5,13,9
-	.half	.L201-.L200
+	.half	.L200-.L199
 	.byte	3,1,1,5,29,9
-	.half	.L202-.L201
+	.half	.L201-.L200
 	.byte	1,5,27,9
-	.half	.L203-.L202
+	.half	.L202-.L201
 	.byte	1,5,9,9
-	.half	.L26-.L203
+	.half	.L25-.L202
 	.byte	3,3,1,5,35,9
-	.half	.L204-.L26
+	.half	.L203-.L25
 	.byte	1,5,52,9
-	.half	.L205-.L204
+	.half	.L204-.L203
 	.byte	1,5,45,9
-	.half	.L206-.L205
+	.half	.L205-.L204
 	.byte	1,5,73,9
-	.half	.L207-.L206
+	.half	.L206-.L205
 	.byte	1,5,66,9
+	.half	.L207-.L206
+	.byte	1,5,23,9
 	.half	.L208-.L207
-	.byte	1,5,23,9
+	.byte	1,5,9,9
 	.half	.L209-.L208
-	.byte	1,5,9,9
-	.half	.L210-.L209
 	.byte	3,1,1,5,35,9
-	.half	.L211-.L210
+	.half	.L210-.L209
 	.byte	1,5,53,9
-	.half	.L212-.L211
+	.half	.L211-.L210
 	.byte	1,5,46,9
-	.half	.L213-.L212
+	.half	.L212-.L211
 	.byte	1,5,75,9
-	.half	.L214-.L213
+	.half	.L213-.L212
 	.byte	1,5,68,9
+	.half	.L214-.L213
+	.byte	1,5,23,9
 	.half	.L215-.L214
-	.byte	1,5,23,9
-	.half	.L216-.L215
 	.byte	1,5,87,9
-	.half	.L217-.L216
+	.half	.L216-.L215
 	.byte	3,127,1,5,9,9
-	.half	.L23-.L217
+	.half	.L22-.L216
 	.byte	3,5,1,5,25,9
-	.half	.L218-.L23
+	.half	.L217-.L22
 	.byte	1,5,23,9
+	.half	.L218-.L217
+	.byte	1,5,9,9
 	.half	.L219-.L218
-	.byte	1,5,9,9
+	.byte	3,1,1,5,25,9
 	.half	.L220-.L219
-	.byte	3,1,1,5,25,9
+	.byte	1,5,23,9
 	.half	.L221-.L220
-	.byte	1,5,23,9
+	.byte	1,5,9,9
 	.half	.L222-.L221
-	.byte	1,5,9,9
+	.byte	3,1,1,5,25,9
 	.half	.L223-.L222
-	.byte	3,1,1,5,25,9
+	.byte	1,5,23,9
 	.half	.L224-.L223
-	.byte	1,5,23,9
-	.half	.L225-.L224
 	.byte	1,5,9,9
-	.half	.L226-.L225
+	.half	.L225-.L224
 	.byte	3,1,1,5,25,9
-	.half	.L227-.L226
+	.half	.L226-.L225
 	.byte	1,5,23,9
-	.half	.L228-.L227
+	.half	.L227-.L226
 	.byte	1,5,24,9
-	.half	.L229-.L228
+	.half	.L228-.L227
 	.byte	3,1,1,9
-	.half	.L230-.L229
+	.half	.L229-.L228
 	.byte	3,1,1,5,18,9
-	.half	.L28-.L230
+	.half	.L27-.L229
 	.byte	3,2,1,5,1,9
-	.half	.L231-.L28
+	.half	.L230-.L27
 	.byte	3,1,1,7,9
-	.half	.L81-.L231
+	.half	.L80-.L230
 	.byte	0,1,1
-.L181:
+.L180:
 	.sdecl	'.debug_ranges',debug,cluster('Debug_Ground_Test')
 	.sect	'.debug_ranges'
-.L80:
-	.word	-1,.L61,0,.L81-.L61,0,0
+.L79:
+	.word	-1,.L60,0,.L80-.L60,0,0
 	.sdecl	'.debug_info',debug,cluster('Debug_Angle_Tuning')
 	.sect	'.debug_info'
-.L82:
+.L81:
 	.word	345
 	.half	3
-	.word	.L83
+	.word	.L82
 	.byte	4,1
 	.byte	'../code/Debug_Car.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'D:\\workspace\\2026_Crazy_Circuit_V4.0\\Debug\\',0,12,1
-	.word	.L85,.L84
+	.word	.L84,.L83
 	.byte	2
-	.word	.L68
+	.word	.L67
 	.byte	3
-	.byte	'Debug_Angle_Tuning',0,1,155,1,6,1,1,1
-	.word	.L63,.L104,.L62
+	.byte	'Debug_Angle_Tuning',0,1,150,1,6,1,1,1
+	.word	.L62,.L103,.L61
 	.byte	4
-	.word	.L63,.L104
+	.word	.L62,.L103
 	.byte	5
-	.byte	'angle_tick',0,1,157,1,19
-	.word	.L105
+	.byte	'angle_tick',0,1,152,1,19
+	.word	.L104
 	.byte	5,3
 	.word	_999001_angle_tick
 	.byte	6
-	.byte	'angle_target',0,1,158,1,11
-	.word	.L106,.L107
+	.byte	'angle_target',0,1,153,1,11
+	.word	.L105,.L106
 	.byte	6
-	.byte	'gyro_target',0,1,159,1,11
-	.word	.L106,.L108
+	.byte	'gyro_target',0,1,154,1,11
+	.word	.L105,.L107
 	.byte	4
-	.word	.L109,.L110
+	.word	.L108,.L109
 	.byte	6
-	.byte	'step_index',0,1,186,1,16
-	.word	.L105,.L111
+	.byte	'step_index',0,1,181,1,16
+	.word	.L104,.L110
 	.byte	6
-	.byte	'phase',0,1,187,1,16
-	.word	.L105,.L112
+	.byte	'phase',0,1,182,1,16
+	.word	.L104,.L111
 	.byte	0,0,0,0
 	.sdecl	'.debug_abbrev',debug,cluster('Debug_Angle_Tuning')
 	.sect	'.debug_abbrev'
-.L83:
+.L82:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
 	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,11,1,17,1,18,1,0,0,5,52,0,3,8,58,15,59,15,57,15,73,16,2,9,0,0,6,52,0
 	.byte	3,8,58,15,59,15,57,15,73,16,2,6,0,0,0
 	.sdecl	'.debug_line',debug,cluster('Debug_Angle_Tuning')
 	.sect	'.debug_line'
-.L84:
-	.word	.L233-.L232
-.L232:
+.L83:
+	.word	.L232-.L231
+.L231:
 	.half	3
-	.word	.L235-.L234
-.L234:
+	.word	.L234-.L233
+.L233:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/Debug_Car.c',0,0,0,0,0
-.L235:
+.L234:
 	.byte	5,9,7,0,5,2
-	.word	.L63
-	.byte	3,160,1,1,5,36,9
-	.half	.L236-.L63
+	.word	.L62
+	.byte	3,155,1,1,5,36,9
+	.half	.L235-.L62
 	.byte	1,5,52,9
-	.half	.L237-.L236
+	.half	.L236-.L235
 	.byte	1,5,9,7,9
-	.half	.L29-.L237
+	.half	.L28-.L236
 	.byte	3,2,1,5,22,9
-	.half	.L238-.L29
+	.half	.L237-.L28
 	.byte	1,5,20,9
+	.half	.L238-.L237
+	.byte	1,5,9,9
 	.half	.L239-.L238
-	.byte	1,5,9,9
+	.byte	3,1,1,5,25,9
 	.half	.L240-.L239
-	.byte	3,1,1,5,25,9
+	.byte	1,5,23,9
 	.half	.L241-.L240
-	.byte	1,5,23,9
+	.byte	1,5,9,9
 	.half	.L242-.L241
-	.byte	1,5,9,9
+	.byte	3,1,1,5,24,9
 	.half	.L243-.L242
-	.byte	3,1,1,5,24,9
+	.byte	1,5,22,9
 	.half	.L244-.L243
-	.byte	1,5,22,9
+	.byte	1,5,9,9
 	.half	.L245-.L244
-	.byte	1,5,9,9
+	.byte	3,1,1,5,24,9
 	.half	.L246-.L245
-	.byte	3,1,1,5,24,9
+	.byte	1,5,22,9
 	.half	.L247-.L246
-	.byte	1,5,22,9
+	.byte	1,5,9,9
 	.half	.L248-.L247
-	.byte	1,5,9,9
-	.half	.L249-.L248
 	.byte	3,1,1,5,34,9
-	.half	.L250-.L249
+	.half	.L249-.L248
 	.byte	1,5,32,9
+	.half	.L250-.L249
+	.byte	1,5,9,9
 	.half	.L251-.L250
-	.byte	1,5,9,9
-	.half	.L252-.L251
 	.byte	3,1,1,5,32,9
-	.half	.L253-.L252
+	.half	.L252-.L251
 	.byte	1,5,30,9
+	.half	.L253-.L252
+	.byte	1,5,9,9
 	.half	.L254-.L253
-	.byte	1,5,9,9
+	.byte	3,1,1,5,24,9
 	.half	.L255-.L254
-	.byte	3,1,1,5,24,9
+	.byte	1,5,22,9
 	.half	.L256-.L255
-	.byte	1,5,22,9
+	.byte	1,5,9,9
 	.half	.L257-.L256
-	.byte	1,5,9,9
+	.byte	3,1,1,5,25,9
 	.half	.L258-.L257
-	.byte	3,1,1,5,25,9
+	.byte	1,5,23,9
 	.half	.L259-.L258
-	.byte	1,5,23,9
+	.byte	1,5,9,9
 	.half	.L260-.L259
-	.byte	1,5,9,9
-	.half	.L261-.L260
 	.byte	3,1,1,5,24,9
-	.half	.L262-.L261
+	.half	.L261-.L260
 	.byte	1,5,22,9
+	.half	.L262-.L261
+	.byte	1,5,9,9
 	.half	.L263-.L262
-	.byte	1,5,9,9
-	.half	.L264-.L263
 	.byte	3,1,1,5,25,9
-	.half	.L265-.L264
+	.half	.L264-.L263
 	.byte	1,5,23,9
-	.half	.L266-.L265
+	.half	.L265-.L264
 	.byte	1,5,9,9
-	.half	.L267-.L266
+	.half	.L266-.L265
 	.byte	3,1,1,5,31,9
-	.half	.L268-.L267
+	.half	.L267-.L266
 	.byte	1,5,29,9
-	.half	.L269-.L268
+	.half	.L268-.L267
 	.byte	1,5,24,9
+	.half	.L269-.L268
+	.byte	3,1,1,9
 	.half	.L270-.L269
 	.byte	3,1,1,9
 	.half	.L271-.L270
@@ -21624,292 +21635,292 @@ _999001_angle_tick:	.type	object
 	.half	.L272-.L271
 	.byte	3,1,1,9
 	.half	.L273-.L272
-	.byte	3,1,1,9
-	.half	.L274-.L273
 	.byte	3,1,1,5,22,9
-	.half	.L275-.L274
+	.half	.L274-.L273
 	.byte	3,1,1,5,9,9
-	.half	.L276-.L275
+	.half	.L275-.L274
 	.byte	3,1,1,9
-	.half	.L30-.L276
+	.half	.L29-.L275
 	.byte	3,3,1,5,5,9
-	.half	.L277-.L30
+	.half	.L276-.L29
 	.byte	1,5,29,7,9
-	.half	.L109-.L277
+	.half	.L108-.L276
 	.byte	3,3,1,5,42,9
-	.half	.L278-.L109
+	.half	.L277-.L108
 	.byte	1,5,40,9
-	.half	.L279-.L278
+	.half	.L278-.L277
 	.byte	1,5,37,9
-	.half	.L116-.L279
+	.half	.L115-.L278
 	.byte	3,1,1,5,35,9
-	.half	.L280-.L116
+	.half	.L279-.L115
 	.byte	1,5,9,9
-	.half	.L117-.L280
+	.half	.L116-.L279
 	.byte	3,1,1,5,28,7,9
-	.half	.L281-.L117
+	.half	.L280-.L116
 	.byte	3,2,1,5,43,9
+	.half	.L281-.L280
+	.byte	1,5,41,9
 	.half	.L282-.L281
-	.byte	1,5,41,9
-	.half	.L283-.L282
 	.byte	1,5,48,9
-	.half	.L119-.L283
+	.half	.L118-.L282
 	.byte	1,5,39,9
-	.half	.L33-.L119
+	.half	.L32-.L118
 	.byte	3,4,1,5,28,9
-	.half	.L284-.L33
+	.half	.L283-.L32
 	.byte	1,5,50,9
-	.half	.L285-.L284
+	.half	.L284-.L283
 	.byte	1,5,48,9
-	.half	.L286-.L285
+	.half	.L285-.L284
 	.byte	1,5,9,9
-	.half	.L34-.L286
+	.half	.L33-.L285
 	.byte	3,3,1,5,31,9
-	.half	.L287-.L34
+	.half	.L286-.L33
 	.byte	1,5,29,9
+	.half	.L287-.L286
+	.byte	1,5,9,9
 	.half	.L288-.L287
-	.byte	1,5,9,9
-	.half	.L289-.L288
 	.byte	3,1,1,5,34,9
+	.half	.L289-.L288
+	.byte	1,5,59,9
 	.half	.L290-.L289
-	.byte	1,5,59,9
-	.half	.L291-.L290
 	.byte	1,5,22,9
-	.half	.L118-.L291
+	.half	.L117-.L290
 	.byte	1,5,23,9
-	.half	.L292-.L118
+	.half	.L291-.L117
 	.byte	3,1,1,5,32,9
-	.half	.L110-.L292
+	.half	.L109-.L291
 	.byte	3,126,1,5,14,9
-	.half	.L32-.L110
+	.half	.L31-.L109
 	.byte	3,4,1,5,10,9
-	.half	.L293-.L32
+	.half	.L292-.L31
 	.byte	1,5,9,7,9
-	.half	.L294-.L293
+	.half	.L293-.L292
 	.byte	3,6,1,5,24,9
+	.half	.L294-.L293
+	.byte	1,5,22,9
 	.half	.L295-.L294
-	.byte	1,5,22,9
+	.byte	1,5,9,9
 	.half	.L296-.L295
-	.byte	1,5,9,9
+	.byte	3,1,1,5,31,9
 	.half	.L297-.L296
-	.byte	3,1,1,5,31,9
+	.byte	1,5,29,9
 	.half	.L298-.L297
-	.byte	1,5,29,9
+	.byte	1,5,23,9
 	.half	.L299-.L298
-	.byte	1,5,23,9
-	.half	.L300-.L299
 	.byte	3,1,1,5,25,9
-	.half	.L120-.L300
+	.half	.L119-.L299
 	.byte	3,125,1,5,9,9
-	.half	.L36-.L120
+	.half	.L35-.L119
 	.byte	3,9,1,5,24,9
-	.half	.L301-.L36
+	.half	.L300-.L35
 	.byte	1,5,22,9
-	.half	.L302-.L301
+	.half	.L301-.L300
 	.byte	1,5,9,9
+	.half	.L302-.L301
+	.byte	3,1,1,5,31,9
 	.half	.L303-.L302
-	.byte	3,1,1,5,31,9
-	.half	.L304-.L303
 	.byte	1,5,29,9
-	.half	.L305-.L304
+	.half	.L304-.L303
 	.byte	1,5,59,9
-	.half	.L306-.L305
+	.half	.L305-.L304
 	.byte	3,1,1,5,72,9
-	.half	.L307-.L306
+	.half	.L306-.L305
 	.byte	1,5,70,9
-	.half	.L308-.L307
+	.half	.L307-.L306
 	.byte	1,5,51,9
-	.half	.L309-.L308
+	.half	.L308-.L307
 	.byte	1,5,38,9
+	.half	.L309-.L308
+	.byte	1,5,49,9
 	.half	.L310-.L309
-	.byte	1,5,49,9
-	.half	.L311-.L310
 	.byte	1,5,80,9
-	.half	.L312-.L311
+	.half	.L311-.L310
 	.byte	1,5,78,9
-	.half	.L313-.L312
+	.half	.L312-.L311
 	.byte	1,5,23,9
-	.half	.L314-.L313
+	.half	.L313-.L312
 	.byte	1,5,31,9
-	.half	.L315-.L314
+	.half	.L314-.L313
 	.byte	1,5,5,9
-	.half	.L35-.L315
+	.half	.L34-.L314
 	.byte	3,3,1,5,28,9
-	.half	.L316-.L35
+	.half	.L315-.L34
 	.byte	1,5,5,9
-	.half	.L317-.L316
+	.half	.L316-.L315
 	.byte	3,1,1,5,28,9
-	.half	.L318-.L317
+	.half	.L317-.L316
 	.byte	1,5,26,9
+	.half	.L318-.L317
+	.byte	1,5,5,9
 	.half	.L319-.L318
-	.byte	1,5,5,9
-	.half	.L320-.L319
 	.byte	3,1,1,5,30,9
-	.half	.L321-.L320
+	.half	.L320-.L319
 	.byte	1,5,53,9
-	.half	.L322-.L321
+	.half	.L321-.L320
 	.byte	1,5,18,9
-	.half	.L121-.L322
+	.half	.L120-.L321
 	.byte	1,5,5,9
-	.half	.L323-.L121
+	.half	.L322-.L120
 	.byte	3,2,1,5,20,9
-	.half	.L324-.L323
+	.half	.L323-.L322
 	.byte	1,5,41,9
-	.half	.L325-.L324
+	.half	.L324-.L323
 	.byte	1,5,39,9
+	.half	.L325-.L324
+	.byte	1,5,18,9
 	.half	.L326-.L325
-	.byte	1,5,18,9
+	.byte	1,5,5,9
 	.half	.L327-.L326
-	.byte	1,5,5,9
-	.half	.L328-.L327
 	.byte	3,1,1,5,21,9
+	.half	.L328-.L327
+	.byte	1,5,42,9
 	.half	.L329-.L328
-	.byte	1,5,42,9
+	.byte	1,5,40,9
 	.half	.L330-.L329
-	.byte	1,5,40,9
+	.byte	1,5,19,9
 	.half	.L331-.L330
-	.byte	1,5,19,9
+	.byte	1,5,5,9
 	.half	.L332-.L331
-	.byte	1,5,5,9
-	.half	.L333-.L332
 	.byte	3,2,1,5,30,9
-	.half	.L334-.L333
+	.half	.L333-.L332
 	.byte	1,5,47,9
-	.half	.L335-.L334
+	.half	.L334-.L333
 	.byte	1,5,40,9
-	.half	.L336-.L335
+	.half	.L335-.L334
 	.byte	1,5,68,9
-	.half	.L337-.L336
+	.half	.L336-.L335
 	.byte	1,5,61,9
+	.half	.L337-.L336
+	.byte	1,5,18,9
 	.half	.L338-.L337
-	.byte	1,5,18,9
+	.byte	1,5,5,9
 	.half	.L339-.L338
-	.byte	1,5,5,9
-	.half	.L340-.L339
 	.byte	3,1,1,5,31,9
-	.half	.L341-.L340
+	.half	.L340-.L339
 	.byte	1,5,49,9
-	.half	.L342-.L341
+	.half	.L341-.L340
 	.byte	1,5,42,9
-	.half	.L343-.L342
+	.half	.L342-.L341
 	.byte	1,5,71,9
-	.half	.L344-.L343
+	.half	.L343-.L342
 	.byte	1,5,64,9
-	.half	.L345-.L344
+	.half	.L344-.L343
 	.byte	1,5,19,9
-	.half	.L346-.L345
+	.half	.L345-.L344
 	.byte	1,5,5,9
-	.half	.L347-.L346
+	.half	.L346-.L345
 	.byte	3,2,1,5,15,9
-	.half	.L348-.L347
+	.half	.L347-.L346
 	.byte	1,5,18,9
-	.half	.L349-.L348
+	.half	.L348-.L347
 	.byte	3,1,1,5,1,9
-	.half	.L31-.L349
+	.half	.L30-.L348
 	.byte	3,1,1,7,9
-	.half	.L86-.L31
+	.half	.L85-.L30
 	.byte	0,1,1
-.L233:
+.L232:
 	.sdecl	'.debug_ranges',debug,cluster('Debug_Angle_Tuning')
 	.sect	'.debug_ranges'
-.L85:
-	.word	-1,.L63,0,.L86-.L63,0,0
+.L84:
+	.word	-1,.L62,0,.L85-.L62,0,0
 	.sdecl	'.debug_info',debug,cluster('Debug_Normal_Trace')
 	.sect	'.debug_info'
-.L87:
+.L86:
 	.word	214
 	.half	3
-	.word	.L88
+	.word	.L87
 	.byte	4,1
 	.byte	'../code/Debug_Car.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'D:\\workspace\\2026_Crazy_Circuit_V4.0\\Debug\\',0,12,1
-	.word	.L90,.L89
+	.word	.L89,.L88
 	.byte	2
-	.word	.L68
+	.word	.L67
 	.byte	3
-	.byte	'Debug_Normal_Trace',0,1,236,1,6,1,1,1
-	.word	.L65,.L113,.L64
+	.byte	'Debug_Normal_Trace',0,1,231,1,6,1,1,1
+	.word	.L64,.L112,.L63
 	.byte	4
-	.word	.L65,.L113
+	.word	.L64,.L112
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('Debug_Normal_Trace')
 	.sect	'.debug_abbrev'
-.L88:
+.L87:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
 	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('Debug_Normal_Trace')
 	.sect	'.debug_line'
-.L89:
-	.word	.L351-.L350
-.L350:
+.L88:
+	.word	.L350-.L349
+.L349:
 	.half	3
-	.word	.L353-.L352
-.L352:
+	.word	.L352-.L351
+.L351:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/Debug_Car.c',0,0,0,0,0
-.L353:
+.L352:
 	.byte	5,9,7,0,5,2
-	.word	.L65
-	.byte	3,237,1,1,5,36,9
-	.half	.L354-.L65
+	.word	.L64
+	.byte	3,232,1,1,5,36,9
+	.half	.L353-.L64
 	.byte	1,5,52,9
-	.half	.L355-.L354
+	.half	.L354-.L353
 	.byte	1,5,9,7,9
-	.half	.L38-.L355
+	.half	.L37-.L354
 	.byte	3,2,1,5,17,9
-	.half	.L356-.L38
+	.half	.L355-.L37
 	.byte	1,5,15,9
+	.half	.L356-.L355
+	.byte	1,5,9,9
 	.half	.L357-.L356
-	.byte	1,5,9,9
+	.byte	3,1,1,5,24,9
 	.half	.L358-.L357
-	.byte	3,1,1,5,24,9
+	.byte	1,5,22,9
 	.half	.L359-.L358
-	.byte	1,5,22,9
+	.byte	1,5,9,9
 	.half	.L360-.L359
-	.byte	1,5,9,9
+	.byte	3,1,1,5,24,9
 	.half	.L361-.L360
-	.byte	3,1,1,5,24,9
+	.byte	1,5,22,9
 	.half	.L362-.L361
-	.byte	1,5,22,9
+	.byte	1,5,9,9
 	.half	.L363-.L362
-	.byte	1,5,9,9
-	.half	.L364-.L363
 	.byte	3,1,1,5,34,9
-	.half	.L365-.L364
+	.half	.L364-.L363
 	.byte	1,5,32,9
+	.half	.L365-.L364
+	.byte	1,5,9,9
 	.half	.L366-.L365
-	.byte	1,5,9,9
-	.half	.L367-.L366
 	.byte	3,1,1,5,32,9
-	.half	.L368-.L367
+	.half	.L367-.L366
 	.byte	1,5,30,9
+	.half	.L368-.L367
+	.byte	1,5,9,9
 	.half	.L369-.L368
-	.byte	1,5,9,9
+	.byte	3,1,1,5,24,9
 	.half	.L370-.L369
-	.byte	3,1,1,5,24,9
+	.byte	1,5,22,9
 	.half	.L371-.L370
-	.byte	1,5,22,9
+	.byte	1,5,9,9
 	.half	.L372-.L371
-	.byte	1,5,9,9
+	.byte	3,1,1,5,25,9
 	.half	.L373-.L372
-	.byte	3,1,1,5,25,9
+	.byte	1,5,23,9
 	.half	.L374-.L373
-	.byte	1,5,23,9
+	.byte	1,5,9,9
 	.half	.L375-.L374
-	.byte	1,5,9,9
-	.half	.L376-.L375
 	.byte	3,1,1,5,24,9
-	.half	.L377-.L376
+	.half	.L376-.L375
 	.byte	1,5,22,9
-	.half	.L378-.L377
+	.half	.L377-.L376
 	.byte	1,5,9,9
-	.half	.L379-.L378
+	.half	.L378-.L377
 	.byte	3,1,1,5,25,9
-	.half	.L380-.L379
+	.half	.L379-.L378
 	.byte	1,5,23,9
-	.half	.L381-.L380
+	.half	.L380-.L379
 	.byte	1,5,24,9
+	.half	.L381-.L380
+	.byte	3,1,1,9
 	.half	.L382-.L381
 	.byte	3,1,1,9
 	.half	.L383-.L382
@@ -21919,554 +21930,544 @@ _999001_angle_tick:	.type	object
 	.half	.L385-.L384
 	.byte	3,1,1,9
 	.half	.L386-.L385
-	.byte	3,1,1,9
+	.byte	3,1,1,5,22,9
 	.half	.L387-.L386
-	.byte	3,1,1,5,22,9
-	.half	.L388-.L387
 	.byte	3,1,1,5,9,9
-	.half	.L389-.L388
+	.half	.L388-.L387
 	.byte	3,1,1,9
-	.half	.L39-.L389
+	.half	.L38-.L388
 	.byte	3,3,1,5,5,9
-	.half	.L390-.L39
+	.half	.L389-.L38
 	.byte	1,5,9,7,9
-	.half	.L391-.L390
+	.half	.L390-.L389
 	.byte	3,2,1,5,19,9
+	.half	.L391-.L390
+	.byte	1,5,28,9
 	.half	.L392-.L391
-	.byte	1,5,28,9
-	.half	.L393-.L392
 	.byte	1,5,44,9
+	.half	.L393-.L392
+	.byte	1,5,54,9
 	.half	.L394-.L393
-	.byte	1,5,54,9
+	.byte	1,5,43,9
 	.half	.L395-.L394
-	.byte	1,5,43,9
-	.half	.L396-.L395
 	.byte	1,5,34,9
+	.half	.L396-.L395
+	.byte	1,5,43,9
 	.half	.L397-.L396
-	.byte	1,5,43,9
-	.half	.L398-.L397
 	.byte	1,5,32,9
-	.half	.L399-.L398
+	.half	.L398-.L397
 	.byte	1,5,62,9
-	.half	.L400-.L399
+	.half	.L399-.L398
 	.byte	1,5,60,9
-	.half	.L401-.L400
+	.half	.L400-.L399
 	.byte	1,5,16,9
+	.half	.L401-.L400
+	.byte	1,5,9,9
 	.half	.L402-.L401
-	.byte	1,5,9,9
-	.half	.L403-.L402
 	.byte	3,1,1,5,22,9
-	.half	.L404-.L403
+	.half	.L403-.L402
 	.byte	1,5,20,9
-	.half	.L405-.L404
+	.half	.L404-.L403
 	.byte	1,5,9,9
-	.half	.L41-.L405
+	.half	.L40-.L404
 	.byte	3,3,1,5,5,9
-	.half	.L406-.L41
+	.half	.L405-.L40
 	.byte	1,5,9,7,9
-	.half	.L407-.L406
+	.half	.L406-.L405
 	.byte	3,2,1,5,17,9
+	.half	.L407-.L406
+	.byte	1,5,15,9
 	.half	.L408-.L407
-	.byte	1,5,15,9
+	.byte	1,5,18,9
 	.half	.L409-.L408
-	.byte	1,5,18,9
-	.half	.L410-.L409
 	.byte	1,5,9,9
-	.half	.L42-.L410
+	.half	.L41-.L409
 	.byte	3,4,1,5,27,9
-	.half	.L411-.L42
+	.half	.L410-.L41
 	.byte	1,5,36,9
+	.half	.L411-.L410
+	.byte	1,5,25,9
 	.half	.L412-.L411
-	.byte	1,5,25,9
+	.byte	1,5,9,9
 	.half	.L413-.L412
-	.byte	1,5,9,9
-	.half	.L414-.L413
 	.byte	3,1,1,5,38,9
-	.half	.L415-.L414
+	.half	.L414-.L413
 	.byte	1,5,48,9
+	.half	.L415-.L414
+	.byte	1,5,37,9
 	.half	.L416-.L415
-	.byte	1,5,37,9
+	.byte	1,5,28,9
 	.half	.L417-.L416
-	.byte	1,5,28,9
-	.half	.L418-.L417
 	.byte	1,5,37,9
+	.half	.L418-.L417
+	.byte	1,5,26,9
 	.half	.L419-.L418
-	.byte	1,5,26,9
+	.byte	1,5,9,9
 	.half	.L420-.L419
-	.byte	1,5,9,9
-	.half	.L421-.L420
 	.byte	3,1,1,5,26,9
+	.half	.L421-.L420
+	.byte	1,5,25,9
 	.half	.L422-.L421
-	.byte	1,5,25,9
+	.byte	1,5,18,9
 	.half	.L423-.L422
-	.byte	1,5,18,9
-	.half	.L424-.L423
 	.byte	1,5,25,9
-	.half	.L425-.L424
+	.half	.L424-.L423
 	.byte	1,5,53,9
+	.half	.L425-.L424
+	.byte	1,5,52,9
 	.half	.L426-.L425
-	.byte	1,5,52,9
+	.byte	1,5,45,9
 	.half	.L427-.L426
-	.byte	1,5,45,9
-	.half	.L428-.L427
 	.byte	1,5,52,9
-	.half	.L429-.L428
+	.half	.L428-.L427
 	.byte	1,5,43,9
-	.half	.L430-.L429
+	.half	.L429-.L428
 	.byte	1,5,74,9
-	.half	.L431-.L430
+	.half	.L430-.L429
 	.byte	1,5,72,9
-	.half	.L432-.L431
+	.half	.L431-.L430
 	.byte	1,5,15,9
-	.half	.L433-.L432
+	.half	.L432-.L431
 	.byte	1,5,9,9
-	.half	.L43-.L433
+	.half	.L42-.L432
 	.byte	3,4,1,5,34,9
-	.half	.L434-.L43
+	.half	.L433-.L42
 	.byte	1,5,45,9
-	.half	.L435-.L434
+	.half	.L434-.L433
 	.byte	1,5,58,9
-	.half	.L436-.L435
+	.half	.L435-.L434
 	.byte	1,5,51,9
-	.half	.L437-.L436
+	.half	.L436-.L435
 	.byte	1,5,22,9
+	.half	.L437-.L436
+	.byte	1,5,5,9
 	.half	.L438-.L437
-	.byte	1,5,5,9
+	.byte	3,2,1,5,30,9
 	.half	.L439-.L438
-	.byte	3,2,1,5,30,9
+	.byte	1,5,40,9
 	.half	.L440-.L439
-	.byte	1,5,40,9
-	.half	.L441-.L440
 	.byte	1,5,54,9
+	.half	.L441-.L440
+	.byte	1,5,18,9
 	.half	.L442-.L441
-	.byte	1,5,18,9
+	.byte	1,5,5,9
 	.half	.L443-.L442
-	.byte	1,5,5,9
+	.byte	3,2,1,5,30,9
 	.half	.L444-.L443
-	.byte	3,2,1,5,30,9
-	.half	.L445-.L444
 	.byte	1,5,28,9
+	.half	.L445-.L444
+	.byte	1,5,5,9
 	.half	.L446-.L445
-	.byte	1,5,5,9
-	.half	.L447-.L446
 	.byte	3,1,1,5,28,9
-	.half	.L448-.L447
+	.half	.L447-.L446
 	.byte	1,5,26,9
+	.half	.L448-.L447
+	.byte	1,5,5,9
 	.half	.L449-.L448
-	.byte	1,5,5,9
-	.half	.L450-.L449
 	.byte	3,2,1,5,20,9
-	.half	.L451-.L450
+	.half	.L450-.L449
 	.byte	1,5,41,9
-	.half	.L452-.L451
+	.half	.L451-.L450
 	.byte	1,5,39,9
+	.half	.L452-.L451
+	.byte	1,5,18,9
 	.half	.L453-.L452
-	.byte	1,5,18,9
+	.byte	1,5,5,9
 	.half	.L454-.L453
-	.byte	1,5,5,9
-	.half	.L455-.L454
 	.byte	3,1,1,5,21,9
+	.half	.L455-.L454
+	.byte	1,5,42,9
 	.half	.L456-.L455
-	.byte	1,5,42,9
+	.byte	1,5,40,9
 	.half	.L457-.L456
-	.byte	1,5,40,9
+	.byte	1,5,19,9
 	.half	.L458-.L457
-	.byte	1,5,19,9
+	.byte	1,5,5,9
 	.half	.L459-.L458
-	.byte	1,5,5,9
-	.half	.L460-.L459
 	.byte	3,2,1,5,30,9
-	.half	.L461-.L460
+	.half	.L460-.L459
 	.byte	1,5,47,9
-	.half	.L462-.L461
+	.half	.L461-.L460
 	.byte	1,5,40,9
-	.half	.L463-.L462
+	.half	.L462-.L461
 	.byte	1,5,68,9
-	.half	.L464-.L463
+	.half	.L463-.L462
 	.byte	1,5,61,9
+	.half	.L464-.L463
+	.byte	1,5,18,9
 	.half	.L465-.L464
-	.byte	1,5,18,9
-	.half	.L466-.L465
 	.byte	1,5,5,9
-	.half	.L467-.L466
+	.half	.L466-.L465
 	.byte	3,1,1,5,31,9
-	.half	.L468-.L467
+	.half	.L467-.L466
 	.byte	1,5,49,9
-	.half	.L469-.L468
+	.half	.L468-.L467
 	.byte	1,5,42,9
-	.half	.L470-.L469
+	.half	.L469-.L468
 	.byte	1,5,71,9
-	.half	.L471-.L470
+	.half	.L470-.L469
 	.byte	1,5,64,9
-	.half	.L472-.L471
+	.half	.L471-.L470
 	.byte	1,5,19,9
-	.half	.L473-.L472
+	.half	.L472-.L471
 	.byte	1,5,18,9
-	.half	.L474-.L473
+	.half	.L473-.L472
 	.byte	3,1,1,5,1,9
-	.half	.L40-.L474
+	.half	.L39-.L473
 	.byte	3,1,1,7,9
-	.half	.L91-.L40
+	.half	.L90-.L39
 	.byte	0,1,1
-.L351:
+.L350:
 	.sdecl	'.debug_ranges',debug,cluster('Debug_Normal_Trace')
 	.sect	'.debug_ranges'
-.L90:
-	.word	-1,.L65,0,.L91-.L65,0,0
+.L89:
+	.word	-1,.L64,0,.L90-.L64,0,0
 	.sdecl	'.debug_info',debug,cluster('Debug_Set_Out')
 	.sect	'.debug_info'
-.L92:
+.L91:
 	.word	209
 	.half	3
-	.word	.L93
+	.word	.L92
 	.byte	4,1
 	.byte	'../code/Debug_Car.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'D:\\workspace\\2026_Crazy_Circuit_V4.0\\Debug\\',0,12,1
-	.word	.L95,.L94
+	.word	.L94,.L93
 	.byte	2
-	.word	.L68
+	.word	.L67
 	.byte	3
-	.byte	'Debug_Set_Out',0,1,166,2,6,1,1,1
-	.word	.L67,.L114,.L66
+	.byte	'Debug_Set_Out',0,1,161,2,6,1,1,1
+	.word	.L66,.L113,.L65
 	.byte	4
-	.word	.L67,.L114
+	.word	.L66,.L113
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('Debug_Set_Out')
 	.sect	'.debug_abbrev'
-.L93:
+.L92:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
 	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('Debug_Set_Out')
 	.sect	'.debug_line'
-.L94:
-	.word	.L476-.L475
-.L475:
+.L93:
+	.word	.L475-.L474
+.L474:
 	.half	3
-	.word	.L478-.L477
-.L477:
+	.word	.L477-.L476
+.L476:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/Debug_Car.c',0,0,0,0,0
-.L478:
+.L477:
 	.byte	5,9,7,0,5,2
-	.word	.L67
-	.byte	3,167,2,1,5,5,9
-	.half	.L479-.L67
+	.word	.L66
+	.byte	3,162,2,1,5,5,9
+	.half	.L478-.L66
 	.byte	1,5,22,7,9
-	.half	.L480-.L479
+	.half	.L479-.L478
 	.byte	3,2,1,5,41,9
+	.half	.L480-.L479
+	.byte	1,5,22,9
 	.half	.L481-.L480
-	.byte	1,5,22,9
+	.byte	3,1,1,5,41,9
 	.half	.L482-.L481
-	.byte	3,1,1,5,41,9
-	.half	.L483-.L482
 	.byte	1,5,56,9
-	.half	.L484-.L483
+	.half	.L483-.L482
 	.byte	3,127,1,5,22,9
-	.half	.L44-.L484
+	.half	.L43-.L483
 	.byte	3,5,1,5,41,9
-	.half	.L485-.L44
+	.half	.L484-.L43
 	.byte	1,5,22,9
-	.half	.L486-.L485
+	.half	.L485-.L484
 	.byte	3,1,1,5,41,9
-	.half	.L487-.L486
+	.half	.L486-.L485
 	.byte	1,5,9,9
-	.half	.L45-.L487
+	.half	.L44-.L486
 	.byte	3,3,1,5,36,9
-	.half	.L488-.L45
+	.half	.L487-.L44
 	.byte	1,5,49,9
-	.half	.L489-.L488
+	.half	.L488-.L487
 	.byte	1,5,22,9
-	.half	.L46-.L489
+	.half	.L45-.L488
 	.byte	3,2,1,5,38,9
-	.half	.L490-.L46
+	.half	.L489-.L45
 	.byte	1,5,22,9
+	.half	.L490-.L489
+	.byte	3,1,1,5,38,9
 	.half	.L491-.L490
-	.byte	3,1,1,5,38,9
+	.byte	1,5,40,9
 	.half	.L492-.L491
-	.byte	1,5,40,9
-	.half	.L493-.L492
 	.byte	3,127,1,5,14,9
-	.half	.L47-.L493
+	.half	.L46-.L492
 	.byte	3,3,1,5,29,9
-	.half	.L494-.L47
+	.half	.L493-.L46
 	.byte	1,5,10,9
+	.half	.L494-.L493
+	.byte	1,5,22,9
 	.half	.L495-.L494
-	.byte	1,5,22,9
-	.half	.L496-.L495
 	.byte	3,7,1,5,38,9
+	.half	.L496-.L495
+	.byte	1,5,22,9
 	.half	.L497-.L496
-	.byte	1,5,22,9
+	.byte	3,1,1,5,38,9
 	.half	.L498-.L497
-	.byte	3,1,1,5,38,9
-	.half	.L499-.L498
 	.byte	1,5,40,9
-	.half	.L500-.L499
+	.half	.L499-.L498
 	.byte	3,122,1,5,22,9
-	.half	.L49-.L500
+	.half	.L48-.L499
 	.byte	1,5,38,9
-	.half	.L501-.L49
+	.half	.L500-.L48
 	.byte	1,5,22,9
-	.half	.L502-.L501
+	.half	.L501-.L500
 	.byte	3,1,1,5,38,9
-	.half	.L503-.L502
+	.half	.L502-.L501
 	.byte	1,5,9,9
-	.half	.L48-.L503
+	.half	.L47-.L502
 	.byte	3,9,1,5,36,9
-	.half	.L504-.L48
+	.half	.L503-.L47
 	.byte	1,5,50,9
-	.half	.L505-.L504
+	.half	.L504-.L503
 	.byte	1,5,22,9
-	.half	.L51-.L505
+	.half	.L50-.L504
 	.byte	3,2,1,5,39,9
-	.half	.L506-.L51
+	.half	.L505-.L50
 	.byte	1,5,22,9
+	.half	.L506-.L505
+	.byte	3,1,1,5,39,9
 	.half	.L507-.L506
-	.byte	3,1,1,5,39,9
+	.byte	1,5,41,9
 	.half	.L508-.L507
-	.byte	1,5,41,9
-	.half	.L509-.L508
 	.byte	3,127,1,5,14,9
-	.half	.L52-.L509
+	.half	.L51-.L508
 	.byte	3,3,1,5,30,9
-	.half	.L510-.L52
+	.half	.L509-.L51
 	.byte	1,5,10,9
+	.half	.L510-.L509
+	.byte	1,5,22,9
 	.half	.L511-.L510
-	.byte	1,5,22,9
-	.half	.L512-.L511
 	.byte	3,7,1,5,39,9
+	.half	.L512-.L511
+	.byte	1,5,22,9
 	.half	.L513-.L512
-	.byte	1,5,22,9
+	.byte	3,1,1,5,39,9
 	.half	.L514-.L513
-	.byte	3,1,1,5,39,9
-	.half	.L515-.L514
 	.byte	1,5,41,9
-	.half	.L516-.L515
+	.half	.L515-.L514
 	.byte	3,122,1,5,22,9
-	.half	.L54-.L516
+	.half	.L53-.L515
 	.byte	1,5,39,9
-	.half	.L517-.L54
+	.half	.L516-.L53
 	.byte	1,5,22,9
-	.half	.L518-.L517
+	.half	.L517-.L516
 	.byte	3,1,1,5,39,9
-	.half	.L519-.L518
+	.half	.L518-.L517
 	.byte	1,5,1,9
-	.half	.L53-.L519
+	.half	.L52-.L518
 	.byte	3,7,1,7,9
-	.half	.L96-.L53
+	.half	.L95-.L52
 	.byte	0,1,1
-.L476:
+.L475:
 	.sdecl	'.debug_ranges',debug,cluster('Debug_Set_Out')
 	.sect	'.debug_ranges'
-.L95:
-	.word	-1,.L67,0,.L96-.L67,0,0
+.L94:
+	.word	-1,.L66,0,.L95-.L66,0,0
 	.sdecl	'.debug_info',debug,cluster('Debug_Car_Go')
 	.sect	'.debug_info'
-.L97:
+.L96:
 	.word	207
 	.half	3
-	.word	.L98
+	.word	.L97
 	.byte	4,1
 	.byte	'../code/Debug_Car.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'D:\\workspace\\2026_Crazy_Circuit_V4.0\\Debug\\',0,12,1
-	.word	.L100,.L99
+	.word	.L99,.L98
 	.byte	2
-	.word	.L68
+	.word	.L67
 	.byte	3
-	.byte	'Debug_Car_Go',0,1,35,6,1,1,1
-	.word	.L57,.L115,.L56
+	.byte	'Debug_Car_Go',0,1,34,6,1,1,1
+	.word	.L56,.L114,.L55
 	.byte	4
-	.word	.L57,.L115
+	.word	.L56,.L114
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('Debug_Car_Go')
 	.sect	'.debug_abbrev'
-.L98:
+.L97:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
 	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('Debug_Car_Go')
 	.sect	'.debug_line'
-.L99:
-	.word	.L521-.L520
-.L520:
+.L98:
+	.word	.L520-.L519
+.L519:
 	.half	3
-	.word	.L523-.L522
-.L522:
+	.word	.L522-.L521
+.L521:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/Debug_Car.c',0,0,0,0,0
-.L523:
+.L522:
 	.byte	5,9,7,0,5,2
-	.word	.L57
-	.byte	3,37,1,5,33,9
-	.half	.L524-.L57
+	.word	.L56
+	.byte	3,36,1,5,33,9
+	.half	.L523-.L56
 	.byte	1,5,54,9
+	.half	.L524-.L523
+	.byte	1,5,9,7,9
 	.half	.L525-.L524
-	.byte	1,5,9,7,9
-	.half	.L526-.L525
-	.byte	3,2,1,5,36,9
-	.half	.L527-.L526
-	.byte	1,5,34,9
-	.half	.L528-.L527
-	.byte	1,5,5,9
-	.half	.L2-.L528
 	.byte	3,2,1,5,28,9
-	.half	.L529-.L2
+	.half	.L526-.L525
 	.byte	1,5,26,9
+	.half	.L527-.L526
+	.byte	1,5,5,9
+	.half	.L2-.L527
+	.byte	3,2,1,5,28,9
+	.half	.L528-.L2
+	.byte	1,5,26,9
+	.half	.L529-.L528
+	.byte	1,5,5,9
 	.half	.L530-.L529
-	.byte	1,5,5,9
+	.byte	3,3,1,5,24,9
 	.half	.L531-.L530
-	.byte	3,3,1,5,32,9
+	.byte	1,5,22,9
 	.half	.L532-.L531
-	.byte	1,5,30,9
-	.half	.L533-.L532
-	.byte	1,5,9,9
-	.half	.L534-.L533
-	.byte	3,3,1,5,5,9
-	.half	.L535-.L534
-	.byte	1,5,18,7,9
-	.half	.L536-.L535
-	.byte	3,2,1,5,5,9
-	.half	.L4-.L536
-	.byte	3,2,1,5,21,9
-	.half	.L537-.L4
-	.byte	1,5,12,9
-	.half	.L538-.L537
-	.byte	3,3,1,5,14,9
-	.half	.L539-.L538
-	.byte	3,1,1,5,17,9
-	.half	.L540-.L539
-	.byte	3,2,1,5,9,9
-	.half	.L541-.L540
-	.byte	3,2,1,5,5,9
-	.half	.L542-.L541
-	.byte	1,5,9,7,9
-	.half	.L543-.L542
-	.byte	3,2,1,5,13,9
-	.half	.L5-.L543
-	.byte	3,4,1,5,14,9
-	.half	.L544-.L5
-	.byte	3,2,1,9
-	.half	.L545-.L544
-	.byte	3,1,1,9
-	.half	.L546-.L545
-	.byte	3,1,1,9
-	.half	.L547-.L546
-	.byte	3,1,1,5,55,9
-	.half	.L7-.L547
-	.byte	3,125,1,5,61,9
-	.half	.L548-.L7
-	.byte	1,5,54,9
-	.half	.L8-.L548
-	.byte	3,1,1,5,62,9
-	.half	.L549-.L8
-	.byte	1,5,55,9
-	.half	.L9-.L549
-	.byte	3,1,1,5,61,9
-	.half	.L550-.L9
-	.byte	1,5,55,9
-	.half	.L10-.L550
-	.byte	3,1,1,5,61,9
-	.half	.L551-.L10
-	.byte	1,5,55,9
-	.half	.L11-.L551
-	.byte	3,1,1,5,61,9
-	.half	.L552-.L11
 	.byte	1,5,18,9
-	.half	.L12-.L552
+	.half	.L533-.L532
+	.byte	3,3,1,5,12,9
+	.half	.L534-.L533
+	.byte	3,3,1,5,14,9
+	.half	.L535-.L534
+	.byte	3,1,1,5,17,9
+	.half	.L536-.L535
+	.byte	3,2,1,5,9,9
+	.half	.L537-.L536
+	.byte	3,2,1,5,5,9
+	.half	.L538-.L537
+	.byte	1,5,9,7,9
+	.half	.L539-.L538
+	.byte	3,2,1,5,13,9
+	.half	.L4-.L539
+	.byte	3,4,1,5,14,9
+	.half	.L540-.L4
+	.byte	3,2,1,9
+	.half	.L541-.L540
+	.byte	3,1,1,9
+	.half	.L542-.L541
+	.byte	3,1,1,9
+	.half	.L543-.L542
+	.byte	3,1,1,5,55,9
+	.half	.L6-.L543
+	.byte	3,125,1,5,61,9
+	.half	.L544-.L6
+	.byte	1,5,54,9
+	.half	.L7-.L544
+	.byte	3,1,1,5,62,9
+	.half	.L545-.L7
+	.byte	1,5,55,9
+	.half	.L8-.L545
+	.byte	3,1,1,5,61,9
+	.half	.L546-.L8
+	.byte	1,5,55,9
+	.half	.L9-.L546
+	.byte	3,1,1,5,61,9
+	.half	.L547-.L9
+	.byte	1,5,55,9
+	.half	.L10-.L547
+	.byte	3,1,1,5,61,9
+	.half	.L548-.L10
+	.byte	1,5,18,9
+	.half	.L11-.L548
 	.byte	3,4,1,5,37,9
-	.half	.L553-.L12
+	.half	.L549-.L11
 	.byte	1,5,41,9
-	.half	.L554-.L553
+	.half	.L550-.L549
 	.byte	1,5,37,9
-	.half	.L17-.L554
+	.half	.L16-.L550
 	.byte	1,5,5,9
-	.half	.L18-.L17
+	.half	.L17-.L16
 	.byte	1,5,16,9
-	.half	.L555-.L18
+	.half	.L551-.L17
 	.byte	1,5,1,9
-	.half	.L6-.L555
+	.half	.L5-.L551
 	.byte	3,1,1,7,9
-	.half	.L101-.L6
+	.half	.L100-.L5
 	.byte	0,1,1
-.L521:
+.L520:
 	.sdecl	'.debug_ranges',debug,cluster('Debug_Car_Go')
 	.sect	'.debug_ranges'
-.L100:
-	.word	-1,.L57,0,.L101-.L57,0,0
+.L99:
+	.word	-1,.L56,0,.L100-.L56,0,0
 	.sdecl	'.debug_loc',debug,cluster('Debug_Angle_Tuning')
 	.sect	'.debug_loc'
-.L62:
-	.word	-1,.L63,0,.L104-.L63
+.L61:
+	.word	-1,.L62,0,.L103-.L62
 	.half	2
 	.byte	138,0
 	.word	0,0
+.L106:
+	.word	-1,.L62,.L118-.L62,.L32-.L62
+	.half	1
+	.byte	84
+	.word	.L33-.L62,.L117-.L62
+	.half	1
+	.byte	84
+	.word	0,0
 .L107:
-	.word	-1,.L63,.L119-.L63,.L33-.L63
+	.word	-1,.L62,.L109-.L62,.L31-.L62
 	.half	1
 	.byte	84
-	.word	.L34-.L63,.L118-.L63
+	.word	.L119-.L62,.L35-.L62
 	.half	1
 	.byte	84
-	.word	0,0
-.L108:
-	.word	-1,.L63,.L110-.L63,.L32-.L63
-	.half	1
-	.byte	84
-	.word	.L120-.L63,.L36-.L63
-	.half	1
-	.byte	84
-	.word	.L35-.L63,.L121-.L63
+	.word	.L34-.L62,.L120-.L62
 	.half	1
 	.byte	84
 	.word	0,0
-.L112:
-	.word	-1,.L63,.L117-.L63,.L118-.L63
+.L111:
+	.word	-1,.L62,.L116-.L62,.L117-.L62
 	.half	1
 	.byte	81
 	.word	0,0
-.L111:
-	.word	-1,.L63,.L116-.L63,.L117-.L63
+.L110:
+	.word	-1,.L62,.L115-.L62,.L116-.L62
 	.half	5
 	.byte	144,32,157,32,0
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('Debug_Car_Go')
 	.sect	'.debug_loc'
-.L56:
-	.word	-1,.L57,0,.L115-.L57
+.L55:
+	.word	-1,.L56,0,.L114-.L56
 	.half	2
 	.byte	138,0
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('Debug_Ground_Test')
 	.sect	'.debug_loc'
-.L60:
-	.word	-1,.L61,0,.L103-.L61
+.L59:
+	.word	-1,.L60,0,.L102-.L60
 	.half	2
 	.byte	138,0
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('Debug_Normal_Trace')
 	.sect	'.debug_loc'
-.L64:
-	.word	-1,.L65,0,.L113-.L65
+.L63:
+	.word	-1,.L64,0,.L112-.L64
 	.half	2
 	.byte	138,0
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('Debug_Set_Out')
 	.sect	'.debug_loc'
-.L66:
-	.word	-1,.L67,0,.L114-.L67
+.L65:
+	.word	-1,.L66,0,.L113-.L66
 	.half	2
 	.byte	138,0
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('Debug_Wheel_Tuning')
 	.sect	'.debug_loc'
-.L58:
-	.word	-1,.L59,0,.L102-.L59
+.L57:
+	.word	-1,.L58,0,.L101-.L58
 	.half	2
 	.byte	138,0
 	.word	0,0
 	.sdecl	'.debug_frame',debug
 	.sect	'.debug_frame'
-.L556:
+.L552:
 	.word	48
 	.word	-1
 	.byte	3,0,2,1,27,12,26,0,8,26,8,27,8,30,8,29,8,28,8,16,8,17,8,24,8,25,8,31,8,32,8,33,8,34,8,35,8,36,8,37,8,38
@@ -22474,25 +22475,25 @@ _999001_angle_tick:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('Debug_Car_Go')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L556,.L57,.L115-.L57
+	.word	.L552,.L56,.L114-.L56
 	.sdecl	'.debug_frame',debug,cluster('Debug_Wheel_Tuning')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L556,.L59,.L102-.L59
+	.word	.L552,.L58,.L101-.L58
 	.sdecl	'.debug_frame',debug,cluster('Debug_Ground_Test')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L556,.L61,.L103-.L61
+	.word	.L552,.L60,.L102-.L60
 	.sdecl	'.debug_frame',debug,cluster('Debug_Angle_Tuning')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L556,.L63,.L104-.L63
+	.word	.L552,.L62,.L103-.L62
 	.sdecl	'.debug_frame',debug,cluster('Debug_Normal_Trace')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L556,.L65,.L113-.L65
+	.word	.L552,.L64,.L112-.L64
 	.sdecl	'.debug_frame',debug,cluster('Debug_Set_Out')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L556,.L67,.L114-.L67
+	.word	.L552,.L66,.L113-.L66
 	; Module end

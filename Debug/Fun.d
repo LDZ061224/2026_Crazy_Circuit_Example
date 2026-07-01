@@ -334,12 +334,6 @@ Fun.o :	..\code\pid.h
 ..\code\pid.h :
 Fun.o :	..\code\Fun.h
 ..\code\Fun.h :
-Fun.o :	..\code\TCA9555.h
-..\code\TCA9555.h :
-Fun.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
-"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :
-Fun.o :	..\code\headfiles.h
-..\code\headfiles.h :
 Fun.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDKeyboard.h"
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\code\\OLED\OLEDKeyboard.h" :
 Fun.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
@@ -366,3 +360,5 @@ Fun.o :	..\code\Ctrl.h
 ..\code\Ctrl.h :
 Fun.o :	"D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h"
 "D:\\workspace\\2026_Crazy_Circuit_V4.0\\libraries\\zf_common\zf_common_headfile.h" :
+Fun.o :	..\code\headfiles.h
+..\code\headfiles.h :

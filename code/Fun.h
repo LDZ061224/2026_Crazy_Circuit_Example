@@ -61,7 +61,6 @@ extern float Gyro_Z;
 extern float Current_Check;
 // Two-channel voltage detection values
 extern float Voltage_Check[2];
-extern int Dbg[10];
 
 /*********************************** Function Declarations ***********************************/
 // VOFA host software data transmit function
