@@ -109,10 +109,10 @@ uint8_t Current_Element_Dir = 0;    // Direction of current element action (1=le
 
 /*-------------------------------*/
 // Single-row 15-sensor tracking: all indexes below participate in Track_Num.
-#define TRACK_SENSOR_ACTIVE_NUM 14
+#define TRACK_SENSOR_ACTIVE_NUM 15
 static const uint8_t Track_Sensor_Active_Index[TRACK_SENSOR_ACTIVE_NUM] =
 {
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
 };
 
 /*--------------- Default Build Action Table ---------------*/

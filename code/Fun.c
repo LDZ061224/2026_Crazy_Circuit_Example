@@ -61,21 +61,21 @@ void Vofa_Send_Data(void)
            VOFA_data[i].floatdata = Light_ADC[i];
        }
     // Assign debug data to be sent
-     VOFA_data[0].floatdata  = Left_Exp_Spd;
-     VOFA_data[1].floatdata  = Right_Exp_Spd;
-     VOFA_data[2].floatdata  = Left_Real_Spd;
-     VOFA_data[3].floatdata  = Right_Real_Spd;
-     VOFA_data[4].floatdata  = Gyro_Z;
-     VOFA_data[5].floatdata  = Total_Run_Mileage;
-     VOFA_data[6].floatdata  = Voltage_Check[0];
-     VOFA_data[7].floatdata  = Count.Mileage;
-     VOFA_data[8].floatdata  = Left_PID_Out;
-     VOFA_data[9].floatdata  = Right_PID_Out;
-     VOFA_data[10].floatdata = Dbg[0];
-     VOFA_data[11].floatdata = Error;
-     VOFA_data[12].floatdata = Gyro_Integral;
-     VOFA_data[13].floatdata = Debug_Angle_Vel_Target;
-     VOFA_data[14].floatdata = Debug_Angle_Vel_Real;
+//     VOFA_data[0].floatdata  = Left_Exp_Spd;
+//     VOFA_data[1].floatdata  = Right_Exp_Spd;
+//     VOFA_data[2].floatdata  = Left_Real_Spd;
+//     VOFA_data[3].floatdata  = Right_Real_Spd;
+//     VOFA_data[4].floatdata  = Gyro_Z;
+//     VOFA_data[5].floatdata  = Total_Run_Mileage;
+//     VOFA_data[6].floatdata  = Voltage_Check[0];
+//     VOFA_data[7].floatdata  = Count.Mileage;
+//     VOFA_data[8].floatdata  = Left_PID_Out;
+//     VOFA_data[9].floatdata  = Right_PID_Out;
+//     VOFA_data[10].floatdata = Dbg[0];
+//     VOFA_data[11].floatdata = Error;
+//     VOFA_data[12].floatdata = Gyro_Integral;
+//     VOFA_data[13].floatdata = Debug_Angle_Vel_Target;
+//     VOFA_data[14].floatdata = Debug_Angle_Vel_Real;
 
     // ---- Reserved ADC channels (swap with any line above for debugging) ----
 //   VOFA_data[ N].floatdata = Light_ADC[0];   // Inductor ADC ch0
