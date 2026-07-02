@@ -27,7 +27,7 @@ Claude    2026.6.29   0.2  clean unused uart_* vars, fix BSP, add all keys
               @AMO=val#(1=sin 2=step 3=gyro rate)  @AVT=val#(gyro rate target deg/s)
               @MEN=val#(toggle if value matches)
               @WHL=val#   @MOD=val#(0=PI 1=GroundTest 2=Angle 3=NormTrace)
-              @FFM=val#(0=PI only 1=speed FF+PI correction)
+              @FFM=val#(0=PI only 1=speed FF+PI)  @GFM=val#(0=PID only 1=gyro FF+PID)
   Flash     : @SAV#   (no value, triggers save)
 ============================================================================= */
 
@@ -244,6 +244,8 @@ void Uart_Adjust_Apply(void)
         Debug_Ground_Dir = ((uint8)g_tuning_cmd.value == 0) ? 0 : 1;
     else if (strcmp(g_tuning_cmd.key, "FFM") == 0)
         Debug_Ground_FF_Mode = (g_tuning_cmd.value > 0) ? 1 : 0;
+    else if (strcmp(g_tuning_cmd.key, "GFM") == 0)
+        Debug_Gyro_FF_Mode = (g_tuning_cmd.value > 0) ? 1 : 0;
     else if (strcmp(g_tuning_cmd.key, "AMO") == 0)
     {
         uint8 amo = (uint8)g_tuning_cmd.value;

@@ -159,6 +159,7 @@ uint8  Debug_Angle_D_First = 0;                      // 0=error D, 1=measurement
 float  Debug_Angle_Vel_Target = 0.0f;
 float  Debug_Angle_Vel_Real = 0.0f;
 uint8  Debug_Ground_FF_Mode = 0;                    // 地面测试: 0=纯PI, 1=速度前馈+PI修正
+uint8  Debug_Gyro_FF_Mode = 0;                      // 角速度: 0=纯PID, 1=前馈+PID修正
 
 
 /*--------------- Build Mode Tuning (see Ctrl.h TUNE_*) ---------------*/

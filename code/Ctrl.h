@@ -286,6 +286,7 @@ extern uint8_t g_led_flag;                // 0=green(normal) 1=blue(object) 2=ye
 extern uint8_t g_scan_progress;            // Scan progress 0-100, 0=not scanning
 extern float  Debug_Angle_Vel_Real;         // VOFA: actual angular velocity
 extern uint8  Debug_Ground_FF_Mode;         // 地面测试: 0=纯PI, 1=速度前馈+PI修正
+extern uint8  Debug_Gyro_FF_Mode;           // 角速度调试: 0=纯PID, 1=角速度前馈+PID修正
 extern float  Debug_Kp_Left;               // Left wheel debug Kp
 extern float  Debug_Ki_Left;               // Left wheel debug Ki
 extern float  Debug_Kp_Right;              // Right wheel debug Kp

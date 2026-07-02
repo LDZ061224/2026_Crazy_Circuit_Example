@@ -30,6 +30,14 @@ typedef struct {
     float pwm;     // 鍓嶉 PWM 鍗犵┖姣旓紙0~10000锛�
 } Speed_FF_Point_t;
 
+/* 角速度前馈表单项：目标角速度 -> 左右轮差速 */
+typedef struct {
+    float gyro_rate;   // 目标角速度 (deg/s)
+    float delta_v;     // 左右轮差速（编码器 tick/3ms）
+} Gyro_FF_Point_t;
+
+#define GYRO_FF_TABLE_SIZE  7
+
 /* 宸﹀彸杞墠棣堣〃琛ㄩ」鏁� */
 #define LEFT_SPEED_FF_TABLE_SIZE   9
 #define RIGHT_SPEED_FF_TABLE_SIZE  9

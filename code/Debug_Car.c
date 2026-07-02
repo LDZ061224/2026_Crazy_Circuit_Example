@@ -54,6 +54,18 @@ static const Speed_FF_Point_t Right_Speed_FF_Table[RIGHT_SPEED_FF_TABLE_SIZE] = 
     {200, 0},
 };
 
+/* 角速度前馈表 —— delta_V 值留空，实车标定后手动填入
+   gyro_rate = 目标角速度 (deg/s), delta_v = 左右轮差速（编码器 tick/3ms） */
+static const Gyro_FF_Point_t Gyro_FF_Table[GYRO_FF_TABLE_SIZE] = {
+    {0,    0},
+    {200,  0},
+    {400,  0},
+    {600,  0},
+    {800,  0},
+    {1000, 0},
+    {1200, 0},
+};
+
 /* 电压滤波状态变量 */
 static float Voltage_Raw  = SPEED_FF_VOLTAGE_REF;   // 原始 ADC 换算值（VOFA 观察用）
 static float Voltage_Fast = SPEED_FF_VOLTAGE_REF;   // 快速 EMA（预留）
@@ -94,6 +106,42 @@ static float Speed_FF_GetPwm(float target_speed,
                     / (table[i + 1].speed - table[i].speed);
             float pwm = table[i].pwm + t * (table[i + 1].pwm - table[i].pwm);
             return sign * pwm;
+        }
+    }
+    return 0.0f;  // 理论上不可达，消除编译器警告
+}
+
+/**
+ * @brief  角速度前馈查表 + 线性插值
+ * @param  target_gyro  带符号的目标角速度 (deg/s)
+ * @return 带符号的左右轮差速 delta_V（编码器 tick/3ms）
+ *
+ * 逻辑与 Speed_FF_GetPwm 一致：取绝对值查表 → 边界钳位/线性插值 → 恢复符号
+ */
+static float Gyro_FF_GetDeltaV(float target_gyro)
+{
+    float sign = (target_gyro >= 0.0f) ? 1.0f : -1.0f;
+    float abs_rate = fabsf(target_gyro);
+
+    // 小于表最小值 → 返回最小 delta_V
+    if (abs_rate <= Gyro_FF_Table[0].gyro_rate)
+        return sign * Gyro_FF_Table[0].delta_v;
+
+    // 大于表最大值 → 返回最大 delta_V
+    if (abs_rate >= Gyro_FF_Table[GYRO_FF_TABLE_SIZE - 1].gyro_rate)
+        return sign * Gyro_FF_Table[GYRO_FF_TABLE_SIZE - 1].delta_v;
+
+    // 线性插值
+    for (uint16_t i = 0; i < GYRO_FF_TABLE_SIZE - 1; i++)
+    {
+        if (abs_rate >= Gyro_FF_Table[i].gyro_rate
+            && abs_rate <= Gyro_FF_Table[i + 1].gyro_rate)
+        {
+            float t = (abs_rate - Gyro_FF_Table[i].gyro_rate)
+                    / (Gyro_FF_Table[i + 1].gyro_rate - Gyro_FF_Table[i].gyro_rate);
+            float dv = Gyro_FF_Table[i].delta_v
+                     + t * (Gyro_FF_Table[i + 1].delta_v - Gyro_FF_Table[i].delta_v);
+            return sign * dv;
         }
     }
     return 0.0f;  // 理论上不可达，消除编译器警告
@@ -363,7 +411,21 @@ void Debug_Angle_Tuning(void)
 
     Debug_Angle_Vel_Target = gyro_target;
     Debug_Angle_Vel_Real = Gyro_Z;
-    Gyro_PID_Out = PID_calc(&Gyro_PID, gyro_target, Gyro_Z);
+
+    // ----- 角速度内环 -----
+    float gyro_pid_out = PID_calc(&Gyro_PID, gyro_target, Gyro_Z);
+
+    if (Debug_Gyro_FF_Mode == 1)
+    {
+        // 前馈模式：查表得 delta_V + PID 修正
+        float ff_delta_v = Gyro_FF_GetDeltaV(gyro_target);
+        Gyro_PID_Out = ff_delta_v + gyro_pid_out;
+    }
+    else
+    {
+        // 原始纯 PID 模式
+        Gyro_PID_Out = gyro_pid_out;
+    }
 
     Left_Exp_Spd = Debug_Target_Speed + Gyro_PID_Out;
     Right_Exp_Spd = Debug_Target_Speed - Gyro_PID_Out;
