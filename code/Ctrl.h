@@ -37,7 +37,26 @@ Cross_Z     2026.1.30      0.0         Initial creation
 #define BUILD_NODE_NUM          17
 #define BUILD_ACTION_COUNT      31
 
-#define SAFETY_LOW_VOLTAGE_THRESHOLD    11.3f
+// ===== Build Mode Tuning Parameters (encoder ticks unless noted) =====
+// -- Turn phase 0 delay --
+#define TUNE_ELEM_TURN_DELAY     850.0f
+#define TUNE_NODE_TURN_DELAY      75.0f
+// -- Straight mileage --
+#define TUNE_NODE_STRAIGHT       200.0f
+#define TUNE_ELEM_STRAIGHT_SHORT 2300.0f
+#define TUNE_ELEM_STRAIGHT_LONG    0.0f
+// -- Turn geometry --
+#define TUNE_TURN_TARGET_DEG      90.0f   // degrees
+// -- Turn settle detection --
+#define TUNE_TURN_SETTLE_ERR       5.0f   // degrees
+#define TUNE_TURN_SETTLE_RATE     45.0f   // deg/s
+#define TUNE_TURN_SETTLE_CYCLES   3       // frames
+// -- Check_Edge cooldown --
+#define TUNE_COOLDOWN_NODE_TURN  150.0f
+#define TUNE_COOLDOWN_STRAIGHT   100.0f
+#define TUNE_COOLDOWN_ELEM_TURN  400.0f
+// -- Safety --
+#define TUNE_SAFE_VOLTAGE         11.3f  // volts
 
 // Gyro rate incremental PID — used in normal trace and turn inner loop
 #define GYRO_PID { \
@@ -162,7 +181,7 @@ typedef struct
     float   Right;       // Right turn Phase 0 distance traveled
     int     Stop;        // Stall counter (consecutive all-on/all-off cycles)
     float   Mileage;     // Resettable segment mileage (zeroed after Phase 1)
-    float   Spd_Mileage; // Current action mileage base snapshot
+    float   StraightBase; // Mileage snapshot at straight entry (encoder ticks)
     float   Straight;    // Straight pass-through target distance (encoder ticks)
     float   Stall;       // Turn delay distance / straight target (replaces Turn_Delay_Mileage)
     int     Edge;        // Total Check_Edge trigger count
@@ -224,9 +243,7 @@ extern float Total_Angle;              // Continuous gyro-derived total angle, c
 // Turn target angle: left turn = -90, right turn = +90
 extern float  Turn_Angle_Target;
 
-// Build mode mileage tracking (now #define macros, not runtime variables)
-#define Mileage_Element_Turn_Delay  850.0f  // Element turn pre-straight distance (encoder ticks)
-#define Mileage_Node_Turn_Delay     75.0f  // Node turn pre-straight distance (encoder ticks)
+// Build mode mileage tracking — see TUNE_* macros above
 // (Count.Stall holds the effective turn delay value at runtime)
 extern uint8  vofa_flash_dump_mode;     // VOFA Flash dump mode flag (OLED toggle)
 extern float  Total_Run_Mileage;       // Total accumulated run mileage (never reset, for Flash records)
@@ -268,6 +285,7 @@ extern float  Debug_Angle_Vel_Target;       // VOFA: target angular velocity
 extern uint8_t g_led_flag;                // 0=green(normal) 1=blue(object) 2=yellow(low voltage)
 extern uint8_t g_scan_progress;            // Scan progress 0-100, 0=not scanning
 extern float  Debug_Angle_Vel_Real;         // VOFA: actual angular velocity
+extern uint8  Debug_Ground_FF_Mode;         // 地面测试: 0=纯PI, 1=速度前馈+PI修正
 extern float  Debug_Kp_Left;               // Left wheel debug Kp
 extern float  Debug_Ki_Left;               // Left wheel debug Ki
 extern float  Debug_Kp_Right;              // Right wheel debug Kp

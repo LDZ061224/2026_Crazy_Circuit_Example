@@ -23,6 +23,124 @@ extern int   Last_Error;
 // Count.StartDelay now in Count_Typedef struct, no standalone extern needed
 extern uint8_t  Last_EnableSwitch_ON;
 
+/* from Ctrl.c -- speed feedforward mode flag */
+extern uint8 Debug_Ground_FF_Mode;
+
+/******************************** speed feedforward **********************************/
+
+/* 左轮速度前馈表 —— PWM 值留空，实车标定后手动填入 */
+static const Speed_FF_Point_t Left_Speed_FF_Table[LEFT_SPEED_FF_TABLE_SIZE] = {
+    {0,   0},
+    {10,  0},
+    {20,  0},
+    {30,  0},
+    {50,  0},
+    {80,  0},
+    {120, 0},
+    {160, 0},
+    {200, 0},
+};
+
+/* 右轮速度前馈表 —— PWM 值留空，实车标定后手动填入 */
+static const Speed_FF_Point_t Right_Speed_FF_Table[RIGHT_SPEED_FF_TABLE_SIZE] = {
+    {0,   0},
+    {10,  0},
+    {20,  0},
+    {30,  0},
+    {50,  0},
+    {80,  0},
+    {120, 0},
+    {160, 0},
+    {200, 0},
+};
+
+/* 电压滤波状态变量 */
+static float Voltage_Raw  = SPEED_FF_VOLTAGE_REF;   // 原始 ADC 换算值（VOFA 观察用）
+static float Voltage_Fast = SPEED_FF_VOLTAGE_REF;   // 快速 EMA（预留）
+static float Voltage_Slow = SPEED_FF_VOLTAGE_REF;   // 慢速 EMA（前馈电压补偿用）
+
+/********************************** 速度前馈辅助函数 **********************************/
+
+/**
+ * @brief  速度前馈查表 + 线性插值
+ * @param  target_speed  带符号的目标速度（编码器 tick/3ms）
+ * @param  table         前馈表指针（已按 speed 升序排列）
+ * @param  table_size    表项数
+ * @return 带符号的前馈 PWM（0~±10000）
+ *
+ * 逻辑：取 target_speed 绝对值查表 → 边界钳位 / 线性插值 → 恢复符号
+ */
+static float Speed_FF_GetPwm(float target_speed,
+                             const Speed_FF_Point_t *table,
+                             uint16_t table_size)
+{
+    float sign = (target_speed >= 0.0f) ? 1.0f : -1.0f;
+    float abs_speed = fabsf(target_speed);
+
+    // 小于表最小值 → 返回最小 PWM
+    if (abs_speed <= table[0].speed)
+        return sign * table[0].pwm;
+
+    // 大于表最大值 → 返回最大 PWM
+    if (abs_speed >= table[table_size - 1].speed)
+        return sign * table[table_size - 1].pwm;
+
+    // 线性插值
+    for (uint16_t i = 0; i < table_size - 1; i++)
+    {
+        if (abs_speed >= table[i].speed && abs_speed <= table[i + 1].speed)
+        {
+            float t = (abs_speed - table[i].speed)
+                    / (table[i + 1].speed - table[i].speed);
+            float pwm = table[i].pwm + t * (table[i + 1].pwm - table[i].pwm);
+            return sign * pwm;
+        }
+    }
+    return 0.0f;  // 理论上不可达，消除编译器警告
+}
+
+/**
+ * @brief  对前馈 PWM 做电池电压补偿
+ *
+ * 只补偿前馈项，不补偿 PID 误差修正量。
+ * ff_pwm_comp = ff_pwm * VOLTAGE_REF / voltage_slow（带上下限钳位）
+ */
+static float Speed_FF_VoltageComp(float ff_pwm, float voltage_slow)
+{
+    float v = voltage_slow;
+
+    if (v < SPEED_FF_VOLTAGE_MIN) v = SPEED_FF_VOLTAGE_MIN;
+    if (v > SPEED_FF_VOLTAGE_MAX) v = SPEED_FF_VOLTAGE_MAX;
+
+    float comp = SPEED_FF_VOLTAGE_REF / v;
+
+    if (comp < SPEED_FF_COMP_MIN) comp = SPEED_FF_COMP_MIN;
+    if (comp > SPEED_FF_COMP_MAX) comp = SPEED_FF_COMP_MAX;
+
+    return ff_pwm * comp;
+}
+
+/**
+ * @brief  更新电压滤波链（尖峰剔除 + 双 EMA）
+ *
+ * 每控制周期（3ms）调用一次，在查前馈表之前调用。
+ * 使用工程已有的 Voltage_Check[0] 作为原始电压来源，不重复写 ADC 驱动。
+ */
+static void Debug_Voltage_Filter_Update(float voltage_adc)
+{
+    float raw = voltage_adc;
+
+    // 尖峰剔除：单次采样偏离慢速趋势超过阈值则钳位
+    if (raw > Voltage_Slow + VOLTAGE_SPIKE_LIMIT)
+        raw = Voltage_Slow + VOLTAGE_SPIKE_LIMIT;
+    else if (raw < Voltage_Slow - VOLTAGE_SPIKE_LIMIT)
+        raw = Voltage_Slow - VOLTAGE_SPIKE_LIMIT;
+
+    Voltage_Raw  = voltage_adc;                                // 原始值，供 VOFA 观察
+    Voltage_Fast += VOLTAGE_FAST_ALPHA * (raw - Voltage_Fast); // 快速 EMA（预留）
+    Voltage_Slow += VOLTAGE_SLOW_ALPHA * (raw - Voltage_Slow); // 慢速 EMA（前馈补偿用）
+}
+
 /**********************************debug entry point**********************************/
 
 /*
@@ -121,17 +239,48 @@ void Debug_Ground_Test(void)
 
         if(Debug_Ground_Dir == 1)
         {
-            Left_Exp_Spd  = Debug_Target_Speed;
+            Left_Exp_Spd  =  Debug_Target_Speed;
             Right_Exp_Spd = -Debug_Target_Speed;
         }
-        else if(Debug_Ground_Dir == 0)
+        else  // Debug_Ground_Dir == 0
         {
             Left_Exp_Spd  = -Debug_Target_Speed;
-            Right_Exp_Spd = Debug_Target_Speed;
+            Right_Exp_Spd =  Debug_Target_Speed;
         }
 
-        Left_PID_Out  = PID_calc(&Left_PID, (float)Left_Exp_Spd, (float)Left_Real_Spd);
-        Right_PID_Out = PID_calc(&Right_PID, (float)Right_Exp_Spd, (float)Right_Real_Spd);
+        // ----- 速度 PI 计算（两种模式共用）-----
+        float pid_out_left  = PID_calc(&Left_PID,  (float)Left_Exp_Spd,  (float)Left_Real_Spd);
+        float pid_out_right = PID_calc(&Right_PID, (float)Right_Exp_Spd, (float)Right_Real_Spd);
+
+        if (Debug_Ground_FF_Mode == 1)
+        {
+            // ----- 前馈模式：FF PWM + PI 修正 -----
+
+            // 1. 更新电压滤波（使用工程已有的 Voltage_Check[0]）
+            Debug_Voltage_Filter_Update(Voltage_Check[0]);
+
+            // 2. 查前馈表
+            float ff_left  = Speed_FF_GetPwm((float)Left_Exp_Spd,
+                                             Left_Speed_FF_Table,
+                                             LEFT_SPEED_FF_TABLE_SIZE);
+            float ff_right = Speed_FF_GetPwm((float)Right_Exp_Spd,
+                                             Right_Speed_FF_Table,
+                                             RIGHT_SPEED_FF_TABLE_SIZE);
+
+            // 3. 电压补偿（只补偿前馈项）
+            ff_left  = Speed_FF_VoltageComp(ff_left,  Voltage_Slow);
+            ff_right = Speed_FF_VoltageComp(ff_right, Voltage_Slow);
+
+            // 4. 合成最终输出 = 前馈补偿 PWM + PID 误差修正
+            Left_PID_Out  = ff_left  + pid_out_left;
+            Right_PID_Out = ff_right + pid_out_right;
+        }
+        else
+        {
+            // ----- 原始纯 PI 模式（不变）-----
+            Left_PID_Out  = pid_out_left;
+            Right_PID_Out = pid_out_right;
+        }
     }
     else
     {

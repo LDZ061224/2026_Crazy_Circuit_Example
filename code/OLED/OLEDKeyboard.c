@@ -684,8 +684,8 @@ void OLED_Input(void)
 
             // 读取并配置控制参�?
             flash_read_page(0, 2, Ctrl_OKb, 8);
-            if (Ctrl_OKb[0] == 0 || Ctrl_OKb[0] > 5000) Ctrl_OKb[0] = (uint32)Mileage_Element_Turn_Delay;
-            if (Ctrl_OKb[1] == 0 || Ctrl_OKb[1] > 5000) Ctrl_OKb[1] = (uint32)Mileage_Node_Turn_Delay;
+            if (Ctrl_OKb[0] == 0 || Ctrl_OKb[0] > 5000) Ctrl_OKb[0] = (uint32)TUNE_ELEM_TURN_DELAY;
+            if (Ctrl_OKb[1] == 0 || Ctrl_OKb[1] > 5000) Ctrl_OKb[1] = (uint32)TUNE_NODE_TURN_DELAY;
             OLED_Show_Str(0, 0, "E_Dly", TextSize_F6x8);
             OLED_Show_Numbers(47, 0, Ctrl_OKb[0], TextSize_F6x8);
             OLED_Show_Str(0, 1, "N_Dly", TextSize_F6x8);
@@ -737,8 +737,8 @@ void Data_Load()
 
     // 加载控制参数（暂时硬编码，调完后恢复）
 //    flash_read_page(0, 2, Ctrl_OKb, 8);
-//    if (Ctrl_OKb[0] != 0 && Ctrl_OKb[0] <= 5000) Mileage_Element_Turn_Delay = Ctrl_OKb[0];
-//    if (Ctrl_OKb[1] != 0 && Ctrl_OKb[1] <= 5000) Mileage_Node_Turn_Delay = Ctrl_OKb[1];
+//    if (Ctrl_OKb[0] != 0 && Ctrl_OKb[0] <= 5000) TUNE_ELEM_TURN_DELAY = Ctrl_OKb[0];
+//    if (Ctrl_OKb[1] != 0 && Ctrl_OKb[1] <= 5000) TUNE_NODE_TURN_DELAY = Ctrl_OKb[1];
 }
 
 /**

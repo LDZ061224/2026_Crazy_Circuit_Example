@@ -50,10 +50,10 @@ float  Light_Thr[15][2];                 // 15-channel light sensor upper and lo
 void Vofa_Send_Data(void)
 {
     floatu8data VOFA_data[20];
-    uint8 frame[15 * 4 + 4];
+    uint8 frame[18 * 4 + 4];
     memset(VOFA_data, 0, sizeof(VOFA_data));
 
-    // Assign debug data to be sent (15 float channels, 60 bytes + 4-byte tail)
+    // Assign debug data to be sent (18 float channels, 72 bytes + 4-byte tail)
      VOFA_data[0].floatdata  = Left_Exp_Spd;
      VOFA_data[1].floatdata  = Right_Exp_Spd;
      VOFA_data[2].floatdata  = Left_Real_Spd;
@@ -69,13 +69,12 @@ void Vofa_Send_Data(void)
      VOFA_data[12].floatdata = Gyro_Integral;
      VOFA_data[13].floatdata = Debug_Angle_Vel_Target;
      VOFA_data[14].floatdata = Total_Angle;
+     VOFA_data[15].floatdata = Build_Action_Index;
+     VOFA_data[16].floatdata = Run_Mode;
+     VOFA_data[17].floatdata = Count.Straight;
 
     int i;
-//    for(i = 0; i < 15; i++)
-//      {
-//          VOFA_data[i].floatdata = Light_ADC[i];
-//      }
-    for(i = 0; i < 15; i++)
+    for(i = 0; i < 18; i++)
     {
         frame[i * 4 + 0] = VOFA_data[i].u8data[0];
         frame[i * 4 + 1] = VOFA_data[i].u8data[1];
@@ -84,10 +83,10 @@ void Vofa_Send_Data(void)
     }
 
     // VOFA protocol fixed frame tail 00 00 80 7F
-    frame[60] = 0x00;
-    frame[61] = 0x00;
-    frame[62] = 0x80;
-    frame[63] = 0x7f;
+    frame[72] = 0x00;
+    frame[73] = 0x00;
+    frame[74] = 0x80;
+    frame[75] = 0x7f;
 
     uart_write_buffer(UART_2, frame, sizeof(frame));
 }

@@ -32,7 +32,7 @@ int Right_Real_Spd = 0;
 
 int Left_Exp_Spd = 0;
 int Right_Exp_Spd = 0;
-int Basic_Speed = 70;   // TODO: hardcoded, restore flash read after tuning
+int Basic_Speed = 30;   // TODO: hardcoded, restore flash read after tuning
 int Run_Speed = 0;
 float Average_Speed = 0;
 uint8 First_Mode = 0;
@@ -158,35 +158,16 @@ uint8  Debug_Angle_Mode = 2;                         // 1=sine rate, 2=step angl
 uint8  Debug_Angle_D_First = 0;                      // 0=error D, 1=measurement D
 float  Debug_Angle_Vel_Target = 0.0f;
 float  Debug_Angle_Vel_Real = 0.0f;
+uint8  Debug_Ground_FF_Mode = 0;                    // 地面测试: 0=纯PI, 1=速度前馈+PI修正
 
 
-/*--------------- Build Mode Turn Control Parameters ---------------*/
+/*--------------- Build Mode Tuning (see Ctrl.h TUNE_*) ---------------*/
+// All TUNE_* macros defined in Ctrl.h
 
-
-
-#define BUILD_TURN_TARGET_ANGLE_DEG    90.0f
-#define TURN_ANGLE_SETTLE_ERROR_DEG    5.0f
-#define TURN_GYRO_SETTLE_RATE_DPS      45.0f
-#define TURN_SETTLE_CYCLE_MIN          3
-#define BUILD_TURN_DECEL_DISTANCE      300.0f  // encoder ticks: distance for decel+advance before in-place rotate
-#define NODE_STRAIGHT_MILEAGE         100.0f  // encoder ticks: node straight pass-through distance
-
-// Mileage_Element_Turn_Delay / Mileage_Node_Turn_Delay now #define macros in Ctrl.h
 uint8 vofa_flash_dump_mode = 0;
 
 // Mileage compensation for turn elements (negative = advance element edge)
 #define MILEAGE_COMPENSATION_X (-100.0f)
-// Short straight element mileage threshold (encoder ticks)
-#define MILEAGE_STRAIGHT_SHORT 1200.0f
-// Long straight element mileage threshold (0 = disabled / handled by node)
-#define MILEAGE_STRAIGHT_LONG  0.0f
-
-
-// Edge-detect cooldown distance after action completes (encoder ticks)
-// Old cycle counts at ~2000 ticks/sec: 25cyc=150tk, 15cyc=90tk, 100cyc=600tk
-#define BUILD_CHECK_EDGE_NODE_TURN_MILEAGE       150.0f
-#define BUILD_CHECK_EDGE_MILEAGE_STRAIGHT_MILEAGE 100.0f
-#define BUILD_CHECK_EDGE_MILEAGE_TURN_MILEAGE     400.0f
 
 // Max consecutive cycles with all sensors on or all off before emergency stop
 #define SAFETY_STOP_CYCLE_MAX         80
@@ -245,7 +226,7 @@ Count_Typedef Count =
     .Right       = 0,
     .Stop        = 0,
     .Mileage     = 0,
-    .Spd_Mileage = 0,
+    .StraightBase = 0,
     .Straight    = 0,
     .Stall       = 0,
     .Edge        = 0,
@@ -340,18 +321,18 @@ static void Build_Dispatch_Current_Action(void)
         // ─── Straight (node + element short + element long) ───
         case BUILD_ACTION_NODE_STRAIGHT:
             Straight_Node_Pending = 1;
-            Count.Straight = NODE_STRAIGHT_MILEAGE;
+            Count.Straight = TUNE_NODE_STRAIGHT;
             Segment_Edge_Mileage_Record[Count.Line][Count.Element++] = Count.Mileage;
             goto do_straight;
         case BUILD_ACTION_ELEM_STRAIGHT_SHORT:
-            Count.Straight = MILEAGE_STRAIGHT_SHORT;
+            Count.Straight = TUNE_ELEM_STRAIGHT_SHORT;
             Segment_Edge_Mileage_Record[Count.Line][Count.Element++] = Count.Mileage;
             goto do_straight;
         case BUILD_ACTION_ELEM_STRAIGHT_LONG:
-            Count.Straight = MILEAGE_STRAIGHT_LONG;
+            Count.Straight = TUNE_ELEM_STRAIGHT_LONG;
             Segment_Edge_Mileage_Record[Count.Line][Count.Element++] = Count.Mileage;
         do_straight:
-            Count.Spd_Mileage = Count.Mileage;
+            Count.StraightBase = Count.Mileage;
             Run_Mode = Straight_Mode;
             break;
 
@@ -359,12 +340,12 @@ static void Build_Dispatch_Current_Action(void)
         case BUILD_ACTION_NODE_TURN_LEFT:
             Segment_Total_Mileage[Count.Line] = Count.Mileage;
             Count.Element = 0;
-            Count.Stall = Mileage_Node_Turn_Delay;          // ★ fix: was missing
+            Count.Stall = TUNE_NODE_TURN_DELAY;          // ★ fix: was missing
             goto do_left;
         case BUILD_ACTION_ELEM_TURN_LEFT:
             Segment_Total_Mileage[Count.Line] = Count.Mileage;
             Count.Element = 0;
-            Count.Stall = Mileage_Element_Turn_Delay;
+            Count.Stall = TUNE_ELEM_TURN_DELAY;
         do_left:
             Count.Line++;
             Set_Node_Run_Mode(1);
@@ -374,12 +355,12 @@ static void Build_Dispatch_Current_Action(void)
         case BUILD_ACTION_NODE_TURN_RIGHT:
             Segment_Total_Mileage[Count.Line] = Count.Mileage;
             Count.Element = 0;
-            Count.Stall = Mileage_Node_Turn_Delay;
+            Count.Stall = TUNE_NODE_TURN_DELAY;
             goto do_right;
         case BUILD_ACTION_ELEM_TURN_RIGHT:
             Segment_Total_Mileage[Count.Line] = Count.Mileage;
             Count.Element = 0;
-            Count.Stall = Mileage_Element_Turn_Delay;
+            Count.Stall = TUNE_ELEM_TURN_DELAY;
         do_right:
             Count.Line++;
             Set_Node_Run_Mode(2);
@@ -407,7 +388,7 @@ static int Select_Run_Speed(void)
 ** Description: Reset all turn-related state variables to prepare for the next action
 ** Details:
 **         Clears PID data, expected speeds, turn flags, and sets the
-**         edge-check cooldown threshold to BUILD_CHECK_EDGE_NODE_TURN_MILEAGE.
+**         edge-check cooldown threshold to TUNE_COOLDOWN_NODE_TURN.
 **         Resets Run_Mode back to Normal_Mode.
 *************************************/
 static void Reset_Turn_Action_State(void)
@@ -430,7 +411,7 @@ static void Reset_Turn_Action_State(void)
     is_right = 0;
     Turn_Decel_Phase = 0;
     Check_Edge_Skip_Mileage_Base = Count.Mileage;
-    Check_Edge_Skip_Thresh = BUILD_CHECK_EDGE_NODE_TURN_MILEAGE;
+    Check_Edge_Skip_Thresh = TUNE_COOLDOWN_NODE_TURN;
     Run_Mode = Normal_Mode;
 }
 
@@ -463,9 +444,9 @@ static uint8_t Is_Turn_Angle_Settled(float angle_target)
 {
     float angle_error = fabsf(angle_target - Gyro_Integral);
 
-    if (angle_error <= TURN_ANGLE_SETTLE_ERROR_DEG && fabsf(Gyro_Z) <= TURN_GYRO_SETTLE_RATE_DPS)
+    if (angle_error <= TUNE_TURN_SETTLE_ERR && fabsf(Gyro_Z) <= TUNE_TURN_SETTLE_RATE)
     {
-        if (Turn_Angle_Settle_Count < TURN_SETTLE_CYCLE_MIN)
+        if (Turn_Angle_Settle_Count < TUNE_TURN_SETTLE_CYCLES)
         {
             Turn_Angle_Settle_Count++;
         }
@@ -475,7 +456,7 @@ static uint8_t Is_Turn_Angle_Settled(float angle_target)
         Turn_Angle_Settle_Count = 0;
     }
 
-    return (Turn_Angle_Settle_Count >= TURN_SETTLE_CYCLE_MIN);
+    return (Turn_Angle_Settle_Count >= TUNE_TURN_SETTLE_CYCLES);
 }
 
 /*************************************
@@ -550,10 +531,10 @@ static void Finish_Mileage_Section(void)
     is_right = 0;
     Mileage_Turn_Done = 0;
     Check_Edge_Skip_Mileage_Base = Count.Mileage;
-    Check_Edge_Skip_Thresh = BUILD_CHECK_EDGE_MILEAGE_STRAIGHT_MILEAGE;
+    Check_Edge_Skip_Thresh = TUNE_COOLDOWN_STRAIGHT;
     Run_Mode = Normal_Mode;
 
-    Count.Spd_Mileage = Count.Mileage;
+    Count.StraightBase = Count.Mileage;
 
     Build_Finish_Current_Action();
 }
@@ -765,7 +746,7 @@ void Load_All_Flash_Data_For_VOFA(void)
 /*************************************
 ** Function: Safety_Check
 ** Description: Safety monitoring — low voltage, stall detection, finish detection, LED indication
-** Details:    1. Low voltage: if Voltage_Check[0] stays below SAFETY_LOW_VOLTAGE_THRESHOLD
+** Details:    1. Low voltage: if Voltage_Check[0] stays below TUNE_SAFE_VOLTAGE
 **                for LOW_VOLT_FRAME_THRESH consecutive frames, trigger stop with yellow LED.
 **             2. Stall detection: if Count.Stop exceeds SAFETY_STOP_CYCLE_MAX (all-on/all-off),
 **                trigger Stop_Flag.
@@ -783,7 +764,7 @@ void Safety_Check(void)
 #define LOW_VOLT_FRAME_THRESH 1000  // frames of sustained low voltage before stop
 
     // Voltage check: debounce — require N consecutive frames below threshold
-    if (Voltage_Check[0] < SAFETY_LOW_VOLTAGE_THRESHOLD)
+    if (Voltage_Check[0] < TUNE_SAFE_VOLTAGE)
     {
         low_volt_frames++;
         if (low_volt_frames >= LOW_VOLT_FRAME_THRESH)
@@ -1322,12 +1303,15 @@ void Set_Speed()
         if (!straight_enter)
         {
             straight_enter = 1;
+            PID_cleardata(&Angle_PID);
             PID_cleardata(&Gyro_PID);
-            PID_cleardata(&Turn_PID);
         }
-        Turn_PID_Out = 0;
-        Gyro_PID_Out = PID_calc(&Gyro_PID, 0.0f, Gyro_Z);
-        Left_Exp_Spd = Run_Speed + Gyro_PID_Out;
+        // Cascaded heading correction: angle → gyro rate → wheel speeds
+        // Target = theoretical total angle, Actual = Total_Angle
+        float desired_angle = Normalize_Angle_180(-90.0f * total_left_turns + 90.0f * total_right_turns);
+        Turn_PID_Out = PID_calc(&Angle_PID, desired_angle, Total_Angle);
+        Gyro_PID_Out = PID_calc(&Gyro_PID, Turn_PID_Out, Gyro_Z);
+        Left_Exp_Spd  = Run_Speed + Gyro_PID_Out;
         Right_Exp_Spd = Run_Speed - Gyro_PID_Out;
     }
     else
@@ -1346,7 +1330,6 @@ void Set_Speed()
     if (EnableSwitch_ON)
     {
         Average_Speed = (Left_Real_Spd + Right_Real_Spd) / 2.0;
-        Count.Spd_Mileage += Average_Speed;
     }
 
 
@@ -1453,7 +1436,7 @@ void Set_Out(void)
 *************************************/
 void Straight_Run(void)
 {
-    float section_mileage = Count.Mileage - Count.Spd_Mileage;
+    float section_mileage = Count.Mileage - Count.StraightBase;
 
     Error = 0;
 

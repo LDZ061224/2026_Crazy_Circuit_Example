@@ -20,7 +20,31 @@ Others:      Requires Ctrl.h externs for shared globals.
  *  USE_DEBUG_MODE = 1   -> Car_Go() dispatches to Debug_Car_Go() when Mode==Debug_Mode
  *  USE_DEBUG_MODE = 0   -> Car_Go() runs only normal racing (compile out debug branch)
  */
-#define USE_DEBUG_MODE  0
+#define USE_DEBUG_MODE  1
+
+/*********************************** 閫熷害鍓嶉鐩稿叧瀹氫箟 ***********************************/
+
+/* 鍓嶉琛ㄥ崟椤癸細鐩爣閫熷害 -> 鍩虹 PWM */
+typedef struct {
+    float speed;   // 鐩爣閫熷害锛堢紪鐮佸櫒 tick/3ms锛�
+    float pwm;     // 鍓嶉 PWM 鍗犵┖姣旓紙0~10000锛�
+} Speed_FF_Point_t;
+
+/* 宸﹀彸杞墠棣堣〃琛ㄩ」鏁� */
+#define LEFT_SPEED_FF_TABLE_SIZE   9
+#define RIGHT_SPEED_FF_TABLE_SIZE  9
+
+/* 鐢靛帇琛ュ伩鍙傛暟 */
+#define SPEED_FF_VOLTAGE_REF    12.0f   // 鍓嶉琛ㄦ爣瀹氭椂鐨勫弬鑰冪數鍘�
+#define SPEED_FF_VOLTAGE_MIN    11.1f   // 鐢垫満棰濆畾鐢靛帇锛堜笅闄愰挸浣嶏級
+#define SPEED_FF_VOLTAGE_MAX    12.6f   // 3S 婊＄數鐢靛帇锛堜笂闄愰挸浣嶏級
+#define SPEED_FF_COMP_MIN       0.90f   // 琛ュ伩鍊嶇巼涓嬮檺
+#define SPEED_FF_COMP_MAX       1.12f   // 琛ュ伩鍊嶇巼涓婇檺
+
+/* 鐢靛帇婊ゆ尝鍙傛暟 */
+#define VOLTAGE_FAST_ALPHA      0.10f   // 蹇�� EMA 绯绘暟
+#define VOLTAGE_SLOW_ALPHA      0.01f   // 鎱㈤�� EMA 绯绘暟
+#define VOLTAGE_SPIKE_LIMIT     1.0f    // 鍗曟閲囨牱灏栧嘲鍓旈櫎闃堝�硷紙V锛�
 
 /***********************************public API***********************************/
 
