@@ -126,13 +126,15 @@ static void TestMotor_Init(void)
     gpio_init(ENABLE_SWITCH_PIN, GPI, 0, GPI_PULL_DOWN);
 
     // DIR PWM: 10000 = forward, 0 = reverse
-    pwm_init(Left_Motor_DIR,  30000, 10000);
-    pwm_init(Right_Motor_DIR, 30000, 10000);
+    // pwm_init(Left_Motor_DIR,  30000, 10000);
+    // pwm_init(Right_Motor_DIR, 30000, 10000);
 
-    // duty PWM: 30 kHz, start at 0
-    pwm_init(Left_Motor_PWM,  30000, 0);
-    pwm_init(Right_Motor_PWM, 30000, 0);
+    // // duty PWM: 30 kHz, start at 0
+    // pwm_init(Left_Motor_PWM,  30000, 0);
+    // pwm_init(Right_Motor_PWM, 30000, 0);
 
+    pwm_init(Motor_DIR, 30000, 10000);
+    pwm_init(Motor_PWM, 30000, 0);
     g_motor_test_phase = 0;
     g_motor_phase_timer = 0;
 
@@ -196,10 +198,12 @@ static void TestMotor_Loop(void)
 //        g_motor_phase_timer = 0;
 //        g_motor_test_phase++;
 //    }
-    pwm_set_duty(Left_Motor_DIR, 0);
-    pwm_set_duty(Left_Motor_PWM, 6000);
-    pwm_set_duty(Right_Motor_DIR, 10000);
-    pwm_set_duty(Right_Motor_PWM, 6000);
+    // pwm_set_duty(Left_Motor_DIR, 0);
+    // pwm_set_duty(Left_Motor_PWM, 6000);
+    // pwm_set_duty(Right_Motor_DIR, 10000);
+    // pwm_set_duty(Right_Motor_PWM, 6000);
+    pwm_set_duty(Motor_DIR, 10000);
+    pwm_set_duty(Motor_PWM, 6000);
 }
 
 /*********************************** TEST_BUZZER ***********************************/

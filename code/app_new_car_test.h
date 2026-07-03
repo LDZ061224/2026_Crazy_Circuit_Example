@@ -95,15 +95,17 @@ typedef enum
 #define Left_Motor_DIR      ATOM3_CH0_P15_5
 //#define Left_Motor_PWM      ATOM3_CH3_P00_12
 //#define Left_Motor_DIR      ATOM2_CH0_P00_9
+#define Motor_DIR      ATOM0_CH3_P00_4
+#define Motor_PWM      ATOM1_CH6_P00_7
 #define Right_Motor_PWM     ATOM1_CH3_P00_4
 #define Right_Motor_DIR     ATOM1_CH5_P00_6
 #define Suction_Motor_PWM   ATOM1_CH6_P00_7
 #define Suction_Motor_DIR   ATOM3_CH3_P00_12
 
-// 娴ｈ儻鍏樺锟介崗鍐茬穿閼存熬绱欐妯兼暩楠烇拷 = 瀵拷閸氼垽绱�
+// 娴ｈ儻鍏樺锟介崗鍐茬穿閼存熬绱欐妯兼暩楠烇拷 = 瀵拷閸氼垽绱
 #define ENABLE_SWITCH_PIN   P20_7
 
-// 閼奉亜鐣炬稊澶嬪瘻闁款喖绱╅懘锟�
+// 閼奉亜鐣炬稊澶嬪瘻闁款喖绱╅懘锟
 #define BUTTON_PIN          P22_3
 
 /*********************************** 閺佺増宓佺猾璇茬�烽敍鍫滅矤 Fun.h 婢跺秴鍩楅敍锟� ***********************************/

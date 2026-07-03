@@ -111,6 +111,15 @@ static const uint8_t Track_Sensor_Active_Index[TRACK_SENSOR_ACTIVE_NUM] =
 
 /*--------------------------*/
 Racing_track_Typedef Run_Track;
+
+/* 预赛/决赛赛道结构体定义 —— 实车建图后通过 OLED 菜单填入，目前先用零初始化 */
+Racing_track_Typedef Pre_Contest_1   = {0};
+Racing_track_Typedef Pre_Contest_2   = {0};
+Racing_track_Typedef Pre_Contest_3   = {0};
+Racing_track_Typedef Final_Contest_1 = {0};
+Racing_track_Typedef Final_Contest_2 = {0};
+Racing_track_Typedef Final_Contest_3 = {0};
+
 int8_t Execute_Times = 0;
 int8_t Mileage_Times = 0;
 uint8_t Line_Num_Count = 0;

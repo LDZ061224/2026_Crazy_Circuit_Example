@@ -1,0 +1,11 @@
+# Build output
+Debug/
+
+# Backup files
+*.bak
+
+# Environment
+.env
+
+# Generated source listings
+*.src
