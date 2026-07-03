@@ -70,7 +70,7 @@ int core0_main(void)
     // ========================= Gyro Zero-Drift Calibration =========================
     // Turn on suction to maximum, LED board breathing red to remind the user to keep the vehicle still.
     pwm_set_duty(Suction_Motor_DIR, 10000);
-    pwm_set_duty(Suction_Motor_PWM, 9500);
+    pwm_set_duty(Suction_Motor_PWM, 3000);
 
     WS2812_Effect_Set((WS2812_Effect_Config){
         .type = EFF_BREATHING,
@@ -143,10 +143,10 @@ int core0_main(void)
     while (TRUE)
     {
         Vofa_Send_Data();
-//        pwm_set_duty(Right_Motor_DIR, 0);
+//        pwm_set_duty(Right_Motor_DIR, 10000);
 //        pwm_set_duty(Right_Motor_PWM, 6000);
 //        pwm_set_duty(Left_Motor_PWM, 6000);
-//        pwm_set_duty(Left_Motor_DIR, 0);
+//        pwm_set_duty(Left_Motor_DIR, 10000);
 
         // run-time LED: 0=green(normal) 1=blue(object) 2=yellow(low voltage)
         WS2812_Effect_Config cfg = { .type = EFF_SOLID };

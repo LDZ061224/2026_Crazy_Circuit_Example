@@ -51,7 +51,7 @@ PID_HandleTypeDef Angle_PID = ANGLE_PID;   // Angle PD with derivative on measur
 PID_HandleTypeDef Left_PID = LEFT_PID;
 
 PID_HandleTypeDef Right_PID = RIGHT_PID;
-PID_HandleTypeDef Turn_PID = TURN_PID;
+// Turn_PID removed — Angle_PID does both outer loops now
 
 /*--------------- Track Following State ---------------*/
 int Left_Scan_Point = 0;
@@ -152,7 +152,7 @@ Debug_Sub_Mode_Enum Debug_Sub_Mode = Debug_Sub_PI_Tuning;
 uint8  Debug_Motor_Enable = 0;
 uint8  Debug_Which_Wheel = 0;
 int    Debug_Target_Speed = 40;
-int    Debug_Fan_Duty = 9500;
+int    Debug_Fan_Duty = 500;
 uint8  Debug_Ground_Dir = 1;
 uint8  Debug_Angle_Mode = 2;                         // 1=sine rate, 2=step angle, 3=direct gyro rate
 uint8  Debug_Angle_D_First = 0;                      // 0=error D, 1=measurement D
@@ -401,7 +401,6 @@ static void Reset_Turn_Action_State(void)
     PID_cleardata(&Gyro_PID);
     PID_cleardata(&Gyro_PD_PID);
     PID_cleardata(&Angle_PID);
-    PID_cleardata(&Turn_PID);
     Gyro_PID_Out = 0;
     Left_Exp_Spd = 0;
     Right_Exp_Spd = 0;
@@ -799,8 +798,8 @@ void Safety_Check(void)
     if (Stop_Flag != 0)
     {
         pwm_set_duty(Suction_Motor_PWM, 0);
-        pwm_set_duty(Suction_Motor_DIR, 0);
-        pwm_set_duty(Left_Motor_DIR, 0);
+        pwm_set_duty(Suction_Motor_DIR, 10000);
+        pwm_set_duty(Left_Motor_DIR, 10000);
         pwm_set_duty(Left_Motor_PWM, 0);
         pwm_set_duty(Right_Motor_DIR, 0);
         pwm_set_duty(Right_Motor_PWM, 0);
@@ -1286,7 +1285,6 @@ void Set_Speed()
         straight_enter = 0;
         Left_Exp_Spd = 0;
         Right_Exp_Spd = 0;
-        PID_cleardata(&Turn_PID);
         PID_cleardata(&Gyro_PID);
         PID_cleardata(&Gyro_PD_PID);
         return;
@@ -1356,9 +1354,9 @@ void Set_Out(void)
         Count.StartDelay--;
 
 
-        pwm_set_duty(Suction_Motor_PWM, 9520);
+        pwm_set_duty(Suction_Motor_PWM, 3000);
         pwm_set_duty(Suction_Motor_DIR, 10000);
-        pwm_set_duty(Left_Motor_DIR, 0);
+        pwm_set_duty(Left_Motor_DIR, 10000);
         pwm_set_duty(Left_Motor_PWM, 0);
         pwm_set_duty(Right_Motor_DIR, 0);
         pwm_set_duty(Right_Motor_PWM, 0);
@@ -1370,13 +1368,13 @@ void Set_Out(void)
 
     if (EnableSwitch_ON && Stop_Flag == 0)
     {
-        pwm_set_duty(Suction_Motor_PWM, 9500);
+        pwm_set_duty(Suction_Motor_PWM, 3000);
         pwm_set_duty(Suction_Motor_DIR, 10000);
     }
     else
     {
         pwm_set_duty(Suction_Motor_PWM, 0);
-        pwm_set_duty(Suction_Motor_DIR, 0);
+        pwm_set_duty(Suction_Motor_DIR, 10000);
     }
 
 
@@ -1385,17 +1383,17 @@ void Set_Out(void)
 
         if (Left_PID_Out == 0)
         {
-            pwm_set_duty(Left_Motor_DIR, 0);
+            pwm_set_duty(Left_Motor_DIR, 10000);
             pwm_set_duty(Left_Motor_PWM, 0);
         }
         else if (Left_PID_Out > 0)   // forward
         {
-            pwm_set_duty(Left_Motor_DIR, 0);
+            pwm_set_duty(Left_Motor_DIR, 10000);
             pwm_set_duty(Left_Motor_PWM, fabs(Left_PID_Out));
         }
-        else                         // reverse
+        else                         // reverse: DIR=0
         {
-            pwm_set_duty(Left_Motor_DIR, 10000);
+            pwm_set_duty(Left_Motor_DIR, 0);
             pwm_set_duty(Left_Motor_PWM, fabs(Left_PID_Out));
         }
 
@@ -1405,12 +1403,12 @@ void Set_Out(void)
             pwm_set_duty(Right_Motor_DIR, 0);
             pwm_set_duty(Right_Motor_PWM, 0);
         }
-        else if (Right_PID_Out > 0)  // forward
+        else if (Right_PID_Out > 0)  // forward: DIR=0
         {
             pwm_set_duty(Right_Motor_DIR, 0);
             pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
         }
-        else                         // reverse
+        else                         // reverse: DIR=10000
         {
             pwm_set_duty(Right_Motor_DIR, 10000);
             pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
@@ -1418,7 +1416,7 @@ void Set_Out(void)
     }
     else
     {
-        pwm_set_duty(Left_Motor_DIR, 0);
+        pwm_set_duty(Left_Motor_DIR, 10000);
         pwm_set_duty(Left_Motor_PWM, 0);
         pwm_set_duty(Right_Motor_DIR, 0);
         pwm_set_duty(Right_Motor_PWM, 0);

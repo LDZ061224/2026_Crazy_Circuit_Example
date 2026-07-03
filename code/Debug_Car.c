@@ -28,7 +28,7 @@ extern uint8 Debug_Ground_FF_Mode;
 
 /******************************** speed feedforward **********************************/
 
-/* 左轮速度前馈表 —— PWM 值留空，实车标定后手动填入 */
+/* 宸﹁疆閫熷害鍓嶉琛� 鈥斺�� PWM 鍊肩暀绌猴紝瀹炶溅鏍囧畾鍚庢墜鍔ㄥ～鍏� */
 static const Speed_FF_Point_t Left_Speed_FF_Table[LEFT_SPEED_FF_TABLE_SIZE] = {
     {0,   0},
     {10,  0},
@@ -41,7 +41,7 @@ static const Speed_FF_Point_t Left_Speed_FF_Table[LEFT_SPEED_FF_TABLE_SIZE] = {
     {200, 0},
 };
 
-/* 右轮速度前馈表 —— PWM 值留空，实车标定后手动填入 */
+/* 鍙宠疆閫熷害鍓嶉琛� 鈥斺�� PWM 鍊肩暀绌猴紝瀹炶溅鏍囧畾鍚庢墜鍔ㄥ～鍏� */
 static const Speed_FF_Point_t Right_Speed_FF_Table[RIGHT_SPEED_FF_TABLE_SIZE] = {
     {0,   0},
     {10,  0},
@@ -54,8 +54,8 @@ static const Speed_FF_Point_t Right_Speed_FF_Table[RIGHT_SPEED_FF_TABLE_SIZE] = 
     {200, 0},
 };
 
-/* 角速度前馈表 —— delta_V 值留空，实车标定后手动填入
-   gyro_rate = 目标角速度 (deg/s), delta_v = 左右轮差速（编码器 tick/3ms） */
+/* 瑙掗�熷害鍓嶉琛� 鈥斺�� delta_V 鍊肩暀绌猴紝瀹炶溅鏍囧畾鍚庢墜鍔ㄥ～鍏�
+   gyro_rate = 鐩爣瑙掗�熷害 (deg/s), delta_v = 宸﹀彸杞樊閫燂紙缂栫爜鍣� tick/3ms锛� */
 static const Gyro_FF_Point_t Gyro_FF_Table[GYRO_FF_TABLE_SIZE] = {
     {0,    0},
     {200,  0},
@@ -66,21 +66,21 @@ static const Gyro_FF_Point_t Gyro_FF_Table[GYRO_FF_TABLE_SIZE] = {
     {1200, 0},
 };
 
-/* 电压滤波状态变量 */
-static float Voltage_Raw  = SPEED_FF_VOLTAGE_REF;   // 原始 ADC 换算值（VOFA 观察用）
-static float Voltage_Fast = SPEED_FF_VOLTAGE_REF;   // 快速 EMA（预留）
-static float Voltage_Slow = SPEED_FF_VOLTAGE_REF;   // 慢速 EMA（前馈电压补偿用）
+/* 鐢靛帇婊ゆ尝鐘舵�佸彉閲� */
+static float Voltage_Raw  = SPEED_FF_VOLTAGE_REF;   // 鍘熷 ADC 鎹㈢畻鍊硷紙VOFA 瑙傚療鐢級
+static float Voltage_Fast = SPEED_FF_VOLTAGE_REF;   // 蹇�� EMA锛堥鐣欙級
+static float Voltage_Slow = SPEED_FF_VOLTAGE_REF;   // 鎱㈤�� EMA锛堝墠棣堢數鍘嬭ˉ鍋跨敤锛�
 
-/********************************** 速度前馈辅助函数 **********************************/
+/********************************** 閫熷害鍓嶉杈呭姪鍑芥暟 **********************************/
 
 /**
- * @brief  速度前馈查表 + 线性插值
- * @param  target_speed  带符号的目标速度（编码器 tick/3ms）
- * @param  table         前馈表指针（已按 speed 升序排列）
- * @param  table_size    表项数
- * @return 带符号的前馈 PWM（0~±10000）
+ * @brief  閫熷害鍓嶉鏌ヨ〃 + 绾挎�ф彃鍊�
+ * @param  target_speed  甯︾鍙风殑鐩爣閫熷害锛堢紪鐮佸櫒 tick/3ms锛�
+ * @param  table         鍓嶉琛ㄦ寚閽堬紙宸叉寜 speed 鍗囧簭鎺掑垪锛�
+ * @param  table_size    琛ㄩ」鏁�
+ * @return 甯︾鍙风殑鍓嶉 PWM锛�0~卤10000锛�
  *
- * 逻辑：取 target_speed 绝对值查表 → 边界钳位 / 线性插值 → 恢复符号
+ * 閫昏緫锛氬彇 target_speed 缁濆鍊兼煡琛� 鈫� 杈圭晫閽充綅 / 绾挎�ф彃鍊� 鈫� 鎭㈠绗﹀彿
  */
 static float Speed_FF_GetPwm(float target_speed,
                              const Speed_FF_Point_t *table,
@@ -89,15 +89,15 @@ static float Speed_FF_GetPwm(float target_speed,
     float sign = (target_speed >= 0.0f) ? 1.0f : -1.0f;
     float abs_speed = fabsf(target_speed);
 
-    // 小于表最小值 → 返回最小 PWM
+    // 灏忎簬琛ㄦ渶灏忓�� 鈫� 杩斿洖鏈�灏� PWM
     if (abs_speed <= table[0].speed)
         return sign * table[0].pwm;
 
-    // 大于表最大值 → 返回最大 PWM
+    // 澶т簬琛ㄦ渶澶у�� 鈫� 杩斿洖鏈�澶� PWM
     if (abs_speed >= table[table_size - 1].speed)
         return sign * table[table_size - 1].pwm;
 
-    // 线性插值
+    // 绾挎�ф彃鍊�
     for (uint16_t i = 0; i < table_size - 1; i++)
     {
         if (abs_speed >= table[i].speed && abs_speed <= table[i + 1].speed)
@@ -108,30 +108,30 @@ static float Speed_FF_GetPwm(float target_speed,
             return sign * pwm;
         }
     }
-    return 0.0f;  // 理论上不可达，消除编译器警告
+    return 0.0f;  // 鐞嗚涓婁笉鍙揪锛屾秷闄ょ紪璇戝櫒璀﹀憡
 }
 
 /**
- * @brief  角速度前馈查表 + 线性插值
- * @param  target_gyro  带符号的目标角速度 (deg/s)
- * @return 带符号的左右轮差速 delta_V（编码器 tick/3ms）
+ * @brief  瑙掗�熷害鍓嶉鏌ヨ〃 + 绾挎�ф彃鍊�
+ * @param  target_gyro  甯︾鍙风殑鐩爣瑙掗�熷害 (deg/s)
+ * @return 甯︾鍙风殑宸﹀彸杞樊閫� delta_V锛堢紪鐮佸櫒 tick/3ms锛�
  *
- * 逻辑与 Speed_FF_GetPwm 一致：取绝对值查表 → 边界钳位/线性插值 → 恢复符号
+ * 閫昏緫涓� Speed_FF_GetPwm 涓�鑷达細鍙栫粷瀵瑰�兼煡琛� 鈫� 杈圭晫閽充綅/绾挎�ф彃鍊� 鈫� 鎭㈠绗﹀彿
  */
 static float Gyro_FF_GetDeltaV(float target_gyro)
 {
     float sign = (target_gyro >= 0.0f) ? 1.0f : -1.0f;
     float abs_rate = fabsf(target_gyro);
 
-    // 小于表最小值 → 返回最小 delta_V
+    // 灏忎簬琛ㄦ渶灏忓�� 鈫� 杩斿洖鏈�灏� delta_V
     if (abs_rate <= Gyro_FF_Table[0].gyro_rate)
         return sign * Gyro_FF_Table[0].delta_v;
 
-    // 大于表最大值 → 返回最大 delta_V
+    // 澶т簬琛ㄦ渶澶у�� 鈫� 杩斿洖鏈�澶� delta_V
     if (abs_rate >= Gyro_FF_Table[GYRO_FF_TABLE_SIZE - 1].gyro_rate)
         return sign * Gyro_FF_Table[GYRO_FF_TABLE_SIZE - 1].delta_v;
 
-    // 线性插值
+    // 绾挎�ф彃鍊�
     for (uint16_t i = 0; i < GYRO_FF_TABLE_SIZE - 1; i++)
     {
         if (abs_rate >= Gyro_FF_Table[i].gyro_rate
@@ -144,14 +144,14 @@ static float Gyro_FF_GetDeltaV(float target_gyro)
             return sign * dv;
         }
     }
-    return 0.0f;  // 理论上不可达，消除编译器警告
+    return 0.0f;  // 鐞嗚涓婁笉鍙揪锛屾秷闄ょ紪璇戝櫒璀﹀憡
 }
 
 /**
- * @brief  对前馈 PWM 做电池电压补偿
+ * @brief  瀵瑰墠棣� PWM 鍋氱數姹犵數鍘嬭ˉ鍋�
  *
- * 只补偿前馈项，不补偿 PID 误差修正量。
- * ff_pwm_comp = ff_pwm * VOLTAGE_REF / voltage_slow（带上下限钳位）
+ * 鍙ˉ鍋垮墠棣堥」锛屼笉琛ュ伩 PID 璇樊淇閲忋��
+ * ff_pwm_comp = ff_pwm * VOLTAGE_REF / voltage_slow锛堝甫涓婁笅闄愰挸浣嶏級
  */
 static float Speed_FF_VoltageComp(float ff_pwm, float voltage_slow)
 {
@@ -169,24 +169,24 @@ static float Speed_FF_VoltageComp(float ff_pwm, float voltage_slow)
 }
 
 /**
- * @brief  更新电压滤波链（尖峰剔除 + 双 EMA）
+ * @brief  鏇存柊鐢靛帇婊ゆ尝閾撅紙灏栧嘲鍓旈櫎 + 鍙� EMA锛�
  *
- * 每控制周期（3ms）调用一次，在查前馈表之前调用。
- * 使用工程已有的 Voltage_Check[0] 作为原始电压来源，不重复写 ADC 驱动。
+ * 姣忔帶鍒跺懆鏈燂紙3ms锛夎皟鐢ㄤ竴娆★紝鍦ㄦ煡鍓嶉琛ㄤ箣鍓嶈皟鐢ㄣ��
+ * 浣跨敤宸ョ▼宸叉湁鐨� Voltage_Check[0] 浣滀负鍘熷鐢靛帇鏉ユ簮锛屼笉閲嶅鍐� ADC 椹卞姩銆�
  */
 static void Debug_Voltage_Filter_Update(float voltage_adc)
 {
     float raw = voltage_adc;
 
-    // 尖峰剔除：单次采样偏离慢速趋势超过阈值则钳位
+    // 灏栧嘲鍓旈櫎锛氬崟娆￠噰鏍峰亸绂绘參閫熻秼鍔胯秴杩囬槇鍊煎垯閽充綅
     if (raw > Voltage_Slow + VOLTAGE_SPIKE_LIMIT)
         raw = Voltage_Slow + VOLTAGE_SPIKE_LIMIT;
     else if (raw < Voltage_Slow - VOLTAGE_SPIKE_LIMIT)
         raw = Voltage_Slow - VOLTAGE_SPIKE_LIMIT;
 
-    Voltage_Raw  = voltage_adc;                                // 原始值，供 VOFA 观察
-    Voltage_Fast += VOLTAGE_FAST_ALPHA * (raw - Voltage_Fast); // 快速 EMA（预留）
-    Voltage_Slow += VOLTAGE_SLOW_ALPHA * (raw - Voltage_Slow); // 慢速 EMA（前馈补偿用）
+    Voltage_Raw  = voltage_adc;                                // 鍘熷鍊硷紝渚� VOFA 瑙傚療
+    Voltage_Fast += VOLTAGE_FAST_ALPHA * (raw - Voltage_Fast); // 蹇�� EMA锛堥鐣欙級
+    Voltage_Slow += VOLTAGE_SLOW_ALPHA * (raw - Voltage_Slow); // 鎱㈤�� EMA锛堝墠棣堣ˉ鍋跨敤锛�
 }
 
 /**********************************debug entry point**********************************/
@@ -296,18 +296,18 @@ void Debug_Ground_Test(void)
             Right_Exp_Spd =  Debug_Target_Speed;
         }
 
-        // ----- 速度 PI 计算（两种模式共用）-----
+        // ----- 閫熷害 PI 璁＄畻锛堜袱绉嶆ā寮忓叡鐢級-----
         float pid_out_left  = PID_calc(&Left_PID,  (float)Left_Exp_Spd,  (float)Left_Real_Spd);
         float pid_out_right = PID_calc(&Right_PID, (float)Right_Exp_Spd, (float)Right_Real_Spd);
 
         if (Debug_Ground_FF_Mode == 1)
         {
-            // ----- 前馈模式：FF PWM + PI 修正 -----
+            // ----- 鍓嶉妯″紡锛欶F PWM + PI 淇 -----
 
-            // 1. 更新电压滤波（使用工程已有的 Voltage_Check[0]）
+            // 1. 鏇存柊鐢靛帇婊ゆ尝锛堜娇鐢ㄥ伐绋嬪凡鏈夌殑 Voltage_Check[0]锛�
             Debug_Voltage_Filter_Update(Voltage_Check[0]);
 
-            // 2. 查前馈表
+            // 2. 鏌ュ墠棣堣〃
             float ff_left  = Speed_FF_GetPwm((float)Left_Exp_Spd,
                                              Left_Speed_FF_Table,
                                              LEFT_SPEED_FF_TABLE_SIZE);
@@ -315,17 +315,17 @@ void Debug_Ground_Test(void)
                                              Right_Speed_FF_Table,
                                              RIGHT_SPEED_FF_TABLE_SIZE);
 
-            // 3. 电压补偿（只补偿前馈项）
+            // 3. 鐢靛帇琛ュ伩锛堝彧琛ュ伩鍓嶉椤癸級
             ff_left  = Speed_FF_VoltageComp(ff_left,  Voltage_Slow);
             ff_right = Speed_FF_VoltageComp(ff_right, Voltage_Slow);
 
-            // 4. 合成最终输出 = 前馈补偿 PWM + PID 误差修正
+            // 4. 鍚堟垚鏈�缁堣緭鍑� = 鍓嶉琛ュ伩 PWM + PID 璇樊淇
             Left_PID_Out  = ff_left  + pid_out_left;
             Right_PID_Out = ff_right + pid_out_right;
         }
         else
         {
-            // ----- 原始纯 PI 模式（不变）-----
+            // ----- 鍘熷绾� PI 妯″紡锛堜笉鍙橈級-----
             Left_PID_Out  = pid_out_left;
             Right_PID_Out = pid_out_right;
         }
@@ -412,18 +412,18 @@ void Debug_Angle_Tuning(void)
     Debug_Angle_Vel_Target = gyro_target;
     Debug_Angle_Vel_Real = Gyro_Z;
 
-    // ----- 角速度内环 -----
+    // ----- 瑙掗�熷害鍐呯幆 -----
     float gyro_pid_out = PID_calc(&Gyro_PID, gyro_target, Gyro_Z);
 
     if (Debug_Gyro_FF_Mode == 1)
     {
-        // 前馈模式：查表得 delta_V + PID 修正
+        // 鍓嶉妯″紡锛氭煡琛ㄥ緱 delta_V + PID 淇
         float ff_delta_v = Gyro_FF_GetDeltaV(gyro_target);
         Gyro_PID_Out = ff_delta_v + gyro_pid_out;
     }
     else
     {
-        // 原始纯 PID 模式
+        // 鍘熷绾� PID 妯″紡
         Gyro_PID_Out = gyro_pid_out;
     }
 
@@ -452,7 +452,6 @@ void Debug_Normal_Trace(void)
         Right_Exp_Spd = 0;
         Left_PID_Out = 0;
         Right_PID_Out = 0;
-        PID_cleardata(&Turn_PID);
         PID_cleardata(&Angle_PID);
         PID_cleardata(&Gyro_PID);
         PID_cleardata(&Gyro_PD_PID);
@@ -502,27 +501,27 @@ void Debug_Set_Out(void)
     if (Debug_Motor_Enable != 0)
     {
         pwm_set_duty(Suction_Motor_PWM, Debug_Fan_Duty);
-        pwm_set_duty(Suction_Motor_DIR, 0);     // Same as Car_Go: 0=suction
+        pwm_set_duty(Suction_Motor_DIR, 10000);     // Same as Car_Go: 0=suction
     }
     else
     {
         pwm_set_duty(Suction_Motor_PWM, 0);
-        pwm_set_duty(Suction_Motor_DIR, 0);
+        pwm_set_duty(Suction_Motor_DIR, 10000);
     }
 
     if (Debug_Motor_Enable == 0 || Left_PID_Out == 0)
     {
-        pwm_set_duty(Left_Motor_DIR, 0);
+        pwm_set_duty(Left_Motor_DIR, 10000);
         pwm_set_duty(Left_Motor_PWM, 0);
     }
     else if (Left_PID_Out > 0)   // forward
     {
-        pwm_set_duty(Left_Motor_DIR, 0);
+        pwm_set_duty(Left_Motor_DIR, 10000);
         pwm_set_duty(Left_Motor_PWM, fabs(Left_PID_Out));
     }
-    else                         // reverse
+    else                         // reverse: DIR=0
     {
-        pwm_set_duty(Left_Motor_DIR, 10000);
+        pwm_set_duty(Left_Motor_DIR, 0);
         pwm_set_duty(Left_Motor_PWM, fabs(Left_PID_Out));
     }
 
@@ -532,12 +531,12 @@ void Debug_Set_Out(void)
         pwm_set_duty(Right_Motor_DIR, 0);
         pwm_set_duty(Right_Motor_PWM, 0);
     }
-    else if (Right_PID_Out > 0)  // forward
+    else if (Right_PID_Out > 0)  // forward: DIR=0
     {
         pwm_set_duty(Right_Motor_DIR, 0);
         pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
     }
-    else                         // reverse
+    else                         // reverse: DIR=10000
     {
         pwm_set_duty(Right_Motor_DIR, 10000);
         pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));

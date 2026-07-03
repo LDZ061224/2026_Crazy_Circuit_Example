@@ -20,39 +20,40 @@ Others:      Requires Ctrl.h externs for shared globals.
  *  USE_DEBUG_MODE = 1   -> Car_Go() dispatches to Debug_Car_Go() when Mode==Debug_Mode
  *  USE_DEBUG_MODE = 0   -> Car_Go() runs only normal racing (compile out debug branch)
  */
-#define USE_DEBUG_MODE  1
+#define USE_DEBUG_MODE  0
 
-/*********************************** 閫熷害鍓嶉鐩稿叧瀹氫箟 ***********************************/
 
-/* 鍓嶉琛ㄥ崟椤癸細鐩爣閫熷害 -> 鍩虹 PWM */
+/*********************************** 闁喎瀹抽崜宥夘洯閻╃鍙х�规矮绠� ***********************************/
+
+/* 閸撳秹顩悰銊ュ礋妞ょ櫢绱伴惄顔界垼闁喎瀹� -> 閸╄櫣顢� PWM */
 typedef struct {
-    float speed;   // 鐩爣閫熷害锛堢紪鐮佸櫒 tick/3ms锛�
-    float pwm;     // 鍓嶉 PWM 鍗犵┖姣旓紙0~10000锛�
+    float speed;   // 閻╊喗鐖ｉ柅鐔峰閿涘牏绱惍浣告珤 tick/3ms閿涳拷
+    float pwm;     // 閸撳秹顩� PWM 閸楃姷鈹栧В鏃撶礄0~10000閿涳拷
 } Speed_FF_Point_t;
 
-/* 角速度前馈表单项：目标角速度 -> 左右轮差速 */
+/* 瑙掗�熷害鍓嶉琛ㄥ崟椤癸細鐩爣瑙掗�熷害 -> 宸﹀彸杞樊閫� */
 typedef struct {
-    float gyro_rate;   // 目标角速度 (deg/s)
-    float delta_v;     // 左右轮差速（编码器 tick/3ms）
+    float gyro_rate;   // 鐩爣瑙掗�熷害 (deg/s)
+    float delta_v;     // 宸﹀彸杞樊閫燂紙缂栫爜鍣� tick/3ms锛�
 } Gyro_FF_Point_t;
 
 #define GYRO_FF_TABLE_SIZE  7
 
-/* 宸﹀彸杞墠棣堣〃琛ㄩ」鏁� */
+/* 瀹革箑褰告潪顔煎妫ｅ牐銆冪悰銊┿�嶉弫锟� */
 #define LEFT_SPEED_FF_TABLE_SIZE   9
 #define RIGHT_SPEED_FF_TABLE_SIZE  9
 
-/* 鐢靛帇琛ュ伩鍙傛暟 */
-#define SPEED_FF_VOLTAGE_REF    12.0f   // 鍓嶉琛ㄦ爣瀹氭椂鐨勫弬鑰冪數鍘�
-#define SPEED_FF_VOLTAGE_MIN    11.1f   // 鐢垫満棰濆畾鐢靛帇锛堜笅闄愰挸浣嶏級
-#define SPEED_FF_VOLTAGE_MAX    12.6f   // 3S 婊＄數鐢靛帇锛堜笂闄愰挸浣嶏級
-#define SPEED_FF_COMP_MIN       0.90f   // 琛ュ伩鍊嶇巼涓嬮檺
-#define SPEED_FF_COMP_MAX       1.12f   // 琛ュ伩鍊嶇巼涓婇檺
+/* 閻㈤潧甯囩悰銉ヤ缉閸欏倹鏆� */
+#define SPEED_FF_VOLTAGE_REF    12.0f   // 閸撳秹顩悰銊︾垼鐎规碍妞傞惃鍕棘閼板啰鏁搁崢锟�
+#define SPEED_FF_VOLTAGE_MIN    11.1f   // 閻㈠灚婧�妫版繂鐣鹃悽闈涘竾閿涘牅绗呴梽鎰版尭娴ｅ稄绱�
+#define SPEED_FF_VOLTAGE_MAX    12.6f   // 3S 濠婏紕鏁搁悽闈涘竾閿涘牅绗傞梽鎰版尭娴ｅ稄绱�
+#define SPEED_FF_COMP_MIN       0.90f   // 鐞涖儱浼╅崐宥囧芳娑撳妾�
+#define SPEED_FF_COMP_MAX       1.12f   // 鐞涖儱浼╅崐宥囧芳娑撳﹪妾�
 
-/* 鐢靛帇婊ゆ尝鍙傛暟 */
-#define VOLTAGE_FAST_ALPHA      0.10f   // 蹇�� EMA 绯绘暟
-#define VOLTAGE_SLOW_ALPHA      0.01f   // 鎱㈤�� EMA 绯绘暟
-#define VOLTAGE_SPIKE_LIMIT     1.0f    // 鍗曟閲囨牱灏栧嘲鍓旈櫎闃堝�硷紙V锛�
+/* 閻㈤潧甯囧銈嗗皾閸欏倹鏆� */
+#define VOLTAGE_FAST_ALPHA      0.10f   // 韫囶偊锟斤拷 EMA 缁粯鏆�
+#define VOLTAGE_SLOW_ALPHA      0.01f   // 閹便垽锟斤拷 EMA 缁粯鏆�
+#define VOLTAGE_SPIKE_LIMIT     1.0f    // 閸楁洘顐奸柌鍥ㄧ壉鐏忔牕鍢查崜鏃堟珟闂冨牆锟界》绱橵閿涳拷
 
 /***********************************public API***********************************/
 

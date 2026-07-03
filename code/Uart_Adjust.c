@@ -216,20 +216,25 @@ void Uart_Adjust_Apply(void)
     /* ---------- steering / gyro PID ---------- */
     else if (strcmp(g_tuning_cmd.key, "TKP") == 0)
     {
-        Turn_PID.kp = g_tuning_cmd.value * 0.01f;
-        PID_cleardata(&Turn_PID);
+        Angle_PID.kp = g_tuning_cmd.value * 0.01f;
+        PID_cleardata(&Angle_PID);
     }
     else if (strcmp(g_tuning_cmd.key, "TKD") == 0)
     {
-        Turn_PID.kd = g_tuning_cmd.value * 0.01f;
-        PID_cleardata(&Turn_PID);
+        Angle_PID.kd = g_tuning_cmd.value * 0.01f;   // (Angle_PID.kd is Derivative-on-Measurement)
     }
     else if (strcmp(g_tuning_cmd.key, "GKP") == 0)
+    {
         Gyro_PID.kp = g_tuning_cmd.value * 0.001f;
+    }
     else if (strcmp(g_tuning_cmd.key, "GKI") == 0)
+    { 
         Gyro_PID.ki = g_tuning_cmd.value * 0.001f;
+    }
     else if (strcmp(g_tuning_cmd.key, "GKD") == 0)
+    {
         Gyro_PID.kd = g_tuning_cmd.value * 0.001f;
+    }
     /* ---------- base speed ---------- */
     else if (strcmp(g_tuning_cmd.key, "BSP") == 0)
     {
@@ -285,8 +290,8 @@ void Uart_Adjust_SaveToFlash(void)
     PID_OKb[1] = (uint32)(Left_PID.ki * 100.0f);
     PID_OKb[2] = (uint32)Right_PID.kp;
     PID_OKb[3] = (uint32)(Right_PID.ki * 100.0f);
-    PID_OKb[4] = (uint32)(Turn_PID.kp * 100.0f);
-    PID_OKb[5] = (uint32)(Turn_PID.kd * 100.0f);
+    PID_OKb[4] = (uint32)(Angle_PID.kp * 100.0f);
+    PID_OKb[5] = (uint32)(Angle_PID.kd * 100.0f);
     PID_OKb[6] = (uint32)(Gyro_PID.kp * 1000.0f);
     PID_OKb[7] = (uint32)(Gyro_PID.ki * 1000.0f);
     PID_OKb[8] = (uint32)(Gyro_PID.kd * 1000.0f);

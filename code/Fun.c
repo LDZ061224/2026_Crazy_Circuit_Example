@@ -53,25 +53,93 @@ void Vofa_Send_Data(void)
     uint8 frame[18 * 4 + 4];
     memset(VOFA_data, 0, sizeof(VOFA_data));
 
-    // Assign debug data to be sent (18 float channels, 72 bytes + 4-byte tail)
+    // Common: wheel speeds (ch0~3)
      VOFA_data[0].floatdata  = Left_Exp_Spd;
      VOFA_data[1].floatdata  = Right_Exp_Spd;
      VOFA_data[2].floatdata  = Left_Real_Spd;
      VOFA_data[3].floatdata  = Right_Real_Spd;
-     VOFA_data[4].floatdata  = Gyro_Z;
-     VOFA_data[5].floatdata  = Total_Run_Mileage;
-     VOFA_data[6].floatdata  = Voltage_Check[0];
-     VOFA_data[7].floatdata  = Count.Mileage;
-     VOFA_data[8].floatdata  = Left_PID_Out;
-     VOFA_data[9].floatdata  = Right_PID_Out;
-     VOFA_data[10].floatdata = Current_Check;
-     VOFA_data[11].floatdata = Error;
-     VOFA_data[12].floatdata = Gyro_Integral;
-     VOFA_data[13].floatdata = Debug_Angle_Vel_Target;
-     VOFA_data[14].floatdata = Total_Angle;
-     VOFA_data[15].floatdata = Build_Action_Index;
-     VOFA_data[16].floatdata = Run_Mode;
-     VOFA_data[17].floatdata = Count.Straight;
+
+#if USE_DEBUG_MODE
+    switch (Debug_Sub_Mode)
+    {
+        case Debug_Sub_PI_Tuning: // ── right-wheel speed PI internals ──
+            /* ch0 */ VOFA_data[0].floatdata  = Right_Exp_Spd;      // expected speed
+            /* ch1 */ VOFA_data[1].floatdata  = Right_Real_Spd;     // actual speed
+            /* ch2 */ VOFA_data[2].floatdata  = Right_PID.set;      // PID setpoint
+            /* ch3 */ VOFA_data[3].floatdata  = Right_PID.err3[0];  // current error
+            /* ch4 */ VOFA_data[4].floatdata  = Right_PID.pOut;     // P output
+            /* ch5 */ VOFA_data[5].floatdata  = Right_PID.iOut;     // I output
+            /* ch6 */ VOFA_data[6].floatdata  = Right_PID.dOut;     // D output
+            /* ch7 */ VOFA_data[7].floatdata  = Right_PID.out;      // total PID output
+            /* ch8 */ VOFA_data[8].floatdata  = Right_PID_Out;      // PWM duty written
+            /* ch9 */ VOFA_data[9].floatdata  = Debug_Target_Speed;
+            /* ch10*/ VOFA_data[10].floatdata = Voltage_Check[0];
+            /* ch11*/ VOFA_data[11].floatdata = Right_PID.kp;
+            /* ch12*/ VOFA_data[12].floatdata = Right_PID.ki;
+            /* ch13*/ VOFA_data[13].floatdata = Right_PID.iOutMax;
+            /* ch14*/ VOFA_data[14].floatdata = Right_PID.outMax;
+            /* ch15*/ VOFA_data[15].floatdata = Debug_Motor_Enable;
+            /* ch16*/ VOFA_data[16].floatdata = Debug_Which_Wheel;
+            /* ch17*/ VOFA_data[17].floatdata = 0;
+            break;
+
+        case Debug_Sub_Ground_Test: // ── ground test (spin in place) ──
+            VOFA_data[4].floatdata  = Gyro_Z;
+            VOFA_data[5].floatdata  = Debug_Target_Speed;
+            VOFA_data[6].floatdata  = Voltage_Check[0];
+            VOFA_data[7].floatdata  = Debug_Ground_Dir;
+            VOFA_data[8].floatdata  = Left_PID_Out;
+            VOFA_data[9].floatdata  = Right_PID_Out;
+            VOFA_data[10].floatdata = Debug_Motor_Enable;
+            VOFA_data[11].floatdata = Debug_Fan_Duty;
+            VOFA_data[12].floatdata = Gyro_Integral;
+            break;
+
+        case Debug_Sub_Angle: // ── angle / gyro rate tuning ──
+            VOFA_data[4].floatdata  = Gyro_Z;
+            VOFA_data[5].floatdata  = Debug_Angle_Vel_Target;
+            VOFA_data[6].floatdata  = Debug_Angle_Mode;
+            VOFA_data[7].floatdata  = Debug_Angle_Vel_Real;
+            VOFA_data[8].floatdata  = Left_PID_Out;
+            VOFA_data[9].floatdata  = Right_PID_Out;
+            VOFA_data[12].floatdata = Gyro_Integral;
+            VOFA_data[13].floatdata = Angle_PID.kp;
+            VOFA_data[14].floatdata = Angle_PID.kd;
+            VOFA_data[15].floatdata = Gyro_PID.kp;
+            VOFA_data[16].floatdata = Gyro_PID.ki;
+            VOFA_data[17].floatdata = Gyro_PID.kd;
+            break;
+
+        case Debug_Sub_NormalTrace: // ── normal trace debug ──
+            VOFA_data[4].floatdata  = Gyro_Z;
+            VOFA_data[5].floatdata  = Error;
+            VOFA_data[6].floatdata  = Turn_PID_Out;
+            VOFA_data[8].floatdata  = Left_PID_Out;
+            VOFA_data[9].floatdata  = Right_PID_Out;
+            VOFA_data[11].floatdata = Gyro_Integral;
+            VOFA_data[13].floatdata = Debug_Target_Speed;
+            break;
+
+        default:
+            break;
+    }
+#else
+    /* Build mode: standard telemetry */
+    VOFA_data[4].floatdata  = Gyro_Z;
+    VOFA_data[5].floatdata  = Total_Run_Mileage;
+    VOFA_data[6].floatdata  = Voltage_Check[0];
+    VOFA_data[7].floatdata  = Count.Mileage;
+    VOFA_data[8].floatdata  = Left_PID_Out;
+    VOFA_data[9].floatdata  = Right_PID_Out;
+    VOFA_data[10].floatdata = Current_Check;
+    VOFA_data[11].floatdata = Error;
+    VOFA_data[12].floatdata = Gyro_Integral;
+    VOFA_data[13].floatdata = Debug_Angle_Vel_Target;
+    VOFA_data[14].floatdata = Total_Angle;
+    VOFA_data[15].floatdata = Build_Action_Index;
+    VOFA_data[16].floatdata = Run_Mode;
+    VOFA_data[17].floatdata = Count.Straight;
+#endif
 
     int i;
     for(i = 0; i < 18; i++)
@@ -248,15 +316,15 @@ void Encoder_Init()
 *************************************/
 void Motor_Init()
 {
-    // DIR PWM: 0=forward, 10000=reverse, 30kHz
+    // DIR PWM: Left 10000=forward/0=rev, Right 0=forward/10000=rev, 30kHz
     pwm_init(Left_Motor_DIR,  30000, 10000);
-    pwm_init(Right_Motor_DIR, 30000, 10000);
+    pwm_init(Right_Motor_DIR, 30000, 0);
     // duty PWM: 30kHz, start at 0
     pwm_init(Left_Motor_PWM,  30000, 0);
     pwm_init(Right_Motor_PWM, 30000, 0);
-    // Fan: DIR=0=suction, duty=0
+    // Fan: initial full duty, run at 3000
     pwm_init(Suction_Motor_DIR, 100000, 10000);
-    pwm_init(Suction_Motor_PWM, 100000, 0);
+    pwm_init(Suction_Motor_PWM, 100000, 10000);
 
     system_delay_ms(10);
 }
@@ -356,9 +424,9 @@ void Get_Threshold()
             span = 1;
         }
         // Calculate upper threshold: 6/9 position of span
-        float mid_Up   = (float)(Light_Raw_Max[ch] - Light_Raw_Min[ch]) * 6 / 9.0f + Light_Raw_Min[ch];
+        float mid_Up   = (float)(Light_Raw_Max[ch] - Light_Raw_Min[ch]) * 0.74 + Light_Raw_Min[ch];
         // Calculate lower threshold: 5/9 position of span
-        float mid_Down = (float)(Light_Raw_Max[ch] - Light_Raw_Min[ch]) * 5 / 9.0f + Light_Raw_Min[ch];
+        float mid_Down = (float)(Light_Raw_Max[ch] - Light_Raw_Min[ch]) * 0.42 + Light_Raw_Min[ch];
         // Store into threshold array
         Light_Thr[ch][0] = mid_Up;
         Light_Thr[ch][1] = mid_Down;

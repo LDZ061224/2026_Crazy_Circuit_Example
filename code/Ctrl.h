@@ -70,9 +70,9 @@ Cross_Z     2026.1.30      0.0         Initial creation
 
 // Angle position PD with derivative on measurement — outer loop for turns
 #define ANGLE_PID { \
-    .kp         = 19.5, \
-    .ki         = 0, \
-    .kd         = 9, \
+    .kp         = 1.6, \
+    .ki         = 0.0, \
+    .kd         = 0.9, \
     .iOutMax    = 0, \
     .outMax     = 1500, \
     .mode       = PID_MODE_POSITION_D_ON_MEASUREMENT \
@@ -90,33 +90,24 @@ Cross_Z     2026.1.30      0.0         Initial creation
 
 // Left wheel speed incremental PID
 #define LEFT_PID { \
-    .kp         = 150, \
-    .ki         = 1.2, \
+    .kp         = 85.5, \
+    .ki         = 42.5, \
     .kd         = 0, \
     .iOutMax    = 5000, \
     .outMax     = 9500, \
     .mode       = PID_MODE_ADD \
 }
-
+//120 ， 55.5
 // Right wheel speed incremental PID
 #define RIGHT_PID { \
-    .kp         = 150, \
-    .ki         = 2.1, \
+    .kp         = 89.5, \
+    .ki         = 37.2, \
     .kd         = 0, \
     .iOutMax    = 5000, \
     .outMax     = 9500, \
     .mode       = PID_MODE_ADD \
 }
-
-// Turn error position PID (outer loop for normal trace steering)
-#define TURN_PID { \
-    .kp         = 80, \
-    .ki         = 0, \
-    .kd         = 0, \
-    .iOutMax    = 0, \
-    .outMax     = 1200, \
-    .mode       = PID_MODE_POSITION \
-}
+// Turn_PID removed — Angle_PID handles both outer loops now
 
 /**********************************************
 * Mode and State Enumerations
@@ -268,7 +259,7 @@ extern uint16_t Turn_Mileage_Record_Num;
 extern PID_HandleTypeDef Gyro_PID;
 extern PID_HandleTypeDef Left_PID;
 extern PID_HandleTypeDef Right_PID;
-extern PID_HandleTypeDef Turn_PID;
+
 extern PID_HandleTypeDef Angle_PID;
 extern PID_HandleTypeDef Gyro_PD_PID;
 
