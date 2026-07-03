@@ -103,13 +103,12 @@ void Vofa_Send_Flash_Data(void)
     uint8 frame[50 * 4 + 4];
     memset(vofa, 0, sizeof(vofa));
 
-    uint16_t turn_count = Turn_Mileage_Record_Num;
     uint16_t pos = 0;
 
-    // Turn interval mileages
-    for (uint16_t i = 0; i < turn_count && pos < 50; i++, pos++)
+    // Segment total mileages
+    for (uint8_t r = 0; r < TRACK_SEGMENT_NUM_MAX && pos < 50; r++, pos++)
     {
-        vofa[pos].floatdata = Turn_Mileage_Record[i];
+        vofa[pos].floatdata = Segment_Total_Mileage[r];
     }
     // Segment edge mileages — 2D array: [segment_row][element_index]
     for (uint8_t r = 0; r < TRACK_SEGMENT_NUM_MAX && pos < 50; r++)
@@ -248,14 +247,14 @@ void Encoder_Init()
 *************************************/
 void Motor_Init()
 {
-    // DIR PWM: 0=forward, 10000=reverse, 30kHz
-    pwm_init(Left_Motor_DIR,  30000, 10000);
-    pwm_init(Right_Motor_DIR, 30000, 10000);
+    // DIR PWM: 10000=forward, 0=reverse, 30kHz (motor wires reversed)
+    pwm_init(Left_Motor_DIR,  30000, 0);
+    pwm_init(Right_Motor_DIR, 30000, 0);
     // duty PWM: 30kHz, start at 0
     pwm_init(Left_Motor_PWM,  30000, 0);
     pwm_init(Right_Motor_PWM, 30000, 0);
     // Fan: DIR=0=suction, duty=0
-    pwm_init(Suction_Motor_DIR, 100000, 10000);
+    pwm_init(Suction_Motor_DIR, 100000, 0);
     pwm_init(Suction_Motor_PWM, 100000, 0);
 
     system_delay_ms(10);

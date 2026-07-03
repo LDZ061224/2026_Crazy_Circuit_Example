@@ -12,7 +12,6 @@ Function List:
 Car_Go / Get_Speed / Get_IMU / Light_Process / Set_Speed / Set_Out
 Normal_Run / Straight_Run / Turn_Left_Run / Turn_Right_Run
 Build_Mode_Get_Error
-Save_Turn_Mileage / Load_Turn_Mileage / Save_Segment_Edge / Load_Segment_Edge
 History:
 <author>  <time>      <version > <desc>
 Cross_Z   2026.1.30    0.0
@@ -79,7 +78,7 @@ uint8_t Turn_Action_Done = 0;
 float Check_Edge_Skip_Thresh = 0;      // Edge-detect cooldown mileage threshold (encoder ticks)
 float Check_Edge_Skip_Mileage_Base = 0; // Count.Mileage snapshot when cooldown started
 uint8_t Last_EnableSwitch_ON = 0;
-uint8_t g_led_flag = 0;                        // 0=green(normal) 1=blue(object) 2=yellow(low voltage)
+uint8_t g_led_flag = 0;                        // 0=green(normal) 1=blue(object) 2=purple(low voltage)
 uint8_t g_scan_progress = 0;                  // Scan progress 0-100 (0=not scanning)
 int Middle = 0;
 float Gyro_Integral = 0;
@@ -88,11 +87,7 @@ static int16_t total_left_turns  = 0;          // Cumulative left turn count for
 static int16_t total_right_turns = 0;          // Cumulative right turn count for angle correction
 float Segment_Edge_Mileage_Record[TRACK_SEGMENT_NUM_MAX][ELEMENT_NUM_MAX] = {{0}};
 float Segment_Total_Mileage[TRACK_SEGMENT_NUM_MAX] = {0};
-float Turn_Mileage_Record[TURN_MILEAGE_RECORD_MAX] = {0};
-uint16_t Turn_Mileage_Record_Num = 0;
 float Total_Run_Mileage = 0;
-float Last_Turn_Mileage_Base = 0;
-float Turn_Begin_Mileage = 0;
 
 /*--------------- Direction Offset Table ---------------*/
 // 15-element sensor direction weight array (mm-level offset mapping)
@@ -186,14 +181,8 @@ static inline float Normalize_Angle_180(float angle)
 /*--------------- Flash Storage Layout ---------------*/
 /*
 * Flash sector and page layout:
-* Sector 0, pages 5~7, each page holds 64 uint32_t words -> Turn_Mileage_Record
-* Layout: Turn_Mileage_Record_Num(uint16), Turn_Mileage_Record[120](float)
 * Corresponds to BUILD_MAP_FLASH_START_PAGE(4) in OLEDKeyboard.c
  */
-#define TURN_MILEAGE_FLASH_SECTOR 0
-#define TURN_MILEAGE_FLASH_START_PAGE 5
-#define TURN_MILEAGE_FLASH_PAGE_COUNT 3
-#define TURN_MILEAGE_FLASH_WORDS_PER_PAGE 64
 
 /*
 * Flash sector and page layout:
@@ -206,13 +195,6 @@ static inline float Normalize_Angle_180(float angle)
 #define SEGMENT_EDGE_MILEAGE_FLASH_WORDS_PER_PAGE 64
 
 /*--------------- Flash Data Structures ---------------*/
-
-typedef struct
-{
-    uint16_t Turn_Mileage_Record_Num;
-    float Turn_Mileage_Record[TURN_MILEAGE_RECORD_MAX];
-}Turn_Mileage_Flash_Typedef;
-
 
 typedef struct
 {
@@ -241,16 +223,14 @@ static uint8_t Straight_Node_Pending = 0;
 static uint8_t Turn_Angle_Settle_Count = 0;
 
 /*--------------- Static Function Declarations ---------------*/
-static void Load_Turn_Mileage_Record_From_Flash(void);
 static void Save_Segment_Edge_Mileage_Record_To_Flash(void);
 static void Load_Segment_Edge_Mileage_Record_From_Flash(void);
 static void Save_Flash_Page_Block(uint8_t sector, uint8_t start_page, uint8_t page_count, uint16_t words_per_page, const uint32_t *words);
 static void Load_Flash_Page_Block(uint8_t sector, uint8_t start_page, uint8_t page_count, uint16_t words_per_page, uint32_t *words);
 static int Select_Run_Speed(void);
-static void Set_Node_Run_Mode(uint8_t node_dir);
+static void Set_Node_Run_Mode(uint8_t node_dir, float turn_delay);
 static void Reset_Turn_Action_State(void);
 static void Complete_Turn_Action(void);
-static void Record_Turn_Mileage(void);
 static uint8_t Is_Turn_Angle_Settled(float angle_target);
 static uint8_t Is_Track_Sensor_Adjacent(uint8_t left_index, uint8_t right_index);
 static void Build_Load_Default_Action_List(void);
@@ -339,32 +319,24 @@ static void Build_Dispatch_Current_Action(void)
 
         // ─── Left turn (node + element) ───
         case BUILD_ACTION_NODE_TURN_LEFT:
-            Segment_Total_Mileage[Count.Line] = Count.Mileage;
             Count.Element = 0;
-            Count.Stall = TUNE_NODE_TURN_DELAY;          // ★ fix: was missing
             goto do_left;
         case BUILD_ACTION_ELEM_TURN_LEFT:
-            Segment_Total_Mileage[Count.Line] = Count.Mileage;
             Count.Element = 0;
-            Count.Stall = TUNE_ELEM_TURN_DELAY;
         do_left:
             Count.Line++;
-            Set_Node_Run_Mode(1);
+            Set_Node_Run_Mode(1, (action == BUILD_ACTION_NODE_TURN_LEFT) ? TUNE_NODE_TURN_DELAY : TUNE_ELEM_TURN_DELAY);
             break;
 
         // ─── Right turn (node + element) ───
         case BUILD_ACTION_NODE_TURN_RIGHT:
-            Segment_Total_Mileage[Count.Line] = Count.Mileage;
             Count.Element = 0;
-            Count.Stall = TUNE_NODE_TURN_DELAY;
             goto do_right;
         case BUILD_ACTION_ELEM_TURN_RIGHT:
-            Segment_Total_Mileage[Count.Line] = Count.Mileage;
             Count.Element = 0;
-            Count.Stall = TUNE_ELEM_TURN_DELAY;
         do_right:
             Count.Line++;
-            Set_Node_Run_Mode(2);
+            Set_Node_Run_Mode(2, (action == BUILD_ACTION_NODE_TURN_RIGHT) ? TUNE_NODE_TURN_DELAY : TUNE_ELEM_TURN_DELAY);
             break;
 
         default:
@@ -424,12 +396,13 @@ static void Reset_Turn_Action_State(void)
 **             3. Advance the action index via Build_Finish_Current_Action
 **             4. Call Reset_Turn_Action_State to clear state
 **    Called by Turn_Left_Run / Turn_Right_Run after angle settles.
-**    Complete_Turn_Action also calls Record_Turn_Mileage.
 *************************************/
 static void Complete_Turn_Action(void)
 {
     Turn_Action_Done = 1;
-    Record_Turn_Mileage();
+
+    // Record segment mileage at turn completion (before Count.Mileage is zeroed)
+    Segment_Total_Mileage[Count.Line] = Count.Mileage;
 
     // Correct Total_Angle to exact turn sum after each turn
     if (Turn_Angle_Target < 0) total_left_turns++;
@@ -484,7 +457,7 @@ static int Get_Track_Middle_Point(void)
 ** Details:    Resets gyro integral, PID state, mileage counters, and sets Run_Mode
 **             to the appropriate turning or straight mode.
 *************************************/
-static void Set_Node_Run_Mode(uint8_t node_dir)
+static void Set_Node_Run_Mode(uint8_t node_dir, float turn_delay)
 {
     Left_Exp_Spd = 0;
     Right_Exp_Spd = 0;
@@ -494,7 +467,8 @@ static void Set_Node_Run_Mode(uint8_t node_dir)
     PID_cleardata(&Gyro_PID);   // one-shot clear on turn entry
     Turn_Action_Done = 0;
     Turn_Decel_Phase = 0;
-    Count.Mileage = 0;  // start turn segment from zero
+    Count.Left = Count.Mileage;  // snapshot turn entry mileage (NOT zeroed — done at turn end)
+    Count.Stall = turn_delay;    // Phase 0 distance to travel
 
     switch (node_dir)
     {
@@ -509,11 +483,6 @@ static void Set_Node_Run_Mode(uint8_t node_dir)
             is_right = 1;
             Turn_Angle_Target = 90.0f;
             Run_Mode = Turn_Right;
-            break;
-        case 0:
-        default:
-            Straight_Node_Pending = 1;
-            Run_Mode = Straight_Mode;
             break;
     }
 }
@@ -534,8 +503,6 @@ static void Finish_Mileage_Section(void)
     Check_Edge_Skip_Mileage_Base = Count.Mileage;
     Check_Edge_Skip_Thresh = TUNE_COOLDOWN_STRAIGHT;
     Run_Mode = Normal_Mode;
-
-    Count.StraightBase = Count.Mileage;
 
     Build_Finish_Current_Action();
 }
@@ -599,62 +566,6 @@ static void Load_Segment_Edge_Mileage_Record_From_Flash(void)
 }
 
 /*************************************
-** Function: Save_Turn_Mileage_Record_To_Flash
-** Description: Save turn mileage interval records to Flash memory
-** Details:    Copies Turn_Mileage_Record_Num and Turn_Mileage_Record into a packed
-**             struct, then writes to the designated Flash sector/page range.
-*************************************/
-static void Save_Turn_Mileage_Record_To_Flash(void)
-{
-    Turn_Mileage_Flash_Typedef flash_log = {0, {0}};
-    uint32 map_words[TURN_MILEAGE_FLASH_PAGE_COUNT * TURN_MILEAGE_FLASH_WORDS_PER_PAGE] = {0};
-
-
-    flash_log.Turn_Mileage_Record_Num = Turn_Mileage_Record_Num;
-    memcpy(flash_log.Turn_Mileage_Record, Turn_Mileage_Record, sizeof(Turn_Mileage_Record));
-
-
-    memcpy(map_words, &flash_log, sizeof(flash_log));
-    Save_Flash_Page_Block(TURN_MILEAGE_FLASH_SECTOR,
-                          TURN_MILEAGE_FLASH_START_PAGE,
-                          TURN_MILEAGE_FLASH_PAGE_COUNT,
-                          TURN_MILEAGE_FLASH_WORDS_PER_PAGE,
-                          map_words);
-}
-
-/*************************************
-** Function: Load_Turn_Mileage_Record_From_Flash
-** Description: Load turn mileage interval records from Flash memory
-** Details:    Reads from the designated Flash sector/page range into a packed struct,
-**             performs bounds checking on Record_Num, then copies back.
-*************************************/
-static void Load_Turn_Mileage_Record_From_Flash(void)
-{
-    Turn_Mileage_Flash_Typedef flash_log = {0, {0}};
-    uint32 map_words[TURN_MILEAGE_FLASH_PAGE_COUNT * TURN_MILEAGE_FLASH_WORDS_PER_PAGE] = {0};
-
-
-    Load_Flash_Page_Block(TURN_MILEAGE_FLASH_SECTOR,
-                          TURN_MILEAGE_FLASH_START_PAGE,
-                          TURN_MILEAGE_FLASH_PAGE_COUNT,
-                          TURN_MILEAGE_FLASH_WORDS_PER_PAGE,
-                          map_words);
-
-
-    memcpy(&flash_log, map_words, sizeof(flash_log));
-
-
-    if (flash_log.Turn_Mileage_Record_Num > TURN_MILEAGE_RECORD_MAX)
-    {
-        flash_log.Turn_Mileage_Record_Num = TURN_MILEAGE_RECORD_MAX;
-    }
-
-
-    Turn_Mileage_Record_Num = flash_log.Turn_Mileage_Record_Num;
-    memcpy(Turn_Mileage_Record, flash_log.Turn_Mileage_Record, sizeof(Turn_Mileage_Record));
-}
-
-/*************************************
 ** Function: Save_Flash_Page_Block
 ** Description: Write data to a contiguous block of Flash pages
 ** Input:      sector       - Flash sector number
@@ -699,46 +610,12 @@ static void Load_Flash_Page_Block(uint8_t sector, uint8_t start_page, uint8_t pa
 }
 
 /*************************************
-** Function: Record_Turn_Mileage
-** Description: Record the mileage interval between turns into Turn_Mileage_Record
-** Details:    Calculates turn_interval_mileage = Turn_Begin_Mileage - Last_Turn_Mileage_Base
-**             as the distance traveled since the last recorded turn. Updates
-**             Last_Turn_Mileage_Base to Total_Run_Mileage for the next interval.
-**             Records are used for Flash-based self-learning.
-*************************************/
-static void Record_Turn_Mileage(void)
-{
-    float turn_interval_mileage;
-
-    if (Turn_Mileage_Record_Num >= TURN_MILEAGE_RECORD_MAX)
-    {
-        return;
-    }
-
-
-    turn_interval_mileage = Turn_Begin_Mileage - Last_Turn_Mileage_Base;
-    if (turn_interval_mileage < 0)
-    {
-        turn_interval_mileage = 0;
-    }
-
-    Turn_Mileage_Record[Turn_Mileage_Record_Num] = turn_interval_mileage;
-    Turn_Mileage_Record_Num++;
-
-    Last_Turn_Mileage_Base = Total_Run_Mileage;
-
-
-}
-
-/*************************************
 ** Function: Load_All_Flash_Data_For_VOFA
 ** Description: Load all Flash records for VOFA visualization/debugging tool
-** Details:    Loads Turn_Mileage_Record and Segment_Edge_Mileage_Record from Flash
 **             so they can be displayed and analyzed in VOFA.
 *************************************/
 void Load_All_Flash_Data_For_VOFA(void)
 {
-    Load_Turn_Mileage_Record_From_Flash();
     // Load_Segment_Edge_Mileage_Record_From_Flash(); (FIXME: Flash format changed)
 }
 
@@ -791,7 +668,6 @@ void Safety_Check(void)
     if (Count.Finish > 200 && Stop_Flag == 0)
     {
         Stop_Flag = 1;
-        Save_Turn_Mileage_Record_To_Flash();
         // Save_Segment_Edge_Mileage_Record_To_Flash(); (FIXME: Flash format changed)
     }
 
@@ -799,10 +675,10 @@ void Safety_Check(void)
     if (Stop_Flag != 0)
     {
         pwm_set_duty(Suction_Motor_PWM, 0);
-        pwm_set_duty(Suction_Motor_DIR, 0);
-        pwm_set_duty(Left_Motor_DIR, 0);
+        pwm_set_duty(Suction_Motor_DIR, 10000);
+        pwm_set_duty(Left_Motor_DIR, 10000);
         pwm_set_duty(Left_Motor_PWM, 0);
-        pwm_set_duty(Right_Motor_DIR, 0);
+        pwm_set_duty(Right_Motor_DIR, 10000);
         pwm_set_duty(Right_Motor_PWM, 0);
 
         Left_Exp_Spd = 0;
@@ -814,7 +690,7 @@ void Safety_Check(void)
 
         if (low_voltage)
         {
-            g_led_flag = 2;  // yellow: low voltage warning
+            g_led_flag = 2;  // purple: low voltage warning
         }
         else
         {
@@ -1099,9 +975,6 @@ void Build_Mode_Get_Error()
         Build_Action_Index = 0;
         Build_Action_Active_Index = 0;
         Build_Load_Default_Action_List();                             // Load default build actions
-        Turn_Mileage_Record_Num = 0;
-        Last_Turn_Mileage_Base = 0;
-        memset(Turn_Mileage_Record, 0, sizeof(Turn_Mileage_Record));
         memset(Segment_Edge_Mileage_Record, 0, sizeof(Segment_Edge_Mileage_Record));
     }
 
@@ -1125,8 +998,9 @@ void Build_Mode_Get_Error()
             break;
     }
 
-    // single-point LED: green when normal tracing, blue when object detected
-    g_led_flag = (Run_Mode == Normal_Mode) ? 0 : 1;
+    // single-point LED: green=normal, blue=object, purple=low voltage (set by Safety_Check)
+    if (g_led_flag != 2)
+        g_led_flag = (Run_Mode == Normal_Mode) ? 0 : 1;
 
 }
 
@@ -1170,27 +1044,31 @@ void Normal_Run()
 *************************************/
 void Turn_Left_Run(void)
 {
-
     if (Turn_Action_Done)
         return;
 
     if (Turn_Decel_Phase == 0)
     {
-        // Phase 0: decel+advance — speed ∝ remaining distance
-        Count.Left = Count.Mileage;  // accumulated from 0 since turn start
-        float ratio = 1.0f - (Count.Left / Count.Stall);
+        // Phase 0: decel+advance with heading correction (like Straight_Mode)
+        float traveled = Count.Mileage - Count.Left;
+        float ratio = 1.0f - (traveled / Count.Stall);
         if (ratio < 0.0f) ratio = 0.0f;
         int speed = (int)(Basic_Speed * ratio);
 
         Error = 0;
-        Set_Mileage_Turn_Exp_Speed(Turn_Angle_Target, speed);
+        // Heading correction: desired = theoretical angle, actual = Total_Angle
+        float desired = Normalize_Angle_180(-90.0f * total_left_turns + 90.0f * total_right_turns);
+        Turn_PID_Out = PID_calc(&Angle_PID, desired, Total_Angle);
+        Gyro_PID_Out = PID_calc(&Gyro_PID, Turn_PID_Out, Gyro_Z);
+        Left_Exp_Spd = speed + (int)Gyro_PID_Out;
+        Right_Exp_Spd = speed - (int)Gyro_PID_Out;
 
-        if (Count.Left >= Count.Stall)
+        if (traveled >= Count.Stall)
         {
             Turn_Decel_Phase = 1;
             Gyro_Integral = 0;
             Turn_Angle_Settle_Count = 0;
-            PID_cleardata(&Angle_PID);
+            PID_cleardata(&Angle_PID);   // fresh for Phase 1 turn tracking
             PID_cleardata(&Gyro_PID);
         }
     }
@@ -1216,15 +1094,20 @@ void Turn_Right_Run(void)
 
     if (Turn_Decel_Phase == 0)
     {
-        Count.Right = Count.Mileage;  // accumulated from 0 since turn start
-        float ratio = 1.0f - (Count.Right / Count.Stall);
+        // Phase 0: decel+advance with heading correction (like Straight_Mode)
+        float traveled = Count.Mileage - Count.Left;
+        float ratio = 1.0f - (traveled / Count.Stall);
         if (ratio < 0.0f) ratio = 0.0f;
         int speed = (int)(Basic_Speed * ratio);
 
         Error = 0;
-        Set_Mileage_Turn_Exp_Speed(Turn_Angle_Target, speed);
+        float desired = Normalize_Angle_180(-90.0f * total_left_turns + 90.0f * total_right_turns);
+        Turn_PID_Out = PID_calc(&Angle_PID, desired, Total_Angle);
+        Gyro_PID_Out = PID_calc(&Gyro_PID, Turn_PID_Out, Gyro_Z);
+        Left_Exp_Spd = speed + (int)Gyro_PID_Out;
+        Right_Exp_Spd = speed - (int)Gyro_PID_Out;
 
-        if (Count.Right >= Count.Stall)
+        if (traveled >= Count.Stall)
         {
             Turn_Decel_Phase = 1;
             Gyro_Integral = 0;
@@ -1233,7 +1116,7 @@ void Turn_Right_Run(void)
             PID_cleardata(&Gyro_PID);
         }
     }
-    else
+    else // Phase 1: in-place rotate
     {
         Error = 0;
         Set_Mileage_Turn_Exp_Speed(Turn_Angle_Target, 0);
@@ -1356,11 +1239,11 @@ void Set_Out(void)
         Count.StartDelay--;
 
 
-        pwm_set_duty(Suction_Motor_PWM, 9520);
-        pwm_set_duty(Suction_Motor_DIR, 10000);
-        pwm_set_duty(Left_Motor_DIR, 0);
+        pwm_set_duty(Suction_Motor_PWM, 5000);
+        pwm_set_duty(Suction_Motor_DIR, 0);
+        pwm_set_duty(Left_Motor_DIR, 10000);
         pwm_set_duty(Left_Motor_PWM, 0);
-        pwm_set_duty(Right_Motor_DIR, 0);
+        pwm_set_duty(Right_Motor_DIR, 10000);
         pwm_set_duty(Right_Motor_PWM, 0);
 
         PID_cleardata(&Left_PID);
@@ -1370,13 +1253,13 @@ void Set_Out(void)
 
     if (EnableSwitch_ON && Stop_Flag == 0)
     {
-        pwm_set_duty(Suction_Motor_PWM, 9500);
-        pwm_set_duty(Suction_Motor_DIR, 10000);
+        pwm_set_duty(Suction_Motor_PWM, 5000);
+        pwm_set_duty(Suction_Motor_DIR, 0);
     }
     else
     {
         pwm_set_duty(Suction_Motor_PWM, 0);
-        pwm_set_duty(Suction_Motor_DIR, 0);
+        pwm_set_duty(Suction_Motor_DIR, 10000);
     }
 
 
@@ -1385,42 +1268,42 @@ void Set_Out(void)
 
         if (Left_PID_Out == 0)
         {
-            pwm_set_duty(Left_Motor_DIR, 0);
+            pwm_set_duty(Left_Motor_DIR, 10000);
             pwm_set_duty(Left_Motor_PWM, 0);
         }
         else if (Left_PID_Out > 0)   // forward
         {
-            pwm_set_duty(Left_Motor_DIR, 0);
+            pwm_set_duty(Left_Motor_DIR, 10000);
             pwm_set_duty(Left_Motor_PWM, fabs(Left_PID_Out));
         }
         else                         // reverse
         {
-            pwm_set_duty(Left_Motor_DIR, 10000);
+            pwm_set_duty(Left_Motor_DIR, 0);
             pwm_set_duty(Left_Motor_PWM, fabs(Left_PID_Out));
         }
 
 
         if (Right_PID_Out == 0)
         {
-            pwm_set_duty(Right_Motor_DIR, 0);
+            pwm_set_duty(Right_Motor_DIR, 10000);
             pwm_set_duty(Right_Motor_PWM, 0);
         }
         else if (Right_PID_Out > 0)  // forward
         {
-            pwm_set_duty(Right_Motor_DIR, 0);
+            pwm_set_duty(Right_Motor_DIR, 10000);
             pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
         }
         else                         // reverse
         {
-            pwm_set_duty(Right_Motor_DIR, 10000);
+            pwm_set_duty(Right_Motor_DIR, 0);
             pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
         }
     }
     else
     {
-        pwm_set_duty(Left_Motor_DIR, 0);
+        pwm_set_duty(Left_Motor_DIR, 10000);
         pwm_set_duty(Left_Motor_PWM, 0);
-        pwm_set_duty(Right_Motor_DIR, 0);
+        pwm_set_duty(Right_Motor_DIR, 10000);
         pwm_set_duty(Right_Motor_PWM, 0);
 
         PID_cleardata(&Left_PID);

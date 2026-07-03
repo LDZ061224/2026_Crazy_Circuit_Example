@@ -233,8 +233,9 @@ void Debug_Car_Go(void)
         default:                    Debug_Wheel_Tuning();   break;
     }
 
-    // LED: green=motor off, blue=motor on (Safety_Check overrides on stop)
-    g_led_flag = Debug_Motor_Enable ? 1 : 0;
+    // LED: only set when Stop_Flag==0. Safety_Check handles stop/low-voltage states.
+    if (g_led_flag != 2)
+        g_led_flag = Debug_Motor_Enable ? 1 : 0;
 }
 
 /**********************************Debug_Wheel_Tuning**********************************/
@@ -275,7 +276,7 @@ void Debug_Wheel_Tuning(void)
 
     Debug_Set_Out();
     pwm_set_duty(Suction_Motor_PWM, 0);
-    pwm_set_duty(Suction_Motor_DIR, 0);
+    pwm_set_duty(Suction_Motor_DIR, 10000);
 }
 
 /**********************************Debug_Ground_Test**********************************/
@@ -502,44 +503,44 @@ void Debug_Set_Out(void)
     if (Debug_Motor_Enable != 0)
     {
         pwm_set_duty(Suction_Motor_PWM, Debug_Fan_Duty);
-        pwm_set_duty(Suction_Motor_DIR, 0);     // Same as Car_Go: 0=suction
+        pwm_set_duty(Suction_Motor_DIR, 10000);     // Same as Car_Go: 0=suction
     }
     else
     {
         pwm_set_duty(Suction_Motor_PWM, 0);
-        pwm_set_duty(Suction_Motor_DIR, 0);
+        pwm_set_duty(Suction_Motor_DIR, 10000);
     }
 
     if (Debug_Motor_Enable == 0 || Left_PID_Out == 0)
     {
-        pwm_set_duty(Left_Motor_DIR, 0);
+        pwm_set_duty(Left_Motor_DIR, 10000);
         pwm_set_duty(Left_Motor_PWM, 0);
     }
     else if (Left_PID_Out > 0)   // forward
     {
-        pwm_set_duty(Left_Motor_DIR, 0);
+        pwm_set_duty(Left_Motor_DIR, 10000);
         pwm_set_duty(Left_Motor_PWM, fabs(Left_PID_Out));
     }
     else                         // reverse
     {
-        pwm_set_duty(Left_Motor_DIR, 10000);
+        pwm_set_duty(Left_Motor_DIR, 0);
         pwm_set_duty(Left_Motor_PWM, fabs(Left_PID_Out));
     }
 
 
     if (Debug_Motor_Enable == 0 || Right_PID_Out == 0)
     {
-        pwm_set_duty(Right_Motor_DIR, 0);
+        pwm_set_duty(Right_Motor_DIR, 10000);
         pwm_set_duty(Right_Motor_PWM, 0);
     }
     else if (Right_PID_Out > 0)  // forward
     {
-        pwm_set_duty(Right_Motor_DIR, 0);
+        pwm_set_duty(Right_Motor_DIR, 10000);
         pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
     }
     else                         // reverse
     {
-        pwm_set_duty(Right_Motor_DIR, 10000);
+        pwm_set_duty(Right_Motor_DIR, 0);
         pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
     }
 }
