@@ -3,7 +3,7 @@ Copyright (C), 2016-2026, TYUT JBD TEAM C.
 File name: app_new_car_test.c
 Author: Claude (based on Cross_Z's framework)
 Version:0.2               Date: 2026.6.28
-Description: New car hardware bring-up test — implementation.
+Description: New car hardware bring-up test 鈥� implementation.
              Each TEST_MODE initializes only what it needs.
 Others:      Safety: motor/fan default duty=0, enable switch kills output.
              PWM driving: DIR pins are PWM channels (10000=forward, 0=reverse).
@@ -98,7 +98,7 @@ static void Vofa_Send_Floats(uart_index_enum uart_n, float *data, uint8 count)
 
 /*********************************** TEST_NONE ***********************************/
 /*
- *  Safe idle — confirm MCU is alive via debugger.
+ *  Safe idle 鈥� confirm MCU is alive via debugger.
  *  No peripherals are initialized.
  */
 static void TestNone_Init(void) {}
@@ -197,9 +197,9 @@ static void TestMotor_Loop(void)
 //        g_motor_test_phase++;
 //    }
     pwm_set_duty(Left_Motor_DIR, 0);
-    pwm_set_duty(Left_Motor_PWM, 2000);
-    pwm_set_duty(Right_Motor_DIR, 0);
-    pwm_set_duty(Right_Motor_PWM, 4000);
+    pwm_set_duty(Left_Motor_PWM, 6000);
+    pwm_set_duty(Right_Motor_DIR, 10000);
+    pwm_set_duty(Right_Motor_PWM, 6000);
 }
 
 /*********************************** TEST_BUZZER ***********************************/
@@ -238,7 +238,7 @@ static void TestBuzzer_Loop(void)
  */
 static void TestIMU_Init(void)
 {
-    uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
+    uart_init(UART_2, 921600, UART2_TX_P33_9, UART2_RX_P33_8);
 
     printf("=== TEST_IMU: IMU660RB gyro + acc ===\r\n");
     printf("  Waiting for IMU init...\r\n");
@@ -285,7 +285,7 @@ static void TestIMU_Loop(void)
  */
 static void TestAdcForward_Init(void)
 {
-    uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
+    uart_init(UART_2, 921600, UART2_TX_P33_9, UART2_RX_P33_8);
 
     adc_init(ADC2_CH14_A48, ADC_12BIT);
     adc_init(ADC2_CH12_A46, ADC_12BIT);
@@ -303,7 +303,12 @@ static void TestAdcForward_Init(void)
     adc_init(ADC0_CH2_A2,   ADC_12BIT);
     adc_init(ADC0_CH0_A0,   ADC_12BIT);
 
-    printf("=== TEST_ADC_FORWARD: 15-ch ADC ===\r\n");
+    gpio_init(ENABLE_SWITCH_PIN, GPI, 0, GPI_PULL_DOWN);
+
+    // DIR PWM: 10000 = forward？
+    pwm_init(Suction_Motor_DIR, 100000, 10000);
+    // duty PWM: 100 kHz, start at 0
+    pwm_init(Suction_Motor_PWM, 100000, 0);
 }
 
 static void TestAdcForward_Loop(void)
@@ -327,18 +332,20 @@ static void TestAdcForward_Loop(void)
 
     Vofa_Send_Floats(UART_2, adc_vals, 15);
     system_delay_ms(10);
+    pwm_set_duty(Suction_Motor_DIR, 10000);
+    pwm_set_duty(Suction_Motor_PWM, 500);
 }
 
 /*********************************** TEST_UART_VOFA ***********************************/
 /*
- *  Pure text UART test — printf a counter, verify with a serial terminal.
+ *  Pure text UART test 鈥� printf a counter, verify with a serial terminal.
  */
 static void TestUartVofa_Init(void)
 {
-    uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
+    uart_init(UART_2, 921600, UART2_TX_P33_9, UART2_RX_P33_8);
     g_uart_test_count = 0;
     printf("=== TEST_UART_VOFA: UART text test ===\r\n");
-    printf("  Baud: 115200, 8N1\r\n");
+    printf("  Baud: 921600, 8N1\r\n");
 }
 
 static void TestUartVofa_Loop(void)
@@ -354,7 +361,7 @@ static void TestUartVofa_Loop(void)
  */
 static void TestOledKey_Init(void)
 {
-    uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
+    uart_init(UART_2, 921600, UART2_TX_P33_9, UART2_RX_P33_8);
 //    OLED_Init();
 //    OLED_Input-
     pwm_init(ATOM0_CH3_P21_5,30000,6000);
@@ -382,7 +389,7 @@ static void TestOledKey_Loop(void)
 
 /*********************************** TEST_FAN ***********************************/
 /*
- *  Suction fan test — DIR=10000=forward, PWM controls duty.
+ *  Suction fan test 鈥� DIR=10000=forward, PWM controls duty.
  *  Phase 0: Low (5%), 1: Mid (10%), 2: Stop, 3: High (20%), loop.
  *  Text-only printf output.
  */
@@ -467,17 +474,17 @@ static void TestFan_Loop(void)
 
 /*********************************** TEST_ENCODER ***********************************/
 /*
- *  Quadrature encoder — send counts over VOFA JustFloat.
+ *  Quadrature encoder 鈥� send counts over VOFA JustFloat.
  */
 static void TestEncoder_Init(void)
 {
-    uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
+    uart_init(UART_2, 921600, UART2_TX_P33_9, UART2_RX_P33_8);
 
     encoder_quad_init(TIM4_ENCODER, TIM4_ENCODER_CH1_P02_8, TIM4_ENCODER_CH2_P00_9);
-    encoder_quad_init(TIM3_ENCODER, TIM3_ENCODER_CH1_P02_6, TIM3_ENCODER_CH2_P02_7);
+    encoder_quad_init(TIM2_ENCODER, TIM2_ENCODER_CH1_P33_7, TIM2_ENCODER_CH2_P33_6);
 
     encoder_clear_count(TIM4_ENCODER);
-    encoder_clear_count(TIM3_ENCODER);
+    encoder_clear_count(TIM2_ENCODER);
 }
 
 static void TestEncoder_Loop(void)
@@ -485,7 +492,7 @@ static void TestEncoder_Loop(void)
     static int16 last_left = 0, last_right = 0;
 
     int16 enc_left  = encoder_get_count(TIM4_ENCODER);
-    int16 enc_right = encoder_get_count(TIM3_ENCODER);
+    int16 enc_right = encoder_get_count(TIM2_ENCODER);
 
     float speed_left  = (float)(enc_left  - last_left);
     float speed_right = (float)(enc_right - last_right);
@@ -506,7 +513,7 @@ static void TestEncoder_Loop(void)
 static void TestEnableSwitch_Init(void)
 {
     gpio_init(ENABLE_SWITCH_PIN, GPI, 0, GPI_PULL_DOWN);
-    uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
+    uart_init(UART_2, 921600, UART2_TX_P33_9, UART2_RX_P33_8);
     printf("=== TEST_ENABLE_SWITCH: P20_7 monitor ===\r\n");
 }
 
@@ -526,12 +533,12 @@ static void TestEnableSwitch_Loop(void)
 
 /*********************************** TEST_BUTTON ***********************************/
 /*
- *  Custom button P22_3 — print on state change.
+ *  Custom button P22_3 鈥� print on state change.
  */
 static void TestButton_Init(void)
 {
     gpio_init(BUTTON_PIN, GPI, 0, GPI_PULL_DOWN);
-    uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
+    uart_init(UART_2, 921600, UART2_TX_P33_9, UART2_RX_P33_8);
     printf("=== TEST_BUTTON: P22_3 monitor ===\r\n");
 }
 
@@ -555,7 +562,7 @@ static void TestButton_Loop(void)
  */
 static void TestVoltageCurrent_Init(void)
 {
-    uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
+    uart_init(UART_2, 921600, UART2_TX_P33_9, UART2_RX_P33_8);
     adc_init(ADC0_CH5_A5,   ADC_12BIT);
     adc_init(ADC0_CH10_A10, ADC_12BIT);
     printf("=== TEST_VOLTAGE_CURRENT ===\r\n");
@@ -587,7 +594,7 @@ static void TestVoltageCurrent_Loop(void)
 
 static void TestWs2812_Init(void)
 {
-    uart_init(UART_2, 115200, UART2_TX_P33_9, UART2_RX_P33_8);
+    uart_init(UART_2, 921600, UART2_TX_P33_9, UART2_RX_P33_8);
 
     WS2812_Init();
     g_ws2812_phase = 0;

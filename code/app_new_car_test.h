@@ -3,93 +3,93 @@ Copyright (C), 2016-2026, TYUT JBD TEAM C.
 File name: app_new_car_test.h
 Author: Claude (based on Cross_Z's framework)
 Version:0.0               Date: 2026.6.27
-Description: 鏂拌溅鍩虹鍔熻兘妫�娴� / 纭欢 Bring-Up 娴嬭瘯 鈥斺�� 澶存枃浠�
-             閫愪釜娴嬭瘯鏂拌溅纭欢妯″潡锛氱數鏈恒�佽渹楦ｅ櫒銆両MU銆丄DC銆�
-             涓插彛銆丱LED/鎸夐敭銆佽礋鍘嬮鎵囥�佺紪鐮佸櫒銆佷娇鑳藉紑鍏崇瓑銆�
-Others:      姣忎釜娴嬭瘯妯″紡鐙珛锛屽彧鍒濆鍖栬妯″紡鎵�闇�澶栬銆�
-             涓嶇牬鍧忓師鏈夋寮忚窇杞︿唬鐮併��
-             鏈ご鏂囦欢涓嶄緷璧� headfiles.h锛屽彧渚濊禆 zf_common_headfile.h
-             搴曞眰椹卞姩搴擄紝閬垮厤鎷栧叆 Ctrl/OLEDKeyboard 绛夎窇杞﹂�昏緫銆�
+Description: 閺傛媽婧呴崺铏诡攨閸旂喕鍏樺Λ锟藉ù锟� / 绾兛娆� Bring-Up 濞村鐦� 閳ユ柡锟斤拷 婢跺瓨鏋冩禒锟�
+             闁劒閲滃ù瀣槸閺傛媽婧呯涵顑挎濡�虫健閿涙氨鏁搁張鎭掞拷浣芥腹妤︼絽娅掗妴涓U閵嗕竸DC閵嗭拷
+             娑撴彃褰涢妴涓盠ED/閹稿鏁妴浣界閸樺顥撻幍鍥ワ拷浣虹椽閻礁娅掗妴浣峰▏閼宠棄绱戦崗宕囩搼閵嗭拷
+Others:      濮ｅ繋閲滃ù瀣槸濡�崇础閻欘剛鐝涢敍灞藉涧閸掓繂顫愰崠鏍嚉濡�崇础閹碉拷闂囷拷婢舵牞顔曢妴锟�
+             娑撳秶鐗崸蹇撳斧閺堝顒滃蹇氱獓鏉烇缚鍞惍浣碉拷锟�
+             閺堫剙銇旈弬鍥︽娑撳秳绶风挧锟� headfiles.h閿涘苯褰ф笟婵婄 zf_common_headfile.h
+             鎼存洖鐪版す鍗炲З鎼存搫绱濋柆鍨帳閹锋牕鍙� Ctrl/OLEDKeyboard 缁涘绐囨潪锕傦拷鏄忕帆閵嗭拷
 Function List:
-             1. NewCarTest_Init()  鈥� 鏍规嵁 TEST_MODE 鍒濆鍖栧搴斿璁�
-             2. NewCarTest_Loop()  鈥� 鏍规嵁 TEST_MODE 寰幆鎵ц娴嬭瘯閫昏緫
+             1. NewCarTest_Init()  閳ワ拷 閺嶈宓� TEST_MODE 閸掓繂顫愰崠鏍ь嚠鎼存柨顦荤拋锟�
+             2. NewCarTest_Loop()  閳ワ拷 閺嶈宓� TEST_MODE 瀵邦亞骞嗛幍褑顢戝ù瀣槸闁槒绶�
 History:
 <author>  <time>      <version > <desc>
-Claude    2026.6.27   0.0        鍒涘缓鍒濆鐗堟湰
-Claude    2026.6.27   0.1        瑙ｉ櫎 headfiles.h 渚濊禆锛岀簿绠�涓� zf_common_headfile.h
+Claude    2026.6.27   0.0        閸掓稑缂撻崚婵嗩潗閻楀牊婀�
+Claude    2026.6.27   0.1        鐟欙綁娅� headfiles.h 娓氭繆绂嗛敍宀�绨跨粻锟芥稉锟� zf_common_headfile.h
 **************************************************/
 
 #ifndef __APP_NEW_CAR_TEST_H
 #define __APP_NEW_CAR_TEST_H
 
-// 鍙寘鍚簳灞傞┍鍔ㄥ簱锛屼笉鍖呭惈 headfiles.h锛堝悗鑰呬細鎷栧叆 Ctrl/OLEDKeyboard/pid 绛夎窇杞︿唬鐮侊級
+// 閸欘亜瀵橀崥顐㈢俺鐏炲倿鈹嶉崝銊ョ氨閿涘奔绗夐崠鍛儓 headfiles.h閿涘牆鎮楅懓鍛窗閹锋牕鍙� Ctrl/OLEDKeyboard/pid 缁涘绐囨潪锔垮敩閻緤绱�
 #include "zf_common_headfile.h"
 
-/*********************************** 娴嬭瘯妯″紡鏋氫妇 ***********************************/
+/*********************************** 濞村鐦Ο鈥崇础閺嬫矮濡� ***********************************/
 typedef enum
 {
-    TEST_NONE = 0,              // 鏃犳祴璇曪紝瀹夊叏鐘舵�侊紝鎵�鏈夎緭鍑哄叧闂�
-    TEST_MOTOR,                 // 鐢垫満椹卞姩娴嬭瘯
-    TEST_BUZZER,                // 铚傞福鍣ㄦ祴璇�
-    TEST_IMU,                   // 闄�铻轰华 / IMU 娴嬭瘯
-    TEST_ADC_FORWARD,           // 鍓嶇灮 ADC / 鍏夌數绠℃祴璇�
-    TEST_UART_VOFA,             // 涓插彛閫氫俊娴嬭瘯
-    TEST_OLED_KEY,              // 閿樉 / OLED 娴嬭瘯锛堥渶瑕� OLED 椹卞姩閾撅級
-    TEST_FAN,                   // 璐熷帇椋庢墖娴嬭瘯
-    TEST_ENCODER,               // 鍏夋爡缂栫爜鍣� / 娴嬮�熸祴璇�
-    TEST_ENABLE_SWITCH,         // 浣胯兘寮�鍏虫祴璇�
-    TEST_BUTTON,                // 鑷畾涔夋寜閿祴璇�
+    TEST_NONE = 0,              // 閺冪姵绁寸拠鏇礉鐎瑰鍙忛悩鑸碉拷渚婄礉閹碉拷閺堝绶崙鍝勫彠闂傦拷
+    TEST_MOTOR,                 // 閻㈠灚婧�妞瑰崬濮╁ù瀣槸
+    TEST_BUZZER,                // 閾氬倿绂忛崳銊︾ゴ鐠囷拷
+    TEST_IMU,                   // 闂勶拷閾昏桨鍗� / IMU 濞村鐦�
+    TEST_ADC_FORWARD,           // 閸撳秶鐏� ADC / 閸忓鏁哥粻鈩冪ゴ鐠囷拷
+    TEST_UART_VOFA,             // 娑撴彃褰涢柅姘繆濞村鐦�
+    TEST_OLED_KEY,              // 闁款喗妯� / OLED 濞村鐦敍鍫ユ付鐟曪拷 OLED 妞瑰崬濮╅柧鎾呯礆
+    TEST_FAN,                   // 鐠愮喎甯囨搴㈠濞村鐦�
+    TEST_ENCODER,               // 閸忓鐖＄紓鏍垳閸ｏ拷 / 濞村锟界喐绁寸拠锟�
+    TEST_ENABLE_SWITCH,         // 娴ｈ儻鍏樺锟介崗铏ゴ鐠囷拷
+    TEST_BUTTON,                // 閼奉亜鐣炬稊澶嬪瘻闁款喗绁寸拠锟�
     TEST_WS2812,                // WS2812 LED test
-    TEST_VOLTAGE_CURRENT,       // 鐢靛帇 / 鐢垫祦妫�娴嬫祴璇�
-    TEST_COUNT                  // 娴嬭瘯椤圭洰鎬绘暟锛堢敤浜庤竟鐣屾鏌ワ級
+    TEST_VOLTAGE_CURRENT,       // 閻㈤潧甯� / 閻㈠灚绁﹀Λ锟藉ù瀣ゴ鐠囷拷
+    TEST_COUNT                  // 濞村鐦い鍦窗閹粯鏆熼敍鍫㈡暏娴滃氦绔熼悾灞绢梾閺屻儻绱�
 } NewCarTestMode_e;
 
-/*********************************** 娴嬭瘯妯″紡閫夋嫨 ***********************************/
+/*********************************** 濞村鐦Ο鈥崇础闁瀚� ***********************************/
 /*
- *  鍦ㄨ繖閲屼慨鏀瑰畯瀹氫箟锛岄�夋嫨瑕佺儳褰曟祴璇曠殑鍔熻兘銆�
- *  姣忔鍙祴涓�涓ā鍧楋紝閬垮厤澶氫釜楂樺姛鐜囨ā鍧楀悓鏃跺伐浣溿��
+ *  閸︺劏绻栭柌灞兼叏閺�鐟扮暞鐎规矮绠熼敍宀勶拷澶嬪鐟曚胶鍎宠ぐ鏇熺ゴ鐠囨洜娈戦崝鐔诲厴閵嗭拷
+ *  濮ｅ繑顐奸崣顏呯ゴ娑擄拷娑擃亝膩閸ф绱濋柆鍨帳婢舵矮閲滄妯哄閻滃洦膩閸ф鎮撻弮璺轰紣娴ｆ嚎锟斤拷
  *
- *  鍙�夊�硷細
- *    TEST_NONE           - 瀹夊叏鐘舵�侊紝CPU 绌哄惊鐜�
- *    TEST_MOTOR          - 鐢垫満椹卞姩
- *    TEST_BUZZER         - 铚傞福鍣�
- *    TEST_IMU            - 闄�铻轰华 IMU
- *    TEST_ADC_FORWARD    - 鍓嶇灮鍏夌數绠� ADC
- *    TEST_UART_VOFA      - 涓插彛閫氫俊
- *    TEST_OLED_KEY       - OLED + 鎸夐敭
- *    TEST_FAN            - 璐熷帇椋庢墖
- *    TEST_ENCODER        - 缂栫爜鍣ㄦ祴閫�
- *    TEST_ENABLE_SWITCH  - 浣胯兘寮�鍏�
- *    TEST_BUTTON         - 鑷畾涔夋寜閿�
- *    TEST_VOLTAGE_CURRENT- 鐢靛帇鐢垫祦妫�娴�
+ *  閸欘垶锟藉锟界》绱�
+ *    TEST_NONE           - 鐎瑰鍙忛悩鑸碉拷渚婄礉CPU 缁屽搫鎯婇悳锟�
+ *    TEST_MOTOR          - 閻㈠灚婧�妞瑰崬濮�
+ *    TEST_BUZZER         - 閾氬倿绂忛崳锟�
+ *    TEST_IMU            - 闂勶拷閾昏桨鍗� IMU
+ *    TEST_ADC_FORWARD    - 閸撳秶鐏崗澶屾暩缁狅拷 ADC
+ *    TEST_UART_VOFA      - 娑撴彃褰涢柅姘繆
+ *    TEST_OLED_KEY       - OLED + 閹稿鏁�
+ *    TEST_FAN            - 鐠愮喎甯囨搴㈠
+ *    TEST_ENCODER        - 缂傛牜鐖滈崳銊︾ゴ闁拷
+ *    TEST_ENABLE_SWITCH  - 娴ｈ儻鍏樺锟介崗锟�
+ *    TEST_BUTTON         - 閼奉亜鐣炬稊澶嬪瘻闁匡拷
+ *    TEST_VOLTAGE_CURRENT- 閻㈤潧甯囬悽鍨ウ濡拷濞达拷
  */
-#define NEW_CAR_TEST_MODE   TEST_WS2812
-/*********************************** 瀹夊叏閰嶇疆瀹� ***********************************/
+#define NEW_CAR_TEST_MODE   TEST_ADC_FORWARD
+/*********************************** 鐎瑰鍙忛柊宥囩枂鐎癸拷 ***********************************/
 /*
- *  浠ヤ笅瀹忕敤浜庣數鏈� / 椋庢墖娴嬭瘯鐨勫畨鍏ㄥ弬鏁般��
- *  淇敼杩欎簺鍊兼潵璋冩暣娴嬭瘯鏃剁殑杈撳嚭寮哄害銆�
- *  PWM_DUTY_MAX = 10000锛堝畾涔夊湪 zf_driver_pwm.h锛�
+ *  娴犮儰绗呯�瑰繒鏁ゆ禍搴ｆ暩閺堬拷 / 妞嬪孩澧栧ù瀣槸閻ㄥ嫬鐣ㄩ崗銊ュ棘閺佽埇锟斤拷
+ *  娣囶喗鏁兼潻娆庣昂閸婂吋娼电拫鍐╂殻濞村鐦弮鍓佹畱鏉堟挸鍤鍝勫閵嗭拷
+ *  PWM_DUTY_MAX = 10000閿涘牆鐣炬稊澶婃躬 zf_driver_pwm.h閿涳拷
  */
 
-// ---------- 鐢垫満娴嬭瘯 ----------
-#define MOTOR_TEST_DUTY_LOW      6000    // 浣庡崰绌烘瘮 10%
-#define MOTOR_TEST_DUTY_MID      5000    // 涓崰绌烘瘮 15%
-#define MOTOR_TEST_DUTY_HIGH     8000    // 楂樺崰绌烘瘮 20%锛堝缓璁笉瓒呰繃 30%锛�
+// ---------- 閻㈠灚婧�濞村鐦� ----------
+#define MOTOR_TEST_DUTY_LOW      6000    // 娴ｅ骸宕扮粚鐑樼槷 10%
+#define MOTOR_TEST_DUTY_MID      5000    // 娑擃厼宕扮粚鐑樼槷 15%
+#define MOTOR_TEST_DUTY_HIGH     8000    // 妤傛ê宕扮粚鐑樼槷 20%閿涘牆缂撶拋顔荤瑝鐡掑懓绻� 30%閿涳拷
 
-// ---------- 璐熷帇椋庢墖娴嬭瘯 ----------
-#define FAN_TEST_DUTY_LOW        2000    // 浣庡崰绌烘瘮 5%
-#define FAN_TEST_DUTY_MID        5000    // 涓崰绌烘瘮 10%
-#define FAN_TEST_DUTY_HIGH       8000    // 楂樺崰绌烘瘮 20%
+// ---------- 鐠愮喎甯囨搴㈠濞村鐦� ----------
+#define FAN_TEST_DUTY_LOW        2000    // 娴ｅ骸宕扮粚鐑樼槷 5%
+#define FAN_TEST_DUTY_MID        5000    // 娑擃厼宕扮粚鐑樼槷 10%
+#define FAN_TEST_DUTY_HIGH       8000    // 妤傛ê宕扮粚鐑樼槷 20%
 
-// ---------- 娴嬭瘯寰幆闂撮殧 ----------
-#define TEST_LOOP_DELAY_MS         10    // 榛樿寰幆闂撮殧锛坢s锛�
-#define TEST_FAST_LOOP_DELAY_MS     3    // 蹇�熷惊鐜棿闅旓紙ms锛夛紝鐢ㄤ簬缂栫爜鍣ㄧ瓑
+// ---------- 濞村鐦顏嗗箚闂傛挳娈� ----------
+#define TEST_LOOP_DELAY_MS         10    // 姒涙顓诲顏嗗箚闂傛挳娈ч敍鍧閿涳拷
+#define TEST_FAST_LOOP_DELAY_MS     3    // 韫囶偊锟界喎鎯婇悳顖炴？闂呮棑绱檓s閿涘绱濋悽銊ょ艾缂傛牜鐖滈崳銊х搼
 
-/*********************************** 纭欢寮曡剼瀹忥紙浠� Fun.h 澶嶅埗锛� ***********************************/
+/*********************************** 绾兛娆㈠鏇″壖鐎瑰骏绱欐禒锟� Fun.h 婢跺秴鍩楅敍锟� ***********************************/
 /*
- *  杩欎簺瀹忓師鏈畾涔夊湪 Fun.h 涓紝鐢变簬娴嬭瘯浠ｇ爜涓嶅寘鍚� headfiles.h
- *  锛堝悗鑰呬細閾惧紡鍖呭惈 Fun.h 鍙婃墍鏈夎窇杞﹂�昏緫锛夛紝鍥犳鍦ㄦ澶勫崟鐙鍒朵竴浠姐��
- *  濡傛灉寮曡剼鏈夊彉鍔紝璇峰悓姝ヤ慨鏀广��
+ *  鏉╂瑤绨虹�瑰繐甯張顒�鐣炬稊澶婃躬 Fun.h 娑擃叏绱濋悽鍙樼艾濞村鐦禒锝囩垳娑撳秴瀵橀崥锟� headfiles.h
+ *  閿涘牆鎮楅懓鍛窗闁炬儳绱￠崠鍛儓 Fun.h 閸欏﹥澧嶉張澶庣獓鏉烇箓锟芥槒绶敍澶涚礉閸ョ姵顒濋崷銊︻劃婢跺嫬宕熼悪顒�顦查崚鏈电娴犲锟斤拷
+ *  婵″倹鐏夊鏇″壖閺堝褰夐崝顭掔礉鐠囧嘲鎮撳銉ゆ叏閺�骞匡拷锟�
  */
 #define Left_Motor_PWM      ATOM3_CH1_P15_7
 #define Left_Motor_DIR      ATOM3_CH0_P15_5
@@ -100,21 +100,21 @@ typedef enum
 #define Suction_Motor_PWM   ATOM1_CH6_P00_7
 #define Suction_Motor_DIR   ATOM3_CH3_P00_12
 
-// 浣胯兘寮�鍏冲紩鑴氾紙楂樼數骞� = 寮�鍚級
+// 娴ｈ儻鍏樺锟介崗鍐茬穿閼存熬绱欐妯兼暩楠烇拷 = 瀵拷閸氼垽绱�
 #define ENABLE_SWITCH_PIN   P20_7
 
-// 鑷畾涔夋寜閿紩鑴�
+// 閼奉亜鐣炬稊澶嬪瘻闁款喖绱╅懘锟�
 #define BUTTON_PIN          P22_3
 
-/*********************************** 鏁版嵁绫诲瀷锛堜粠 Fun.h 澶嶅埗锛� ***********************************/
-// 娴偣鏁� <-> 4瀛楄妭鏁扮粍 鍏辩敤浣擄紝鐢ㄤ簬 VOFA 涓插彛鍙戦��
+/*********************************** 閺佺増宓佺猾璇茬�烽敍鍫滅矤 Fun.h 婢跺秴鍩楅敍锟� ***********************************/
+// 濞搭喚鍋ｉ弫锟� <-> 4鐎涙濡弫鎵矋 閸忚京鏁ゆ担鎿勭礉閻€劋绨� VOFA 娑撴彃褰涢崣鎴︼拷锟�
 typedef union floatu8data
 {
     float floatdata;
     uint8 u8data[4];
 } floatu8data;
 
-/*********************************** 鍑芥暟澹版槑 ***********************************/
+/*********************************** 閸戣姤鏆熸竟鐗堟 ***********************************/
 void NewCarTest_Init(void);
 void NewCarTest_Loop(void);
 

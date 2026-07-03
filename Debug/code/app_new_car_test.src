@@ -1,6 +1,6 @@
 	; Module start
 	.compiler_version	"TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler v1.1r8 Build 22011964"
-	.compiler_invocation	"ctc -f cc60612a --dep-file=app_new_car_test.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc26xb -D__CPU_TC26XB__ --core=tc1.6.x --fp-model=+float -D__CPU__=tc26xb -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\code -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\code\\\\OLED -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Configurations -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B\\\\_Reg -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin\\\\Asc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6\\\\Timer -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\CStart -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\Irq -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma\\\\Dma -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Flash -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Flash\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12\\\\IncrEnc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Atom -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Mtu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Mtu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Port -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Port\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi\\\\SpiMaster -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Scu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Scu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Src -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Src\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Stm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Stm\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc\\\\Adc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Impl -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Lib -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Lib\\\\DataHandling -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_PinMap -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_common -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_components -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_device -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_driver -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o code/app_new_car_test.src ../code/app_new_car_test.c"
+	.compiler_invocation	"ctc -f cc49592a --dep-file=app_new_car_test.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc26xb -D__CPU_TC26XB__ --core=tc1.6.x --fp-model=+float -D__CPU__=tc26xb -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\code -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\code\\\\OLED -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Configurations -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC26B\\\\_Reg -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin\\\\Asc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Asclin\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Ccu6\\\\Timer -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\CStart -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\Irq -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Cpu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma\\\\Dma -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Dma\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Flash -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Flash\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12 -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12\\\\IncrEnc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gpt12\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Atom -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Gtm\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Mtu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Mtu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Port -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Port\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi\\\\SpiMaster -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Qspi\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Scu -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Scu\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Src -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Src\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Stm -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Stm\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc\\\\Adc -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\Vadc\\\\Std -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Impl -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Lib -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_Lib\\\\DataHandling -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC26B\\\\Tricore\\\\_PinMap -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_common -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_components -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_device -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\libraries\\\\zf_driver -ID:\\\\workspace\\\\2026_Crazy_Circuit_V4.0\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o code/app_new_car_test.src ../code/app_new_car_test.c"
 	.compiler_name		"ctc"
 	;source	'../code/app_new_car_test.c'
 
@@ -200,17 +200,17 @@ TestMotor_Loop:	.type	func
 .L579:
 	mov	d4,#147
 .L580:
-	mov	d5,#2000
+	mov	d5,#6000
 	call	pwm_set_duty
 .L581:
 	mov	d4,#85
 .L582:
-	mov	d5,#0
+	mov	d5,#10000
 	call	pwm_set_duty
 .L583:
 	mov	d4,#72
 .L584:
-	mov	d5,#4000
+	mov	d5,#6000
 	call	pwm_set_duty
 .L585:
 	ret
@@ -316,8 +316,8 @@ TestIMU_Init:	.type	func
 .L436:
 	mov	d4,#2
 .L616:
-	mov.u	d5,#49664
-	addih	d5,d5,#1
+	mov	d5,#4096
+	addih	d5,d5,#14
 .L617:
 	mov	d6,#18
 .L618:
@@ -522,8 +522,8 @@ __TestIMU_Loop_function_end:
 TestAdcForward_Init:	.type	func
 	mov	d4,#2
 .L674:
-	mov.u	d5,#49664
-	addih	d5,d5,#1
+	mov	d5,#4096
+	addih	d5,d5,#14
 .L675:
 	mov	d6,#18
 .L676:
@@ -605,10 +605,31 @@ TestAdcForward_Init:	.type	func
 	mov	d5,#2
 	call	adc_init
 .L707:
-	movh.a	a4,#@his(.9.str)
-	lea	a4,[a4]@los(.9.str)
-	call	printf
+	mov	d4,#647
 .L708:
+	mov	d5,#0
+.L709:
+	mov	d6,#0
+.L710:
+	mov	d7,#2
+	call	gpio_init
+.L711:
+	mov	d4,#154
+.L712:
+	mov	d5,#3125
+	sh	d5,#5
+.L713:
+	mov	d6,#10000
+	call	pwm_init
+.L714:
+	mov	d4,#91
+.L715:
+	mov	d5,#3125
+	sh	d5,#5
+.L716:
+	mov	d6,#0
+	call	pwm_init
+.L717:
 	ret
 .L369:
 	
@@ -628,119 +649,129 @@ TestAdcForward_Loop:	.type	func
 .L448:
 	mov	d4,#46
 	call	adc_convert
-.L713:
-	utof	d15,d2
-.L714:
-	st.w	[a10]56,d15
-.L715:
-	mov	d4,#44
-	call	adc_convert
-.L716:
-	utof	d15,d2
-.L717:
-	st.w	[a10]52,d15
-.L718:
-	mov	d4,#42
-	call	adc_convert
-.L719:
-	utof	d15,d2
-.L720:
-	st.w	[a10]48,d15
-.L721:
-	mov	d4,#38
-	call	adc_convert
 .L722:
 	utof	d15,d2
 .L723:
-	st.w	[a10]44,d15
+	st.w	[a10]56,d15
 .L724:
-	mov	d4,#36
+	mov	d4,#44
 	call	adc_convert
 .L725:
 	utof	d15,d2
 .L726:
-	st.w	[a10]40,d15
+	st.w	[a10]52,d15
 .L727:
-	mov	d4,#25
+	mov	d4,#42
 	call	adc_convert
 .L728:
 	utof	d15,d2
 .L729:
-	st.w	[a10]36,d15
+	st.w	[a10]48,d15
 .L730:
-	mov	d4,#21
+	mov	d4,#38
 	call	adc_convert
 .L731:
 	utof	d15,d2
 .L732:
-	st.w	[a10]32,d15
+	st.w	[a10]44,d15
 .L733:
-	mov	d4,#17
+	mov	d4,#36
 	call	adc_convert
 .L734:
 	utof	d15,d2
 .L735:
-	st.w	[a10]28,d15
+	st.w	[a10]40,d15
 .L736:
-	mov	d4,#13
+	mov	d4,#25
 	call	adc_convert
 .L737:
 	utof	d15,d2
 .L738:
-	st.w	[a10]24,d15
+	st.w	[a10]36,d15
 .L739:
-	mov	d4,#11
+	mov	d4,#21
 	call	adc_convert
 .L740:
 	utof	d15,d2
 .L741:
-	st.w	[a10]20,d15
+	st.w	[a10]32,d15
 .L742:
-	mov	d4,#8
+	mov	d4,#17
 	call	adc_convert
 .L743:
 	utof	d15,d2
 .L744:
-	st.w	[a10]16,d15
+	st.w	[a10]28,d15
 .L745:
-	mov	d4,#6
+	mov	d4,#13
 	call	adc_convert
 .L746:
 	utof	d15,d2
 .L747:
-	st.w	[a10]12,d15
+	st.w	[a10]24,d15
 .L748:
-	mov	d4,#4
+	mov	d4,#11
 	call	adc_convert
 .L749:
 	utof	d15,d2
 .L750:
-	st.w	[a10]8,d15
+	st.w	[a10]20,d15
 .L751:
-	mov	d4,#2
+	mov	d4,#8
 	call	adc_convert
 .L752:
 	utof	d15,d2
 .L753:
-	st.w	[a10]4,d15
+	st.w	[a10]16,d15
 .L754:
-	mov	d4,#0
+	mov	d4,#6
 	call	adc_convert
 .L755:
 	utof	d15,d2
 .L756:
-	st.w	[a10],d15
+	st.w	[a10]12,d15
 .L757:
-	mov	d4,#2
+	mov	d4,#4
+	call	adc_convert
 .L758:
-	lea	a4,[a10]0
+	utof	d15,d2
 .L759:
+	st.w	[a10]8,d15
+.L760:
+	mov	d4,#2
+	call	adc_convert
+.L761:
+	utof	d15,d2
+.L762:
+	st.w	[a10]4,d15
+.L763:
+	mov	d4,#0
+	call	adc_convert
+.L764:
+	utof	d15,d2
+.L765:
+	st.w	[a10],d15
+.L766:
+	mov	d4,#2
+.L767:
+	lea	a4,[a10]0
+.L768:
 	mov	d5,#15
 	call	Vofa_Send_Floats
-.L760:
+.L769:
 	mov	d4,#10
 	call	system_delay_ms
-.L761:
+.L770:
+	mov	d4,#154
+.L771:
+	mov	d5,#10000
+	call	pwm_set_duty
+.L772:
+	mov	d4,#91
+.L773:
+	mov	d5,#500
+	call	pwm_set_duty
+.L774:
 	ret
 .L370:
 	
@@ -757,30 +788,30 @@ __TestAdcForward_Loop_function_end:
 .L128:
 TestUartVofa_Init:	.type	func
 	mov	d4,#2
-.L766:
-	mov.u	d5,#49664
-	addih	d5,d5,#1
-.L767:
+.L779:
+	mov	d5,#4096
+	addih	d5,d5,#14
+.L780:
 	mov	d6,#18
-.L768:
+.L781:
 	mov	d7,#12
 	call	uart_init
-.L769:
+.L782:
 	movh.a	a15,#@his(g_uart_test_count)
 	lea	a15,[a15]@los(g_uart_test_count)
-.L770:
+.L783:
 	mov	d15,#0
-.L771:
+.L784:
 	st.w	[a15],d15
-.L772:
+.L785:
+	movh.a	a4,#@his(.9.str)
+	lea	a4,[a4]@los(.9.str)
+	call	printf
+.L786:
 	movh.a	a4,#@his(.10.str)
 	lea	a4,[a4]@los(.10.str)
 	call	printf
-.L773:
-	movh.a	a4,#@his(.11.str)
-	lea	a4,[a4]@los(.11.str)
-	call	printf
-.L774:
+.L787:
 	ret
 .L373:
 	
@@ -803,22 +834,22 @@ TestUartVofa_Loop:	.type	func
 	movh.a	a2,#@his(g_uart_test_count)
 	lea	a2,[a2]@los(g_uart_test_count)
 	ld.w	d15,[a2]
-.L779:
+.L792:
 	add	d15,#1
 	st.w	[a15],d15
-.L780:
+.L793:
 	movh.a	a15,#@his(g_uart_test_count)
 	lea	a15,[a15]@los(g_uart_test_count)
 	ld.w	d15,[a15]
 	st.w	[a10],d15
-.L781:
-	movh.a	a4,#@his(.12.str)
-	lea	a4,[a4]@los(.12.str)
+.L794:
+	movh.a	a4,#@his(.11.str)
+	lea	a4,[a4]@los(.11.str)
 	call	printf
-.L782:
+.L795:
 	mov	d4,#200
 	call	system_delay_ms
-.L783:
+.L796:
 	ret
 .L374:
 	
@@ -835,29 +866,29 @@ __TestUartVofa_Loop_function_end:
 .L132:
 TestOledKey_Init:	.type	func
 	mov	d4,#2
-.L788:
-	mov.u	d5,#49664
-	addih	d5,d5,#1
-.L789:
+.L801:
+	mov	d5,#4096
+	addih	d5,d5,#14
+.L802:
 	mov	d6,#18
-.L790:
+.L803:
 	mov	d7,#12
 	call	uart_init
-.L791:
+.L804:
 	mov	d4,#26
-.L792:
+.L805:
 	mov	d5,#30000
-.L793:
+.L806:
 	mov	d6,#6000
 	call	pwm_init
-.L794:
+.L807:
 	mov	d4,#89
-.L795:
+.L808:
 	mov	d5,#30000
-.L796:
+.L809:
 	mov	d6,#6000
 	call	pwm_init
-.L797:
+.L810:
 	ret
 .L375:
 	
@@ -878,38 +909,38 @@ TestOledKey_Loop:	.type	func
 	movh.a	a2,#@his(g_oled_test_count)
 	lea	a2,[a2]@los(g_oled_test_count)
 	ld.w	d15,[a2]
-.L802:
+.L815:
 	add	d15,#1
 	st.w	[a15],d15
-.L803:
+.L816:
 	mov	d4,#0
-.L804:
+.L817:
 	mov	d5,#0
-.L805:
+.L818:
+	movh.a	a4,#@his(.12.str)
+	lea	a4,[a4]@los(.12.str)
+.L819:
+	mov	d6,#0
+	call	OLED_Show_Str
+.L820:
+	mov	d4,#0
+.L821:
+	mov	d5,#2
+.L822:
 	movh.a	a4,#@his(.13.str)
 	lea	a4,[a4]@los(.13.str)
-.L806:
+.L823:
 	mov	d6,#0
 	call	OLED_Show_Str
-.L807:
+.L824:
 	mov	d4,#0
-.L808:
-	mov	d5,#2
-.L809:
-	movh.a	a4,#@his(.14.str)
-	lea	a4,[a4]@los(.14.str)
-.L810:
-	mov	d6,#0
-	call	OLED_Show_Str
-.L811:
-	mov	d4,#0
-.L812:
+.L825:
 	mov	d5,#4
-.L813:
+.L826:
 	movh.a	a15,#@his(g_oled_test_count)
 	lea	a15,[a15]@los(g_oled_test_count)
 	ld.w	d6,[a15]
-.L814:
+.L827:
 	mov	d7,#0
 	call	OLED_Show_Numbers
 .L377:
@@ -918,9 +949,9 @@ TestOledKey_Loop:	.type	func
 	jeq	d2,#0,.L11
 .L451:
 	mov	d4,#60
-.L815:
+.L828:
 	mov	d5,#4
-.L816:
+.L829:
 	mov	d7,#0
 .L452:
 	mov	d6,d2
@@ -929,7 +960,7 @@ TestOledKey_Loop:	.type	func
 .L11:
 	mov	d4,#200
 	call	system_delay_ms
-.L817:
+.L830:
 	ret
 .L376:
 	
@@ -946,72 +977,72 @@ __TestOledKey_Loop_function_end:
 .L136:
 TestFan_Init:	.type	func
 	mov	d4,#647
-.L822:
+.L835:
 	mov	d5,#0
-.L823:
+.L836:
 	mov	d6,#0
-.L824:
+.L837:
 	mov	d7,#2
 	call	gpio_init
-.L825:
-	mov	d4,#154
-.L826:
-	mov	d5,#3125
-	sh	d5,#5
-.L827:
-	mov	d6,#10000
-	call	pwm_init
-.L828:
-	mov	d4,#91
-.L829:
-	mov	d5,#3125
-	sh	d5,#5
-.L830:
-	mov	d6,#0
-	call	pwm_init
-.L831:
-	mov	d4,#140
-.L832:
-	mov	d5,#30000
-.L833:
-	mov	d6,#10000
-	call	pwm_init
-.L834:
-	mov	d4,#85
-.L835:
-	mov	d5,#30000
-.L836:
-	mov	d6,#10000
-	call	pwm_init
-.L837:
-	mov	d4,#147
 .L838:
-	mov	d5,#30000
+	mov	d4,#154
 .L839:
-	mov	d6,#0
-	call	pwm_init
+	mov	d5,#3125
+	sh	d5,#5
 .L840:
-	mov	d4,#72
+	mov	d6,#10000
+	call	pwm_init
 .L841:
-	mov	d5,#30000
+	mov	d4,#91
 .L842:
+	mov	d5,#3125
+	sh	d5,#5
+.L843:
 	mov	d6,#0
 	call	pwm_init
-.L843:
+.L844:
+	mov	d4,#140
+.L845:
+	mov	d5,#30000
+.L846:
+	mov	d6,#10000
+	call	pwm_init
+.L847:
+	mov	d4,#85
+.L848:
+	mov	d5,#30000
+.L849:
+	mov	d6,#10000
+	call	pwm_init
+.L850:
+	mov	d4,#147
+.L851:
+	mov	d5,#30000
+.L852:
+	mov	d6,#0
+	call	pwm_init
+.L853:
+	mov	d4,#72
+.L854:
+	mov	d5,#30000
+.L855:
+	mov	d6,#0
+	call	pwm_init
+.L856:
 	movh.a	a15,#@his(g_fan_test_phase)
 	lea	a15,[a15]@los(g_fan_test_phase)
-.L844:
+.L857:
 	mov	d15,#0
-.L845:
+.L858:
 	st.b	[a15],d15
-.L846:
+.L859:
 	movh.a	a15,#@his(g_fan_phase_timer)
 	lea	a15,[a15]@los(g_fan_phase_timer)
-.L847:
+.L860:
 	mov	d15,#0
-.L848:
+.L861:
 	st.w	[a15],d15
-.L849:
+.L862:
 	ret
 .L379:
 	
@@ -1028,15 +1059,15 @@ __TestFan_Init_function_end:
 .L138:
 TestFan_Loop:	.type	func
 	mov	d4,#154
-.L854:
+.L867:
 	mov	d5,#10000
 	call	pwm_set_duty
-.L855:
+.L868:
 	mov	d4,#91
-.L856:
+.L869:
 	mov	d5,#9500
 	call	pwm_set_duty
-.L857:
+.L870:
 	ret
 .L380:
 	
@@ -1053,35 +1084,35 @@ __TestFan_Loop_function_end:
 .L140:
 TestEncoder_Init:	.type	func
 	mov	d4,#2
-.L862:
-	mov.u	d5,#49664
-	addih	d5,d5,#1
-.L863:
+.L875:
+	mov	d5,#4096
+	addih	d5,d5,#14
+.L876:
 	mov	d6,#18
-.L864:
+.L877:
 	mov	d7,#12
 	call	uart_init
-.L865:
+.L878:
 	mov	d4,#2
-.L866:
+.L879:
 	mov	d5,#3
-.L867:
+.L880:
 	mov	d6,#3
 	call	encoder_quad_init
-.L868:
-	mov	d4,#1
-.L869:
-	mov	d5,#2
-.L870:
-	mov	d6,#2
+.L881:
+	mov	d4,#0
+.L882:
+	mov	d5,#1
+.L883:
+	mov	d6,#1
 	call	encoder_quad_init
-.L871:
+.L884:
 	mov	d4,#2
 	call	encoder_clear_count
-.L872:
-	mov	d4,#1
+.L885:
+	mov	d4,#0
 	call	encoder_clear_count
-.L873:
+.L886:
 	ret
 .L381:
 	
@@ -1104,66 +1135,66 @@ TestEncoder_Loop:	.type	func
 .L455:
 	mov	d8,d2
 .L457:
-	mov	d4,#1
+	mov	d4,#0
 	call	encoder_get_count
 .L456:
 	movh.a	a15,#@his(_999001_last_left)
 	lea	a15,[a15]@los(_999001_last_left)
 	ld.h	d15,[a15]
-.L878:
+.L891:
 	sub	d15,d8,d15
-.L879:
+.L892:
 	itof	d0,d15
 .L459:
 	movh.a	a15,#@his(_999002_last_right)
 	lea	a15,[a15]@los(_999002_last_right)
 	ld.h	d15,[a15]
-.L880:
+.L893:
 	sub	d15,d2,d15
-.L881:
+.L894:
 	itof	d1,d15
 .L460:
 	movh.a	a15,#@his(_999001_last_left)
 	lea	a15,[a15]@los(_999001_last_left)
-.L882:
+.L895:
 	st.h	[a15],d8
-.L883:
+.L896:
 	movh.a	a15,#@his(_999002_last_right)
 	lea	a15,[a15]@los(_999002_last_right)
-.L884:
+.L897:
 	st.h	[a15],d2
 .L388:
-	movh.a	a15,#@his(.15.ini)
-	lea	a15,[a15]@los(.15.ini)
+	movh.a	a15,#@his(.14.ini)
+	lea	a15,[a15]@los(.14.ini)
 	lea	a15,[a15]0
-.L885:
+.L898:
 	lea	a2,[a10]0
 	mov.a	a4,#3
 .L12:
 	ld.w	d15,[a15+]
 	st.w	[a2+],d15
 	loop	a4,.L12
-.L886:
+.L899:
 	itof	d15,d8
 	st.w	[a10],d15
-.L887:
+.L900:
 	itof	d15,d2
 	st.w	[a10]4,d15
-.L888:
+.L901:
 	st.w	[a10]8,d0
-.L889:
+.L902:
 	st.w	[a10]12,d1
-.L890:
+.L903:
 	mov	d4,#2
-.L891:
+.L904:
 	lea	a4,[a10]0
-.L892:
+.L905:
 	mov	d5,#4
 	call	Vofa_Send_Floats
 .L458:
 	mov	d4,#3
 	call	system_delay_ms
-.L893:
+.L906:
 	ret
 .L382:
 	
@@ -1180,28 +1211,28 @@ __TestEncoder_Loop_function_end:
 .L144:
 TestEnableSwitch_Init:	.type	func
 	mov	d4,#647
-.L898:
+.L911:
 	mov	d5,#0
-.L899:
+.L912:
 	mov	d6,#0
-.L900:
+.L913:
 	mov	d7,#2
 	call	gpio_init
-.L901:
+.L914:
 	mov	d4,#2
-.L902:
-	mov.u	d5,#49664
-	addih	d5,d5,#1
-.L903:
+.L915:
+	mov	d5,#4096
+	addih	d5,d5,#14
+.L916:
 	mov	d6,#18
-.L904:
+.L917:
 	mov	d7,#12
 	call	uart_init
-.L905:
-	movh.a	a4,#@his(.16.str)
-	lea	a4,[a4]@los(.16.str)
+.L918:
+	movh.a	a4,#@his(.15.str)
+	lea	a4,[a4]@los(.15.str)
 	call	printf
-.L906:
+.L919:
 	ret
 .L391:
 	
@@ -1221,9 +1252,9 @@ TestEnableSwitch_Loop:	.type	func
 .L395:
 	mov	d4,#647
 	call	gpio_get_level
-.L911:
+.L924:
 	jne	d2,#1,.L13
-.L912:
+.L925:
 	mov	d15,#1
 .L461:
 	j	.L14
@@ -1242,38 +1273,38 @@ TestEnableSwitch_Loop:	.type	func
 	lea	a15,[a15]@los(_999003_last_state)
 .L400:
 	st.b	[a15],d15
-.L913:
+.L926:
 	jeq	d15,#0,.L17
 .L401:
-	movh.a	a2,#@his(.18.str)
-	lea	a2,[a2]@los(.18.str)
-.L914:
+	movh.a	a2,#@his(.17.str)
+	lea	a2,[a2]@los(.17.str)
+.L927:
 	j	.L18
 .L17:
-	movh.a	a2,#@his(.19.str)
-	lea	a2,[a2]@los(.19.str)
+	movh.a	a2,#@his(.18.str)
+	lea	a2,[a2]@los(.18.str)
 .L18:
 	jeq	d15,#0,.L19
 .L402:
-	movh.a	a15,#@his(.20.str)
-	lea	a15,[a15]@los(.20.str)
-.L915:
+	movh.a	a15,#@his(.19.str)
+	lea	a15,[a15]@los(.19.str)
+.L928:
 	j	.L20
 .L19:
-	movh.a	a15,#@his(.21.str)
-	lea	a15,[a15]@los(.21.str)
+	movh.a	a15,#@his(.20.str)
+	lea	a15,[a15]@los(.20.str)
 .L20:
 	st.a	[a10],a2
-.L916:
+.L929:
 	st.a	[a10]4,a15
-.L917:
-	movh.a	a4,#@his(.17.str)
-	lea	a4,[a4]@los(.17.str)
+.L930:
+	movh.a	a4,#@his(.16.str)
+	lea	a4,[a4]@los(.16.str)
 	call	printf
 .L16:
 	mov	d4,#100
 	call	system_delay_ms
-.L918:
+.L931:
 	ret
 .L392:
 	
@@ -1290,28 +1321,28 @@ __TestEnableSwitch_Loop_function_end:
 .L148:
 TestButton_Init:	.type	func
 	mov	d4,#707
-.L923:
+.L936:
 	mov	d5,#0
-.L924:
+.L937:
 	mov	d6,#0
-.L925:
+.L938:
 	mov	d7,#2
 	call	gpio_init
-.L926:
+.L939:
 	mov	d4,#2
-.L927:
-	mov.u	d5,#49664
-	addih	d5,d5,#1
-.L928:
+.L940:
+	mov	d5,#4096
+	addih	d5,d5,#14
+.L941:
 	mov	d6,#18
-.L929:
+.L942:
 	mov	d7,#12
 	call	uart_init
-.L930:
-	movh.a	a4,#@his(.22.str)
-	lea	a4,[a4]@los(.22.str)
+.L943:
+	movh.a	a4,#@his(.21.str)
+	lea	a4,[a4]@los(.21.str)
 	call	printf
-.L931:
+.L944:
 	ret
 .L403:
 	
@@ -1335,45 +1366,45 @@ TestButton_Loop:	.type	func
 	movh.a	a15,#@his(_999004_last_btn)
 	lea	a15,[a15]@los(_999004_last_btn)
 	ld.bu	d15,[a15]
-.L936:
+.L949:
 	jeq	d15,d2,.L21
-.L937:
+.L950:
 	movh.a	a15,#@his(_999004_last_btn)
 	lea	a15,[a15]@los(_999004_last_btn)
-.L938:
+.L951:
 	st.b	[a15],d2
-.L939:
+.L952:
 	jeq	d2,#0,.L22
-.L940:
-	movh.a	a2,#@his(.24.str)
-	lea	a2,[a2]@los(.24.str)
-.L941:
+.L953:
+	movh.a	a2,#@his(.23.str)
+	lea	a2,[a2]@los(.23.str)
+.L954:
 	j	.L23
 .L22:
-	movh.a	a2,#@his(.25.str)
-	lea	a2,[a2]@los(.25.str)
+	movh.a	a2,#@his(.24.str)
+	lea	a2,[a2]@los(.24.str)
 .L23:
 	jeq	d2,#0,.L24
-.L942:
-	movh.a	a15,#@his(.20.str)
-	lea	a15,[a15]@los(.20.str)
-.L943:
+.L955:
+	movh.a	a15,#@his(.19.str)
+	lea	a15,[a15]@los(.19.str)
+.L956:
 	j	.L25
 .L24:
-	movh.a	a15,#@his(.21.str)
-	lea	a15,[a15]@los(.21.str)
+	movh.a	a15,#@his(.20.str)
+	lea	a15,[a15]@los(.20.str)
 .L25:
 	st.a	[a10],a2
-.L944:
+.L957:
 	st.a	[a10]4,a15
-.L945:
-	movh.a	a4,#@his(.23.str)
-	lea	a4,[a4]@los(.23.str)
+.L958:
+	movh.a	a4,#@his(.22.str)
+	lea	a4,[a4]@los(.22.str)
 	call	printf
 .L21:
 	mov	d4,#50
 	call	system_delay_ms
-.L946:
+.L959:
 	ret
 .L404:
 	
@@ -1390,29 +1421,29 @@ __TestButton_Loop_function_end:
 .L152:
 TestVoltageCurrent_Init:	.type	func
 	mov	d4,#2
-.L951:
-	mov.u	d5,#49664
-	addih	d5,d5,#1
-.L952:
+.L964:
+	mov	d5,#4096
+	addih	d5,d5,#14
+.L965:
 	mov	d6,#18
-.L953:
+.L966:
 	mov	d7,#12
 	call	uart_init
-.L954:
+.L967:
 	mov	d4,#5
-.L955:
+.L968:
 	mov	d5,#2
 	call	adc_init
-.L956:
+.L969:
 	mov	d4,#10
-.L957:
+.L970:
 	mov	d5,#2
 	call	adc_init
-.L958:
-	movh.a	a4,#@his(.26.str)
-	lea	a4,[a4]@los(.26.str)
+.L971:
+	movh.a	a4,#@his(.25.str)
+	lea	a4,[a4]@los(.25.str)
 	call	printf
-.L959:
+.L972:
 	ret
 .L406:
 	
@@ -1439,75 +1470,75 @@ TestVoltageCurrent_Loop:	.type	func
 	call	adc_convert
 .L466:
 	utof	d15,d8
-.L964:
+.L977:
 	mov	d0,#13107
 	addih	d0,d0,#16467
-.L965:
+.L978:
 	mul.f	d15,d15,d0
-.L966:
+.L979:
 	movh	d0,#16688
-.L967:
+.L980:
 	mul.f	d15,d15,d0
-.L968:
+.L981:
 	mov.u	d0,#61440
 	addih	d0,d0,#17791
-.L969:
+.L982:
 	div.f	d15,d15,d0
-.L970:
+.L983:
 	mov	d0,#9961
 	addih	d0,d0,#16145
-.L971:
+.L984:
 	add.f	d0,d15,d0
 .L469:
 	utof	d15,d2
-.L972:
+.L985:
 	mov.u	d1,#46871
 	addih	d1,d1,#14929
-.L973:
+.L986:
 	mul.f	d15,d15,d1
-.L974:
+.L987:
 	mov.u	d1,#60293
 	addih	d1,d1,#16081
-.L975:
+.L988:
 	mul.f	d15,d15,d1
-.L976:
+.L989:
 	mov.u	d1,#39321
 	addih	d1,d1,#16025
-.L977:
+.L990:
 	div.f	d15,d15,d1
 .L470:
-	movh.a	a15,#@his(.15.ini)
-	lea	a15,[a15]@los(.15.ini)
+	movh.a	a15,#@his(.14.ini)
+	lea	a15,[a15]@los(.14.ini)
 	lea	a15,[a15]0
-.L978:
+.L991:
 	lea	a2,[a10]0
 	mov.a	a4,#3
 .L26:
 	ld.w	d1,[a15+]
 	st.w	[a2+],d1
 	loop	a4,.L26
-.L979:
+.L992:
 	st.w	[a10],d0
-.L980:
+.L993:
 	st.w	[a10]4,d15
-.L981:
+.L994:
 	utof	d15,d8
 .L471:
 	st.w	[a10]8,d15
-.L982:
+.L995:
 	utof	d15,d2
 	st.w	[a10]12,d15
-.L983:
+.L996:
 	mov	d4,#2
-.L984:
+.L997:
 	lea	a4,[a10]0
-.L985:
+.L998:
 	mov	d5,#4
 	call	Vofa_Send_Floats
 .L468:
 	mov	d4,#200
 	call	system_delay_ms
-.L986:
+.L999:
 	ret
 .L407:
 	
@@ -1524,24 +1555,24 @@ __TestVoltageCurrent_Loop_function_end:
 .L156:
 TestWs2812_Init:	.type	func
 	mov	d4,#2
-.L991:
-	mov.u	d5,#49664
-	addih	d5,d5,#1
-.L992:
+.L1004:
+	mov	d5,#4096
+	addih	d5,d5,#14
+.L1005:
 	mov	d6,#18
-.L993:
+.L1006:
 	mov	d7,#12
 	call	uart_init
-.L994:
+.L1007:
 	call	WS2812_Init
-.L995:
+.L1008:
 	movh.a	a15,#@his(g_ws2812_phase)
 	lea	a15,[a15]@los(g_ws2812_phase)
-.L996:
+.L1009:
 	mov	d15,#0
-.L997:
+.L1010:
 	st.w	[a15],d15
-.L998:
+.L1011:
 	ret
 .L414:
 	
@@ -1562,47 +1593,47 @@ TestWs2812_Loop:	.type	func
 	movh.a	a15,#@his(g_ws2812_phase)
 	lea	a15,[a15]@los(g_ws2812_phase)
 	ld.w	d15,[a15]
-.L1003:
+.L1016:
 	mov	d0,#300
-.L1004:
+.L1017:
 	div.u	e0,d15,d0
-.L1005:
+.L1018:
 	mov	d15,#6
-.L1006:
+.L1019:
 	div.u	e0,d0,d15
 .L473:
 	movh.a	a15,#@his(_999005_last_phase)
 	lea	a15,[a15]@los(_999005_last_phase)
 	ld.bu	d15,[a15]
-.L1007:
+.L1020:
 	jeq	d15,d1,.L27
-.L1008:
+.L1021:
 	movh.a	a15,#@his(_999005_last_phase)
 	lea	a15,[a15]@los(_999005_last_phase)
-.L1009:
+.L1022:
 	st.b	[a15],d1
-.L1010:
+.L1023:
 	mov	d15,#0
 	jeq	d15,d1,.L28
-.L1011:
+.L1024:
 	mov	d15,#1
 	jeq	d15,d1,.L29
-.L1012:
+.L1025:
 	mov	d15,#2
 	jeq	d15,d1,.L30
-.L1013:
+.L1026:
 	mov	d15,#3
 	jeq	d15,d1,.L31
-.L1014:
+.L1027:
 	mov	d15,#4
 	jeq	d15,d1,.L32
-.L1015:
+.L1028:
 	mov	d15,#5
 	jeq	d15,d1,.L33
 	j	.L34
 .L28:
-	movh.a	a15,#@his(.27.lit)
-	lea	a15,[a15]@los(.27.lit)
+	movh.a	a15,#@his(.26.lit)
+	lea	a15,[a15]@los(.26.lit)
 	lea	a15,[a15]0
 	lea	a2,[a10]0
 	mov.a	a4,#2
@@ -1614,8 +1645,8 @@ TestWs2812_Loop:	.type	func
 .L474:
 	j	.L36
 .L29:
-	movh.a	a15,#@his(.28.lit)
-	lea	a15,[a15]@los(.28.lit)
+	movh.a	a15,#@his(.27.lit)
+	lea	a15,[a15]@los(.27.lit)
 	lea	a15,[a15]0
 	lea	a2,[a10]0
 	mov.a	a4,#2
@@ -1627,8 +1658,8 @@ TestWs2812_Loop:	.type	func
 .L475:
 	j	.L38
 .L30:
-	movh.a	a15,#@his(.29.lit)
-	lea	a15,[a15]@los(.29.lit)
+	movh.a	a15,#@his(.28.lit)
+	lea	a15,[a15]@los(.28.lit)
 	lea	a15,[a15]0
 	lea	a2,[a10]0
 	mov.a	a4,#2
@@ -1640,8 +1671,8 @@ TestWs2812_Loop:	.type	func
 .L476:
 	j	.L40
 .L31:
-	movh.a	a15,#@his(.30.lit)
-	lea	a15,[a15]@los(.30.lit)
+	movh.a	a15,#@his(.29.lit)
+	lea	a15,[a15]@los(.29.lit)
 	lea	a15,[a15]0
 	lea	a2,[a10]0
 	mov.a	a4,#2
@@ -1653,8 +1684,8 @@ TestWs2812_Loop:	.type	func
 .L477:
 	j	.L42
 .L32:
-	movh.a	a15,#@his(.31.lit)
-	lea	a15,[a15]@los(.31.lit)
+	movh.a	a15,#@his(.30.lit)
+	lea	a15,[a15]@los(.30.lit)
 	lea	a15,[a15]0
 	lea	a2,[a10]0
 	mov.a	a4,#2
@@ -1666,8 +1697,8 @@ TestWs2812_Loop:	.type	func
 .L478:
 	j	.L44
 .L33:
-	movh.a	a15,#@his(.32.lit)
-	lea	a15,[a15]@los(.32.lit)
+	movh.a	a15,#@his(.31.lit)
+	lea	a15,[a15]@los(.31.lit)
 	lea	a15,[a15]0
 	lea	a2,[a10]0
 	mov.a	a4,#2
@@ -1687,19 +1718,19 @@ TestWs2812_Loop:	.type	func
 .L36:
 .L27:
 	call	WS2812_Effect_Update
-.L1016:
+.L1029:
 	movh.a	a15,#@his(g_ws2812_phase)
 	lea	a15,[a15]@los(g_ws2812_phase)
 	movh.a	a2,#@his(g_ws2812_phase)
 	lea	a2,[a2]@los(g_ws2812_phase)
 	ld.w	d15,[a2]
-.L1017:
+.L1030:
 	add	d15,#1
 	st.w	[a15],d15
-.L1018:
+.L1031:
 	mov	d4,#10
 	call	system_delay_ms
-.L1019:
+.L1032:
 	ret
 .L415:
 	
@@ -1727,18 +1758,18 @@ NewCarTest_Init:	.type	func
 	mov	d15,#0
 	jlt	d0,d15,.L47
 	sub	d15,d0,d15
-	movh.a	a15,#@his(.34.jmp)
-	lea	a15,[a15]@los(.34.jmp)
+	movh.a	a15,#@his(.33.jmp)
+	lea	a15,[a15]@los(.33.jmp)
 	addsc.a	a15,a15,d15,#2
 	ld.a	a15,[a15]
 	ji	a15
 .L47:
 	j	.L48
 	
-	.sdecl	'.rodata.app_new_car_test..34.jmp',data,rom
-	.sect	'.rodata.app_new_car_test..34.jmp'
+	.sdecl	'.rodata.app_new_car_test..33.jmp',data,rom
+	.sect	'.rodata.app_new_car_test..33.jmp'
 	.align	4
-.34.jmp:	.type	object
+.33.jmp:	.type	object
 	.word	.L49
 	.word	.L50
 	.word	.L51
@@ -1813,8 +1844,8 @@ NewCarTest_Init:	.type	func
 .L503:
 	st.w	[a10],d15
 .L504:
-	movh.a	a4,#@his(.33.str)
-	lea	a4,[a4]@los(.33.str)
+	movh.a	a4,#@his(.32.str)
+	lea	a4,[a4]@los(.32.str)
 	call	printf
 .L505:
 	j	.L75
@@ -1860,18 +1891,18 @@ NewCarTest_Loop:	.type	func
 	mov	d15,#0
 	jlt	d0,d15,.L76
 	sub	d15,d0,d15
-	movh.a	a15,#@his(.35.jmp)
-	lea	a15,[a15]@los(.35.jmp)
+	movh.a	a15,#@his(.34.jmp)
+	lea	a15,[a15]@los(.34.jmp)
 	addsc.a	a15,a15,d15,#2
 	ld.a	a15,[a15]
 	ji	a15
 .L76:
 	j	.L77
 	
-	.sdecl	'.rodata.app_new_car_test..35.jmp',data,rom
-	.sect	'.rodata.app_new_car_test..35.jmp'
+	.sdecl	'.rodata.app_new_car_test..34.jmp',data,rom
+	.sect	'.rodata.app_new_car_test..34.jmp'
 	.align	4
-.35.jmp:	.type	object
+.34.jmp:	.type	object
 	.word	.L78
 	.word	.L79
 	.word	.L80
@@ -1970,7 +2001,7 @@ __NewCarTest_Loop_function_end:
 	.sect	'.rodata.app_new_car_test.g_test_mode'
 g_test_mode:	.type	object
 	.size	g_test_mode,1
-	.byte	11
+	.byte	4
 	.sdecl	'.data.app_new_car_test.g_buzzer_timer',data,cluster('g_buzzer_timer')
 	.sect	'.data.app_new_car_test.g_buzzer_timer'
 	.align	2
@@ -2103,54 +2134,43 @@ g_ws2812_phase:	.type	object
 	.sdecl	'.rodata.app_new_car_test..9.str',data,rom
 	.sect	'.rodata.app_new_car_test..9.str'
 .9.str:	.type	object
-	.size	.9.str,38
-	.byte	61,61,61,32,84,69,83,84
-	.byte	95,65,68,67,95,70,79,82
-	.byte	87,65,82,68,58,32,49,53
-	.byte	45,99,104,32,65,68,67,32
-	.byte	61,61,61,13
-	.byte	10
-	.space	1
-	.sdecl	'.rodata.app_new_car_test..10.str',data,rom
-	.sect	'.rodata.app_new_car_test..10.str'
-.10.str:	.type	object
-	.size	.10.str,41
+	.size	.9.str,41
 	.byte	61,61,61,32,84,69,83,84
 	.byte	95,85,65,82,84,95,86,79
 	.byte	70,65,58,32,85,65,82,84
 	.byte	32,116,101,120,116,32,116,101
 	.byte	115,116,32,61,61,61,13,10
 	.space	1
-	.sdecl	'.rodata.app_new_car_test..11.str',data,rom
-	.sect	'.rodata.app_new_car_test..11.str'
-.11.str:	.type	object
-	.size	.11.str,22
+	.sdecl	'.rodata.app_new_car_test..10.str',data,rom
+	.sect	'.rodata.app_new_car_test..10.str'
+.10.str:	.type	object
+	.size	.10.str,22
 	.byte	32,32,66,97,117,100,58,32
-	.byte	49,49,53,50,48,48,44,32
+	.byte	57,50,49,54,48,48,44,32
 	.byte	56,78,49,13
 	.byte	10
 	.space	1
-	.sdecl	'.rodata.app_new_car_test..12.str',data,rom
-	.sect	'.rodata.app_new_car_test..12.str'
-.12.str:	.type	object
-	.size	.12.str,34
+	.sdecl	'.rodata.app_new_car_test..11.str',data,rom
+	.sect	'.rodata.app_new_car_test..11.str'
+.11.str:	.type	object
+	.size	.11.str,34
 	.byte	78,101,119,32,99,97,114,32
 	.byte	85,65,82,84,32,116,101,115
 	.byte	116,32,79,75,44,32,99,111
 	.byte	117,110,116,61,37,108,117,13
 	.byte	10
 	.space	1
-	.sdecl	'.rodata.app_new_car_test..13.str',data,rom
-	.sect	'.rodata.app_new_car_test..13.str'
-.13.str:	.type	object
-	.size	.13.str,13
+	.sdecl	'.rodata.app_new_car_test..12.str',data,rom
+	.sect	'.rodata.app_new_car_test..12.str'
+.12.str:	.type	object
+	.size	.12.str,13
 	.byte	78,69,87,32,67,65,82,32
 	.byte	84,69,83,84
 	.space	1
-	.sdecl	'.rodata.app_new_car_test..14.str',data,rom
-	.sect	'.rodata.app_new_car_test..14.str'
-.14.str:	.type	object
-	.size	.14.str,12
+	.sdecl	'.rodata.app_new_car_test..13.str',data,rom
+	.sect	'.rodata.app_new_car_test..13.str'
+.13.str:	.type	object
+	.size	.13.str,12
 	.byte	79,76,69,68,43,75,69,89
 	.byte	32,79,75
 	.space	1
@@ -2166,16 +2186,16 @@ _999001_last_left:	.type	object
 _999002_last_right:	.type	object
 	.size	_999002_last_right,2
 	.space	2
-	.sdecl	'.rodata.app_new_car_test..15.ini',data,rom
-	.sect	'.rodata.app_new_car_test..15.ini'
+	.sdecl	'.rodata.app_new_car_test..14.ini',data,rom
+	.sect	'.rodata.app_new_car_test..14.ini'
 	.align	2
-.15.ini:	.type	object
-	.size	.15.ini,16
+.14.ini:	.type	object
+	.size	.14.ini,16
 	.space	16
-	.sdecl	'.rodata.app_new_car_test..16.str',data,rom
-	.sect	'.rodata.app_new_car_test..16.str'
-.16.str:	.type	object
-	.size	.16.str,44
+	.sdecl	'.rodata.app_new_car_test..15.str',data,rom
+	.sect	'.rodata.app_new_car_test..15.str'
+.15.str:	.type	object
+	.size	.15.str,44
 	.byte	61,61,61,32,84,69,83,84
 	.byte	95,69,78,65,66,76,69,95
 	.byte	83,87,73,84,67,72,58,32
@@ -2188,44 +2208,44 @@ _999002_last_right:	.type	object
 _999003_last_state:	.type	object
 	.size	_999003_last_state,1
 	.byte	255
-	.sdecl	'.rodata.app_new_car_test..17.str',data,rom
-	.sect	'.rodata.app_new_car_test..17.str'
-.17.str:	.type	object
-	.size	.17.str,31
+	.sdecl	'.rodata.app_new_car_test..16.str',data,rom
+	.sect	'.rodata.app_new_car_test..16.str'
+.16.str:	.type	object
+	.size	.16.str,31
 	.byte	69,110,97,98,108,101,32,83
 	.byte	119,105,116,99,104,58,32,37
 	.byte	115,32,40,80,50,48,95,55
 	.byte	61,37,115,41
 	.byte	13,10
 	.space	1
+	.sdecl	'.rodata.app_new_car_test..17.str',data,rom
+	.sect	'.rodata.app_new_car_test..17.str'
+.17.str:	.type	object
+	.size	.17.str,3
+	.byte	79,78
+	.space	1
 	.sdecl	'.rodata.app_new_car_test..18.str',data,rom
 	.sect	'.rodata.app_new_car_test..18.str'
 .18.str:	.type	object
-	.size	.18.str,3
-	.byte	79,78
+	.size	.18.str,4
+	.byte	79,70,70
 	.space	1
 	.sdecl	'.rodata.app_new_car_test..19.str',data,rom
 	.sect	'.rodata.app_new_car_test..19.str'
 .19.str:	.type	object
-	.size	.19.str,4
-	.byte	79,70,70
+	.size	.19.str,5
+	.byte	72,73,71,72
 	.space	1
 	.sdecl	'.rodata.app_new_car_test..20.str',data,rom
 	.sect	'.rodata.app_new_car_test..20.str'
 .20.str:	.type	object
-	.size	.20.str,5
-	.byte	72,73,71,72
+	.size	.20.str,4
+	.byte	76,79,87
 	.space	1
 	.sdecl	'.rodata.app_new_car_test..21.str',data,rom
 	.sect	'.rodata.app_new_car_test..21.str'
 .21.str:	.type	object
-	.size	.21.str,4
-	.byte	76,79,87
-	.space	1
-	.sdecl	'.rodata.app_new_car_test..22.str',data,rom
-	.sect	'.rodata.app_new_car_test..22.str'
-.22.str:	.type	object
-	.size	.22.str,37
+	.size	.21.str,37
 	.byte	61,61,61,32,84,69,83,84
 	.byte	95,66,85,84,84,79,78,58
 	.byte	32,80,50,50,95,51,32,109
@@ -2237,32 +2257,32 @@ _999003_last_state:	.type	object
 _999004_last_btn:	.type	object
 	.size	_999004_last_btn,1
 	.byte	255
-	.sdecl	'.rodata.app_new_car_test..23.str',data,rom
-	.sect	'.rodata.app_new_car_test..23.str'
-.23.str:	.type	object
-	.size	.23.str,24
+	.sdecl	'.rodata.app_new_car_test..22.str',data,rom
+	.sect	'.rodata.app_new_car_test..22.str'
+.22.str:	.type	object
+	.size	.22.str,24
 	.byte	66,117,116,116,111,110,58,32
 	.byte	37,115,32,40,80,50,50,95
 	.byte	51,61,37,115
 	.byte	41,13,10
 	.space	1
+	.sdecl	'.rodata.app_new_car_test..23.str',data,rom
+	.sect	'.rodata.app_new_car_test..23.str'
+.23.str:	.type	object
+	.size	.23.str,8
+	.byte	80,82,69,83
+	.byte	83,69,68
+	.space	1
 	.sdecl	'.rodata.app_new_car_test..24.str',data,rom
 	.sect	'.rodata.app_new_car_test..24.str'
 .24.str:	.type	object
-	.size	.24.str,8
-	.byte	80,82,69,83
-	.byte	83,69,68
+	.size	.24.str,9
+	.byte	82,69,76,69,65,83,69,68
 	.space	1
 	.sdecl	'.rodata.app_new_car_test..25.str',data,rom
 	.sect	'.rodata.app_new_car_test..25.str'
 .25.str:	.type	object
-	.size	.25.str,9
-	.byte	82,69,76,69,65,83,69,68
-	.space	1
-	.sdecl	'.rodata.app_new_car_test..26.str',data,rom
-	.sect	'.rodata.app_new_car_test..26.str'
-.26.str:	.type	object
-	.size	.26.str,31
+	.size	.25.str,31
 	.byte	61,61,61,32,84,69,83,84
 	.byte	95,86,79,76,84,65,71,69
 	.byte	95,67,85,82,82,69,78,84
@@ -2274,61 +2294,61 @@ _999004_last_btn:	.type	object
 _999005_last_phase:	.type	object
 	.size	_999005_last_phase,1
 	.byte	255
+	.sdecl	'.data.app_new_car_test..26.lit',data,cluster('.26.lit')
+	.sect	'.data.app_new_car_test..26.lit'
+	.align	4
+.26.lit:	.type	object
+	.size	.26.lit,12
+	.byte	1,255
+	.space	10
 	.sdecl	'.data.app_new_car_test..27.lit',data,cluster('.27.lit')
 	.sect	'.data.app_new_car_test..27.lit'
 	.align	4
 .27.lit:	.type	object
 	.size	.27.lit,12
-	.byte	1,255
-	.space	10
+	.byte	1
+	.space	1
+	.byte	255
+	.space	9
 	.sdecl	'.data.app_new_car_test..28.lit',data,cluster('.28.lit')
 	.sect	'.data.app_new_car_test..28.lit'
 	.align	4
 .28.lit:	.type	object
 	.size	.28.lit,12
 	.byte	1
-	.space	1
+	.space	2
 	.byte	255
-	.space	9
+	.space	8
 	.sdecl	'.data.app_new_car_test..29.lit',data,cluster('.29.lit')
 	.sect	'.data.app_new_car_test..29.lit'
 	.align	4
 .29.lit:	.type	object
 	.size	.29.lit,12
-	.byte	1
-	.space	2
-	.byte	255
-	.space	8
+	.byte	3
+	.space	3
+	.byte	1,4
+	.space	6
 	.sdecl	'.data.app_new_car_test..30.lit',data,cluster('.30.lit')
 	.sect	'.data.app_new_car_test..30.lit'
 	.align	4
 .30.lit:	.type	object
 	.size	.30.lit,12
-	.byte	3
-	.space	3
-	.byte	1,4
-	.space	6
-	.sdecl	'.data.app_new_car_test..31.lit',data,cluster('.31.lit')
-	.sect	'.data.app_new_car_test..31.lit'
-	.align	4
-.31.lit:	.type	object
-	.size	.31.lit,12
 	.byte	2
 	.space	1
 	.byte	255
 	.space	5
 	.half	2000
 	.space	2
-	.sdecl	'.data.app_new_car_test..32.lit',data,cluster('.32.lit')
-	.sect	'.data.app_new_car_test..32.lit'
+	.sdecl	'.data.app_new_car_test..31.lit',data,cluster('.31.lit')
+	.sect	'.data.app_new_car_test..31.lit'
 	.align	4
-.32.lit:	.type	object
-	.size	.32.lit,12
+.31.lit:	.type	object
+	.size	.31.lit,12
 	.space	12
-	.sdecl	'.rodata.app_new_car_test..33.str',data,rom
-	.sect	'.rodata.app_new_car_test..33.str'
-.33.str:	.type	object
-	.size	.33.str,38
+	.sdecl	'.rodata.app_new_car_test..32.str',data,rom
+	.sect	'.rodata.app_new_car_test..32.str'
+.32.str:	.type	object
+	.size	.32.str,38
 	.byte	61,61,61,32,69,82,82,79
 	.byte	82,58,32,85,110,107,110,111
 	.byte	119,110,32,116,101,115,116,32
@@ -2356,10 +2376,12 @@ _999005_last_phase:	.type	object
 	.calls	'TestIMU_Loop','system_delay_ms'
 	.calls	'TestAdcForward_Init','uart_init'
 	.calls	'TestAdcForward_Init','adc_init'
-	.calls	'TestAdcForward_Init','printf'
+	.calls	'TestAdcForward_Init','gpio_init'
+	.calls	'TestAdcForward_Init','pwm_init'
 	.calls	'TestAdcForward_Loop','adc_convert'
 	.calls	'TestAdcForward_Loop','Vofa_Send_Floats'
 	.calls	'TestAdcForward_Loop','system_delay_ms'
+	.calls	'TestAdcForward_Loop','pwm_set_duty'
 	.calls	'TestUartVofa_Init','uart_init'
 	.calls	'TestUartVofa_Init','printf'
 	.calls	'TestUartVofa_Loop','printf'
@@ -22432,7 +22454,7 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'NewCarTest_Init',0,1,129,5,6,1,1,1
+	.byte	'NewCarTest_Init',0,1,136,5,6,1,1,1
 	.word	.L160,.L332,.L159
 	.byte	4
 	.word	.L160,.L332
@@ -22455,7 +22477,7 @@ _999005_last_phase:	.type	object
 .L488:
 	.byte	5,6,7,0,5,2
 	.word	.L160
-	.byte	3,128,5,1,5,13,9
+	.byte	3,135,5,1,5,13,9
 	.half	.L480-.L160
 	.byte	3,2,1,5,5,9
 	.half	.L489-.L480
@@ -22545,7 +22567,7 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'NewCarTest_Loop',0,1,153,5,6,1,1,1
+	.byte	'NewCarTest_Loop',0,1,160,5,6,1,1,1
 	.word	.L162,.L333,.L161
 	.byte	4
 	.word	.L162,.L333
@@ -22568,7 +22590,7 @@ _999005_last_phase:	.type	object
 .L510:
 	.byte	5,13,7,0,5,2
 	.word	.L162
-	.byte	3,154,5,1,5,5,9
+	.byte	3,161,5,1,5,5,9
 	.half	.L511-.L162
 	.byte	1,5,44,9
 	.half	.L78-.L511
@@ -23469,12 +23491,30 @@ _999005_last_phase:	.type	object
 	.half	.L705-.L704
 	.byte	3,1,1,5,29,9
 	.half	.L706-.L705
-	.byte	1,5,12,9
+	.byte	1,5,15,9
 	.half	.L707-.L706
-	.byte	3,2,1,5,1,9
+	.byte	3,2,1,5,34,9
 	.half	.L708-.L707
+	.byte	1,5,39,9
+	.half	.L709-.L708
+	.byte	1,5,42,9
+	.half	.L710-.L709
+	.byte	1,5,14,9
+	.half	.L711-.L710
+	.byte	3,3,1,5,33,9
+	.half	.L712-.L711
+	.byte	1,5,41,9
+	.half	.L713-.L712
+	.byte	1,5,14,9
+	.half	.L714-.L713
+	.byte	3,2,1,5,33,9
+	.half	.L715-.L714
+	.byte	1,5,41,9
+	.half	.L716-.L715
+	.byte	1,5,1,9
+	.half	.L717-.L716
 	.byte	3,1,1,7,9
-	.half	.L226-.L708
+	.half	.L226-.L717
 	.byte	0,1,1
 .L671:
 	.sdecl	'.debug_ranges',debug,cluster('TestAdcForward_Init')
@@ -23495,12 +23535,12 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'TestAdcForward_Loop',0,1,181,2,13,1,1
+	.byte	'TestAdcForward_Loop',0,1,186,2,13,1,1
 	.word	.L126,.L370,.L125
 	.byte	4
 	.word	.L126,.L370
 	.byte	5
-	.byte	'adc_vals',0,1,183,2,11
+	.byte	'adc_vals',0,1,188,2,11
 	.word	.L371,.L372
 	.byte	0,0,0
 	.sdecl	'.debug_abbrev',debug,cluster('TestAdcForward_Loop')
@@ -23511,38 +23551,20 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_line',debug,cluster('TestAdcForward_Loop')
 	.sect	'.debug_line'
 .L229:
-	.word	.L710-.L709
-.L709:
+	.word	.L719-.L718
+.L718:
 	.half	3
-	.word	.L712-.L711
-.L711:
+	.word	.L721-.L720
+.L720:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/app_new_car_test.c',0,0,0,0,0
-.L712:
+.L721:
 	.byte	5,13,7,0,5,2
 	.word	.L126
-	.byte	3,180,2,1,5,39,9
+	.byte	3,185,2,1,5,39,9
 	.half	.L448-.L126
 	.byte	3,3,1,5,20,9
-	.half	.L713-.L448
-	.byte	1,5,18,9
-	.half	.L714-.L713
-	.byte	1,5,39,9
-	.half	.L715-.L714
-	.byte	3,1,1,5,20,9
-	.half	.L716-.L715
-	.byte	1,5,18,9
-	.half	.L717-.L716
-	.byte	1,5,39,9
-	.half	.L718-.L717
-	.byte	3,1,1,5,20,9
-	.half	.L719-.L718
-	.byte	1,5,18,9
-	.half	.L720-.L719
-	.byte	1,5,39,9
-	.half	.L721-.L720
-	.byte	3,1,1,5,20,9
-	.half	.L722-.L721
+	.half	.L722-.L448
 	.byte	1,5,18,9
 	.half	.L723-.L722
 	.byte	1,5,39,9
@@ -23611,20 +23633,46 @@ _999005_last_phase:	.type	object
 	.half	.L755-.L754
 	.byte	1,5,18,9
 	.half	.L756-.L755
-	.byte	1,5,22,9
+	.byte	1,5,39,9
 	.half	.L757-.L756
-	.byte	3,2,1,5,30,9
+	.byte	3,1,1,5,20,9
 	.half	.L758-.L757
-	.byte	1,5,40,9
+	.byte	1,5,18,9
 	.half	.L759-.L758
-	.byte	1,5,21,9
+	.byte	1,5,39,9
 	.half	.L760-.L759
-	.byte	3,1,1,5,1,9
+	.byte	3,1,1,5,20,9
 	.half	.L761-.L760
+	.byte	1,5,18,9
+	.half	.L762-.L761
+	.byte	1,5,39,9
+	.half	.L763-.L762
+	.byte	3,1,1,5,20,9
+	.half	.L764-.L763
+	.byte	1,5,18,9
+	.half	.L765-.L764
+	.byte	1,5,22,9
+	.half	.L766-.L765
+	.byte	3,2,1,5,30,9
+	.half	.L767-.L766
+	.byte	1,5,40,9
+	.half	.L768-.L767
+	.byte	1,5,21,9
+	.half	.L769-.L768
+	.byte	3,1,1,5,18,9
+	.half	.L770-.L769
+	.byte	3,1,1,5,37,9
+	.half	.L771-.L770
+	.byte	1,5,18,9
+	.half	.L772-.L771
+	.byte	3,1,1,5,37,9
+	.half	.L773-.L772
+	.byte	1,5,1,9
+	.half	.L774-.L773
 	.byte	3,1,1,7,9
-	.half	.L231-.L761
+	.half	.L231-.L774
 	.byte	0,1,1
-.L710:
+.L719:
 	.sdecl	'.debug_ranges',debug,cluster('TestAdcForward_Loop')
 	.sect	'.debug_ranges'
 .L230:
@@ -23643,7 +23691,7 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'TestUartVofa_Init',0,1,208,2,13,1,1
+	.byte	'TestUartVofa_Init',0,1,215,2,13,1,1
 	.word	.L128,.L373,.L127
 	.byte	4
 	.word	.L128,.L373
@@ -23656,38 +23704,38 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_line',debug,cluster('TestUartVofa_Init')
 	.sect	'.debug_line'
 .L234:
-	.word	.L763-.L762
-.L762:
+	.word	.L776-.L775
+.L775:
 	.half	3
-	.word	.L765-.L764
-.L764:
+	.word	.L778-.L777
+.L777:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/app_new_car_test.c',0,0,0,0,0
-.L765:
+.L778:
 	.byte	5,15,7,0,5,2
 	.word	.L128
-	.byte	3,209,2,1,5,23,9
-	.half	.L766-.L128
+	.byte	3,216,2,1,5,23,9
+	.half	.L779-.L128
 	.byte	1,5,31,9
-	.half	.L767-.L766
+	.half	.L780-.L779
 	.byte	1,5,47,9
-	.half	.L768-.L767
+	.half	.L781-.L780
 	.byte	1,5,5,9
-	.half	.L769-.L768
+	.half	.L782-.L781
 	.byte	3,1,1,5,25,9
-	.half	.L770-.L769
+	.half	.L783-.L782
 	.byte	1,5,23,9
-	.half	.L771-.L770
+	.half	.L784-.L783
 	.byte	1,5,12,9
-	.half	.L772-.L771
+	.half	.L785-.L784
 	.byte	3,1,1,9
-	.half	.L773-.L772
+	.half	.L786-.L785
 	.byte	3,1,1,5,1,9
-	.half	.L774-.L773
+	.half	.L787-.L786
 	.byte	3,1,1,7,9
-	.half	.L236-.L774
+	.half	.L236-.L787
 	.byte	0,1,1
-.L763:
+.L776:
 	.sdecl	'.debug_ranges',debug,cluster('TestUartVofa_Init')
 	.sect	'.debug_ranges'
 .L235:
@@ -23706,7 +23754,7 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'TestUartVofa_Loop',0,1,216,2,13,1,1
+	.byte	'TestUartVofa_Loop',0,1,223,2,13,1,1
 	.word	.L130,.L374,.L129
 	.byte	4
 	.word	.L130,.L374
@@ -23719,32 +23767,32 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_line',debug,cluster('TestUartVofa_Loop')
 	.sect	'.debug_line'
 .L239:
-	.word	.L776-.L775
-.L775:
+	.word	.L789-.L788
+.L788:
 	.half	3
-	.word	.L778-.L777
-.L777:
+	.word	.L791-.L790
+.L790:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/app_new_car_test.c',0,0,0,0,0
-.L778:
+.L791:
 	.byte	5,13,7,0,5,2
 	.word	.L130
-	.byte	3,215,2,1,5,5,9
+	.byte	3,222,2,1,5,5,9
 	.half	.L449-.L130
 	.byte	3,2,1,5,22,9
-	.half	.L779-.L449
+	.half	.L792-.L449
 	.byte	1,5,51,9
-	.half	.L780-.L779
+	.half	.L793-.L792
 	.byte	3,1,1,5,12,9
-	.half	.L781-.L780
+	.half	.L794-.L793
 	.byte	1,5,21,9
-	.half	.L782-.L781
+	.half	.L795-.L794
 	.byte	3,1,1,5,1,9
-	.half	.L783-.L782
+	.half	.L796-.L795
 	.byte	3,1,1,7,9
-	.half	.L241-.L783
+	.half	.L241-.L796
 	.byte	0,1,1
-.L776:
+.L789:
 	.sdecl	'.debug_ranges',debug,cluster('TestUartVofa_Loop')
 	.sect	'.debug_ranges'
 .L240:
@@ -23763,7 +23811,7 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'TestOledKey_Init',0,1,227,2,13,1,1
+	.byte	'TestOledKey_Init',0,1,234,2,13,1,1
 	.word	.L132,.L375,.L131
 	.byte	4
 	.word	.L132,.L375
@@ -23776,40 +23824,40 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_line',debug,cluster('TestOledKey_Init')
 	.sect	'.debug_line'
 .L244:
-	.word	.L785-.L784
-.L784:
+	.word	.L798-.L797
+.L797:
 	.half	3
-	.word	.L787-.L786
-.L786:
+	.word	.L800-.L799
+.L799:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/app_new_car_test.c',0,0,0,0,0
-.L787:
+.L800:
 	.byte	5,15,7,0,5,2
 	.word	.L132
-	.byte	3,228,2,1,5,23,9
-	.half	.L788-.L132
+	.byte	3,235,2,1,5,23,9
+	.half	.L801-.L132
 	.byte	1,5,31,9
-	.half	.L789-.L788
+	.half	.L802-.L801
 	.byte	1,5,47,9
-	.half	.L790-.L789
+	.half	.L803-.L802
 	.byte	1,5,14,9
-	.half	.L791-.L790
+	.half	.L804-.L803
 	.byte	3,3,1,5,30,9
-	.half	.L792-.L791
+	.half	.L805-.L804
 	.byte	1,5,36,9
-	.half	.L793-.L792
+	.half	.L806-.L805
 	.byte	1,5,14,9
-	.half	.L794-.L793
+	.half	.L807-.L806
 	.byte	3,1,1,5,30,9
-	.half	.L795-.L794
+	.half	.L808-.L807
 	.byte	1,5,36,9
-	.half	.L796-.L795
+	.half	.L809-.L808
 	.byte	1,5,1,9
-	.half	.L797-.L796
+	.half	.L810-.L809
 	.byte	3,1,1,7,9
-	.half	.L246-.L797
+	.half	.L246-.L810
 	.byte	0,1,1
-.L785:
+.L798:
 	.sdecl	'.debug_ranges',debug,cluster('TestOledKey_Init')
 	.sect	'.debug_ranges'
 .L245:
@@ -23828,14 +23876,14 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'TestOledKey_Loop',0,1,236,2,13,1,1
+	.byte	'TestOledKey_Loop',0,1,243,2,13,1,1
 	.word	.L134,.L376,.L133
 	.byte	4
 	.word	.L134,.L376
 	.byte	4
 	.word	.L377,.L11
 	.byte	5
-	.byte	'key_val',0,1,245,2,15
+	.byte	'key_val',0,1,252,2,15
 	.word	.L339,.L378
 	.byte	0,0,0,0
 	.sdecl	'.debug_abbrev',debug,cluster('TestOledKey_Loop')
@@ -23846,60 +23894,60 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_line',debug,cluster('TestOledKey_Loop')
 	.sect	'.debug_line'
 .L249:
-	.word	.L799-.L798
-.L798:
+	.word	.L812-.L811
+.L811:
 	.half	3
-	.word	.L801-.L800
-.L800:
+	.word	.L814-.L813
+.L813:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/app_new_car_test.c',0,0,0,0,0
-.L801:
+.L814:
 	.byte	5,5,7,0,5,2
 	.word	.L134
-	.byte	3,237,2,1,5,22,9
-	.half	.L802-.L134
+	.byte	3,244,2,1,5,22,9
+	.half	.L815-.L134
 	.byte	1,5,19,9
-	.half	.L803-.L802
+	.half	.L816-.L815
 	.byte	3,2,1,5,22,9
-	.half	.L804-.L803
+	.half	.L817-.L816
 	.byte	1,5,34,9
-	.half	.L805-.L804
+	.half	.L818-.L817
 	.byte	1,5,50,9
-	.half	.L806-.L805
+	.half	.L819-.L818
 	.byte	1,5,19,9
-	.half	.L807-.L806
+	.half	.L820-.L819
 	.byte	3,1,1,5,22,9
-	.half	.L808-.L807
+	.half	.L821-.L820
 	.byte	1,5,34,9
-	.half	.L809-.L808
+	.half	.L822-.L821
 	.byte	1,5,49,9
-	.half	.L810-.L809
+	.half	.L823-.L822
 	.byte	1,5,23,9
-	.half	.L811-.L810
+	.half	.L824-.L823
 	.byte	3,1,1,5,26,9
-	.half	.L812-.L811
+	.half	.L825-.L824
 	.byte	1,5,36,9
-	.half	.L813-.L812
+	.half	.L826-.L825
 	.byte	1,5,55,9
-	.half	.L814-.L813
+	.half	.L827-.L826
 	.byte	1,5,35,9
-	.half	.L377-.L814
+	.half	.L377-.L827
 	.byte	3,3,1,5,9,9
 	.half	.L450-.L377
 	.byte	3,1,1,5,31,7,9
 	.half	.L451-.L450
 	.byte	3,2,1,5,35,9
-	.half	.L815-.L451
+	.half	.L828-.L451
 	.byte	1,5,54,9
-	.half	.L816-.L815
+	.half	.L829-.L828
 	.byte	1,5,21,9
-	.half	.L11-.L816
+	.half	.L11-.L829
 	.byte	3,4,1,5,1,9
-	.half	.L817-.L11
+	.half	.L830-.L11
 	.byte	3,1,1,7,9
-	.half	.L251-.L817
+	.half	.L251-.L830
 	.byte	0,1,1
-.L799:
+.L812:
 	.sdecl	'.debug_ranges',debug,cluster('TestOledKey_Loop')
 	.sect	'.debug_ranges'
 .L250:
@@ -23918,7 +23966,7 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'TestFan_Init',0,1,133,3,13,1,1
+	.byte	'TestFan_Init',0,1,140,3,13,1,1
 	.word	.L136,.L379,.L135
 	.byte	4
 	.word	.L136,.L379
@@ -23931,76 +23979,76 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_line',debug,cluster('TestFan_Init')
 	.sect	'.debug_line'
 .L254:
-	.word	.L819-.L818
-.L818:
+	.word	.L832-.L831
+.L831:
 	.half	3
-	.word	.L821-.L820
-.L820:
+	.word	.L834-.L833
+.L833:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/app_new_car_test.c',0,0,0,0,0
-.L821:
+.L834:
 	.byte	5,15,7,0,5,2
 	.word	.L136
-	.byte	3,134,3,1,5,34,9
-	.half	.L822-.L136
+	.byte	3,141,3,1,5,34,9
+	.half	.L835-.L136
 	.byte	1,5,39,9
-	.half	.L823-.L822
-	.byte	1,5,42,9
-	.half	.L824-.L823
-	.byte	1,5,14,9
-	.half	.L825-.L824
-	.byte	3,3,1,5,33,9
-	.half	.L826-.L825
-	.byte	1,5,41,9
-	.half	.L827-.L826
-	.byte	1,5,14,9
-	.half	.L828-.L827
-	.byte	3,2,1,5,33,9
-	.half	.L829-.L828
-	.byte	1,5,41,9
-	.half	.L830-.L829
-	.byte	1,5,14,9
-	.half	.L831-.L830
-	.byte	3,3,1,5,31,9
-	.half	.L832-.L831
-	.byte	1,5,38,9
-	.half	.L833-.L832
-	.byte	1,5,14,9
-	.half	.L834-.L833
-	.byte	3,1,1,5,31,9
-	.half	.L835-.L834
-	.byte	1,5,38,9
 	.half	.L836-.L835
-	.byte	1,5,14,9
+	.byte	1,5,42,9
 	.half	.L837-.L836
-	.byte	3,3,1,5,31,9
-	.half	.L838-.L837
-	.byte	1,5,38,9
-	.half	.L839-.L838
 	.byte	1,5,14,9
+	.half	.L838-.L837
+	.byte	3,3,1,5,33,9
+	.half	.L839-.L838
+	.byte	1,5,41,9
 	.half	.L840-.L839
-	.byte	3,1,1,5,31,9
+	.byte	1,5,14,9
 	.half	.L841-.L840
-	.byte	1,5,38,9
+	.byte	3,2,1,5,33,9
 	.half	.L842-.L841
-	.byte	1,5,5,9
+	.byte	1,5,41,9
 	.half	.L843-.L842
-	.byte	3,2,1,5,24,9
+	.byte	1,5,14,9
 	.half	.L844-.L843
-	.byte	1,5,22,9
+	.byte	3,3,1,5,31,9
 	.half	.L845-.L844
-	.byte	1,5,5,9
+	.byte	1,5,38,9
 	.half	.L846-.L845
-	.byte	3,1,1,5,25,9
+	.byte	1,5,14,9
 	.half	.L847-.L846
-	.byte	1,5,23,9
+	.byte	3,1,1,5,31,9
 	.half	.L848-.L847
-	.byte	1,5,1,9
+	.byte	1,5,38,9
 	.half	.L849-.L848
+	.byte	1,5,14,9
+	.half	.L850-.L849
+	.byte	3,3,1,5,31,9
+	.half	.L851-.L850
+	.byte	1,5,38,9
+	.half	.L852-.L851
+	.byte	1,5,14,9
+	.half	.L853-.L852
+	.byte	3,1,1,5,31,9
+	.half	.L854-.L853
+	.byte	1,5,38,9
+	.half	.L855-.L854
+	.byte	1,5,5,9
+	.half	.L856-.L855
+	.byte	3,2,1,5,24,9
+	.half	.L857-.L856
+	.byte	1,5,22,9
+	.half	.L858-.L857
+	.byte	1,5,5,9
+	.half	.L859-.L858
+	.byte	3,1,1,5,25,9
+	.half	.L860-.L859
+	.byte	1,5,23,9
+	.half	.L861-.L860
+	.byte	1,5,1,9
+	.half	.L862-.L861
 	.byte	3,1,1,7,9
-	.half	.L256-.L849
+	.half	.L256-.L862
 	.byte	0,1,1
-.L819:
+.L832:
 	.sdecl	'.debug_ranges',debug,cluster('TestFan_Init')
 	.sect	'.debug_ranges'
 .L255:
@@ -24019,7 +24067,7 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'TestFan_Loop',0,1,154,3,13,1,1
+	.byte	'TestFan_Loop',0,1,161,3,13,1,1
 	.word	.L138,.L380,.L137
 	.byte	4
 	.word	.L138,.L380
@@ -24032,28 +24080,28 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_line',debug,cluster('TestFan_Loop')
 	.sect	'.debug_line'
 .L259:
-	.word	.L851-.L850
-.L850:
+	.word	.L864-.L863
+.L863:
 	.half	3
-	.word	.L853-.L852
-.L852:
+	.word	.L866-.L865
+.L865:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/app_new_car_test.c',0,0,0,0,0
-.L853:
+.L866:
 	.byte	5,18,7,0,5,2
 	.word	.L138
-	.byte	3,207,3,1,5,37,9
-	.half	.L854-.L138
+	.byte	3,214,3,1,5,37,9
+	.half	.L867-.L138
 	.byte	1,5,18,9
-	.half	.L855-.L854
+	.half	.L868-.L867
 	.byte	3,1,1,5,37,9
-	.half	.L856-.L855
+	.half	.L869-.L868
 	.byte	1,5,1,9
-	.half	.L857-.L856
+	.half	.L870-.L869
 	.byte	3,1,1,7,9
-	.half	.L261-.L857
+	.half	.L261-.L870
 	.byte	0,1,1
-.L851:
+.L864:
 	.sdecl	'.debug_ranges',debug,cluster('TestFan_Loop')
 	.sect	'.debug_ranges'
 .L260:
@@ -24072,7 +24120,7 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'TestEncoder_Init',0,1,216,3,13,1,1
+	.byte	'TestEncoder_Init',0,1,223,3,13,1,1
 	.word	.L140,.L381,.L139
 	.byte	4
 	.word	.L140,.L381
@@ -24085,44 +24133,44 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_line',debug,cluster('TestEncoder_Init')
 	.sect	'.debug_line'
 .L264:
-	.word	.L859-.L858
-.L858:
+	.word	.L872-.L871
+.L871:
 	.half	3
-	.word	.L861-.L860
-.L860:
+	.word	.L874-.L873
+.L873:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/app_new_car_test.c',0,0,0,0,0
-.L861:
+.L874:
 	.byte	5,15,7,0,5,2
 	.word	.L140
-	.byte	3,217,3,1,5,23,9
-	.half	.L862-.L140
+	.byte	3,224,3,1,5,23,9
+	.half	.L875-.L140
 	.byte	1,5,31,9
-	.half	.L863-.L862
+	.half	.L876-.L875
 	.byte	1,5,47,9
-	.half	.L864-.L863
+	.half	.L877-.L876
 	.byte	1,5,23,9
-	.half	.L865-.L864
+	.half	.L878-.L877
 	.byte	3,2,1,5,37,9
-	.half	.L866-.L865
+	.half	.L879-.L878
 	.byte	1,5,61,9
-	.half	.L867-.L866
+	.half	.L880-.L879
 	.byte	1,5,23,9
-	.half	.L868-.L867
+	.half	.L881-.L880
 	.byte	3,1,1,5,37,9
-	.half	.L869-.L868
+	.half	.L882-.L881
 	.byte	1,5,61,9
-	.half	.L870-.L869
+	.half	.L883-.L882
 	.byte	1,5,25,9
-	.half	.L871-.L870
+	.half	.L884-.L883
 	.byte	3,2,1,9
-	.half	.L872-.L871
+	.half	.L885-.L884
 	.byte	3,1,1,5,1,9
-	.half	.L873-.L872
+	.half	.L886-.L885
 	.byte	3,1,1,7,9
-	.half	.L266-.L873
+	.half	.L266-.L886
 	.byte	0,1,1
-.L859:
+.L872:
 	.sdecl	'.debug_ranges',debug,cluster('TestEncoder_Init')
 	.sect	'.debug_ranges'
 .L265:
@@ -24141,36 +24189,36 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'TestEncoder_Loop',0,1,227,3,13,1,1
+	.byte	'TestEncoder_Loop',0,1,234,3,13,1,1
 	.word	.L142,.L382,.L141
 	.byte	4
 	.word	.L142,.L382
 	.byte	5
-	.byte	'last_left',0,1,229,3,18
+	.byte	'last_left',0,1,236,3,18
 	.word	.L383
 	.byte	5,3
 	.word	_999001_last_left
 	.byte	5
-	.byte	'last_right',0,1,229,3,33
+	.byte	'last_right',0,1,236,3,33
 	.word	.L383
 	.byte	5,3
 	.word	_999002_last_right
 	.byte	6
-	.byte	'enc_left',0,1,231,3,11
+	.byte	'enc_left',0,1,238,3,11
 	.word	.L383,.L384
 	.byte	6
-	.byte	'enc_right',0,1,232,3,11
+	.byte	'enc_right',0,1,239,3,11
 	.word	.L383,.L385
 	.byte	6
-	.byte	'speed_left',0,1,234,3,11
+	.byte	'speed_left',0,1,241,3,11
 	.word	.L360,.L386
 	.byte	6
-	.byte	'speed_right',0,1,235,3,11
+	.byte	'speed_right',0,1,242,3,11
 	.word	.L360,.L387
 	.byte	4
 	.word	.L388,.L382
 	.byte	6
-	.byte	'enc_data',0,1,240,3,11
+	.byte	'enc_data',0,1,247,3,11
 	.word	.L389,.L390
 	.byte	0,0,0,0
 	.sdecl	'.debug_abbrev',debug,cluster('TestEncoder_Loop')
@@ -24182,17 +24230,17 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_line',debug,cluster('TestEncoder_Loop')
 	.sect	'.debug_line'
 .L269:
-	.word	.L875-.L874
-.L874:
+	.word	.L888-.L887
+.L887:
 	.half	3
-	.word	.L877-.L876
-.L876:
+	.word	.L890-.L889
+.L889:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/app_new_car_test.c',0,0,0,0,0
-.L877:
+.L890:
 	.byte	5,13,7,0,5,2
 	.word	.L142
-	.byte	3,226,3,1,5,41,9
+	.byte	3,233,3,1,5,41,9
 	.half	.L454-.L142
 	.byte	3,4,1,5,21,9
 	.half	.L455-.L454
@@ -24201,49 +24249,49 @@ _999005_last_phase:	.type	object
 	.byte	3,1,1,5,45,9
 	.half	.L456-.L457
 	.byte	3,2,1,5,43,9
-	.half	.L878-.L456
+	.half	.L891-.L456
 	.byte	1,5,25,9
-	.half	.L879-.L878
-	.byte	1,5,45,9
-	.half	.L459-.L879
-	.byte	3,1,1,5,43,9
-	.half	.L880-.L459
-	.byte	1,5,25,9
-	.half	.L881-.L880
-	.byte	1,5,5,9
-	.half	.L460-.L881
-	.byte	3,2,1,5,16,9
-	.half	.L882-.L460
-	.byte	1,5,5,9
-	.half	.L883-.L882
-	.byte	3,1,1,5,16,9
-	.half	.L884-.L883
-	.byte	1,5,25,9
-	.half	.L388-.L884
-	.byte	3,2,1,5,23,9
-	.half	.L885-.L388
-	.byte	1,5,27,9
-	.half	.L886-.L885
-	.byte	1,5,44,9
-	.half	.L887-.L886
-	.byte	1,5,62,9
-	.half	.L888-.L887
-	.byte	1,5,74,9
-	.half	.L889-.L888
-	.byte	1,5,22,9
-	.half	.L890-.L889
-	.byte	3,1,1,5,30,9
-	.half	.L891-.L890
-	.byte	1,5,40,9
 	.half	.L892-.L891
+	.byte	1,5,45,9
+	.half	.L459-.L892
+	.byte	3,1,1,5,43,9
+	.half	.L893-.L459
+	.byte	1,5,25,9
+	.half	.L894-.L893
+	.byte	1,5,5,9
+	.half	.L460-.L894
+	.byte	3,2,1,5,16,9
+	.half	.L895-.L460
+	.byte	1,5,5,9
+	.half	.L896-.L895
+	.byte	3,1,1,5,16,9
+	.half	.L897-.L896
+	.byte	1,5,25,9
+	.half	.L388-.L897
+	.byte	3,2,1,5,23,9
+	.half	.L898-.L388
+	.byte	1,5,27,9
+	.half	.L899-.L898
+	.byte	1,5,44,9
+	.half	.L900-.L899
+	.byte	1,5,62,9
+	.half	.L901-.L900
+	.byte	1,5,74,9
+	.half	.L902-.L901
+	.byte	1,5,22,9
+	.half	.L903-.L902
+	.byte	3,1,1,5,30,9
+	.half	.L904-.L903
+	.byte	1,5,40,9
+	.half	.L905-.L904
 	.byte	1,5,21,9
-	.half	.L458-.L892
+	.half	.L458-.L905
 	.byte	3,2,1,5,1,9
-	.half	.L893-.L458
+	.half	.L906-.L458
 	.byte	3,1,1,7,9
-	.half	.L271-.L893
+	.half	.L271-.L906
 	.byte	0,1,1
-.L875:
+.L888:
 	.sdecl	'.debug_ranges',debug,cluster('TestEncoder_Loop')
 	.sect	'.debug_ranges'
 .L270:
@@ -24262,7 +24310,7 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'TestEnableSwitch_Init',0,1,250,3,13,1,1
+	.byte	'TestEnableSwitch_Init',0,1,129,4,13,1,1
 	.word	.L144,.L391,.L143
 	.byte	4
 	.word	.L144,.L391
@@ -24275,38 +24323,38 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_line',debug,cluster('TestEnableSwitch_Init')
 	.sect	'.debug_line'
 .L274:
-	.word	.L895-.L894
-.L894:
+	.word	.L908-.L907
+.L907:
 	.half	3
-	.word	.L897-.L896
-.L896:
+	.word	.L910-.L909
+.L909:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/app_new_car_test.c',0,0,0,0,0
-.L897:
+.L910:
 	.byte	5,15,7,0,5,2
 	.word	.L144
-	.byte	3,251,3,1,5,34,9
-	.half	.L898-.L144
+	.byte	3,130,4,1,5,34,9
+	.half	.L911-.L144
 	.byte	1,5,39,9
-	.half	.L899-.L898
+	.half	.L912-.L911
 	.byte	1,5,42,9
-	.half	.L900-.L899
+	.half	.L913-.L912
 	.byte	1,5,15,9
-	.half	.L901-.L900
+	.half	.L914-.L913
 	.byte	3,1,1,5,23,9
-	.half	.L902-.L901
+	.half	.L915-.L914
 	.byte	1,5,31,9
-	.half	.L903-.L902
+	.half	.L916-.L915
 	.byte	1,5,47,9
-	.half	.L904-.L903
+	.half	.L917-.L916
 	.byte	1,5,12,9
-	.half	.L905-.L904
+	.half	.L918-.L917
 	.byte	3,1,1,5,1,9
-	.half	.L906-.L905
+	.half	.L919-.L918
 	.byte	3,1,1,7,9
-	.half	.L276-.L906
+	.half	.L276-.L919
 	.byte	0,1,1
-.L895:
+.L908:
 	.sdecl	'.debug_ranges',debug,cluster('TestEnableSwitch_Init')
 	.sect	'.debug_ranges'
 .L275:
@@ -24325,17 +24373,17 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'TestEnableSwitch_Loop',0,1,129,4,13,1,1
+	.byte	'TestEnableSwitch_Loop',0,1,136,4,13,1,1
 	.word	.L146,.L392,.L145
 	.byte	4
 	.word	.L146,.L392
 	.byte	5
-	.byte	'last_state',0,1,131,4,18
+	.byte	'last_state',0,1,138,4,18
 	.word	.L339
 	.byte	5,3
 	.word	_999003_last_state
 	.byte	6
-	.byte	'state',0,1,132,4,11
+	.byte	'state',0,1,139,4,11
 	.word	.L339,.L393
 	.byte	7
 	.word	.L394,.L395,.L15
@@ -24358,66 +24406,66 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_line',debug,cluster('TestEnableSwitch_Loop')
 	.sect	'.debug_line'
 .L279:
-	.word	.L908-.L907
-.L907:
+	.word	.L921-.L920
+.L920:
 	.half	3
-	.word	.L910-.L909
-.L909:
+	.word	.L923-.L922
+.L922:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/app_new_car_test.c',0,0,0,0,0
-.L910:
+.L923:
 	.byte	5,13,7,0,5,2
 	.word	.L146
-	.byte	3,128,4,1,5,28,9
+	.byte	3,135,4,1,5,28,9
 	.half	.L395-.L146
-	.byte	3,187,124,1,5,12,9
-	.half	.L911-.L395
+	.byte	3,180,124,1,5,12,9
+	.half	.L924-.L395
 	.byte	1,5,53,7,9
-	.half	.L912-.L911
+	.half	.L925-.L924
 	.byte	1,5,57,9
-	.half	.L461-.L912
+	.half	.L461-.L925
 	.byte	1,5,53,9
 	.half	.L13-.L461
 	.byte	1,5,5,9
 	.half	.L14-.L13
 	.byte	1,5,18,9
 	.half	.L15-.L14
-	.byte	3,202,3,1,5,5,9
+	.byte	3,209,3,1,5,5,9
 	.half	.L398-.L15
 	.byte	1,5,9,7,9
 	.half	.L399-.L398
 	.byte	3,2,1,5,20,9
 	.half	.L400-.L399
 	.byte	1,5,16,9
-	.half	.L913-.L400
+	.half	.L926-.L400
 	.byte	3,2,1,5,24,7,9
-	.half	.L401-.L913
+	.half	.L401-.L926
 	.byte	1,5,29,9
-	.half	.L914-.L401
+	.half	.L927-.L401
 	.byte	1,5,31,9
-	.half	.L17-.L914
+	.half	.L17-.L927
 	.byte	1,5,38,9
 	.half	.L18-.L17
 	.byte	1,5,46,7,9
 	.half	.L402-.L18
 	.byte	1,5,53,9
-	.half	.L915-.L402
+	.half	.L928-.L402
 	.byte	1,5,55,9
-	.half	.L19-.L915
+	.half	.L19-.L928
 	.byte	1,5,22,9
 	.half	.L20-.L19
 	.byte	1,5,44,9
-	.half	.L916-.L20
+	.half	.L929-.L20
 	.byte	1,5,16,9
-	.half	.L917-.L916
+	.half	.L930-.L929
 	.byte	3,127,1,5,21,9
-	.half	.L16-.L917
+	.half	.L16-.L930
 	.byte	3,3,1,5,1,9
-	.half	.L918-.L16
+	.half	.L931-.L16
 	.byte	3,1,1,7,9
-	.half	.L281-.L918
+	.half	.L281-.L931
 	.byte	0,1,1
-.L908:
+.L921:
 	.sdecl	'.debug_ranges',debug,cluster('TestEnableSwitch_Loop')
 	.sect	'.debug_ranges'
 .L280:
@@ -24439,7 +24487,7 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'TestButton_Init',0,1,147,4,13,1,1
+	.byte	'TestButton_Init',0,1,154,4,13,1,1
 	.word	.L148,.L403,.L147
 	.byte	4
 	.word	.L148,.L403
@@ -24452,38 +24500,38 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_line',debug,cluster('TestButton_Init')
 	.sect	'.debug_line'
 .L284:
-	.word	.L920-.L919
-.L919:
+	.word	.L933-.L932
+.L932:
 	.half	3
-	.word	.L922-.L921
-.L921:
+	.word	.L935-.L934
+.L934:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/app_new_car_test.c',0,0,0,0,0
-.L922:
+.L935:
 	.byte	5,15,7,0,5,2
 	.word	.L148
-	.byte	3,148,4,1,5,27,9
-	.half	.L923-.L148
+	.byte	3,155,4,1,5,27,9
+	.half	.L936-.L148
 	.byte	1,5,32,9
-	.half	.L924-.L923
+	.half	.L937-.L936
 	.byte	1,5,35,9
-	.half	.L925-.L924
+	.half	.L938-.L937
 	.byte	1,5,15,9
-	.half	.L926-.L925
+	.half	.L939-.L938
 	.byte	3,1,1,5,23,9
-	.half	.L927-.L926
+	.half	.L940-.L939
 	.byte	1,5,31,9
-	.half	.L928-.L927
+	.half	.L941-.L940
 	.byte	1,5,47,9
-	.half	.L929-.L928
+	.half	.L942-.L941
 	.byte	1,5,12,9
-	.half	.L930-.L929
+	.half	.L943-.L942
 	.byte	3,1,1,5,1,9
-	.half	.L931-.L930
+	.half	.L944-.L943
 	.byte	3,1,1,7,9
-	.half	.L286-.L931
+	.half	.L286-.L944
 	.byte	0,1,1
-.L920:
+.L933:
 	.sdecl	'.debug_ranges',debug,cluster('TestButton_Init')
 	.sect	'.debug_ranges'
 .L285:
@@ -24502,17 +24550,17 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'TestButton_Loop',0,1,154,4,13,1,1
+	.byte	'TestButton_Loop',0,1,161,4,13,1,1
 	.word	.L150,.L404,.L149
 	.byte	4
 	.word	.L150,.L404
 	.byte	5
-	.byte	'last_btn',0,1,156,4,18
+	.byte	'last_btn',0,1,163,4,18
 	.word	.L339
 	.byte	5,3
 	.word	_999004_last_btn
 	.byte	6
-	.byte	'btn',0,1,157,4,11
+	.byte	'btn',0,1,164,4,11
 	.word	.L339,.L405
 	.byte	0,0,0
 	.sdecl	'.debug_abbrev',debug,cluster('TestButton_Loop')
@@ -24524,56 +24572,56 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_line',debug,cluster('TestButton_Loop')
 	.sect	'.debug_line'
 .L289:
-	.word	.L933-.L932
-.L932:
+	.word	.L946-.L945
+.L945:
 	.half	3
-	.word	.L935-.L934
-.L934:
+	.word	.L948-.L947
+.L947:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/app_new_car_test.c',0,0,0,0,0
-.L935:
+.L948:
 	.byte	5,13,7,0,5,2
 	.word	.L150
-	.byte	3,153,4,1,5,32,9
+	.byte	3,160,4,1,5,32,9
 	.half	.L462-.L150
 	.byte	3,3,1,5,16,9
 	.half	.L463-.L462
 	.byte	3,2,1,5,5,9
-	.half	.L936-.L463
+	.half	.L949-.L463
 	.byte	1,5,9,7,9
-	.half	.L937-.L936
+	.half	.L950-.L949
 	.byte	3,2,1,5,18,9
-	.half	.L938-.L937
+	.half	.L951-.L950
 	.byte	1,5,16,9
-	.half	.L939-.L938
+	.half	.L952-.L951
 	.byte	3,2,1,5,22,7,9
-	.half	.L940-.L939
+	.half	.L953-.L952
 	.byte	1,5,32,9
-	.half	.L941-.L940
+	.half	.L954-.L953
 	.byte	1,5,34,9
-	.half	.L22-.L941
+	.half	.L22-.L954
 	.byte	1,5,46,9
 	.half	.L23-.L22
 	.byte	1,5,52,7,9
-	.half	.L942-.L23
+	.half	.L955-.L23
 	.byte	1,5,59,9
-	.half	.L943-.L942
+	.half	.L956-.L955
 	.byte	1,5,61,9
-	.half	.L24-.L943
+	.half	.L24-.L956
 	.byte	1,5,20,9
 	.half	.L25-.L24
 	.byte	1,5,50,9
-	.half	.L944-.L25
+	.half	.L957-.L25
 	.byte	1,5,16,9
-	.half	.L945-.L944
+	.half	.L958-.L957
 	.byte	3,127,1,5,21,9
-	.half	.L21-.L945
+	.half	.L21-.L958
 	.byte	3,3,1,5,1,9
-	.half	.L946-.L21
+	.half	.L959-.L21
 	.byte	3,1,1,7,9
-	.half	.L291-.L946
+	.half	.L291-.L959
 	.byte	0,1,1
-.L933:
+.L946:
 	.sdecl	'.debug_ranges',debug,cluster('TestButton_Loop')
 	.sect	'.debug_ranges'
 .L290:
@@ -24592,7 +24640,7 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'TestVoltageCurrent_Init',0,1,172,4,13,1,1
+	.byte	'TestVoltageCurrent_Init',0,1,179,4,13,1,1
 	.word	.L152,.L406,.L151
 	.byte	4
 	.word	.L152,.L406
@@ -24605,38 +24653,38 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_line',debug,cluster('TestVoltageCurrent_Init')
 	.sect	'.debug_line'
 .L294:
-	.word	.L948-.L947
-.L947:
+	.word	.L961-.L960
+.L960:
 	.half	3
-	.word	.L950-.L949
-.L949:
+	.word	.L963-.L962
+.L962:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/app_new_car_test.c',0,0,0,0,0
-.L950:
+.L963:
 	.byte	5,15,7,0,5,2
 	.word	.L152
-	.byte	3,173,4,1,5,23,9
-	.half	.L951-.L152
+	.byte	3,180,4,1,5,23,9
+	.half	.L964-.L152
 	.byte	1,5,31,9
-	.half	.L952-.L951
+	.half	.L965-.L964
 	.byte	1,5,47,9
-	.half	.L953-.L952
+	.half	.L966-.L965
 	.byte	1,5,14,9
-	.half	.L954-.L953
+	.half	.L967-.L966
 	.byte	3,1,1,5,29,9
-	.half	.L955-.L954
+	.half	.L968-.L967
 	.byte	1,5,14,9
-	.half	.L956-.L955
+	.half	.L969-.L968
 	.byte	3,1,1,5,29,9
-	.half	.L957-.L956
+	.half	.L970-.L969
 	.byte	1,5,12,9
-	.half	.L958-.L957
+	.half	.L971-.L970
 	.byte	3,1,1,5,1,9
-	.half	.L959-.L958
+	.half	.L972-.L971
 	.byte	3,1,1,7,9
-	.half	.L296-.L959
+	.half	.L296-.L972
 	.byte	0,1,1
-.L948:
+.L961:
 	.sdecl	'.debug_ranges',debug,cluster('TestVoltageCurrent_Init')
 	.sect	'.debug_ranges'
 .L295:
@@ -24655,24 +24703,24 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'TestVoltageCurrent_Loop',0,1,180,4,13,1,1
+	.byte	'TestVoltageCurrent_Loop',0,1,187,4,13,1,1
 	.word	.L154,.L407,.L153
 	.byte	4
 	.word	.L154,.L407
 	.byte	5
-	.byte	'v_raw',0,1,182,4,12
+	.byte	'v_raw',0,1,189,4,12
 	.word	.L408,.L409
 	.byte	5
-	.byte	'i_raw',0,1,183,4,12
+	.byte	'i_raw',0,1,190,4,12
 	.word	.L408,.L410
 	.byte	5
-	.byte	'voltage',0,1,185,4,11
+	.byte	'voltage',0,1,192,4,11
 	.word	.L360,.L411
 	.byte	5
-	.byte	'current',0,1,186,4,11
+	.byte	'current',0,1,193,4,11
 	.word	.L360,.L412
 	.byte	5
-	.byte	'data',0,1,188,4,11
+	.byte	'data',0,1,195,4,11
 	.word	.L389,.L413
 	.byte	0,0,0
 	.sdecl	'.debug_abbrev',debug,cluster('TestVoltageCurrent_Loop')
@@ -24683,17 +24731,17 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_line',debug,cluster('TestVoltageCurrent_Loop')
 	.sect	'.debug_line'
 .L299:
-	.word	.L961-.L960
-.L960:
+	.word	.L974-.L973
+.L973:
 	.half	3
-	.word	.L963-.L962
-.L962:
+	.word	.L976-.L975
+.L975:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/app_new_car_test.c',0,0,0,0,0
-.L963:
+.L976:
 	.byte	5,13,7,0,5,2
 	.word	.L154
-	.byte	3,179,4,1,5,32,9
+	.byte	3,186,4,1,5,32,9
 	.half	.L464-.L154
 	.byte	3,2,1,5,18,9
 	.half	.L465-.L464
@@ -24702,61 +24750,61 @@ _999005_last_phase:	.type	object
 	.byte	3,1,1,5,22,9
 	.half	.L466-.L467
 	.byte	3,2,1,5,30,9
-	.half	.L964-.L466
+	.half	.L977-.L466
 	.byte	1,5,28,9
-	.half	.L965-.L964
+	.half	.L978-.L977
 	.byte	1,5,37,9
-	.half	.L966-.L965
-	.byte	1,5,35,9
-	.half	.L967-.L966
-	.byte	1,5,45,9
-	.half	.L968-.L967
-	.byte	1,5,43,9
-	.half	.L969-.L968
-	.byte	1,5,56,9
-	.half	.L970-.L969
-	.byte	1,5,54,9
-	.half	.L971-.L970
-	.byte	1,5,22,9
-	.half	.L469-.L971
-	.byte	3,1,1,5,30,9
-	.half	.L972-.L469
-	.byte	1,5,28,9
-	.half	.L973-.L972
-	.byte	1,5,40,9
-	.half	.L974-.L973
-	.byte	1,5,38,9
-	.half	.L975-.L974
-	.byte	1,5,56,9
-	.half	.L976-.L975
-	.byte	1,5,47,9
-	.half	.L977-.L976
-	.byte	1,5,21,9
-	.half	.L470-.L977
-	.byte	3,2,1,5,19,9
-	.half	.L978-.L470
-	.byte	1,5,23,9
 	.half	.L979-.L978
-	.byte	1,5,32,9
+	.byte	1,5,35,9
 	.half	.L980-.L979
-	.byte	1,5,41,9
+	.byte	1,5,45,9
 	.half	.L981-.L980
-	.byte	1,5,55,9
+	.byte	1,5,43,9
 	.half	.L982-.L981
-	.byte	1,5,22,9
+	.byte	1,5,56,9
 	.half	.L983-.L982
-	.byte	3,1,1,5,30,9
+	.byte	1,5,54,9
 	.half	.L984-.L983
-	.byte	1,5,36,9
-	.half	.L985-.L984
+	.byte	1,5,22,9
+	.half	.L469-.L984
+	.byte	3,1,1,5,30,9
+	.half	.L985-.L469
+	.byte	1,5,28,9
+	.half	.L986-.L985
+	.byte	1,5,40,9
+	.half	.L987-.L986
+	.byte	1,5,38,9
+	.half	.L988-.L987
+	.byte	1,5,56,9
+	.half	.L989-.L988
+	.byte	1,5,47,9
+	.half	.L990-.L989
 	.byte	1,5,21,9
-	.half	.L468-.L985
+	.half	.L470-.L990
+	.byte	3,2,1,5,19,9
+	.half	.L991-.L470
+	.byte	1,5,23,9
+	.half	.L992-.L991
+	.byte	1,5,32,9
+	.half	.L993-.L992
+	.byte	1,5,41,9
+	.half	.L994-.L993
+	.byte	1,5,55,9
+	.half	.L995-.L994
+	.byte	1,5,22,9
+	.half	.L996-.L995
+	.byte	3,1,1,5,30,9
+	.half	.L997-.L996
+	.byte	1,5,36,9
+	.half	.L998-.L997
+	.byte	1,5,21,9
+	.half	.L468-.L998
 	.byte	3,2,1,5,1,9
-	.half	.L986-.L468
+	.half	.L999-.L468
 	.byte	3,1,1,7,9
-	.half	.L301-.L986
+	.half	.L301-.L999
 	.byte	0,1,1
-.L961:
+.L974:
 	.sdecl	'.debug_ranges',debug,cluster('TestVoltageCurrent_Loop')
 	.sect	'.debug_ranges'
 .L300:
@@ -24775,7 +24823,7 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'TestWs2812_Init',0,1,204,4,13,1,1
+	.byte	'TestWs2812_Init',0,1,211,4,13,1,1
 	.word	.L156,.L414,.L155
 	.byte	4
 	.word	.L156,.L414
@@ -24788,36 +24836,36 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_line',debug,cluster('TestWs2812_Init')
 	.sect	'.debug_line'
 .L304:
-	.word	.L988-.L987
-.L987:
+	.word	.L1001-.L1000
+.L1000:
 	.half	3
-	.word	.L990-.L989
-.L989:
+	.word	.L1003-.L1002
+.L1002:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/app_new_car_test.c',0,0,0,0,0
-.L990:
+.L1003:
 	.byte	5,15,7,0,5,2
 	.word	.L156
-	.byte	3,205,4,1,5,23,9
-	.half	.L991-.L156
+	.byte	3,212,4,1,5,23,9
+	.half	.L1004-.L156
 	.byte	1,5,31,9
-	.half	.L992-.L991
+	.half	.L1005-.L1004
 	.byte	1,5,47,9
-	.half	.L993-.L992
+	.half	.L1006-.L1005
 	.byte	1,5,16,9
-	.half	.L994-.L993
+	.half	.L1007-.L1006
 	.byte	3,2,1,5,5,9
-	.half	.L995-.L994
+	.half	.L1008-.L1007
 	.byte	3,1,1,5,22,9
-	.half	.L996-.L995
+	.half	.L1009-.L1008
 	.byte	1,5,20,9
-	.half	.L997-.L996
+	.half	.L1010-.L1009
 	.byte	1,5,1,9
-	.half	.L998-.L997
+	.half	.L1011-.L1010
 	.byte	3,2,1,7,9
-	.half	.L306-.L998
+	.half	.L306-.L1011
 	.byte	0,1,1
-.L988:
+.L1001:
 	.sdecl	'.debug_ranges',debug,cluster('TestWs2812_Init')
 	.sect	'.debug_ranges'
 .L305:
@@ -24836,15 +24884,15 @@ _999005_last_phase:	.type	object
 	.byte	2
 	.word	.L163
 	.byte	3
-	.byte	'TestWs2812_Loop',0,1,213,4,13,1,1
+	.byte	'TestWs2812_Loop',0,1,220,4,13,1,1
 	.word	.L158,.L415,.L157
 	.byte	4
 	.word	.L158,.L415
 	.byte	5
-	.byte	'phase',0,1,216,4,13
+	.byte	'phase',0,1,223,4,13
 	.word	.L339,.L416
 	.byte	6
-	.byte	'last_phase',0,1,217,4,20
+	.byte	'last_phase',0,1,224,4,20
 	.word	.L339
 	.byte	5,3
 	.word	_999005_last_phase
@@ -24858,48 +24906,48 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_line',debug,cluster('TestWs2812_Loop')
 	.sect	'.debug_line'
 .L309:
-	.word	.L1000-.L999
-.L999:
+	.word	.L1013-.L1012
+.L1012:
 	.half	3
-	.word	.L1002-.L1001
-.L1001:
+	.word	.L1015-.L1014
+.L1014:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/app_new_car_test.c',0,0,0,0,0
-.L1002:
+.L1015:
 	.byte	5,13,7,0,5,2
 	.word	.L158
-	.byte	3,212,4,1,5,22,9
+	.byte	3,219,4,1,5,22,9
 	.half	.L472-.L158
 	.byte	3,3,1,5,61,9
-	.half	.L1003-.L472
+	.half	.L1016-.L472
 	.byte	1,5,37,9
-	.half	.L1004-.L1003
+	.half	.L1017-.L1016
 	.byte	1,5,70,9
-	.half	.L1005-.L1004
+	.half	.L1018-.L1017
 	.byte	1,5,68,9
-	.half	.L1006-.L1005
+	.half	.L1019-.L1018
 	.byte	1,5,18,9
-	.half	.L473-.L1006
+	.half	.L473-.L1019
 	.byte	3,3,1,5,5,9
-	.half	.L1007-.L473
+	.half	.L1020-.L473
 	.byte	1,5,9,7,9
-	.half	.L1008-.L1007
+	.half	.L1021-.L1020
 	.byte	3,2,1,5,20,9
-	.half	.L1009-.L1008
+	.half	.L1022-.L1021
 	.byte	1,5,14,9
-	.half	.L1010-.L1009
+	.half	.L1023-.L1022
 	.byte	3,3,1,9
-	.half	.L1011-.L1010
+	.half	.L1024-.L1023
 	.byte	3,4,1,9
-	.half	.L1012-.L1011
+	.half	.L1025-.L1024
 	.byte	3,4,1,9
-	.half	.L1013-.L1012
+	.half	.L1026-.L1025
 	.byte	3,4,1,9
-	.half	.L1014-.L1013
+	.half	.L1027-.L1026
 	.byte	3,4,1,9
-	.half	.L1015-.L1014
+	.half	.L1028-.L1027
 	.byte	3,4,1,5,53,9
-	.half	.L28-.L1015
+	.half	.L28-.L1028
 	.byte	3,109,1,5,13,9
 	.half	.L474-.L28
 	.byte	3,2,1,5,53,9
@@ -24925,17 +24973,17 @@ _999005_last_phase:	.type	object
 	.byte	3,2,1,5,25,9
 	.half	.L27-.L479
 	.byte	3,4,1,5,5,9
-	.half	.L1016-.L27
+	.half	.L1029-.L27
 	.byte	3,1,1,5,19,9
-	.half	.L1017-.L1016
+	.half	.L1030-.L1029
 	.byte	1,5,21,9
-	.half	.L1018-.L1017
+	.half	.L1031-.L1030
 	.byte	3,1,1,5,1,9
-	.half	.L1019-.L1018
+	.half	.L1032-.L1031
 	.byte	3,1,1,7,9
-	.half	.L311-.L1019
+	.half	.L311-.L1032
 	.byte	0,1,1
-.L1000:
+.L1013:
 	.sdecl	'.debug_ranges',debug,cluster('TestWs2812_Loop')
 	.sect	'.debug_ranges'
 .L310:
@@ -25629,7 +25677,7 @@ _999005_last_phase:	.type	object
 	.word	0,0
 	.sdecl	'.debug_frame',debug
 	.sect	'.debug_frame'
-.L1020:
+.L1033:
 	.word	48
 	.word	-1
 	.byte	3,0,2,1,27,12,26,0,8,26,8,27,8,30,8,29,8,28,8,16,8,17,8,24,8,25,8,31,8,32,8,33,8,34,8,35,8,36,8,37,8,38
@@ -25637,7 +25685,7 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('Vofa_Send_Floats')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1020,.L106,.L334-.L106
+	.word	.L1033,.L106,.L334-.L106
 	.byte	4
 	.word	(.L419-.L106)/2
 	.byte	19,8,22,26,3,19,138,8,4
@@ -25646,24 +25694,24 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('TestNone_Init')
 	.sect	'.debug_frame'
 	.word	24
-	.word	.L1020,.L108,.L348-.L108
+	.word	.L1033,.L108,.L348-.L108
 	.byte	8,18,8,19,8,20,8,21,8,22,8,23
 	.sdecl	'.debug_frame',debug,cluster('TestNone_Loop')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1020,.L110,.L349-.L110
+	.word	.L1033,.L110,.L349-.L110
 	.sdecl	'.debug_frame',debug,cluster('TestMotor_Init')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1020,.L112,.L350-.L112
+	.word	.L1033,.L112,.L350-.L112
 	.sdecl	'.debug_frame',debug,cluster('TestMotor_Loop')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1020,.L114,.L351-.L114
+	.word	.L1033,.L114,.L351-.L114
 	.sdecl	'.debug_frame',debug,cluster('TestBuzzer_Init')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1020,.L116,.L352-.L116
+	.word	.L1033,.L116,.L352-.L116
 	.byte	4
 	.word	(.L435-.L116)/2
 	.byte	19,8,22,26,3,19,138,8,4
@@ -25672,11 +25720,11 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('TestBuzzer_Loop')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1020,.L118,.L353-.L118
+	.word	.L1033,.L118,.L353-.L118
 	.sdecl	'.debug_frame',debug,cluster('TestIMU_Init')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1020,.L120,.L354-.L120
+	.word	.L1033,.L120,.L354-.L120
 	.byte	4
 	.word	(.L436-.L120)/2
 	.byte	19,8,22,26,3,19,138,8,4
@@ -25685,7 +25733,7 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('TestIMU_Loop')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1020,.L122,.L358-.L122
+	.word	.L1033,.L122,.L358-.L122
 	.byte	4
 	.word	(.L438-.L122)/2
 	.byte	19,24,22,26,3,19,138,24,4
@@ -25694,11 +25742,11 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('TestAdcForward_Init')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1020,.L124,.L369-.L124
+	.word	.L1033,.L124,.L369-.L124
 	.sdecl	'.debug_frame',debug,cluster('TestAdcForward_Loop')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1020,.L126,.L370-.L126
+	.word	.L1033,.L126,.L370-.L126
 	.byte	4
 	.word	(.L448-.L126)/2
 	.byte	19,192,0,22,26,4,19,138,192,0,4
@@ -25707,11 +25755,11 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('TestUartVofa_Init')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1020,.L128,.L373-.L128
+	.word	.L1033,.L128,.L373-.L128
 	.sdecl	'.debug_frame',debug,cluster('TestUartVofa_Loop')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1020,.L130,.L374-.L130
+	.word	.L1033,.L130,.L374-.L130
 	.byte	4
 	.word	(.L449-.L130)/2
 	.byte	19,8,22,26,3,19,138,8,4
@@ -25720,27 +25768,27 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('TestOledKey_Init')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1020,.L132,.L375-.L132
+	.word	.L1033,.L132,.L375-.L132
 	.sdecl	'.debug_frame',debug,cluster('TestOledKey_Loop')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1020,.L134,.L376-.L134
+	.word	.L1033,.L134,.L376-.L134
 	.sdecl	'.debug_frame',debug,cluster('TestFan_Init')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1020,.L136,.L379-.L136
+	.word	.L1033,.L136,.L379-.L136
 	.sdecl	'.debug_frame',debug,cluster('TestFan_Loop')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1020,.L138,.L380-.L138
+	.word	.L1033,.L138,.L380-.L138
 	.sdecl	'.debug_frame',debug,cluster('TestEncoder_Init')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1020,.L140,.L381-.L140
+	.word	.L1033,.L140,.L381-.L140
 	.sdecl	'.debug_frame',debug,cluster('TestEncoder_Loop')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1020,.L142,.L382-.L142
+	.word	.L1033,.L142,.L382-.L142
 	.byte	4
 	.word	(.L454-.L142)/2
 	.byte	19,16,22,26,3,19,138,16,4
@@ -25749,11 +25797,11 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('TestEnableSwitch_Init')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1020,.L144,.L391-.L144
+	.word	.L1033,.L144,.L391-.L144
 	.sdecl	'.debug_frame',debug,cluster('TestEnableSwitch_Loop')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1020,.L146,.L392-.L146
+	.word	.L1033,.L146,.L392-.L146
 	.byte	4
 	.word	(.L395-.L146)/2
 	.byte	19,8,22,26,3,19,138,8,4
@@ -25762,11 +25810,11 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('TestButton_Init')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1020,.L148,.L403-.L148
+	.word	.L1033,.L148,.L403-.L148
 	.sdecl	'.debug_frame',debug,cluster('TestButton_Loop')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1020,.L150,.L404-.L150
+	.word	.L1033,.L150,.L404-.L150
 	.byte	4
 	.word	(.L462-.L150)/2
 	.byte	19,8,22,26,3,19,138,8,4
@@ -25775,11 +25823,11 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('TestVoltageCurrent_Init')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1020,.L152,.L406-.L152
+	.word	.L1033,.L152,.L406-.L152
 	.sdecl	'.debug_frame',debug,cluster('TestVoltageCurrent_Loop')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1020,.L154,.L407-.L154
+	.word	.L1033,.L154,.L407-.L154
 	.byte	4
 	.word	(.L464-.L154)/2
 	.byte	19,16,22,26,3,19,138,16,4
@@ -25788,11 +25836,11 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('TestWs2812_Init')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1020,.L156,.L414-.L156
+	.word	.L1033,.L156,.L414-.L156
 	.sdecl	'.debug_frame',debug,cluster('TestWs2812_Loop')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1020,.L158,.L415-.L158
+	.word	.L1033,.L158,.L415-.L158
 	.byte	4
 	.word	(.L472-.L158)/2
 	.byte	19,16,22,26,3,19,138,16,4
@@ -25801,7 +25849,7 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('NewCarTest_Init')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1020,.L160,.L332-.L160
+	.word	.L1033,.L160,.L332-.L160
 	.byte	4
 	.word	(.L480-.L160)/2
 	.byte	19,8,22,26,3,19,138,8,4
@@ -25810,5 +25858,5 @@ _999005_last_phase:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('NewCarTest_Loop')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1020,.L162,.L333-.L162
+	.word	.L1033,.L162,.L333-.L162
 	; Module end
