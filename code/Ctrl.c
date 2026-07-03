@@ -31,7 +31,7 @@ int Right_Real_Spd = 0;
 
 int Left_Exp_Spd = 0;
 int Right_Exp_Spd = 0;
-int Basic_Speed = 45;   // TODO: hardcoded, restore flash read after tuning
+int Basic_Speed = 20;   // TODO: hardcoded, restore flash read after tuning
 int Run_Speed = 0;
 float Average_Speed = 0;
 uint8 First_Mode = 0;
@@ -46,11 +46,11 @@ float Gyro_Z_For_PID = 0;
 float gyro_z_offset = 0;   // Gyro Z-axis zero-drift offset, sampled during power-on calibration
 PID_HandleTypeDef Gyro_PID = GYRO_PID;     // Gyro rate incremental PID
 PID_HandleTypeDef Gyro_PD_PID = GYRO_PD_PID; // Gyro rate position PD for normal trace debug
-PID_HandleTypeDef Angle_PID = ANGLE_PID;   // Angle PD with derivative on measurement
+PID_HandleTypeDef Turn_PID = TURN_PID;   // Angle PD with derivative on measurement
 PID_HandleTypeDef Left_PID = LEFT_PID;
 
 PID_HandleTypeDef Right_PID = RIGHT_PID;
-// Turn_PID removed — Angle_PID does both outer loops now
+PID_HandleTypeDef Angle_PID = ANGLE_PID;     // heading hold (straight + full angle correction)
 
 /*--------------- Track Following State ---------------*/
 int Left_Scan_Point = 0;
@@ -83,8 +83,7 @@ uint8_t g_scan_progress = 0;                  // Scan progress 0-100 (0=not scan
 int Middle = 0;
 float Gyro_Integral = 0;
 float Total_Angle = 0;                         // Continuous gyro angle, corrected after each turn
-static int16_t total_left_turns  = 0;          // Cumulative left turn count for angle correction
-static int16_t total_right_turns = 0;          // Cumulative right turn count for angle correction
+// total_left/right_turns removed — Total_Angle is zeroed after each turn instead
 float Segment_Edge_Mileage_Record[TRACK_SEGMENT_NUM_MAX][ELEMENT_NUM_MAX] = {{0}};
 float Segment_Total_Mileage[TRACK_SEGMENT_NUM_MAX] = {0};
 float Total_Run_Mileage = 0;
@@ -162,9 +161,6 @@ uint8  Debug_Gyro_FF_Mode = 0;                      // 角速度: 0=纯PID, 1=�
 
 uint8 vofa_flash_dump_mode = 0;
 
-// Mileage compensation for turn elements (negative = advance element edge)
-#define MILEAGE_COMPENSATION_X (-100.0f)
-
 // Max consecutive cycles with all sensors on or all off before emergency stop
 #define SAFETY_STOP_CYCLE_MAX         80
 
@@ -173,8 +169,8 @@ uint8 vofa_flash_dump_mode = 0;
 // Normalize an angle to [-180, 180] degrees
 static inline float Normalize_Angle_180(float angle)
 {
-    while (angle > 180.0f)  angle -= 360.0f;
-    while (angle < -180.0f) angle += 360.0f;
+    // while (angle > 180.0f)  angle -= 360.0f;
+    // while (angle < -180.0f) angle += 360.0f;
     return angle;
 }
 
@@ -303,15 +299,15 @@ static void Build_Dispatch_Current_Action(void)
         case BUILD_ACTION_NODE_STRAIGHT:
             Straight_Node_Pending = 1;
             Count.Straight = TUNE_NODE_STRAIGHT;
-            Segment_Edge_Mileage_Record[Count.Line][Count.Element++] = Count.Mileage;
+            Segment_Edge_Mileage_Record[Count.Line][Count.Element++] = Count.Last_Edge_Mileage;
             goto do_straight;
         case BUILD_ACTION_ELEM_STRAIGHT_SHORT:
             Count.Straight = TUNE_ELEM_STRAIGHT_SHORT;
-            Segment_Edge_Mileage_Record[Count.Line][Count.Element++] = Count.Mileage;
+            Segment_Edge_Mileage_Record[Count.Line][Count.Element++] = Count.Last_Edge_Mileage;
             goto do_straight;
         case BUILD_ACTION_ELEM_STRAIGHT_LONG:
             Count.Straight = TUNE_ELEM_STRAIGHT_LONG;
-            Segment_Edge_Mileage_Record[Count.Line][Count.Element++] = Count.Mileage;
+            Segment_Edge_Mileage_Record[Count.Line][Count.Element++] = Count.Last_Edge_Mileage;
         do_straight:
             Count.StraightBase = Count.Mileage;
             Run_Mode = Straight_Mode;
@@ -319,9 +315,11 @@ static void Build_Dispatch_Current_Action(void)
 
         // ─── Left turn (node + element) ───
         case BUILD_ACTION_NODE_TURN_LEFT:
+            Count.is_elem_turn = 0;
             Count.Element = 0;
             goto do_left;
         case BUILD_ACTION_ELEM_TURN_LEFT:
+            Count.is_elem_turn = 1;
             Count.Element = 0;
         do_left:
             Count.Line++;
@@ -330,9 +328,11 @@ static void Build_Dispatch_Current_Action(void)
 
         // ─── Right turn (node + element) ───
         case BUILD_ACTION_NODE_TURN_RIGHT:
+            Count.is_elem_turn = 0;
             Count.Element = 0;
             goto do_right;
         case BUILD_ACTION_ELEM_TURN_RIGHT:
+            Count.is_elem_turn = 1;
             Count.Element = 0;
         do_right:
             Count.Line++;
@@ -372,7 +372,7 @@ static void Reset_Turn_Action_State(void)
     Turn_PID_Out = 0;
     PID_cleardata(&Gyro_PID);
     PID_cleardata(&Gyro_PD_PID);
-    PID_cleardata(&Angle_PID);
+    PID_cleardata(&Turn_PID);
     Gyro_PID_Out = 0;
     Left_Exp_Spd = 0;
     Right_Exp_Spd = 0;
@@ -383,7 +383,7 @@ static void Reset_Turn_Action_State(void)
     is_right = 0;
     Turn_Decel_Phase = 0;
     Check_Edge_Skip_Mileage_Base = Count.Mileage;
-    Check_Edge_Skip_Thresh = TUNE_COOLDOWN_NODE_TURN;
+    Check_Edge_Skip_Thresh = Count.is_elem_turn ? TUNE_COOLDOWN_ELEM_TURN : TUNE_COOLDOWN_NODE_TURN;
     Run_Mode = Normal_Mode;
 }
 
@@ -400,13 +400,11 @@ static void Complete_Turn_Action(void)
 {
     Turn_Action_Done = 1;
 
-    // Record segment mileage at turn completion (before Count.Mileage is zeroed)
-    Segment_Total_Mileage[Count.Line] = Count.Mileage;
+    // Record segment mileage using Phase 0 end snapshot (excludes Phase 1 rotation slip)
+    Segment_Total_Mileage[Count.Line] = Count.Mileage_Phase0;
 
-    // Correct Total_Angle to exact turn sum after each turn
-    if (Turn_Angle_Target < 0) total_left_turns++;
-    else                       total_right_turns++;
-    Total_Angle = Normalize_Angle_180(-90.0f * total_left_turns + 90.0f * total_right_turns);
+    // Zero Total_Angle after each turn — heading correction always converges to 0
+    Total_Angle = 0;
 
     Build_Finish_Current_Action();
     Reset_Turn_Action_State();
@@ -462,7 +460,7 @@ static void Set_Node_Run_Mode(uint8_t node_dir, float turn_delay)
     Right_Exp_Spd = 0;
     Gyro_Integral = 0;
     Turn_Angle_Settle_Count = 0;
-    PID_cleardata(&Angle_PID);
+    PID_cleardata(&Turn_PID);
     PID_cleardata(&Gyro_PID);   // one-shot clear on turn entry
     Turn_Action_Done = 0;
     Turn_Decel_Phase = 0;
@@ -734,7 +732,7 @@ void Car_Go()
 
     Light_Process();
 
-    Safety_Check();
+    // Safety_Check();
 
 
     if (Stop_Flag != 0)
@@ -867,6 +865,7 @@ uint8 Check_Edge()
         Initial_White_Num >= 4) || Initial_White_Num >= 5)
     {
         Count.Edge++;
+        Count.Last_Edge_Mileage = Count.Mileage;  // snapshot before zero — used by Build_Dispatch_Current_Action
         Count.Mileage = 0;
 
         return 1;
@@ -1038,7 +1037,7 @@ void Normal_Run()
 ** Function: Turn_Left_Run
 ** Description: 2-phase turn (works for both node and element turns, distinguished by Count.Stall)
 **   Phase 0: decelerate+advance — speed ramps Basic_Speed→0 linearly over Count.Stall ticks
-**   Phase 1: in-place rotate to target angle with speed=0, Angle_PID + Gyro_PID cascade
+**   Phase 1: in-place rotate to target angle with speed=0, Turn_PID + Gyro_PID cascade
 **   Non-Build_Mode: immediate turn at full Basic_Speed
 *************************************/
 void Turn_Left_Run(void)
@@ -1052,12 +1051,12 @@ void Turn_Left_Run(void)
         float traveled = Count.Mileage - Count.Left;
         float ratio = 1.0f - (traveled / Count.Stall);
         if (ratio < 0.0f) ratio = 0.0f;
-        int speed = (int)(Basic_Speed * ratio);
+        int speed = (int)(Basic_Speed * 1.0);
 
         Error = 0;
-        // Heading correction: desired = theoretical angle, actual = Total_Angle
-        float desired = Normalize_Angle_180(-90.0f * total_left_turns + 90.0f * total_right_turns);
-        Turn_PID_Out = PID_calc(&Angle_PID, desired, Total_Angle);
+      // Heading correction: desired = theoretical angle, actual = Total_Angle
+        float delta = -Total_Angle;
+        Turn_PID_Out = PID_calc(&Angle_PID, 0.0f, delta);
         Gyro_PID_Out = PID_calc(&Gyro_PID, Turn_PID_Out, Gyro_Z);
         Left_Exp_Spd = speed + (int)Gyro_PID_Out;
         Right_Exp_Spd = speed - (int)Gyro_PID_Out;
@@ -1065,9 +1064,10 @@ void Turn_Left_Run(void)
         if (traveled >= Count.Stall)
         {
             Turn_Decel_Phase = 1;
+            Count.Mileage_Phase0 = Count.Mileage;  // snapshot before rotation — used by Complete_Turn_Action
             Gyro_Integral = 0;
             Turn_Angle_Settle_Count = 0;
-            PID_cleardata(&Angle_PID);   // fresh for Phase 1 turn tracking
+            PID_cleardata(&Turn_PID);   // fresh for Phase 1 turn tracking
             PID_cleardata(&Gyro_PID);
         }
     }
@@ -1097,11 +1097,12 @@ void Turn_Right_Run(void)
         float traveled = Count.Mileage - Count.Left;
         float ratio = 1.0f - (traveled / Count.Stall);
         if (ratio < 0.0f) ratio = 0.0f;
-        int speed = (int)(Basic_Speed * ratio);
+        int speed = (int)(Basic_Speed * 1.0);
 
         Error = 0;
-        float desired = Normalize_Angle_180(-90.0f * total_left_turns + 90.0f * total_right_turns);
-        Turn_PID_Out = PID_calc(&Angle_PID, desired, Total_Angle);
+      // Heading correction: desired = theoretical angle, actual = Total_Angle
+        float delta = -Total_Angle;
+        Turn_PID_Out = PID_calc(&Angle_PID, 0.0f, delta);
         Gyro_PID_Out = PID_calc(&Gyro_PID, Turn_PID_Out, Gyro_Z);
         Left_Exp_Spd = speed + (int)Gyro_PID_Out;
         Right_Exp_Spd = speed - (int)Gyro_PID_Out;
@@ -1109,9 +1110,10 @@ void Turn_Right_Run(void)
         if (traveled >= Count.Stall)
         {
             Turn_Decel_Phase = 1;
+            Count.Mileage_Phase0 = Count.Mileage;  // snapshot before rotation — used by Complete_Turn_Action
             Gyro_Integral = 0;
             Turn_Angle_Settle_Count = 0;
-            PID_cleardata(&Angle_PID);
+            PID_cleardata(&Turn_PID);
             PID_cleardata(&Gyro_PID);
         }
     }
@@ -1127,7 +1129,7 @@ void Turn_Right_Run(void)
 }
 /*************************************
 ** Function: Set_Mileage_Turn_Exp_Speed
-** Description: Angle PID cascade for turns — outer Angle_PID → inner Gyro_PID → wheel speeds
+** Description: Angle PID cascade for turns — outer Turn_PID → inner Gyro_PID → wheel speeds
 *************************************/
 
 /*************************************
@@ -1140,7 +1142,7 @@ void Set_Mileage_Turn_Exp_Speed(float angle_target, int base_speed)
 {
     float gyro_target;
 
-    gyro_target = PID_calc(&Angle_PID, angle_target, Gyro_Integral);
+    gyro_target = PID_calc(&Turn_PID, angle_target, Gyro_Integral);
     Gyro_PID_Out = PID_calc(&Gyro_PID, gyro_target, Gyro_Z);
     Left_Exp_Spd = base_speed + (int)Gyro_PID_Out;
     Right_Exp_Spd = base_speed - (int)Gyro_PID_Out;
@@ -1149,7 +1151,7 @@ void Set_Mileage_Turn_Exp_Speed(float angle_target, int base_speed)
 /*************************************
 ** Function: Set_Speed
 ** Description: PID speed control — compute expected wheel speeds from tracking error
-** Control Chain: Error -> Turn_PID -> Gyro_PID(+Gyro_Z damping) -> left/right speeds
+** Control Chain: Error -> Angle_PID -> Gyro_PID(+Gyro_Z damping) -> left/right speeds
 ** Details:    Either uses angle-based control (during turns) or normal trace control
 **             with gyro rate as damping. Straight_Mode uses gyro-damped straight control.
 **             Outputs Left_Exp_Spd and Right_Exp_Spd, and computes wheel speed PID outputs.
@@ -1190,8 +1192,8 @@ void Set_Speed()
         }
         // Cascaded heading correction: angle → gyro rate → wheel speeds
         // Target = theoretical total angle, Actual = Total_Angle
-        float desired_angle = Normalize_Angle_180(-90.0f * total_left_turns + 90.0f * total_right_turns);
-        Turn_PID_Out = PID_calc(&Angle_PID, desired_angle, Total_Angle);
+        float delta = -Total_Angle;
+        Turn_PID_Out = PID_calc(&Angle_PID, 0.0f, delta);
         Gyro_PID_Out = PID_calc(&Gyro_PID, Turn_PID_Out, Gyro_Z);
         Left_Exp_Spd  = Run_Speed + Gyro_PID_Out;
         Right_Exp_Spd = Run_Speed - Gyro_PID_Out;
@@ -1200,7 +1202,7 @@ void Set_Speed()
     {
         straight_enter = 0;
 
-        // Normal trace: Angle_PID(Error) → Gyro_PID rate damping → wheel speeds
+        // Normal trace: Turn_PID(Error) → Gyro_PID rate damping → wheel speeds
         Turn_PID_Out = PID_calc(&Angle_PID, 0.0f, (float)Error);
         Gyro_PID_Out = PID_calc(&Gyro_PID, Turn_PID_Out, Gyro_Z);
 

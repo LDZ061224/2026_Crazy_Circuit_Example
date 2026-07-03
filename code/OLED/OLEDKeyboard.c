@@ -629,8 +629,8 @@ void OLED_Input(void)
         {
             // 读取并配置左右电机PID
             flash_read_page(0, 1, PID_OKb, 13);
-            if (PID_OKb[4] == 0 || PID_OKb[4] > 20000) PID_OKb[4] = (uint32)(Angle_PID.kp * 100.0f);
-            if (PID_OKb[5] == 0 || PID_OKb[5] > 20000) PID_OKb[5] = (uint32)(Angle_PID.kd * 100.0f);
+            if (PID_OKb[4] == 0 || PID_OKb[4] > 20000) PID_OKb[4] = (uint32)(Turn_PID.kp * 100.0f);
+            if (PID_OKb[5] == 0 || PID_OKb[5] > 20000) PID_OKb[5] = (uint32)(Turn_PID.kd * 100.0f);
             if (PID_OKb[6] == 0 || PID_OKb[6] > 10000) PID_OKb[6] = (uint32)(Gyro_PID.kp * 1000.0f);
             if (PID_OKb[7] == 0 || PID_OKb[7] > 10000) PID_OKb[7] = (uint32)(Gyro_PID.ki * 1000.0f);
             if (PID_OKb[8] == 0 || PID_OKb[8] > 10000) PID_OKb[8] = (uint32)(Gyro_PD_PID.kp * 1000.0f);
@@ -716,11 +716,11 @@ void Data_Load()
     // if (PID_OKb[1] != 0 && PID_OKb[1] <= 10000) Left_PID.ki = PID_OKb[1] * 0.01f;
     // if (PID_OKb[2] != 0 && PID_OKb[2] <= 2000) Right_PID.kp = PID_OKb[2];
     // if (PID_OKb[3] != 0 && PID_OKb[3] <= 10000) Right_PID.ki = PID_OKb[3] * 0.01f;
-    // if (PID_OKb[4] != 0 && PID_OKb[4] <= 20000) Angle_PID.kp = PID_OKb[4] * 0.01f;
-    // if (PID_OKb[5] != 0 && PID_OKb[5] <= 20000) Angle_PID.kd = PID_OKb[5] * 0.01f;
-    // Angle_PID.ki = 0;
-    Angle_PID.mode = PID_MODE_POSITION_D_ON_MEASUREMENT;
-    // Turn_PID removed — Angle_PID handles both outer loops now
+    // if (PID_OKb[4] != 0 && PID_OKb[4] <= 20000) Turn_PID.kp = PID_OKb[4] * 0.01f;
+    // if (PID_OKb[5] != 0 && PID_OKb[5] <= 20000) Turn_PID.kd = PID_OKb[5] * 0.01f;
+    // Turn_PID.ki = 0;
+    Turn_PID.mode = PID_MODE_POSITION_D_ON_MEASUREMENT;
+    // Angle_PID removed — Turn_PID handles both outer loops now
     // if (PID_OKb[6] != 0 && PID_OKb[6] <= 10000) Gyro_PID.kp = PID_OKb[6] * 0.001f;
     // if (PID_OKb[7] != 0 && PID_OKb[7] <= 10000) Gyro_PID.ki = PID_OKb[7] * 0.001f;
     // if (PID_OKb[10] <= 10000) Gyro_PID.kd = PID_OKb[10] * 0.001f;
@@ -947,8 +947,8 @@ void Data_Load()
 //                 int i;
 
 //                 OLED_CLS();
-//                 cur_val[0] = (int)(Angle_PID.kp * 100.0f);
-//                 cur_val[1] = (int)(Angle_PID.kd * 100.0f);
+//                 cur_val[0] = (int)(Turn_PID.kp * 100.0f);
+//                 cur_val[1] = (int)(Turn_PID.kd * 100.0f);
 //                 cur_val[2] = (int)(Gyro_PID.kp * 1000.0f);
 //                 cur_val[3] = (int)(Gyro_PID.ki * 1000.0f);
 //                 cur_val[4] = (int)(Gyro_PID.kd * 1000.0f);
@@ -977,10 +977,10 @@ void Data_Load()
 //                     if (edit_value != 0) cur_val[i] = edit_value;
 //                 }
 
-//                 Angle_PID.kp = cur_val[0] * 0.01f;
-//                 Angle_PID.kd = cur_val[1] * 0.01f;
-//                 Angle_PID.ki = 0;
-//                 Angle_PID.mode = PID_MODE_POSITION_D_ON_MEASUREMENT;
+//                 Turn_PID.kp = cur_val[0] * 0.01f;
+//                 Turn_PID.kd = cur_val[1] * 0.01f;
+//                 Turn_PID.ki = 0;
+//                 Turn_PID.mode = PID_MODE_POSITION_D_ON_MEASUREMENT;
 //                 Gyro_PID.kp = cur_val[2] * 0.001f;
 //                 Gyro_PID.ki = cur_val[3] * 0.001f;
 //                 Gyro_PID.kd = cur_val[4] * 0.001f;
@@ -991,8 +991,8 @@ void Data_Load()
 //                 Debug_Motor_Enable = 1;
 //                 Gyro_Integral = 0;
 //                 Debug_Angle_D_First = 0;
-//                 PID_cleardata(&Angle_PID);
 //                 PID_cleardata(&Turn_PID);
+//                 PID_cleardata(&Angle_PID);
 //                 PID_cleardata(&Gyro_PID);
 //                 PID_cleardata(&Gyro_PD_PID);
 //                 PID_cleardata(&Left_PID);
@@ -1020,8 +1020,8 @@ void Data_Load()
 
 //                 if (key == 1)
 //                 {
-//                     PID_OKb[4] = (uint32)(Angle_PID.kp * 100.0f);
-//                     PID_OKb[5] = (uint32)(Angle_PID.kd * 100.0f);
+//                     PID_OKb[4] = (uint32)(Turn_PID.kp * 100.0f);
+//                     PID_OKb[5] = (uint32)(Turn_PID.kd * 100.0f);
 //                     PID_OKb[6] = (uint32)(Gyro_PID.kp * 1000.0f);
 //                     PID_OKb[7] = (uint32)(Gyro_PID.ki * 1000.0f);
 //                     PID_OKb[10] = (uint32)(Gyro_PID.kd * 1000.0f);
@@ -1052,8 +1052,8 @@ void Data_Load()
 //                 int i;
 
 //                 OLED_CLS();
-//                 cur_val[0] = (int)(Angle_PID.kp * 100.0f);
-//                 cur_val[1] = (int)(Angle_PID.kd * 100.0f);
+//                 cur_val[0] = (int)(Turn_PID.kp * 100.0f);
+//                 cur_val[1] = (int)(Turn_PID.kd * 100.0f);
 //                 cur_val[2] = (int)(Gyro_PD_PID.kp * 1000.0f);
 //                 cur_val[3] = (int)(Gyro_PD_PID.kd * 1000.0f);
 //                 cur_val[4] = Debug_Target_Speed;
@@ -1078,10 +1078,10 @@ void Data_Load()
 //                     if (edit_value != 0) cur_val[i] = edit_value;
 //                 }
 
-//                 Angle_PID.kp = cur_val[0] * 0.01f;
-//                 Angle_PID.kd = cur_val[1] * 0.01f;
-//                 Angle_PID.ki = 0;
-//                 Angle_PID.mode = PID_MODE_POSITION_D_ON_MEASUREMENT;
+//                 Turn_PID.kp = cur_val[0] * 0.01f;
+//                 Turn_PID.kd = cur_val[1] * 0.01f;
+//                 Turn_PID.ki = 0;
+//                 Turn_PID.mode = PID_MODE_POSITION_D_ON_MEASUREMENT;
 //                 Gyro_PD_PID.kp = cur_val[2] * 0.001f;
 //                 Gyro_PD_PID.kd = cur_val[3] * 0.001f;
 //                 Gyro_PD_PID.ki = 0;
@@ -1091,8 +1091,8 @@ void Data_Load()
 //                 Debug_Motor_Enable = 1;
 //                 Gyro_Integral = 0;
 //                 Debug_Angle_D_First = 0;
-//                 PID_cleardata(&Angle_PID);
 //                 PID_cleardata(&Turn_PID);
+//                 PID_cleardata(&Angle_PID);
 //                 PID_cleardata(&Gyro_PID);
 //                 PID_cleardata(&Gyro_PD_PID);
 //                 PID_cleardata(&Left_PID);
@@ -1116,8 +1116,8 @@ void Data_Load()
 
 //                 if (key == 1)
 //                 {
-//                     PID_OKb[4] = (uint32)(Angle_PID.kp * 100.0f);
-//                     PID_OKb[5] = (uint32)(Angle_PID.kd * 100.0f);
+//                     PID_OKb[4] = (uint32)(Turn_PID.kp * 100.0f);
+//                     PID_OKb[5] = (uint32)(Turn_PID.kd * 100.0f);
 //                     PID_OKb[8] = (uint32)(Gyro_PD_PID.kp * 1000.0f);
 //                     PID_OKb[9] = (uint32)(Gyro_PD_PID.kd * 1000.0f);
 //                     DBG_OKb[0] = (uint32)Debug_Target_Speed;

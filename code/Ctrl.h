@@ -38,11 +38,11 @@ Cross_Z     2026.1.30      0.0         Initial creation
 
 // ===== Build Mode Tuning Parameters (encoder ticks unless noted) =====
 // -- Turn phase 0 delay --
-#define TUNE_ELEM_TURN_DELAY     850.0f
-#define TUNE_NODE_TURN_DELAY      75.0f
+#define TUNE_ELEM_TURN_DELAY     775.0f
+#define TUNE_NODE_TURN_DELAY      445.0f
 // -- Straight mileage --
 #define TUNE_NODE_STRAIGHT       200.0f
-#define TUNE_ELEM_STRAIGHT_SHORT 2300.0f
+#define TUNE_ELEM_STRAIGHT_SHORT 2650.0f
 #define TUNE_ELEM_STRAIGHT_LONG    0.0f
 // -- Turn geometry --
 #define TUNE_TURN_TARGET_DEG      90.0f   // degrees
@@ -68,10 +68,10 @@ Cross_Z     2026.1.30      0.0         Initial creation
 }
 
 // Angle position PD with derivative on measurement — outer loop for turns
-#define ANGLE_PID { \
-    .kp         = 16, \
+#define TURN_PID { \
+    .kp         = 4, \
     .ki         = 0.0, \
-    .kd         = 9.6, \
+    .kd         = 1.4, \
     .iOutMax    = 0, \
     .outMax     = 1500, \
     .mode       = PID_MODE_POSITION_D_ON_MEASUREMENT \
@@ -106,7 +106,15 @@ Cross_Z     2026.1.30      0.0         Initial creation
     .outMax     = 9500, \
     .mode       = PID_MODE_ADD \
 }
-// Turn_PID removed — Angle_PID handles both outer loops now
+// Turn position PD — heading hold for straight mode and full angle correction
+#define ANGLE_PID { \
+    .kp         = 17, \
+    .ki         = 0.0, \
+    .kd         = 9.6, \
+    .iOutMax    = 0, \
+    .outMax     = 1500, \
+    .mode       = PID_MODE_POSITION_D_ON_MEASUREMENT \
+}
 
 /**********************************************
 * Mode and State Enumerations
@@ -179,6 +187,9 @@ typedef struct
     int     Element;     // Straight action column index within current segment
     int     Finish;      // Finish detection frame counter
     int     StartDelay;  // Startup delay counter before enable-switch takes effect
+    float   Last_Edge_Mileage;  // Mileage snapshot at edge detection (saved before Check_Edge zeroes it)
+    float   Mileage_Phase0;     // Mileage snapshot at end of turn Phase 0 (before rotation Phase 1)
+    uint8_t is_elem_turn;       // Current turn type: 0=node turn, 1=element turn
 } Count_Typedef;
 
 // Build action list: flat enum array (one Build_Action_Enum per action)
@@ -257,8 +268,8 @@ extern float Segment_Total_Mileage[TRACK_SEGMENT_NUM_MAX];
 extern PID_HandleTypeDef Gyro_PID;
 extern PID_HandleTypeDef Left_PID;
 extern PID_HandleTypeDef Right_PID;
-
 extern PID_HandleTypeDef Angle_PID;
+extern PID_HandleTypeDef Turn_PID;
 extern PID_HandleTypeDef Gyro_PD_PID;
 
 // Debug mode variables

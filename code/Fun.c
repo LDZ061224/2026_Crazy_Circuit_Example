@@ -103,8 +103,8 @@ void Vofa_Send_Data(void)
             VOFA_data[8].floatdata  = Left_PID_Out;
             VOFA_data[9].floatdata  = Right_PID_Out;
             VOFA_data[12].floatdata = Gyro_Integral;
-            VOFA_data[13].floatdata = Angle_PID.kp;
-            VOFA_data[14].floatdata = Angle_PID.kd;
+            VOFA_data[13].floatdata = Turn_PID.kp;
+            VOFA_data[14].floatdata = Turn_PID.kd;
             VOFA_data[15].floatdata = Gyro_PID.kp;
             VOFA_data[16].floatdata = Gyro_PID.ki;
             VOFA_data[17].floatdata = Gyro_PID.kd;
