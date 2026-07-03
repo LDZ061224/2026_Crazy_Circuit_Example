@@ -171,13 +171,12 @@ void Vofa_Send_Flash_Data(void)
     uint8 frame[50 * 4 + 4];
     memset(vofa, 0, sizeof(vofa));
 
-    uint16_t turn_count = Turn_Mileage_Record_Num;
     uint16_t pos = 0;
 
-    // Turn interval mileages
-    for (uint16_t i = 0; i < turn_count && pos < 50; i++, pos++)
+    // Segment total mileages
+    for (uint8_t r = 0; r < TRACK_SEGMENT_NUM_MAX && pos < 50; r++, pos++)
     {
-        vofa[pos].floatdata = Turn_Mileage_Record[i];
+        vofa[pos].floatdata = Segment_Total_Mileage[r];
     }
     // Segment edge mileages — 2D array: [segment_row][element_index]
     for (uint8_t r = 0; r < TRACK_SEGMENT_NUM_MAX && pos < 50; r++)

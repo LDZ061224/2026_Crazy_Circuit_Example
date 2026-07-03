@@ -118,7 +118,7 @@ int core0_main(void)
         .r = 0, .g = 255, .b = 0 });
     WS2812_Effect_Update();
     // ========================= Line Scan END =========================
-    pwm_set_duty(Suction_Motor_PWM, 0);
+    pwm_set_duty(Suction_Motor_PWM, 10000);
 
     /* UART_2: tuning command receiver */
     uart_init(UART_2, 921600, UART2_TX_P33_9, UART2_RX_P33_8);
@@ -148,11 +148,11 @@ int core0_main(void)
 //        pwm_set_duty(Left_Motor_PWM, 6000);
 //        pwm_set_duty(Left_Motor_DIR, 10000);
 
-        // run-time LED: 0=green(normal) 1=blue(object) 2=yellow(low voltage)
+        // run-time LED: 0=green(normal) 1=blue(object) 2=purple(low voltage)
         WS2812_Effect_Config cfg = { .type = EFF_SOLID };
         switch (g_led_flag)
         {
-            case 2:  cfg.r = 255; cfg.g = 0; cfg.b = 255;   break; // yellow
+            case 2:  cfg.r = 255; cfg.g = 0; cfg.b = 255;   break; // purple
             case 1:  cfg.r = 0;   cfg.g = 0;   cfg.b = 255; break; // blue
             default: cfg.r = 0;   cfg.g = 255; cfg.b = 0;   break; // green
         }
@@ -163,3 +163,5 @@ int core0_main(void)
 }
 
 #pragma section all restore
+
+

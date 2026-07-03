@@ -30,7 +30,6 @@ Cross_Z     2026.1.30      0.0         Initial creation
 #define ELEMENT_NUM_MAX         5
 #define TRACK_SEGMENT_NUM_MAX   (NODE_NUM_MAX + 1)
 #define BUILD_ACTION_MAX        (NODE_NUM_MAX + (TRACK_SEGMENT_NUM_MAX * ELEMENT_NUM_MAX))
-#define TURN_MILEAGE_RECORD_MAX 120
 #define DEBUG_ANGLE_STEP_TICKS 667U          // Angle debug: 90-degree target changes every 2s
 
 // Build mode default track constants
@@ -252,8 +251,7 @@ extern const uint8_t Default_Build_Actions[BUILD_ACTION_COUNT];
 // Flash mileage records for VOFA display
 extern float Segment_Edge_Mileage_Record[TRACK_SEGMENT_NUM_MAX][ELEMENT_NUM_MAX];
 extern float Segment_Total_Mileage[TRACK_SEGMENT_NUM_MAX];
-extern float Turn_Mileage_Record[TURN_MILEAGE_RECORD_MAX];
-extern uint16_t Turn_Mileage_Record_Num;
+// (Turn_Mileage_Record removed — replaced by Segment_Total_Mileage)
 
 // PID controller handles
 extern PID_HandleTypeDef Gyro_PID;

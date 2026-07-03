@@ -1,7 +1,7 @@
 # 新车基础功能测试 — 引脚配置
 
-> 分支: `test/new-car`
-> 切回正式跑车: `git checkout master` 或改 `cpu0_main.c` 中 `NEW_CAR_TEST_ENABLE = 0`
+<!-- > 分支: `test/new-car`
+> 切回正式跑车: `git checkout master` 或改 `cpu0_main.c` 中 `NEW_CAR_TEST_ENABLE = 0` -->
 
 ---
 
@@ -10,9 +10,9 @@
 | 信号 | 引脚 | 类型 | 参数 |
 |------|------|------|------|
 | 左电机占空比 | P15_7 (ATOM3_CH1) | PWM | 30kHz |
-| 左电机方向 | P15_5 (ATOM3_CH0) | PWM | 30kHz, 10000=正转, 0=反转 |
+| 左电机方向 | P15_5 (ATOM3_CH0) | PWM | 30kHz, 10000=反转, 0=正转 |
 | 右电机占空比 | P00_4 (ATOM1_CH3) | PWM | 30kHz |
-| 右电机方向 | P00_6 (ATOM1_CH5) | PWM | 30kHz, 10000=正转, 0=反转 |
+| 右电机方向 | P00_6 (ATOM1_CH5) | PWM | 30kHz, 10000=反转, 0=正转 |
 
 ## 负压风扇 (TEST_FAN)
 
@@ -66,8 +66,8 @@
 |------|------|------|
 | 左编码器 A | P02_8 (TIM4_CH1) | 正交编码 |
 | 左编码器 B | P00_9 (TIM4_CH2) | 正交编码 |
-| 右编码器 A | P02_6 (TIM3_CH1) | 正交编码 |
-| 右编码器 B | P02_7 (TIM3_CH2) | 正交编码 |
+| 右编码器 A | (TIM2_ENCODER_CH1_P33_7) | 正交编码 |
+| 右编码器 B | (TIM2_ENCODER_CH2_P33_6) | 正交编码 |
 
 ## 串口 (TEST_UART_VOFA / 其他测试共用)
 
@@ -110,7 +110,7 @@
 | 数据线 | P20_9 | GPIO bit-bang | 8 颗灯珠 |
 
 ---
-
+<!-- 
 ## 测试模式切换
 
 修改 `code/app_new_car_test.h` 第 65 行:
@@ -119,4 +119,4 @@
 #define NEW_CAR_TEST_MODE   TEST_NONE  // 改成对应的 TEST_xxx
 ```
 
-烧录后串口 `UART2` (P33_9/P33_8) 115200 观察输出。
+烧录后串口 `UART2` (P33_9/P33_8) 115200 观察输出。 -->
