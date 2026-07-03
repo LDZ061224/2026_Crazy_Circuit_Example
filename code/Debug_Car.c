@@ -529,17 +529,17 @@ void Debug_Set_Out(void)
 
     if (Debug_Motor_Enable == 0 || Right_PID_Out == 0)
     {
-        pwm_set_duty(Right_Motor_DIR, 10000);
+        pwm_set_duty(Right_Motor_DIR, 0);
         pwm_set_duty(Right_Motor_PWM, 0);
     }
     else if (Right_PID_Out > 0)  // forward: DIR=0
     {
-        pwm_set_duty(Right_Motor_DIR, 10000);
+        pwm_set_duty(Right_Motor_DIR, 0);
         pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
     }
     else                         // reverse: DIR=10000
     {
-        pwm_set_duty(Right_Motor_DIR, 0);
+        pwm_set_duty(Right_Motor_DIR, 10000);
         pwm_set_duty(Right_Motor_PWM, fabs(Right_PID_Out));
     }
 }
