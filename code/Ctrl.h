@@ -47,7 +47,7 @@ Cross_Z     2026.1.30      0.0         Initial creation
 // -- Turn geometry --
 #define TUNE_TURN_TARGET_DEG      90.0f   // degrees
 // -- Turn settle detection --
-#define TUNE_TURN_SETTLE_ERR       5.0f   // degrees
+#define TUNE_TURN_SETTLE_ERR       3.0f   // degrees
 #define TUNE_TURN_SETTLE_RATE     45.0f   // deg/s
 #define TUNE_TURN_SETTLE_CYCLES   3       // frames
 // -- Check_Edge cooldown --
@@ -59,9 +59,9 @@ Cross_Z     2026.1.30      0.0         Initial creation
 
 // Gyro rate incremental PID — used in normal trace and turn inner loop
 #define GYRO_PID { \
-    .kp         = 0.16, \
-    .ki         = 0.006, \
-    .kd         = 0.075, \
+    .kp         = 0.15, \
+    .ki         = 0.0048, \
+    .kd         = 0.04, \
     .iOutMax    = 0, \
     .outMax     = 500, \
     .mode       = PID_MODE_ADD \
@@ -69,9 +69,9 @@ Cross_Z     2026.1.30      0.0         Initial creation
 
 // Angle position PD with derivative on measurement — outer loop for turns
 #define ANGLE_PID { \
-    .kp         = 1.6, \
+    .kp         = 16, \
     .ki         = 0.0, \
-    .kd         = 0.9, \
+    .kd         = 9.6, \
     .iOutMax    = 0, \
     .outMax     = 1500, \
     .mode       = PID_MODE_POSITION_D_ON_MEASUREMENT \
@@ -99,7 +99,7 @@ Cross_Z     2026.1.30      0.0         Initial creation
 //120 ， 55.5
 // Right wheel speed incremental PID
 #define RIGHT_PID { \
-    .kp         = 89.5, \
+    .kp         = 95.5, \
     .ki         = 37.2, \
     .kd         = 0, \
     .iOutMax    = 5000, \

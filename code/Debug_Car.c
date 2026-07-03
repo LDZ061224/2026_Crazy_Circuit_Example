@@ -275,7 +275,7 @@ void Debug_Wheel_Tuning(void)
     }
 
     Debug_Set_Out();
-    pwm_set_duty(Suction_Motor_PWM, 0);
+    pwm_set_duty(Suction_Motor_PWM, 9500);
     pwm_set_duty(Suction_Motor_DIR, 10000);
 }
 
@@ -506,7 +506,7 @@ void Debug_Set_Out(void)
     }
     else
     {
-        pwm_set_duty(Suction_Motor_PWM, 0);
+        pwm_set_duty(Suction_Motor_PWM, 9500);
         pwm_set_duty(Suction_Motor_DIR, 10000);
     }
 

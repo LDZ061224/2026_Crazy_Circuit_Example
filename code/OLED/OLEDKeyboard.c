@@ -720,8 +720,7 @@ void Data_Load()
     // if (PID_OKb[5] != 0 && PID_OKb[5] <= 20000) Angle_PID.kd = PID_OKb[5] * 0.01f;
     // Angle_PID.ki = 0;
     Angle_PID.mode = PID_MODE_POSITION_D_ON_MEASUREMENT;
-    Turn_PID.ki = 0;
-    Turn_PID.mode = PID_MODE_POSITION;
+    // Turn_PID removed — Angle_PID handles both outer loops now
     // if (PID_OKb[6] != 0 && PID_OKb[6] <= 10000) Gyro_PID.kp = PID_OKb[6] * 0.001f;
     // if (PID_OKb[7] != 0 && PID_OKb[7] <= 10000) Gyro_PID.ki = PID_OKb[7] * 0.001f;
     // if (PID_OKb[10] <= 10000) Gyro_PID.kd = PID_OKb[10] * 0.001f;

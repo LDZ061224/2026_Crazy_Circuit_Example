@@ -142,6 +142,10 @@ void Vofa_Send_Data(void)
 #endif
 
     int i;
+    // for(i = 0; i < 15; i++)
+    // {
+    //     VOFA_data[i + 3].floatdata  = Light_Convert[i];
+    // }
     for(i = 0; i < 18; i++)
     {
         frame[i * 4 + 0] = VOFA_data[i].u8data[0];

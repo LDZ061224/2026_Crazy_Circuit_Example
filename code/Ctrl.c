@@ -31,7 +31,7 @@ int Right_Real_Spd = 0;
 
 int Left_Exp_Spd = 0;
 int Right_Exp_Spd = 0;
-int Basic_Speed = 30;   // TODO: hardcoded, restore flash read after tuning
+int Basic_Speed = 45;   // TODO: hardcoded, restore flash read after tuning
 int Run_Speed = 0;
 float Average_Speed = 0;
 uint8 First_Mode = 0;
@@ -673,7 +673,7 @@ void Safety_Check(void)
     // LED priority: yellow(voltage) > blue(beep) > green(normal)
     if (Stop_Flag != 0)
     {
-        pwm_set_duty(Suction_Motor_PWM, 0);
+        pwm_set_duty(Suction_Motor_PWM, 9500);
         pwm_set_duty(Suction_Motor_DIR, 10000);
         pwm_set_duty(Left_Motor_DIR, 10000);
         pwm_set_duty(Left_Motor_PWM, 0);
@@ -1256,7 +1256,7 @@ void Set_Out(void)
     }
     else
     {
-        pwm_set_duty(Suction_Motor_PWM, 0);
+        pwm_set_duty(Suction_Motor_PWM, 3000);
         pwm_set_duty(Suction_Motor_DIR, 10000);
     }
 

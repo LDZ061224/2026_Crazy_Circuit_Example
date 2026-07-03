@@ -88,7 +88,7 @@ int core0_main(void)
     }
 
     gyro_z_offset = imu660rb_gyro_transition((float)gyro_z_sum / GYRO_CALIB_SAMPLES);
-//    pwm_set_duty(Suction_Motor_PWM, 0);
+//    pwm_set_duty(Suction_Motor_PWM, 9500);
 
     // ========================= Line Scan =========================
     // Green progress bar on LED strip, completed entirely before PIT starts.
