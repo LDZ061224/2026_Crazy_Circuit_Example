@@ -18,7 +18,7 @@ Cross_Z   2026.6.23   0.0      Initial
 
 /***********************************Hardware Configuration***********************************/
 #define WS2812_MAX_LEDS         8
-#define WS2812_DATA_PIN         P20_9           // Data pin
+#define WS2812_DATA_PIN         P33_13          // Data pin
 
 /***********************************Type Definitions***********************************/
 

@@ -70,7 +70,7 @@ int core0_main(void)
     // ========================= Gyro Zero-Drift Calibration =========================
     // Turn on suction to maximum, LED board breathing red to remind the user to keep the vehicle still.
     pwm_set_duty(Suction_Motor_DIR, 10000);
-    pwm_set_duty(Suction_Motor_PWM, 3000);
+    pwm_set_duty(Suction_Motor_PWM, 500);
 
     WS2812_Effect_Set((WS2812_Effect_Config){
         .type = EFF_BREATHING,
@@ -134,7 +134,7 @@ int core0_main(void)
     }
 
     // After PIT starts, ISR calls Car_Go; LED board is driven by the CPU0 main loop.
-    pit_ms_init(CCU60_CH0, 3);
+     pit_ms_init(CCU60_CH0, 3);
     cpu_wait_event_ready();
 
     int last_led = -1;
@@ -147,7 +147,8 @@ int core0_main(void)
 //        pwm_set_duty(Right_Motor_PWM, 6000);
 //        pwm_set_duty(Left_Motor_PWM, 6000);
 //        pwm_set_duty(Left_Motor_DIR, 10000);
-
+//        imu660rb_get_gyro();
+//        Gyro_Z = imu660rb_gyro_transition(imu660rb_gyro_z) - gyro_z_offset;
         // run-time LED: 0=green(normal) 1=blue(object) 2=purple(low voltage)
         WS2812_Effect_Config cfg = { .type = EFF_SOLID };
         switch (g_led_flag)

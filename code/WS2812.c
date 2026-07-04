@@ -31,7 +31,7 @@ static inline void WS2812_SendBit(uint8_t bit)
     if (bit)
     {
         // '1': 800ns high + 450ns low
-        P20_OUT.B.P9 = 1;
+        P33_OUT.B.P13 = 1;
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
@@ -48,7 +48,7 @@ static inline void WS2812_SendBit(uint8_t bit)
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
-        P20_OUT.B.P9 = 0;
+        P33_OUT.B.P13 = 0;
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
@@ -62,7 +62,7 @@ static inline void WS2812_SendBit(uint8_t bit)
     else
     {
         // '0': 400ns high + 850ns low
-        P20_OUT.B.P9 = 1;
+        P33_OUT.B.P13 = 1;
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
@@ -71,7 +71,7 @@ static inline void WS2812_SendBit(uint8_t bit)
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
-        P20_OUT.B.P9 = 0;
+        P33_OUT.B.P13 = 0;
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");
         __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop"); __asm("nop");

@@ -275,7 +275,7 @@ void Debug_Wheel_Tuning(void)
     }
 
     Debug_Set_Out();
-    pwm_set_duty(Suction_Motor_PWM, 9500);
+    pwm_set_duty(Suction_Motor_PWM, 500);
     pwm_set_duty(Suction_Motor_DIR, 10000);
 }
 
@@ -364,7 +364,7 @@ void Debug_Angle_Tuning(void)
         Left_PID_Out = 0;
         Right_PID_Out = 0;
         Debug_Angle_D_First = 0;
-        PID_cleardata(&Angle_PID);
+        PID_cleardata(&Turn_PID);
         PID_cleardata(&Gyro_PID);
         PID_cleardata(&Gyro_PD_PID);
         PID_cleardata(&Left_PID);
@@ -375,7 +375,7 @@ void Debug_Angle_Tuning(void)
 
     if (Debug_Angle_Mode == 2)
     {
-        // ----- angle tracking (Angle_PID outer + Gyro_PID inner) -----
+        // ----- angle tracking (Turn_PID outer + Gyro_PID inner) -----
         uint32 step_index = angle_tick / DEBUG_ANGLE_STEP_TICKS;
         uint32 phase = step_index % 8U;
         if (phase <= 4U)
@@ -388,14 +388,14 @@ void Debug_Angle_Tuning(void)
         }
 
         Debug_Angle_D_First = 1;
-        Turn_PID_Out = PID_calc(&Angle_PID, angle_target, Gyro_Integral);
+        Turn_PID_Out = PID_calc(&Turn_PID, angle_target, Gyro_Integral);
         gyro_target = Turn_PID_Out;
     }
     else if (Debug_Angle_Mode == 3)
     {
         // ----- direct gyro rate target (Gyro_PID only, set by serial AVT) -----
         // User sends @AVT=200# to set Debug_Angle_Vel_Target=200 deg/s
-        // This bypasses Angle_PID -- pure rate-loop tuning
+        // This bypasses Turn_PID -- pure rate-loop tuning
         angle_target = 0;
         Turn_PID_Out = 0;
         Debug_Angle_D_First = 0;
@@ -453,7 +453,7 @@ void Debug_Normal_Trace(void)
         Right_Exp_Spd = 0;
         Left_PID_Out = 0;
         Right_PID_Out = 0;
-        PID_cleardata(&Angle_PID);
+        PID_cleardata(&Turn_PID);
         PID_cleardata(&Gyro_PID);
         PID_cleardata(&Gyro_PD_PID);
         PID_cleardata(&Left_PID);
@@ -480,7 +480,7 @@ void Debug_Normal_Trace(void)
     }
 
     {
-        Turn_PID_Out = PID_calc(&Angle_PID, 0.0f, (float)Error);
+        Turn_PID_Out = PID_calc(&Turn_PID, 0.0f, (float)Error);
     }
     Gyro_PID_Out = PID_calc(&Gyro_PID, Turn_PID_Out, Gyro_Z);
 
