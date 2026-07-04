@@ -20,7 +20,7 @@ Others:      Requires Ctrl.h externs for shared globals.
  *  USE_DEBUG_MODE = 1   -> Car_Go() dispatches to Debug_Car_Go() when Mode==Debug_Mode
  *  USE_DEBUG_MODE = 0   -> Car_Go() runs only normal racing (compile out debug branch)
  */
-#define USE_DEBUG_MODE  0
+#define USE_DEBUG_MODE  1
 
 
 /*********************************** 闁喎瀹抽崜宥夘洯閻╃鍙х�规矮绠� ***********************************/

@@ -51,6 +51,15 @@ int core0_main(void)
 
     /* ---- saved data and LED strip ---- */
     Data_Load();
+
+    // ===== Mode Selection (compile-time) =====
+    // Mode is initialized in Ctrl.c as Build_Mode.
+    // For Remember mode, load Flash mileage data before interrupts.
+#if ACTIVE_MODE == MODE_REMEMBER
+    Mode = Remember_Mode;
+    Load_Mileage_Data_From_Flash();
+#endif
+
     WS2812_Init();
 
     // ========================= Startup Buffer: wait 3 seconds before calibration =========================
@@ -139,10 +148,19 @@ int core0_main(void)
 
     int last_led = -1;
 
-    /* ---- Main loop: telemetry output and runtime LED indication ---- */
+    /* ---- Main loop: telemetry output, Flash save, runtime LED indication ---- */
     while (TRUE)
     {
         Vofa_Send_Data();
+
+#if ACTIVE_MODE == MODE_BUILD
+        // Build mode: save mileage data to Flash after finish
+        if (Flash_Save_Pending)
+        {
+            Flash_Save_Pending = 0;
+            Save_Mileage_Data_To_Flash();
+        }
+#endif
 //        pwm_set_duty(Right_Motor_DIR, 10000);
 //        pwm_set_duty(Right_Motor_PWM, 6000);
 //        pwm_set_duty(Left_Motor_PWM, 6000);

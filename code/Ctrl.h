@@ -19,43 +19,37 @@ Cross_Z     2026.1.30      0.0         Initial creation
 #ifndef __CTRL_H
 #define __CTRL_H
 
-// Common headers: MCU peripheral + project-specific headfiles
-#include "zf_common_headfile.h"
-#include "headfiles.h"
-
 /**********************************************
-* Numeric Constants
+* Numeric Constants (must be before headfiles.h — used by mode headers)
 **********************************************/
 #define NODE_NUM_MAX            20
 #define ELEMENT_NUM_MAX         5
 #define TRACK_SEGMENT_NUM_MAX   (NODE_NUM_MAX + 1)
 #define BUILD_ACTION_MAX        (NODE_NUM_MAX + (TRACK_SEGMENT_NUM_MAX * ELEMENT_NUM_MAX))
-#define DEBUG_ANGLE_STEP_TICKS 667U          // Angle debug: 90-degree target changes every 2s
+#define DEBUG_ANGLE_STEP_TICKS 667U
 
-// Build mode default track constants
 #define BUILD_NODE_NUM          17
 #define BUILD_ACTION_COUNT      31
 
 // ===== Build Mode Tuning Parameters (encoder ticks unless noted) =====
-// -- Turn phase 0 delay --
 #define TUNE_ELEM_TURN_DELAY     775.0f
 #define TUNE_NODE_TURN_DELAY      445.0f
-// -- Straight mileage --
 #define TUNE_NODE_STRAIGHT       200.0f
 #define TUNE_ELEM_STRAIGHT_SHORT 2650.0f
 #define TUNE_ELEM_STRAIGHT_LONG    0.0f
-// -- Turn geometry --
-#define TUNE_TURN_TARGET_DEG      90.0f   // degrees
-// -- Turn settle detection --
-#define TUNE_TURN_SETTLE_ERR       3.0f   // degrees
-#define TUNE_TURN_SETTLE_RATE     45.0f   // deg/s
-#define TUNE_TURN_SETTLE_CYCLES   3       // frames
-// -- Check_Edge cooldown --
+#define TUNE_TURN_TARGET_DEG      90.0f
+#define TUNE_TURN_SETTLE_ERR       3.0f
+#define TUNE_TURN_SETTLE_RATE     45.0f
+#define TUNE_TURN_SETTLE_CYCLES   3
 #define TUNE_COOLDOWN_NODE_TURN  150.0f
 #define TUNE_COOLDOWN_STRAIGHT   100.0f
 #define TUNE_COOLDOWN_ELEM_TURN  400.0f
-// -- Safety --
-#define TUNE_SAFE_VOLTAGE         11.3f  // volts
+#define TUNE_SAFE_VOLTAGE         11.3f
+#define GYRO_INTEGRATION_PERIOD_S 0.003f
+
+// Common headers: MCU peripheral + project-specific headfiles
+#include "zf_common_headfile.h"
+#include "headfiles.h"
 
 // Gyro rate incremental PID — used in normal trace and turn inner loop
 #define GYRO_PID { \
@@ -69,9 +63,9 @@ Cross_Z     2026.1.30      0.0         Initial creation
 
 // Angle position PD with derivative on measurement — outer loop for turns
 #define TURN_PID { \
-    .kp         = 4, \
+    .kp         = 9, \
     .ki         = 0.0, \
-    .kd         = 1.4, \
+    .kd         = 5.4, \
     .iOutMax    = 0, \
     .outMax     = 1500, \
     .mode       = PID_MODE_POSITION_D_ON_MEASUREMENT \
@@ -108,9 +102,9 @@ Cross_Z     2026.1.30      0.0         Initial creation
 }
 // Turn position PD — heading hold for straight mode and full angle correction
 #define ANGLE_PID { \
-    .kp         = 17, \
+    .kp         = 14, \
     .ki         = 0.0, \
-    .kd         = 9.6, \
+    .kd         = 8.6, \
     .iOutMax    = 0, \
     .outMax     = 1500, \
     .mode       = PID_MODE_POSITION_D_ON_MEASUREMENT \
@@ -121,15 +115,26 @@ Cross_Z     2026.1.30      0.0         Initial creation
 **********************************************/
 
 /**
+ * @brief Global mode selection (used by code that must run-time-check the mode)
+ */
+typedef enum
+{
+    Remember_Mode,   // Replay mode (= 0)
+    Build_Mode,      // Build/mapping mode (= 1)
+} Mode_Define;
+
+/**
  * @brief Run mode enumeration — main operating state machine
  */
 typedef enum
 {
     Normal_Mode,     // Normal line-following trace
-    Turn_Left,       // Left turn mode
+    Turn_Left,       // Left turn mode (Build 2-phase / Remember PID diff)
     Turn_Right,      // Right turn mode
-    Mileage_Mode,    // Mileage-based element execution mode
-    Straight_Mode,   // Straight line mode
+    Mileage_Mode,    // Mileage-based element execution mode (unused)
+    Straight_Mode,   // Straight line mode (Build: mileage control)
+    Straight_Drive,  // Straight drive mode (Remember: heading lock + mileage control)
+    Curve_Turn,      // Curve turn mode (Remember: fixed-diff arc turn)
 } Run_Mode_Enum;
 
 /**
@@ -142,6 +147,7 @@ typedef enum
 } Mileage_Stage_Enum;
 
 // Build action type — defines what the car does at each track node/element
+// (shared by Build_Mode dispatch and OLED keyboard editor)
 typedef enum
 {
     BUILD_ACTION_NONE              = 0,  // unused / placeholder
@@ -291,6 +297,21 @@ extern float  Debug_Kp_Left;               // Left wheel debug Kp
 extern float  Debug_Ki_Left;               // Left wheel debug Ki
 extern float  Debug_Kp_Right;              // Right wheel debug Kp
 extern float  Debug_Ki_Right;              // Right wheel debug Ki
+
+// Mode selection
+extern Mode_Define Mode;
+
+// Turn control flags (shared by Build and Remember)
+extern uint8_t is_left;
+extern uint8_t is_right;
+extern uint8_t Turn_Decel_Phase;
+extern uint8_t Turn_Action_Done;
+extern uint8_t Turn_Angle_D_First;
+extern uint8_t Mileage_Turn_Done;
+extern uint8_t First_Mode;
+extern float   Check_Edge_Skip_Thresh;
+extern float   Check_Edge_Skip_Mileage_Base;
+extern float   Gyro_Z;      // Gyro Z-axis angular velocity
 
 /**********************************************
 * Public Function Declarations

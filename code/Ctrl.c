@@ -31,9 +31,11 @@ int Right_Real_Spd = 0;
 
 int Left_Exp_Spd = 0;
 int Right_Exp_Spd = 0;
-int Basic_Speed = 20;   // TODO: hardcoded, restore flash read after tuning
+int Basic_Speed = 45;   // TODO: hardcoded, restore flash read after tuning
 int Run_Speed = 0;
 float Average_Speed = 0;
+
+Mode_Define Mode = Build_Mode;  // Runtime mode (overridden in cpu0_main.c at startup)
 uint8 First_Mode = 0;
 
 /*--------------- Light Sensor Data ---------------*/
@@ -164,7 +166,7 @@ uint8 vofa_flash_dump_mode = 0;
 // Max consecutive cycles with all sensors on or all off before emergency stop
 #define SAFETY_STOP_CYCLE_MAX         80
 
-#define GYRO_INTEGRATION_PERIOD_S 0.003f
+// (GYRO_INTEGRATION_PERIOD_S moved to Ctrl.h)
 
 // Normalize an angle to [-180, 180] degrees
 static inline float Normalize_Angle_180(float angle)
@@ -219,19 +221,7 @@ static uint8_t Straight_Node_Pending = 0;
 static uint8_t Turn_Angle_Settle_Count = 0;
 
 /*--------------- Static Function Declarations ---------------*/
-static void Save_Segment_Edge_Mileage_Record_To_Flash(void);
-static void Load_Segment_Edge_Mileage_Record_From_Flash(void);
-static void Save_Flash_Page_Block(uint8_t sector, uint8_t start_page, uint8_t page_count, uint16_t words_per_page, const uint32_t *words);
-static void Load_Flash_Page_Block(uint8_t sector, uint8_t start_page, uint8_t page_count, uint16_t words_per_page, uint32_t *words);
-static int Select_Run_Speed(void);
-static void Set_Node_Run_Mode(uint8_t node_dir, float turn_delay);
-static void Reset_Turn_Action_State(void);
-static void Complete_Turn_Action(void);
-static uint8_t Is_Turn_Angle_Settled(float angle_target);
 static uint8_t Is_Track_Sensor_Adjacent(uint8_t left_index, uint8_t right_index);
-static void Build_Load_Default_Action_List(void);
-static void Build_Dispatch_Current_Action(void);
-static void Build_Finish_Current_Action(void);
 
 /********************************* Static Helper Functions *********************************/
 
@@ -259,362 +249,7 @@ static uint8_t Is_Track_Sensor_Adjacent(uint8_t left_index, uint8_t right_index)
     return 0;
 }
 
-// (Build_Action_To_Element_Dir removed — Build_Action_List is now flat enum array)
-
-// Load the pre-defined default build action list (flat enum array copy)
-static void Build_Load_Default_Action_List(void)
-{
-    Build_Action_Count = BUILD_ACTION_COUNT;
-    Build_Action_Index = 0;
-    Build_Action_Active_Index = 0;
-    memcpy(Build_Action_List, Default_Build_Actions, sizeof(Default_Build_Actions));
-}
-
-// Mark the current action as finished — just check finish condition
-static void Build_Finish_Current_Action(void)
-{
-    if (Build_Action_Index >= Build_Action_Count)
-    {
-        Finish_Flag = 1;
-    }
-}
-
-// Dispatch next build action — 3 behavior groups (straight / left turn / right turn)
-static void Build_Dispatch_Current_Action(void)
-{
-    uint8_t action;
-
-    if (Build_Action_Index >= Build_Action_Count)
-    {
-        Finish_Flag = 1;
-        return;
-    }
-
-    Build_Action_Active_Index = Build_Action_Index;
-    action = Build_Action_List[Build_Action_Index];
-
-    switch (action)
-    {
-        // ─── Straight (node + element short + element long) ───
-        case BUILD_ACTION_NODE_STRAIGHT:
-            Straight_Node_Pending = 1;
-            Count.Straight = TUNE_NODE_STRAIGHT;
-            Segment_Edge_Mileage_Record[Count.Line][Count.Element++] = Count.Last_Edge_Mileage;
-            goto do_straight;
-        case BUILD_ACTION_ELEM_STRAIGHT_SHORT:
-            Count.Straight = TUNE_ELEM_STRAIGHT_SHORT;
-            Segment_Edge_Mileage_Record[Count.Line][Count.Element++] = Count.Last_Edge_Mileage;
-            goto do_straight;
-        case BUILD_ACTION_ELEM_STRAIGHT_LONG:
-            Count.Straight = TUNE_ELEM_STRAIGHT_LONG;
-            Segment_Edge_Mileage_Record[Count.Line][Count.Element++] = Count.Last_Edge_Mileage;
-        do_straight:
-            Count.StraightBase = Count.Mileage;
-            Run_Mode = Straight_Mode;
-            break;
-
-        // ─── Left turn (node + element) ───
-        case BUILD_ACTION_NODE_TURN_LEFT:
-            Count.is_elem_turn = 0;
-            Count.Element = 0;
-            goto do_left;
-        case BUILD_ACTION_ELEM_TURN_LEFT:
-            Count.is_elem_turn = 1;
-            Count.Element = 0;
-        do_left:
-            Count.Line++;
-            Set_Node_Run_Mode(1, (action == BUILD_ACTION_NODE_TURN_LEFT) ? TUNE_NODE_TURN_DELAY : TUNE_ELEM_TURN_DELAY);
-            break;
-
-        // ─── Right turn (node + element) ───
-        case BUILD_ACTION_NODE_TURN_RIGHT:
-            Count.is_elem_turn = 0;
-            Count.Element = 0;
-            goto do_right;
-        case BUILD_ACTION_ELEM_TURN_RIGHT:
-            Count.is_elem_turn = 1;
-            Count.Element = 0;
-        do_right:
-            Count.Line++;
-            Set_Node_Run_Mode(2, (action == BUILD_ACTION_NODE_TURN_RIGHT) ? TUNE_NODE_TURN_DELAY : TUNE_ELEM_TURN_DELAY);
-            break;
-
-        default:
-            return;
-    }
-    Build_Action_Index++;
-}
-
-// Select the current run speed from the configured Basic_Speed
-static int Select_Run_Speed(void)
-{
-    if (Basic_Speed < 0)
-    {
-        return 0;
-    }
-
-    return Basic_Speed;
-}
-
-/*************************************
-** Function: Reset_Turn_Action_State
-** Description: Reset all turn-related state variables to prepare for the next action
-** Details:
-**         Clears PID data, expected speeds, turn flags, and sets the
-**         edge-check cooldown threshold to TUNE_COOLDOWN_NODE_TURN.
-**         Resets Run_Mode back to Normal_Mode.
-*************************************/
-static void Reset_Turn_Action_State(void)
-{
-    Gyro_Integral = 0;
-    Turn_Angle_Settle_Count = 0;
-    Error = 0;
-    Turn_PID_Out = 0;
-    PID_cleardata(&Gyro_PID);
-    PID_cleardata(&Gyro_PD_PID);
-    PID_cleardata(&Turn_PID);
-    Gyro_PID_Out = 0;
-    Left_Exp_Spd = 0;
-    Right_Exp_Spd = 0;
-    Count.Left = 0;
-    Count.Right = 0;
-    Count.Mileage = 0;  // Zero segment mileage after Phase 1
-    is_left = 0;
-    is_right = 0;
-    Turn_Decel_Phase = 0;
-    Check_Edge_Skip_Mileage_Base = Count.Mileage;
-    Check_Edge_Skip_Thresh = Count.is_elem_turn ? TUNE_COOLDOWN_ELEM_TURN : TUNE_COOLDOWN_NODE_TURN;
-    Run_Mode = Normal_Mode;
-}
-
-/*************************************
-** Function: Complete_Turn_Action
-** Description: Finalize the current turn action
-** Details:    1. Set Turn_Action_Done flag
-**             2. Save turn mileage to Flash
-**             3. Advance the action index via Build_Finish_Current_Action
-**             4. Call Reset_Turn_Action_State to clear state
-**    Called by Turn_Left_Run / Turn_Right_Run after angle settles.
-*************************************/
-static void Complete_Turn_Action(void)
-{
-    Turn_Action_Done = 1;
-
-    // Record segment mileage using Phase 0 end snapshot (excludes Phase 1 rotation slip)
-    Segment_Total_Mileage[Count.Line] = Count.Mileage_Phase0;
-
-    // Zero Total_Angle after each turn — heading correction always converges to 0
-    Total_Angle = 0;
-
-    Build_Finish_Current_Action();
-    Reset_Turn_Action_State();
-}
-
-// Check if the accumulated gyro angle has settled within the target tolerance
-static uint8_t Is_Turn_Angle_Settled(float angle_target)
-{
-    float angle_error = fabsf(angle_target - Gyro_Integral);
-
-    if (angle_error <= TUNE_TURN_SETTLE_ERR && fabsf(Gyro_Z) <= TUNE_TURN_SETTLE_RATE)
-    {
-        if (Turn_Angle_Settle_Count < TUNE_TURN_SETTLE_CYCLES)
-        {
-            Turn_Angle_Settle_Count++;
-        }
-    }
-    else
-    {
-        Turn_Angle_Settle_Count = 0;
-    }
-
-    return (Turn_Angle_Settle_Count >= TUNE_TURN_SETTLE_CYCLES);
-}
-
-/*************************************
-** Function: Get_Track_Middle_Point
-** Description: Compute the middle point of the detected track line
-** Return:     If Track_Num > 0: average of first and last active sensor index
-**             If Track_Num == 0: default center sensor index 7
-** Details:    Uses Track_Arr[0] and Track_Arr[Track_Num-1] to compute midpoint.
-*************************************/
-static int Get_Track_Middle_Point(void)
-{
-    if (Track_Num > 0)
-    {
-        return (Track_Arr[0] + Track_Arr[Track_Num - 1]) / 2;
-    }
-
-    return 7;
-}
-
-/*************************************
-** Function: Set_Node_Run_Mode
-** Description: Configure the run mode based on the node direction at an intersection
-** Input:      node_dir - 0=straight, 1=left turn, 2=right turn, 3/4=reserved
-** Details:    Resets gyro integral, PID state, mileage counters, and sets Run_Mode
-**             to the appropriate turning or straight mode.
-*************************************/
-static void Set_Node_Run_Mode(uint8_t node_dir, float turn_delay)
-{
-    Left_Exp_Spd = 0;
-    Right_Exp_Spd = 0;
-    Gyro_Integral = 0;
-    Turn_Angle_Settle_Count = 0;
-    PID_cleardata(&Turn_PID);
-    PID_cleardata(&Gyro_PID);   // one-shot clear on turn entry
-    Turn_Action_Done = 0;
-    Turn_Decel_Phase = 0;
-    Count.Left = Count.Mileage;  // snapshot turn entry mileage (NOT zeroed — done at turn end)
-    Count.Stall = turn_delay;    // Phase 0 distance to travel
-
-    switch (node_dir)
-    {
-        case 1:
-            is_left = 1;
-            is_right = 0;
-            Turn_Angle_Target = -90.0f;
-            Run_Mode = Turn_Left;
-            break;
-        case 2:
-            is_left = 0;
-            is_right = 1;
-            Turn_Angle_Target = 90.0f;
-            Run_Mode = Turn_Right;
-            break;
-    }
-}
-
-/*************************************
-** Function: Finish_Mileage_Section
-** Description: Complete the current mileage-based section (element or node segment)
-** Details:    Resets turn flags, sets cooldown threshold for edge detection,
-**             and transitions back to Normal_Mode. Calls Build_Finish_Current_Action
-**             to advance the action queue.
-*************************************/
-static void Finish_Mileage_Section(void)
-{
-
-    is_left = 0;
-    is_right = 0;
-    Mileage_Turn_Done = 0;
-    Check_Edge_Skip_Mileage_Base = Count.Mileage;
-    Check_Edge_Skip_Thresh = TUNE_COOLDOWN_STRAIGHT;
-    Run_Mode = Normal_Mode;
-
-    Build_Finish_Current_Action();
-}
-
-// (Record_Segment_Edge_Mileage removed — edge mileage now recorded inline in Build_Dispatch)
-
-/*************************************
-** Function: Save_Segment_Edge_Mileage_Record_To_Flash
-** Description: Save segment edge mileage records to Flash memory
-** Details:    Copies Segment_Edge_Mileage_Record and Segment_Total_Mileage into a
-**             packed struct, then writes to the designated Flash sector/page range.
-*************************************/
-static void Save_Segment_Edge_Mileage_Record_To_Flash(void)
-{
-    Segment_Edge_Mileage_Flash_Typedef flash_log = {{0}};
-    uint32 map_words[SEGMENT_EDGE_MILEAGE_FLASH_PAGE_COUNT * SEGMENT_EDGE_MILEAGE_FLASH_WORDS_PER_PAGE] = {0};
-
-
-    memcpy(flash_log.Segment_Edge_Mileage_Record,
-           Segment_Edge_Mileage_Record,
-           sizeof(Segment_Edge_Mileage_Record));
-    memcpy(flash_log.Segment_Total_Mileage,
-           Segment_Total_Mileage,
-           sizeof(Segment_Total_Mileage));
-
-
-    memcpy(map_words, &flash_log, sizeof(flash_log));
-    Save_Flash_Page_Block(SEGMENT_EDGE_MILEAGE_FLASH_SECTOR,
-                          SEGMENT_EDGE_MILEAGE_FLASH_START_PAGE,
-                          SEGMENT_EDGE_MILEAGE_FLASH_PAGE_COUNT,
-                          SEGMENT_EDGE_MILEAGE_FLASH_WORDS_PER_PAGE,
-                          map_words);
-}
-
-/*************************************
-** Function: Load_Segment_Edge_Mileage_Record_From_Flash
-** Description: Load segment edge mileage records from Flash memory
-** Details:    Reads from the designated Flash sector/page range into a packed struct,
-**             then copies back to Segment_Edge_Mileage_Record and Segment_Total_Mileage.
-*************************************/
-static void Load_Segment_Edge_Mileage_Record_From_Flash(void)
-{
-    Segment_Edge_Mileage_Flash_Typedef flash_log = {{0}};
-    uint32 map_words[SEGMENT_EDGE_MILEAGE_FLASH_PAGE_COUNT * SEGMENT_EDGE_MILEAGE_FLASH_WORDS_PER_PAGE] = {0};
-
-
-    Load_Flash_Page_Block(SEGMENT_EDGE_MILEAGE_FLASH_SECTOR,
-                          SEGMENT_EDGE_MILEAGE_FLASH_START_PAGE,
-                          SEGMENT_EDGE_MILEAGE_FLASH_PAGE_COUNT,
-                          SEGMENT_EDGE_MILEAGE_FLASH_WORDS_PER_PAGE,
-                          map_words);
-
-
-    memcpy(&flash_log, map_words, sizeof(flash_log));
-    memcpy(Segment_Edge_Mileage_Record,
-           flash_log.Segment_Edge_Mileage_Record,
-           sizeof(Segment_Edge_Mileage_Record));
-    memcpy(Segment_Total_Mileage,
-           flash_log.Segment_Total_Mileage,
-           sizeof(Segment_Total_Mileage));
-}
-
-/*************************************
-** Function: Save_Flash_Page_Block
-** Description: Write data to a contiguous block of Flash pages
-** Input:      sector       - Flash sector number
-**             start_page   - First page within the sector
-**             page_count   - Number of pages to write
-**             words_per_page - Number of uint32_t words per page
-**             words        - Pointer to source data array
-** Details:    Uses the URIX Flash API: erase each page, then write.
-*************************************/
-static void Save_Flash_Page_Block(uint8_t sector, uint8_t start_page, uint8_t page_count, uint16_t words_per_page, const uint32_t *words)
-{
-    uint8_t page_index;
-
-    for (page_index = 0; page_index < page_count; page_index++)
-    {
-        flash_erase_page(sector, start_page + page_index);
-        flash_write_page(sector,
-                         start_page + page_index,
-                         &words[page_index * words_per_page],
-                         words_per_page);
-    }
-}
-
-/*************************************
-** Function: Load_Flash_Page_Block
-** Description: Read data from a contiguous block of Flash pages
-** Input:      sector/start_page/page_count/words_per_page - Same as Save counterpart
-** Output:     words - Pointer to destination buffer (filled with uint32_t data)
-** Details:    Reads uint32_t words from Flash pages into the output buffer.
-*************************************/
-static void Load_Flash_Page_Block(uint8_t sector, uint8_t start_page, uint8_t page_count, uint16_t words_per_page, uint32_t *words)
-{
-    uint8_t page_index;
-
-    for (page_index = 0; page_index < page_count; page_index++)
-    {
-        flash_read_page(sector,
-                        start_page + page_index,
-                        &words[page_index * words_per_page],
-                        words_per_page);
-    }
-}
-
-/*************************************
-** Function: Load_All_Flash_Data_For_VOFA
-** Description: Load all Flash records for VOFA visualization/debugging tool
-**             so they can be displayed and analyzed in VOFA.
-*************************************/
-void Load_All_Flash_Data_For_VOFA(void)
-{
-    // Load_Segment_Edge_Mileage_Record_From_Flash(); (FIXME: Flash format changed)
-}
+// (Build-only helper functions moved to Ctrl_Build.c)
 
 /********************************* Core Run-Time Functions *********************************/
 
@@ -743,7 +378,11 @@ void Car_Go()
 
     if (EnableSwitch_ON)
     {
+#if ACTIVE_MODE == MODE_BUILD
         Build_Mode_Get_Error();
+#elif ACTIVE_MODE == MODE_REMEMBER
+        Remember_Mode_Get_Error();
+#endif
     }
 
     Set_Speed();
@@ -784,7 +423,16 @@ void Get_Speed()
     {
         instant_speed = (left_raw + right_raw) / 2.0f;
         Count.Mileage += instant_speed;
+#if ACTIVE_MODE == MODE_BUILD || ACTIVE_MODE == MODE_REMEMBER
+        // Exclude in-place rotation mileage (Build Phase1 / Remember right-angle turns)
+        if (!((Mode == Remember_Mode && (is_left == 1 || is_right == 1))
+           || (Mode == Build_Mode && Turn_Decel_Phase == 1)))
+        {
+            Total_Run_Mileage += instant_speed;
+        }
+#else
         Total_Run_Mileage += instant_speed;
+#endif
     }
 }
 
@@ -852,20 +500,24 @@ void Get_IMU()
 *************************************/
 uint8 Check_Edge()
 {
-    // Mileage-based cooldown: block edge detection until enough distance driven
+    // Mileage-based cooldown (Build mode only)
+#if ACTIVE_MODE == MODE_BUILD
     if (Check_Edge_Skip_Thresh > 0)
     {
         if ((Count.Mileage - Check_Edge_Skip_Mileage_Base) < Check_Edge_Skip_Thresh)
             return 0;
-        Check_Edge_Skip_Thresh = 0;  // cooldown expired naturally
+        Check_Edge_Skip_Thresh = 0;
     }
+#endif
 
 
     if (((Light_Convert[0] == 1 || Light_Convert[14] == 1)&&
         Initial_White_Num >= 4) || Initial_White_Num >= 5)
     {
         Count.Edge++;
+#if ACTIVE_MODE == MODE_BUILD
         Count.Last_Edge_Mileage = Count.Mileage;  // snapshot before zero — used by Build_Dispatch_Current_Action
+#endif
         Count.Mileage = 0;
 
         return 1;
@@ -951,201 +603,8 @@ void Light_Process()
 
 }
 
-/*************************************
-** Function: Build_Mode_Get_Error
-** Description: Build mode main dispatcher — select run mode and compute tracking error
-** Details:    On first call (First_Mode==0), initializes action list, counters, and
-**             resets Flash-stored records.
-**             Dispatches to Normal_Run, Turn_Left_Run, Turn_Right_Run, Mileage_Mode_Run,
-**             or Straight_Run depending on current Run_Mode.
-*************************************/
-void Build_Mode_Get_Error()
-{
-    // (Check_Edge cooldown is now mileage-based, checked in Check_Edge())
-
-
-    if (First_Mode == 0)
-    {
-        Run_Mode = Normal_Mode;                                       // Initialize to normal trace
-        First_Mode = 1;                                               // Mark as initialized
-        Count.Line = 0;
-        Count.Element = 0;
-        Build_Action_Index = 0;
-        Build_Action_Active_Index = 0;
-        Build_Load_Default_Action_List();                             // Load default build actions
-        memset(Segment_Edge_Mileage_Record, 0, sizeof(Segment_Edge_Mileage_Record));
-    }
-
-
-    switch (Run_Mode)
-    {
-        case Normal_Mode:
-            Normal_Run();
-            break;
-        case Turn_Left:
-            Turn_Left_Run();
-            break;
-        case Turn_Right:
-            Turn_Right_Run();
-            break;
-        case Straight_Mode:
-            Straight_Run();
-            break;
-        default:
-            Normal_Run();
-            break;
-    }
-
-    // single-point LED: green=normal, blue=object, purple=low voltage (set by Safety_Check)
-    if (g_led_flag != 2)
-        g_led_flag = (Run_Mode == Normal_Mode) ? 0 : 1;
-
-}
-
-/*************************************
-** Function: Normal_Run
-** Description: Normal line-following mode: compute steering error from track position
-** Details:    Calculates the midpoint of detected track line and the lateral error
-**             (average of direction offset values for leftmost and rightmost sensors).
-**             Checks for segment edges and dispatches the next build action if found.
-*************************************/
-void Normal_Run()
-{
-    if (Track_Num > 0)
-    {
-        Middle = (Track_Arr[0] + Track_Arr[Track_Num - 1]) / 2;
-        Last_Error = Error;
-    }
-
-    if (Track_Num < 2)
-    {
-        Error = 0;
-    }
-    else
-    {
-        Left_Scan_Point = Track_Arr[0];
-        Right_Scan_Point = Track_Arr[Track_Num - 1];
-        Error = (Dir_Arr[Left_Scan_Point] + Dir_Arr[Right_Scan_Point]) / 2;
-    }
-
-    if (Check_Edge())
-    {
-        Build_Dispatch_Current_Action();
-    }
-}
-/*************************************
-** Function: Turn_Left_Run
-** Description: 2-phase turn (works for both node and element turns, distinguished by Count.Stall)
-**   Phase 0: decelerate+advance — speed ramps Basic_Speed→0 linearly over Count.Stall ticks
-**   Phase 1: in-place rotate to target angle with speed=0, Turn_PID + Gyro_PID cascade
-**   Non-Build_Mode: immediate turn at full Basic_Speed
-*************************************/
-void Turn_Left_Run(void)
-{
-    if (Turn_Action_Done)
-        return;
-
-    if (Turn_Decel_Phase == 0)
-    {
-        // Phase 0: decel+advance with heading correction (like Straight_Mode)
-        float traveled = Count.Mileage - Count.Left;
-        float ratio = 1.0f - (traveled / Count.Stall);
-        if (ratio < 0.0f) ratio = 0.0f;
-        int speed = (int)(Basic_Speed * 1.0);
-
-        Error = 0;
-      // Heading correction: desired = theoretical angle, actual = Total_Angle
-        Turn_PID_Out = PID_calc(&Angle_PID, 0.0f, Total_Angle);
-        Gyro_PID_Out = PID_calc(&Gyro_PID, Turn_PID_Out, Gyro_Z);
-        Left_Exp_Spd = speed + (int)Gyro_PID_Out;
-        Right_Exp_Spd = speed - (int)Gyro_PID_Out;
-
-        if (traveled >= Count.Stall)
-        {
-            Turn_Decel_Phase = 1;
-            Count.Mileage_Phase0 = Count.Mileage;  // snapshot before rotation — used by Complete_Turn_Action
-            Gyro_Integral = 0;
-            Turn_Angle_Settle_Count = 0;
-            PID_cleardata(&Turn_PID);   // fresh for Phase 1 turn tracking
-            PID_cleardata(&Gyro_PID);
-        }
-    }
-    else // Phase 1: in-place rotate
-    {
-        Error = 0;
-        Set_Mileage_Turn_Exp_Speed(Turn_Angle_Target, 0);
-        if (Is_Turn_Angle_Settled(Turn_Angle_Target))
-        {
-            Complete_Turn_Action();
-        }
-    }
-}
-
-/*************************************
-** Function: Turn_Right_Run
-** Description: Execute a right turn (mirror of Turn_Left_Run) — same 2-phase logic
-*************************************/
-void Turn_Right_Run(void)
-{
-    if (Turn_Action_Done)
-        return;
-
-    if (Turn_Decel_Phase == 0)
-    {
-        // Phase 0: decel+advance with heading correction (like Straight_Mode)
-        float traveled = Count.Mileage - Count.Left;
-        float ratio = 1.0f - (traveled / Count.Stall);
-        if (ratio < 0.0f) ratio = 0.0f;
-        int speed = (int)(Basic_Speed * 1.0);
-
-        Error = 0;
-      // Heading correction: desired = theoretical angle, actual = Total_Angle
-        float delta = -Total_Angle;
-        Turn_PID_Out = PID_calc(&Angle_PID, 0.0f, delta);
-        Gyro_PID_Out = PID_calc(&Gyro_PID, Turn_PID_Out, Gyro_Z);
-        Left_Exp_Spd = speed + (int)Gyro_PID_Out;
-        Right_Exp_Spd = speed - (int)Gyro_PID_Out;
-
-        if (traveled >= Count.Stall)
-        {
-            Turn_Decel_Phase = 1;
-            Count.Mileage_Phase0 = Count.Mileage;  // snapshot before rotation — used by Complete_Turn_Action
-            Gyro_Integral = 0;
-            Turn_Angle_Settle_Count = 0;
-            PID_cleardata(&Turn_PID);
-            PID_cleardata(&Gyro_PID);
-        }
-    }
-    else // Phase 1: in-place rotate
-    {
-        Error = 0;
-        Set_Mileage_Turn_Exp_Speed(Turn_Angle_Target, 0);
-        if (Is_Turn_Angle_Settled(Turn_Angle_Target))
-        {
-            Complete_Turn_Action();
-        }
-    }
-}
-/*************************************
-** Function: Set_Mileage_Turn_Exp_Speed
-** Description: Angle PID cascade for turns — outer Turn_PID → inner Gyro_PID → wheel speeds
-*************************************/
-
-/*************************************
-** Function: Set_Mileage_Turn_Exp_Speed
-** Description: Calculate expected wheel speeds for an angle-based turn
-**              using cascaded PID: outer angle PID -> inner gyro PID -> wheel speeds
-** Input:      angle_target - Target gyro angle (deg, e.g. +/-90)
-*************************************/
-void Set_Mileage_Turn_Exp_Speed(float angle_target, int base_speed)
-{
-    float gyro_target;
-
-    gyro_target = PID_calc(&Turn_PID, angle_target, Gyro_Integral);
-    Gyro_PID_Out = PID_calc(&Gyro_PID, gyro_target, Gyro_Z);
-    Left_Exp_Spd = base_speed + (int)Gyro_PID_Out;
-    Right_Exp_Spd = base_speed - (int)Gyro_PID_Out;
-}
+// (Mode-specific functions removed — Build in Ctrl_Build.c, Remember in Ctrl_Remember.c)
+// (Set_Mileage_Turn_Exp_Speed removed — moved to Ctrl_Build.c)
 
 /*************************************
 ** Function: Set_Speed
@@ -1174,7 +633,9 @@ void Set_Speed()
         return;
     }
 
-    Run_Speed = Select_Run_Speed();
+#if ACTIVE_MODE == MODE_BUILD
+    Run_Speed = Basic_Speed;
+    if (Run_Speed < 0) Run_Speed = 0;
 
     if (is_left == 1 || is_right == 1)
     {
@@ -1190,7 +651,6 @@ void Set_Speed()
             PID_cleardata(&Gyro_PID);
         }
         // Cascaded heading correction: angle → gyro rate → wheel speeds
-        // Target = theoretical total angle, Actual = Total_Angle
         Turn_PID_Out = PID_calc(&Angle_PID, 0.0f, Total_Angle);
         Gyro_PID_Out = PID_calc(&Gyro_PID, Turn_PID_Out, Gyro_Z);
         Left_Exp_Spd  = Run_Speed + Gyro_PID_Out;
@@ -1199,14 +659,15 @@ void Set_Speed()
     else
     {
         straight_enter = 0;
-
         // Normal trace: Turn_PID(Error) → Gyro_PID rate damping → wheel speeds
         Turn_PID_Out = PID_calc(&Angle_PID, 0.0f, (float)Error);
         Gyro_PID_Out = PID_calc(&Gyro_PID, Turn_PID_Out, Gyro_Z);
-
         Left_Exp_Spd = Run_Speed + Gyro_PID_Out;
         Right_Exp_Spd = Run_Speed - Gyro_PID_Out;
     }
+#elif ACTIVE_MODE == MODE_REMEMBER
+    Remember_Set_Speed();
+#endif
 
 
     if (EnableSwitch_ON)
@@ -1309,29 +770,4 @@ void Set_Out(void)
     }
 }
 
-/*************************************
-** Function: Straight_Run
-** Description: Straight line mode — maintain straight until track narrows enough, called every 3ms
-** Details:    Waits until track narrows (Track_Num < 5) and the midpoint is near center,
-**             counts consecutive straight-valid cycles, then either finishes a pending
-**             node straight section or falls back to Normal_Mode.
-*************************************/
-void Straight_Run(void)
-{
-    float section_mileage = Count.Mileage - Count.StraightBase;
-
-    Error = 0;
-
-    if (section_mileage >= Count.Straight)
-    {
-        if (Straight_Node_Pending)
-        {
-            Finish_Mileage_Section();
-            Straight_Node_Pending = 0;
-        }
-        else
-        {
-            Finish_Mileage_Section();
-        }
-    }
-}
+// Straight_Run removed — moved to Ctrl_Build.c
