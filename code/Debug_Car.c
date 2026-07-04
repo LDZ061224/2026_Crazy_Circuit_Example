@@ -388,7 +388,7 @@ void Debug_Angle_Tuning(void)
         }
 
         Debug_Angle_D_First = 1;
-        Turn_PID_Out = PID_calc(&Angle_PID, angle_target, Gyro_Integral);
+        Turn_PID_Out = PID_calc(&Turn_PID, angle_target, Gyro_Integral);
         gyro_target = Turn_PID_Out;
     }
     else if (Debug_Angle_Mode == 3)

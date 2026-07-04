@@ -36,6 +36,7 @@ Cross_Z     2026.1.30      0.0         Initial creation
 #define TUNE_NODE_TURN_DELAY      445.0f
 #define TUNE_NODE_STRAIGHT       200.0f
 #define TUNE_ELEM_STRAIGHT_SHORT 2650.0f
+#define TUNE_ELEM_STRAIGHT_SHORT 2650.0f
 #define TUNE_ELEM_STRAIGHT_LONG    0.0f
 #define TUNE_TURN_TARGET_DEG      90.0f
 #define TUNE_TURN_SETTLE_ERR       3.0f
@@ -65,7 +66,7 @@ Cross_Z     2026.1.30      0.0         Initial creation
 #define TURN_PID { \
     .kp         = 9, \
     .ki         = 0.0, \
-    .kd         = 5.4, \
+    .kd         = 1.4, \
     .iOutMax    = 0, \
     .outMax     = 1500, \
     .mode       = PID_MODE_POSITION_D_ON_MEASUREMENT \
