@@ -200,42 +200,42 @@ static void Debug_Voltage_Filter_Update(float voltage_adc)
 void Debug_Car_Go(void)
 {
     /* --- EnableSwitch edge detection --- */
-    if (EnableSwitch_ON == 1 && Last_EnableSwitch_ON == 0)
-    {
-        Count.StartDelay = 100;
-    }
-    Last_EnableSwitch_ON = EnableSwitch_ON;
-
-    /* debug mode skips the startup delay */
-    Count.StartDelay = 0;
+//    if (EnableSwitch_ON == 1 && Last_EnableSwitch_ON == 0)
+//    {
+//        Count.StartDelay = 100;
+//    }
+//    Last_EnableSwitch_ON = EnableSwitch_ON;
+//
+//    /* debug mode skips the startup delay */
+//    Count.StartDelay = 0;
 
     /* --- alternating speed read (every 3ms, same as Car_Go) --- */
-    Get_Speed();
+//    Get_Speed();
 
     /* --- IMU + sensors + safety --- */
     Get_IMU();
     Get_Light();
 //    Light_Process();
-    Safety_Check();
-
-    if (Stop_Flag != 0)
-    {
-        return;
-    }
-
-    /* --- dispatch to specific debug sub-mode --- */
-    switch (Debug_Sub_Mode)
-    {
-        case Debug_Sub_PI_Tuning:   Debug_Wheel_Tuning();   break;
-        case Debug_Sub_Ground_Test: Debug_Ground_Test();     break;
-        case Debug_Sub_Angle:       Debug_Angle_Tuning();   break;
-        case Debug_Sub_NormalTrace: Debug_Normal_Trace();   break;
-        default:                    Debug_Wheel_Tuning();   break;
-    }
+//    Safety_Check();
+//
+//    if (Stop_Flag != 0)
+//    {
+//        return;
+//    }
+//
+//    /* --- dispatch to specific debug sub-mode --- */
+//    switch (Debug_Sub_Mode)
+//    {
+//        case Debug_Sub_PI_Tuning:   Debug_Wheel_Tuning();   break;
+//        case Debug_Sub_Ground_Test: Debug_Ground_Test();     break;
+//        case Debug_Sub_Angle:       Debug_Angle_Tuning();   break;
+//        case Debug_Sub_NormalTrace: Debug_Normal_Trace();   break;
+//        default:                    Debug_Wheel_Tuning();   break;
+//    }
 
     // LED: only set when Stop_Flag==0. Safety_Check handles stop/low-voltage states.
-    if (g_led_flag != 2)
-        g_led_flag = Debug_Motor_Enable ? 1 : 0;
+//    if (g_led_flag != 2)
+//        g_led_flag = Debug_Motor_Enable ? 1 : 0;
 }
 
 /**********************************Debug_Wheel_Tuning**********************************/
@@ -388,7 +388,7 @@ void Debug_Angle_Tuning(void)
         }
 
         Debug_Angle_D_First = 1;
-        Turn_PID_Out = PID_calc(&Turn_PID, angle_target, Gyro_Integral);
+        Turn_PID_Out = PID_calc(&Angle_PID, angle_target, Gyro_Integral);
         gyro_target = Turn_PID_Out;
     }
     else if (Debug_Angle_Mode == 3)
