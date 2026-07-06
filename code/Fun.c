@@ -54,9 +54,9 @@ void Vofa_Send_Data(void)
     memset(VOFA_data, 0, sizeof(VOFA_data));
 
     // Common: wheel speeds (ch0~3)
-     VOFA_data[0].floatdata  = Left_Exp_Spd;
-     VOFA_data[1].floatdata  = Right_Exp_Spd;
-     VOFA_data[2].floatdata  = Left_Real_Spd;
+     VOFA_data[0].floatdata  = Gyro_Z;
+     VOFA_data[1].floatdata  = 666;
+     VOFA_data[2].floatdata  = 66666;
      VOFA_data[3].floatdata  = Right_Real_Spd;
 
 #if USE_DEBUG_MODE
@@ -142,10 +142,10 @@ void Vofa_Send_Data(void)
 #endif
 
     int i;
-    // for(i = 0; i < 15; i++)
-    // {
-    //     VOFA_data[i + 3].floatdata  = Light_Convert[i];
-    // }
+     for(i = 0; i < 15; i++)
+     {
+         VOFA_data[i + 3].floatdata  = Light_ADC[i];
+     }
     for(i = 0; i < 18; i++)
     {
         frame[i * 4 + 0] = VOFA_data[i].u8data[0];
@@ -321,13 +321,13 @@ void Motor_Init()
 {
     // DIR PWM: Left 10000=forward/0=rev, Right 0=forward/10000=rev, 30kHz
     pwm_init(Left_Motor_DIR,  30000, 10000);
-    pwm_init(Right_Motor_DIR, 30000, 0);
+    pwm_init(Right_Motor_DIR, 30000, 10000);
     // duty PWM: 30kHz, start at 0
     pwm_init(Left_Motor_PWM,  30000, 0);
     pwm_init(Right_Motor_PWM, 30000, 0);
     // Fan: initial full duty, run at 3000
-    pwm_init(Suction_Motor_DIR, 100000, 10000);
-    pwm_init(Suction_Motor_PWM, 100000, 0);
+    pwm_init(Suction_Motor_DIR, 70000, 0);
+    pwm_init(Suction_Motor_PWM, 70000, 0);
 
     system_delay_ms(10);
 }
