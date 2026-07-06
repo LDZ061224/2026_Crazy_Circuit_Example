@@ -210,7 +210,7 @@ void Debug_Car_Go(void)
 //    Count.StartDelay = 0;
 
     /* --- alternating speed read (every 3ms, same as Car_Go) --- */
-//    Get_Speed();
+   Get_Speed();
 
     /* --- IMU + sensors + safety --- */
     Get_IMU();

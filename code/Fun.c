@@ -55,8 +55,8 @@ void Vofa_Send_Data(void)
 
     // Common: wheel speeds (ch0~3)
      VOFA_data[0].floatdata  = Gyro_Z;
-     VOFA_data[1].floatdata  = 666;
-     VOFA_data[2].floatdata  = 66666;
+     VOFA_data[1].floatdata  = Left_Real_Spd;
+     VOFA_data[2].floatdata  = Right_Real_Spd;
      VOFA_data[3].floatdata  = Right_Real_Spd;
 
 #if USE_DEBUG_MODE
@@ -307,6 +307,7 @@ void Encoder_Init()
     encoder_quad_init(TIM4_ENCODER, TIM4_ENCODER_CH1_P02_8, TIM4_ENCODER_CH2_P00_9);
     // Right motor encoder initialization (TIM3->TIM2: P02_7 wire broken, switched to P33_6/P33_7)
     encoder_quad_init(TIM2_ENCODER, TIM2_ENCODER_CH1_P33_7, TIM2_ENCODER_CH2_P33_6);
+    encoder_quad_init(TIM3_ENCODER, TIM3_ENCODER_CH1_P02_6, TIM3_ENCODER_CH2_P02_7);
 }
 
 /*************************************
