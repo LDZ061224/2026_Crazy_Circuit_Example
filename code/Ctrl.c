@@ -86,6 +86,7 @@ int Middle = 0;
 float Gyro_Integral = 0;
 float Total_Angle = 0;                         // Continuous gyro angle, corrected after each turn
 // total_left/right_turns removed — Total_Angle is zeroed after each turn instead
+// total_left/right_turns removed — Total_Angle is zeroed after each turn instead
 float Segment_Edge_Mileage_Record[TRACK_SEGMENT_NUM_MAX][ELEMENT_NUM_MAX] = {{0}};
 float Segment_Total_Mileage[TRACK_SEGMENT_NUM_MAX] = {0};
 float Total_Run_Mileage = 0;
@@ -171,6 +172,8 @@ uint8 vofa_flash_dump_mode = 0;
 // Normalize an angle to [-180, 180] degrees
 static inline float Normalize_Angle_180(float angle)
 {
+    // while (angle > 180.0f)  angle -= 360.0f;
+    // while (angle < -180.0f) angle += 360.0f;
     // while (angle > 180.0f)  angle -= 360.0f;
     // while (angle < -180.0f) angle += 360.0f;
     return angle;
@@ -367,7 +370,7 @@ void Car_Go()
 
     Light_Process();
 
-    // Safety_Check();
+    Safety_Check();
 
 
     if (Stop_Flag != 0)
@@ -609,6 +612,7 @@ void Light_Process()
 /*************************************
 ** Function: Set_Speed
 ** Description: PID speed control — compute expected wheel speeds from tracking error
+** Control Chain: Error -> Angle_PID -> Gyro_PID(+Gyro_Z damping) -> left/right speeds
 ** Control Chain: Error -> Angle_PID -> Gyro_PID(+Gyro_Z damping) -> left/right speeds
 ** Details:    Either uses angle-based control (during turns) or normal trace control
 **             with gyro rate as damping. Straight_Mode uses gyro-damped straight control.

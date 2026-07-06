@@ -84,7 +84,7 @@ Cross_Z     2026.1.30      0.0         Initial creation
 
 // Left wheel speed incremental PID
 #define LEFT_PID { \
-    .kp         = 85.5, \
+    .kp         = 90.5, \
     .ki         = 42.5, \
     .kd         = 0, \
     .iOutMax    = 5000, \
@@ -94,7 +94,7 @@ Cross_Z     2026.1.30      0.0         Initial creation
 //120 ， 55.5
 // Right wheel speed incremental PID
 #define RIGHT_PID { \
-    .kp         = 95.5, \
+    .kp         = 100.5, \
     .ki         = 37.2, \
     .kd         = 0, \
     .iOutMax    = 5000, \
@@ -103,9 +103,9 @@ Cross_Z     2026.1.30      0.0         Initial creation
 }
 // Turn position PD — heading hold for straight mode and full angle correction
 #define ANGLE_PID { \
-    .kp         = 14, \
+    .kp         = 3.0, \
     .ki         = 0.0, \
-    .kd         = 8.6, \
+    .kd         = 1.2, \
     .iOutMax    = 0, \
     .outMax     = 1500, \
     .mode       = PID_MODE_POSITION_D_ON_MEASUREMENT \
