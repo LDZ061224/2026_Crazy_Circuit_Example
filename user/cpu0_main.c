@@ -79,7 +79,7 @@ int core0_main(void)
     // ========================= Gyro Zero-Drift Calibration =========================
     // Turn on suction to maximum, LED board breathing red to remind the user to keep the vehicle still.
     pwm_set_duty(Suction_Motor_DIR, 10000);
-    pwm_set_duty(Suction_Motor_PWM, 500);
+    pwm_set_duty(Suction_Motor_PWM, 9500);
 
     WS2812_Effect_Set((WS2812_Effect_Config){
         .type = EFF_BREATHING,
@@ -97,7 +97,15 @@ int core0_main(void)
     }
 
     gyro_z_offset = imu660rb_gyro_transition((float)gyro_z_sum / GYRO_CALIB_SAMPLES);
-//    pwm_set_duty(Suction_Motor_PWM, 9500);
+
+    // ===== 1-second suction stop: let the fan spin down before line scan =====
+    pwm_set_duty(Suction_Motor_PWM, 0);
+    WS2812_Effect_Set((WS2812_Effect_Config){ .type = EFF_OFF });
+    for (int i = 0; i < 100; i++)
+    {
+        WS2812_Effect_Update();
+        system_delay_ms(10);
+    }
 
     // ========================= Line Scan =========================
     // Green progress bar on LED strip, completed entirely before PIT starts.
@@ -105,6 +113,7 @@ int core0_main(void)
         .type = EFF_PROGRESS,
         .r = 0, .g = 255, .b = 0 });
 
+    pwm_set_duty(Suction_Motor_PWM, 9500);
 #define SCAN_START 200
 #define SCAN_END   1600
     for (int tick = 0; tick <= SCAN_END; tick++)
@@ -130,7 +139,7 @@ int core0_main(void)
     pwm_set_duty(Suction_Motor_PWM, 10000);
 
     /* UART_2: tuning command receiver */
-    uart_init(UART_2, 921600, UART2_TX_P33_9, UART2_RX_P33_8);
+    uart_init(UART_2, 230400, UART2_TX_P33_9, UART2_RX_P33_8);
     uart_rx_interrupt(UART_2, 1);
 
     /* Enable interrupts on CPU0 */

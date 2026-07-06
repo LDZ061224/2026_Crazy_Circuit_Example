@@ -327,7 +327,7 @@ void Motor_Init()
     pwm_init(Right_Motor_PWM, 30000, 0);
     // Fan: initial full duty, run at 3000
     pwm_init(Suction_Motor_DIR, 100000, 10000);
-    pwm_init(Suction_Motor_PWM, 100000, 10000);
+    pwm_init(Suction_Motor_PWM, 100000, 0);
 
     system_delay_ms(10);
 }

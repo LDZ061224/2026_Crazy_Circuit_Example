@@ -5,7 +5,7 @@ Author: Cross_Z
 Version:4.0               Date: 2026.7.4
 Description: Compile-time mode selection
              Change ACTIVE_MODE to switch between Build / Remember / Debug.
-             Only the active mode's code is compiled — zero runtime overhead.
+             Only the active mode's code is compiled 鈥� zero runtime overhead.
 Others:      Must be included before any mode-specific headers.
 **************************************************/
 
@@ -17,6 +17,6 @@ Others:      Must be included before any mode-specific headers.
 #define MODE_DEBUG      3
 
 // ===== Change this line to switch modes =====
-#define ACTIVE_MODE     MODE_BUILD
+#define ACTIVE_MODE     MODE_DEBUG
 
 #endif
