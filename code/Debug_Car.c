@@ -211,11 +211,21 @@ void Debug_Car_Go(void)
 
     /* --- alternating speed read (every 3ms, same as Car_Go) --- */
    Get_Speed();
-
+    static uint8_t imu_get = 0;
+    static uint8_t first = 0;
     /* --- IMU + sensors + safety --- */
-    if(EnableSwitch_ON == 1)
+    if(first == 0)
+    {    if(gpio_get_level(P20_7) == 1)
+        {
+            imu_get = 1;
+        }
+        first = 1;
+    }
+
+
+    if(imu_get == 0)
     {
-        Get_IMU();
+    Get_IMU();
     }
     Get_Light();
 //    Light_Process();
