@@ -31,6 +31,7 @@ Cross_Z   2026.1.30   0.0        Initial version
 #include "pid.h"                   // PID algorithm related header
 #include "Fun.h"                   // Function driver implementation header
 #include "OLEDKeyboard.h"          // OLED display and keyboard driver header
+#include "Hardware_Config.h"      // Hardware geometry + turn diff constants
 #include "Mode_Config.h"           // Compile-time mode selection (must be before mode headers)
 #include "Racing_Track.h"          // Track definition structs + Default_Simple_Track
 #include "Ctrl_Flash.h"            // Flash mileage persistence
