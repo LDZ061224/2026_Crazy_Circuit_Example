@@ -641,33 +641,57 @@ void Set_Speed()
     Run_Speed = Basic_Speed;
     if (Run_Speed < 0) Run_Speed = 0;
 
-    if (is_left == 1 || is_right == 1)
+    if (Run_Mode == Turn_Left || Run_Mode == Turn_Right)
     {
         straight_enter = 0;
-        // PID cleared once in Set_Node_Run_Mode / Phase transitions — do NOT clear per-tick
+        if (Turn_Decel_Phase == 0)
+        {
+            // Phase 0: heading hold — cascaded Angle_PID(Total_Angle) → Gyro_PID → diff
+            Turn_PID_Out = PID_calc(&Angle_PID, 0.0f, Total_Angle);
+            Gyro_PID_Out = PID_calc(&Gyro_PID, Turn_PID_Out, Gyro_Z);
+            Left_Exp_Spd  = Run_Speed + (int)Gyro_PID_Out;
+            Right_Exp_Spd = Run_Speed - (int)Gyro_PID_Out;
+        }
+        else
+        {
+            // Phase 1: fixed diff + gyro PD damping (no angle loop)
+            float damp = PID_calc(&Gyro_PD_PID, 0.0f, Gyro_Z);
+            if (Run_Mode == Turn_Left)
+            {
+                Left_Exp_Spd  = -BUILD_TURN_DIFF_FIXED + (int)damp;
+                Right_Exp_Spd =  BUILD_TURN_DIFF_FIXED - (int)damp;
+            }
+            else
+            {
+                Left_Exp_Spd  =  BUILD_TURN_DIFF_FIXED + (int)damp;
+                Right_Exp_Spd = -BUILD_TURN_DIFF_FIXED - (int)damp;
+            }
+        }
     }
     else if (Run_Mode == Straight_Mode)
     {
+        // Straight: cascaded heading hold — Angle_PID(Total_Angle) → Gyro_PID → diff
         if (!straight_enter)
         {
             straight_enter = 1;
             PID_cleardata(&Angle_PID);
             PID_cleardata(&Gyro_PID);
         }
-        // Cascaded heading correction: angle → gyro rate → wheel speeds
         Turn_PID_Out = PID_calc(&Angle_PID, 0.0f, Total_Angle);
         Gyro_PID_Out = PID_calc(&Gyro_PID, Turn_PID_Out, Gyro_Z);
-        Left_Exp_Spd  = Run_Speed + Gyro_PID_Out;
-        Right_Exp_Spd = Run_Speed - Gyro_PID_Out;
+        Left_Exp_Spd  = Run_Speed + (int)Gyro_PID_Out;
+        Right_Exp_Spd = Run_Speed - (int)Gyro_PID_Out;
     }
     else
     {
+        // Normal trace: parallel curvature diff + gyro PD damping
         straight_enter = 0;
-        // Normal trace: Turn_PID(Error) → Gyro_PID rate damping → wheel speeds
-        Turn_PID_Out = PID_calc(&Angle_PID, 0.0f, (float)Error);
-        Gyro_PID_Out = PID_calc(&Gyro_PID, Turn_PID_Out, Gyro_Z);
-        Left_Exp_Spd = Run_Speed + Gyro_PID_Out;
-        Right_Exp_Spd = Run_Speed - Gyro_PID_Out;
+        float e = (float)Error * SENSOR_PITCH_MM;
+        float curvature = 2.0f * e / (LD_MM * LD_MM + e * e);
+        float diff_track = Turn_PID.kp * curvature * TRACK_WIDTH_MM * (float)Run_Speed;
+        float diff_damp  = PID_calc(&Gyro_PD_PID, 0.0f, Gyro_Z);
+        Left_Exp_Spd  = Run_Speed + (int)diff_track + (int)diff_damp;
+        Right_Exp_Spd = Run_Speed - (int)diff_track - (int)diff_damp;
     }
 #elif ACTIVE_MODE == MODE_REMEMBER
     Remember_Set_Speed();

@@ -39,7 +39,6 @@ static int  Select_Run_Speed(void);
 static void Set_Node_Run_Mode(uint8_t node_dir, float turn_delay);
 static void Reset_Turn_Action_State(void);
 static void Complete_Turn_Action(void);
-static uint8_t Is_Turn_Angle_Settled(float angle_target);
 static void Finish_Mileage_Section(void);
 static void Save_Segment_Edge_Mileage_Record_To_Flash(void);
 static void Load_Segment_Edge_Mileage_Record_From_Flash(void);
@@ -177,21 +176,7 @@ static void Complete_Turn_Action(void)
     Reset_Turn_Action_State();
 }
 
-// Check if the accumulated gyro angle has settled within the target tolerance
-static uint8_t Is_Turn_Angle_Settled(float angle_target)
-{
-    float angle_error = fabsf(angle_target - Gyro_Integral);
-    if (angle_error <= TUNE_TURN_SETTLE_ERR && fabsf(Gyro_Z) <= TUNE_TURN_SETTLE_RATE)
-    {
-        if (Turn_Angle_Settle_Count < TUNE_TURN_SETTLE_CYCLES)
-            Turn_Angle_Settle_Count++;
-    }
-    else
-    {
-        Turn_Angle_Settle_Count = 0;
-    }
-    return (Turn_Angle_Settle_Count >= TUNE_TURN_SETTLE_CYCLES);
-}
+// (Is_Turn_Angle_Settled removed — Phase 1 now uses direct Gyro_Integral >= ROTATE_TARGET_DEG check)
 
 /*************************************
 ** Function: Set_Node_Run_Mode
@@ -361,9 +346,9 @@ void Turn_Left_Run(void)
     }
     else
     {
+        // Phase 1: fixed diff + gyro PD damping handled in Set_Speed()
         Error = 0;
-        Set_Mileage_Turn_Exp_Speed(Turn_Angle_Target, 0);
-        if (Is_Turn_Angle_Settled(Turn_Angle_Target))
+        if (fabsf(Gyro_Integral) >= ROTATE_TARGET_DEG)
             Complete_Turn_Action();
     }
 }
@@ -400,23 +385,14 @@ void Turn_Right_Run(void)
     }
     else
     {
+        // Phase 1: fixed diff + gyro PD damping handled in Set_Speed()
         Error = 0;
-        Set_Mileage_Turn_Exp_Speed(Turn_Angle_Target, 0);
-        if (Is_Turn_Angle_Settled(Turn_Angle_Target))
+        if (fabsf(Gyro_Integral) >= ROTATE_TARGET_DEG)
             Complete_Turn_Action();
     }
 }
 
-/*************************************
-** Function: Set_Mileage_Turn_Exp_Speed
-*************************************/
-void Set_Mileage_Turn_Exp_Speed(float angle_target, int base_speed)
-{
-    float gyro_target = PID_calc(&Turn_PID, angle_target, Gyro_Integral);
-    Gyro_PID_Out = PID_calc(&Gyro_PID, gyro_target, Gyro_Z);
-    Left_Exp_Spd = base_speed + (int)Gyro_PID_Out;
-    Right_Exp_Spd = base_speed - (int)Gyro_PID_Out;
-}
+// (Set_Mileage_Turn_Exp_Speed removed — Phase 1 now uses fixed diff in Set_Speed)
 
 /*************************************
 ** Function: Straight_Run

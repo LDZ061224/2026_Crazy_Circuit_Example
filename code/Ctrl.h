@@ -62,11 +62,11 @@ Cross_Z     2026.1.30      0.0         Initial creation
     .mode       = PID_MODE_ADD \
 }
 
-// Angle position PD with derivative on measurement — outer loop for turns
+// Angle position PD with derivative on measurement — now used as curvature gain (kp) + zero ki/kd
 #define TURN_PID { \
     .kp         = 9, \
     .ki         = 0.0, \
-    .kd         = 1.4, \
+    .kd         = 0.0, \
     .iOutMax    = 0, \
     .outMax     = 1500, \
     .mode       = PID_MODE_POSITION_D_ON_MEASUREMENT \
@@ -171,6 +171,7 @@ typedef enum
     Debug_Sub_Ground_Test,   // Ground/floor test mode
     Debug_Sub_Angle,         // Angle PID tuning with incremental step target
     Debug_Sub_NormalTrace,   // Normal trace debug with gyro PD
+    Debug_Sub_Curvature_Trace, // Curvature-based pure pursuit trace (parallel diff + PD damping)
 } Debug_Sub_Mode_Enum;
 
 /**********************************************
@@ -341,8 +342,8 @@ void Debug_Wheel_Tuning(void);              // Single-wheel PI tuning for left/r
 void Debug_Ground_Test(void);               // Ground test mode
 void Debug_Angle_Tuning(void);              // Angle PID tuning with incremental step target
 void Debug_Normal_Trace(void);              // Normal trace debug with PD control
+void Debug_Curvature_Trace(void);           // Curvature pure pursuit trace (parallel diff + gyro PD damping)
 void Debug_Set_Out(void);                   // Debug mode PWM output
-
-void Set_Mileage_Turn_Exp_Speed(float angle_target, int base_speed);
+// (Set_Mileage_Turn_Exp_Speed removed — Phase1 now uses fixed diff in Set_Speed)
 
 #endif

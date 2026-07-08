@@ -40,14 +40,18 @@ int core0_main(void)
     Light_Init();
 
     /* ---- IMU (gyro) initialization with retry ---- */
-    while(1)
+        if(EnableSwitch_ON == 1)
+    {
+     while(1)
     {
        if (imu660rb_init()){}
        else
            break;
        gpio_toggle_level(P33_4);   // toggle LED on each retry attempt
     }
-    gpio_set_level(P33_4, 0);      // turn LED off after successful init
+    gpio_set_level(P33_4, 0); 
+    }
+     // turn LED off after successful init
 
     /* ---- saved data and LED strip ---- */
     Data_Load();
@@ -80,6 +84,10 @@ int core0_main(void)
 //    // Turn on suction to maximum, LED board breathing red to remind the user to keep the vehicle still.
     pwm_set_duty(Suction_Motor_DIR, 0);
     pwm_set_duty(Suction_Motor_PWM, 9500);
+        pwm_set_duty(Left_Motor_DIR, 0);
+    pwm_set_duty(Suction_Motor_PWM, 5000);
+        pwm_set_duty(Left_Motor_DIR, 0);
+    pwm_set_duty(Suction_Motor_PWM, 5000);
 //
 //    WS2812_Effect_Set((WS2812_Effect_Config){
 //        .type = EFF_BREATHING,

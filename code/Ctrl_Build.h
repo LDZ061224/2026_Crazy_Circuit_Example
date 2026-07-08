@@ -21,7 +21,7 @@ void Normal_Run(void);
 void Turn_Left_Run(void);
 void Turn_Right_Run(void);
 void Straight_Run(void);
-void Set_Mileage_Turn_Exp_Speed(float angle_target, int base_speed);
+// (Set_Mileage_Turn_Exp_Speed removed — Phase 1 uses fixed diff in Set_Speed)
 uint8 Check_Edge(void);
 void Load_All_Flash_Data_For_VOFA(void);
 #endif
