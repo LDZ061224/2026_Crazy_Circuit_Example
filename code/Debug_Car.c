@@ -499,6 +499,57 @@ void Debug_Normal_Trace(void)
     Debug_Set_Out();
 }
 
+/**********************************Debug_Curvature_Trace**********************************/
+
+void Debug_Curvature_Trace(void)
+{
+    if (Debug_Motor_Enable == 0 || EnableSwitch_ON == 0)
+    {
+        Error = 0;
+        Gyro_PID_Out = 0;
+        Turn_PID_Out = 0;
+        Left_Exp_Spd = 0;
+        Right_Exp_Spd = 0;
+        Left_PID_Out = 0;
+        Right_PID_Out = 0;
+        PID_cleardata(&Gyro_PD_PID);
+        PID_cleardata(&Left_PID);
+        PID_cleardata(&Right_PID);
+        Debug_Set_Out();
+        return;
+    }
+
+    // Compute Error (same as Normal_Trace)
+    if (Track_Num > 0) {
+        Middle = (Track_Arr[0] + Track_Arr[Track_Num - 1]) / 2;
+        Last_Error = Error;
+    }
+    if (Track_Num < 2)
+        Error = 0;
+    else {
+        Left_Scan_Point = Track_Arr[0];
+        Right_Scan_Point = Track_Arr[Track_Num - 1];
+        Error = (Dir_Arr[Left_Scan_Point] + Dir_Arr[Right_Scan_Point]) / 2;
+    }
+
+    // Parallel: curvature feedforward + gyro PD damping
+    float e = (float)Error * SENSOR_PITCH_MM;
+    float curvature = 2.0f * e / (LD_MM * LD_MM + e * e);
+    float diff_track = Turn_PID.kp * curvature * TRACK_WIDTH_MM * (float)Debug_Target_Speed;
+    float diff_damp  = PID_calc(&Gyro_PD_PID, 0.0f, Gyro_Z);
+
+    // VOFA debug vars: channel 1=curvature diff, channel 2=actual gyro rate
+    Debug_Angle_Vel_Target = diff_track;
+    Debug_Angle_Vel_Real   = Gyro_Z;
+
+    Left_Exp_Spd  = Debug_Target_Speed + (int)diff_track + (int)diff_damp;
+    Right_Exp_Spd = Debug_Target_Speed - (int)diff_track - (int)diff_damp;
+
+    Left_PID_Out  = PID_calc(&Left_PID,  (float)Left_Exp_Spd,  (float)Left_Real_Spd);
+    Right_PID_Out = PID_calc(&Right_PID, (float)Right_Exp_Spd, (float)Right_Real_Spd);
+    Debug_Set_Out();
+}
+
 /**********************************Debug_Set_Out**********************************/
 
 void Debug_Set_Out(void)
