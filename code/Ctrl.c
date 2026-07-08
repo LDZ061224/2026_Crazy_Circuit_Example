@@ -31,7 +31,7 @@ int Right_Real_Spd = 0;
 
 int Left_Exp_Spd = 0;
 int Right_Exp_Spd = 0;
-int Basic_Speed = 45;   // TODO: hardcoded, restore flash read after tuning
+int Basic_Speed = BUILD_BASIC_SPEED;   // from Hardware_Config.h
 int Run_Speed = 0;
 float Average_Speed = 0;
 
@@ -164,8 +164,7 @@ uint8  Debug_Gyro_FF_Mode = 0;                      // 角速度: 0=纯PID, 1=�
 
 uint8 vofa_flash_dump_mode = 0;
 
-// Max consecutive cycles with all sensors on or all off before emergency stop
-#define SAFETY_STOP_CYCLE_MAX         80
+// SAFETY_STOP_CYCLE_MAX now in Hardware_Config.h
 
 // (GYRO_INTEGRATION_PERIOD_S moved to Ctrl.h)
 
@@ -358,7 +357,7 @@ void Car_Go()
 
     if (EnableSwitch_ON == 1 && Last_EnableSwitch_ON == 0)
     {
-        Count.StartDelay = 800;
+        Count.StartDelay = START_DELAY_TICKS;
     }
     Last_EnableSwitch_ON = EnableSwitch_ON;
 
@@ -418,8 +417,8 @@ void Get_Speed()
     giSpeed_Right[0] = right_raw;
 
     // Weighted IIR: 0.5*window[0] + 0.3*window[1] + 0.2*window[2]
-    Left_Real_Spd  = (int)(0.5f * giSpeed_Left[0]  + 0.3f * giSpeed_Left[1]  + 0.2f * giSpeed_Left[2]);
-    Right_Real_Spd = (int)(0.5f * giSpeed_Right[0] + 0.3f * giSpeed_Right[1] + 0.2f * giSpeed_Right[2]);
+    Left_Real_Spd  = (int)(SPEED_IIR_W0 * giSpeed_Left[0]  + SPEED_IIR_W1 * giSpeed_Left[1]  + SPEED_IIR_W2 * giSpeed_Left[2]);
+    Right_Real_Spd = (int)(SPEED_IIR_W0 * giSpeed_Right[0] + SPEED_IIR_W1 * giSpeed_Right[1] + SPEED_IIR_W2 * giSpeed_Right[2]);
 
 
     if (EnableSwitch_ON)
@@ -455,7 +454,7 @@ void Get_IMU()
         (Debug_Sub_Mode == Debug_Sub_Angle || Debug_Sub_Mode == Debug_Sub_NormalTrace)
         && Debug_Motor_Enable == 1);
 
-    if (fabs(gyro_raw) < 2.0f)
+    if (fabs(gyro_raw) < GYRO_DEADZONE_DEG_S)
     {
         Gyro_Z = 0;
         imu660rb_gyro_z = 0;

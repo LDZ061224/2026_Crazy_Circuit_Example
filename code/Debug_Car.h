@@ -43,17 +43,17 @@ typedef struct {
 #define LEFT_SPEED_FF_TABLE_SIZE   9
 #define RIGHT_SPEED_FF_TABLE_SIZE  9
 
-/* 閻㈤潧甯囩悰銉ヤ缉閸欏倹鏆� */
-#define SPEED_FF_VOLTAGE_REF    12.0f   // 閸撳秹顩悰銊︾垼鐎规碍妞傞惃鍕棘閼板啰鏁搁崢锟�
-#define SPEED_FF_VOLTAGE_MIN    11.1f   // 閻㈠灚婧�妫版繂鐣鹃悽闈涘竾閿涘牅绗呴梽鎰版尭娴ｅ稄绱�
-#define SPEED_FF_VOLTAGE_MAX    12.6f   // 3S 濠婏紕鏁搁悽闈涘竾閿涘牅绗傞梽鎰版尭娴ｅ稄绱�
-#define SPEED_FF_COMP_MIN       0.90f   // 鐞涖儱浼╅崐宥囧芳娑撳妾�
-#define SPEED_FF_COMP_MAX       1.12f   // 鐞涖儱浼╅崐宥囧芳娑撳﹪妾�
+/* Voltage compensation — from Hardware_Config.h */
+#define SPEED_FF_VOLTAGE_REF    DEBUG_SPEED_FF_REF
+#define SPEED_FF_VOLTAGE_MIN    DEBUG_SPEED_FF_V_MIN
+#define SPEED_FF_VOLTAGE_MAX    DEBUG_SPEED_FF_V_MAX
+#define SPEED_FF_COMP_MIN       DEBUG_SPEED_FF_COMP_MIN
+#define SPEED_FF_COMP_MAX       DEBUG_SPEED_FF_COMP_MAX
 
-/* 閻㈤潧甯囧銈嗗皾閸欏倹鏆� */
-#define VOLTAGE_FAST_ALPHA      0.10f   // 韫囶偊锟斤拷 EMA 缁粯鏆�
-#define VOLTAGE_SLOW_ALPHA      0.01f   // 閹便垽锟斤拷 EMA 缁粯鏆�
-#define VOLTAGE_SPIKE_LIMIT     1.0f    // 閸楁洘顐奸柌鍥ㄧ壉鐏忔牕鍢查崜鏃堟珟闂冨牆锟界》绱橵閿涳拷
+/* Voltage filter — from Hardware_Config.h */
+#define VOLTAGE_FAST_ALPHA      DEBUG_VOLT_FAST_ALPHA
+#define VOLTAGE_SLOW_ALPHA      DEBUG_VOLT_SLOW_ALPHA
+#define VOLTAGE_SPIKE_LIMIT     DEBUG_VOLT_SPIKE_LIMIT
 
 /***********************************public API***********************************/
 

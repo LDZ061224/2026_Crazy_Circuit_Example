@@ -33,11 +33,10 @@ Cross_Z     2026.1.30      0.0         Initial creation
 
 // ===== Build Mode Tuning Parameters (encoder ticks unless noted) =====
 #define TUNE_ELEM_TURN_DELAY     775.0f
-#define TUNE_NODE_TURN_DELAY      445.0f
+#define TUNE_NODE_TURN_DELAY     445.0f
 #define TUNE_NODE_STRAIGHT       200.0f
 #define TUNE_ELEM_STRAIGHT_SHORT 2650.0f
-#define TUNE_ELEM_STRAIGHT_SHORT 2650.0f
-#define TUNE_ELEM_STRAIGHT_LONG    0.0f
+#define TUNE_ELEM_STRAIGHT_LONG   0.0f
 #define TUNE_TURN_TARGET_DEG      90.0f
 #define TUNE_TURN_SETTLE_ERR       3.0f
 #define TUNE_TURN_SETTLE_RATE     45.0f
@@ -54,60 +53,61 @@ Cross_Z     2026.1.30      0.0         Initial creation
 
 // Gyro rate incremental PID — used in normal trace and turn inner loop
 #define GYRO_PID { \
-    .kp         = 0.15, \
-    .ki         = 0.0048, \
-    .kd         = 0.04, \
+    .kp         = GYRO_RATE_KP, \
+    .ki         = GYRO_RATE_KI, \
+    .kd         = GYRO_RATE_KD, \
     .iOutMax    = 0, \
-    .outMax     = 500, \
+    .outMax     = GYRO_RATE_OUT_MAX, \
     .mode       = PID_MODE_ADD \
 }
 
-// Angle position PD with derivative on measurement — now used as curvature gain (kp) + zero ki/kd
+// Angle position PD — now used as curvature gain (kp) + zero ki/kd
 #define TURN_PID { \
-    .kp         = 9, \
+    .kp         = TURN_KP, \
     .ki         = 0.0, \
     .kd         = 0.0, \
     .iOutMax    = 0, \
-    .outMax     = 1500, \
+    .outMax     = TURN_OUT_MAX, \
     .mode       = PID_MODE_POSITION_D_ON_MEASUREMENT \
 }
 
-// Gyro position PD — for normal trace debug
+// Gyro position PD — parallel damping (curvature diff + PD damping)
 #define GYRO_PD_PID { \
-    .kp         = 0.008, \
+    .kp         = GYRO_PD_KP, \
     .ki         = 0, \
-    .kd         = 0.002, \
+    .kd         = GYRO_PD_KD, \
     .iOutMax    = 0, \
-    .outMax     = 500, \
+    .outMax     = GYRO_PD_OUT_MAX, \
     .mode       = PID_MODE_POSITION \
 }
 
 // Left wheel speed incremental PID
 #define LEFT_PID { \
-    .kp         = 90.5, \
-    .ki         = 42.5, \
-    .kd         = 0, \
-    .iOutMax    = 5000, \
-    .outMax     = 9500, \
+    .kp         = LEFT_WHEEL_KP, \
+    .ki         = LEFT_WHEEL_KI, \
+    .kd         = LEFT_WHEEL_KD, \
+    .iOutMax    = LEFT_WHEEL_IOUT_MAX, \
+    .outMax     = LEFT_WHEEL_OUT_MAX, \
     .mode       = PID_MODE_ADD \
 }
-//120 ， 55.5
+
 // Right wheel speed incremental PID
 #define RIGHT_PID { \
-    .kp         = 100.5, \
-    .ki         = 37.2, \
-    .kd         = 0, \
-    .iOutMax    = 5000, \
-    .outMax     = 9500, \
+    .kp         = RIGHT_WHEEL_KP, \
+    .ki         = RIGHT_WHEEL_KI, \
+    .kd         = RIGHT_WHEEL_KD, \
+    .iOutMax    = RIGHT_WHEEL_IOUT_MAX, \
+    .outMax     = RIGHT_WHEEL_OUT_MAX, \
     .mode       = PID_MODE_ADD \
 }
+
 // Turn position PD — heading hold for straight mode and full angle correction
 #define ANGLE_PID { \
-    .kp         = 3.0, \
-    .ki         = 0.0, \
-    .kd         = 1.2, \
+    .kp         = ANGLE_KP, \
+    .ki         = ANGLE_KI, \
+    .kd         = ANGLE_KD, \
     .iOutMax    = 0, \
-    .outMax     = 1500, \
+    .outMax     = ANGLE_OUT_MAX, \
     .mode       = PID_MODE_POSITION_D_ON_MEASUREMENT \
 }
 
