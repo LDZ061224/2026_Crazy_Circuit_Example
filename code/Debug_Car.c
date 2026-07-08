@@ -213,7 +213,10 @@ void Debug_Car_Go(void)
    Get_Speed();
 
     /* --- IMU + sensors + safety --- */
-    Get_IMU();
+    if(EnableSwitch_ON == 1)
+    {
+        Get_IMU();
+    }
     Get_Light();
 //    Light_Process();
 //    Safety_Check();
@@ -230,6 +233,7 @@ void Debug_Car_Go(void)
 //        case Debug_Sub_Ground_Test: Debug_Ground_Test();     break;
 //        case Debug_Sub_Angle:       Debug_Angle_Tuning();   break;
 //        case Debug_Sub_NormalTrace: Debug_Normal_Trace();   break;
+//        case Debug_Sub_Curvature_Trace: Debug_Curvature_Trace(); break;
 //        default:                    Debug_Wheel_Tuning();   break;
 //    }
 
