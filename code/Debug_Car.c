@@ -223,7 +223,7 @@ void Debug_Car_Go(void)
     }
 
 
-    if(imu_get == 0)
+    if(imu_get == 1)
     {
     Get_IMU();
     }

@@ -40,14 +40,17 @@ int core0_main(void)
     Light_Init();
 
     /* ---- IMU (gyro) initialization with retry ---- */
-        if(gpio_get_level(P20_7) == 1)
+         if(gpio_get_level(P20_7) == 1)
+//        if(1)
     {
      while(1)
     {
        if (imu660rb_init()){}
        else
+       gpio_toggle_level (P33_4);
            break;  // toggle LED on each retry attempt
     }
+     gpio_set_level (P33_4, 0);
     }
      // turn LED off after successful init
 
