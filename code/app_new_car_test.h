@@ -63,7 +63,7 @@ typedef enum
  *    TEST_BUTTON         - 閼奉亜鐣炬稊澶嬪瘻闁匡拷
  *    TEST_VOLTAGE_CURRENT- 閻㈤潧甯囬悽鍨ウ濡拷濞达拷
  */
-#define NEW_CAR_TEST_MODE   TEST_ADC_FORWARD
+#define NEW_CAR_TEST_MODE   TEST_ENCODER
 /*********************************** 鐎瑰鍙忛柊宥囩枂鐎癸拷 ***********************************/
 /*
  *  娴犮儰绗呯�瑰繒鏁ゆ禍搴ｆ暩閺堬拷 / 妞嬪孩澧栧ù瀣槸閻ㄥ嫬鐣ㄩ崗銊ュ棘閺佽埇锟斤拷

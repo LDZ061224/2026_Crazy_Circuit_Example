@@ -49,7 +49,15 @@ int core0_main(void)
 #if NEW_CAR_TEST_ENABLE
     /* ========== 新车基础功能测试模式 ========== */
     NewCarTest_Init();
+    pwm_init(Left_Motor_DIR,  30000, 10000);
+    pwm_init(Right_Motor_DIR, 30000, 10000);
 
+    // duty PWM: 30 kHz, start at 0
+    pwm_init(Left_Motor_PWM,  30000, 0);
+    pwm_init(Right_Motor_PWM, 30000, 0);
+
+    pwm_init(Suction_Motor_PWM, 70000, 10000);
+    pwm_init(Suction_Motor_PWM, 70000, 0);
     while (TRUE)
     {
         NewCarTest_Loop();
